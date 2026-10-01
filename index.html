@@ -380,9 +380,9 @@ kbd.pill { font-size: 11.5px; padding: 1px 7px; }
 .t-seal { position: absolute; left: calc(100% + 0.25em); top: -0.12em; font: 800 clamp(12px, 1.7vw, 19px)/1.08 var(--font-title); font-style: normal; writing-mode: vertical-rl; text-orientation: upright; letter-spacing: 0.06em; color: #fff3ea; background: var(--red); padding: 0.45em 0.28em; border-radius: 3px; transform: rotate(5deg); box-shadow: 0 8px 20px rgba(120, 20, 10, 0.45), inset 0 0 0 1.5px rgba(255, 243, 234, 0.55); text-shadow: none; }
 .tagline { margin: 6px 0 0; font: 600 clamp(15px, 2vw, 21px) var(--font-title); color: rgba(243, 235, 218, 0.88); text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55); }
 /* sélecteur de mer : une pastille par mer, la mer choisie en or ; défile sur petit écran */
-.sea-pick { display: flex; gap: 4px; max-width: min(780px, 94vw); overflow-x: auto; padding: 4px; scrollbar-width: none; background: rgba(12, 20, 33, 0.5); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--line); border-radius: 999px; }
+.sea-pick { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: min(880px, 94vw); padding: 4px; scrollbar-width: none; background: rgba(12, 20, 33, 0.5); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--line); border-radius: 22px; }
 .sea-pick::-webkit-scrollbar { display: none; }
-.sea-pick .btn { flex: none; flex-direction: column; gap: 1px; border-radius: 999px; padding: 6px 15px 7px; background: transparent; border-color: transparent; color: var(--text-2); }
+.sea-pick .btn { flex: none; flex-direction: column; gap: 1px; border-radius: 999px; padding: 6px 13px 7px; background: transparent; border-color: transparent; color: var(--text-2); }
 .sea-pick .btn b { font: 800 14px/1.1 var(--font-title); color: inherit; }
 .sea-pick .btn small { font: 700 10.5px/1.1 var(--font-ui); letter-spacing: 0.08em; opacity: 0.78; }
 .sea-pick .btn.on { background: linear-gradient(180deg, rgba(243, 200, 101, 0.24), rgba(216, 160, 56, 0.16)); border-color: rgba(247, 213, 138, 0.62); color: var(--gold-hi); }
@@ -839,8 +839,8 @@ function fmtShort(n) {
 }
 function pct(x) { return (x >= 0 ? '+' : '') + Math.round(x * 100) + ' %'; }
 
-// calendrier : année du 1er janvier de la partie (celle de la mer en cours)
-const CAL = { y0: 1840 };
+// calendrier : année du 1er janvier de la partie (celle de la mer en cours) ; era : ère écrite après l'année (« av. J.-C. »)
+const CAL = { y0: 1840, era: '' };
 const MONTHS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 const MONTHS_SHORT = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
 function isLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
@@ -854,7 +854,7 @@ function dateOf(day) {
 }
 function fmtDate(day, short) {
   const t = dateOf(day);
-  return t.d + (t.d === 1 ? 'er' : '') + ' ' + (short ? MONTHS_SHORT : MONTHS)[t.m] + (short ? '' : ' ' + t.y);
+  return t.d + (t.d === 1 ? 'er' : '') + ' ' + (short ? MONTHS_SHORT : MONTHS)[t.m] + (short ? '' : ' ' + t.y + CAL.era);
 }
 function monthOf(day) { return dateOf(day).m; }
 // « de Venise », mais « d'Alexandrie » : élision devant une voyelle
@@ -1037,7 +1037,7 @@ const Seas = {
     // (kx : échelle est-ouest, w en degrés de longitude)
     Object.assign(WORLD, { LON0: w.lon0, LAT0: w.lat0, K: w.k, KX: w.kx || 1, W: w.w * w.k * (w.kx || 1), H: w.h * w.k });
     GEO = w.geo;
-    CAL.y0 = d.year;
+    CAL.y0 = d.year; CAL.era = d.era || '';
     Object.assign(CULTURE, d.cultures);
     if (d.schemes) Object.assign(SHIP_SCHEMES, d.schemes);   // couleurs des navires de la mer
     World.TOWN = d.towns;
@@ -3631,6 +3631,8 @@ const Game = {
   },
   // une mer peut fermer des ports (la peste…) : [titre, raison] ou null
   portClosed(pid) { return SEA.rules && SEA.rules.closed ? SEA.rules.closed(pid) : null; },
+  // un port « dormant » : un site déclaré dans les données mais pas encore bâti (un comptoir à fonder) ; ni ville, ni prix, ni contrats
+  portDormant(pid) { return !!(SEA.rules && SEA.rules.dormant && SEA.rules.dormant(pid)); },
   parcelSpace() { return U.sum(this.run.contracts.filter(c => c.type === 'colis'), c => c.space); },
   used() { const r = this.run; return U.sum(r.cargo) + (r.ship ? r.ship.cannons * CANNON_SPACE : 0) + this.parcelSpace(); },
   free() { const st = this.stats(); return st ? Math.max(0, st.hold - this.used()) : 0; },
@@ -3797,7 +3799,7 @@ const Game = {
   bestKnown(gi, exceptPid, wantHigh) {
     let best = null;
     for (const p of PORTS) {
-      if (p.id === exceptPid) continue;
+      if (p.id === exceptPid || this.portDormant(p.id)) continue;
       const k = this.knownPrices(p.id);
       if (!k) continue;
       const v = k.p[gi];
@@ -4025,6 +4027,7 @@ const Game = {
     if (amount >= 1000) { this.addBuff('calme', 60); this.addBuff('vent', 20); this.addBuff('paix', 20); }
     else if (amount >= 200) { this.addBuff('calme', 35); this.addBuff('vent', 10); }
     else this.addBuff('calme', 18);
+    if (SEA.rules && SEA.rules.onOffering) SEA.rules.onOffering(amount);   // (la faveur du dieu de la mer : Melqart)
     if (r.stats.offerings >= 5) this.unlock('mazu');
     return true;
   },
@@ -4069,7 +4072,7 @@ const Game = {
     const rng = new RNG((r.seed ^ strHash(pid) ^ Math.imul(key + 1, 2654435761)) >>> 0);
     const st = this.stats() || this.stats({ type: SHIP_ORDER[0], upg: {} });
     const list = [];
-    const others = PORTS.filter(p => p.id !== pid);
+    const others = PORTS.filter(p => p.id !== pid && !this.portDormant(p.id));
     const tierMul = 1 + (st.tier - 1) * 0.6;
     const targets = this.huntTargets();
     // pas de contrats en double : une seule chasse par liste, et jamais deux livraisons (ou deux colis) pour le même port
@@ -4181,11 +4184,11 @@ const Game = {
     r.cash -= this.rumorCost();
     if (SEA.rules && SEA.rules.rumor) { const x = SEA.rules.rumor(); if (x) return x; }   // rumeurs propres à la mer
     const d = r.day;
-    const cands = r.events.filter(e => e.p !== r.port && e.start + e.dur > d && e.start - d < 28 && !r.rumors.includes(e.id));
+    const cands = r.events.filter(e => e.p !== r.port && e.start + e.dur > d && e.start - d < 28 && !r.rumors.includes(e.id) && !this.portDormant(e.p));
     const reliable = this.her('informateurs') >= 1 || R.chance(0.85);
     if (!cands.length || !reliable) {
       if (!reliable && cands.length) {
-        const p = R.pick(PORTS.filter(x => x.id !== r.port)), g = R.pick(GOODS);
+        const p = R.pick(PORTS.filter(x => x.id !== r.port && !this.portDormant(x.id))), g = R.pick(GOODS);
         return { fake: true, text: `On raconte que ${g.name.toLowerCase()} va manquer à ${p.name}… mais l'homme a beaucoup bu.` };
       }
       return { text: R.pick(TAVERN_LINES) };
@@ -4198,7 +4201,7 @@ const Game = {
   },
   hearRumorFree() {
     const r = this.run, d = r.day;
-    const cands = r.events.filter(e => e.start + e.dur > d && e.start - d < 30 && !r.rumors.includes(e.id));
+    const cands = r.events.filter(e => e.start + e.dur > d && e.start - d < 30 && !r.rumors.includes(e.id) && !this.portDormant(e.p));
     if (!cands.length) return null;
     const e = R.pick(cands);
     r.rumors.push(e.id);
@@ -4207,7 +4210,7 @@ const Game = {
   },
   knownEvents() {
     const r = this.run, d = r.day;
-    return r.events.filter(e => r.rumors.includes(e.id) && e.start + e.dur > d);
+    return r.events.filter(e => r.rumors.includes(e.id) && e.start + e.dur > d && !this.portDormant(e.p));
   },
 
   // ════════════ Arrivée au port ════════════
@@ -5128,6 +5131,28 @@ const PortScene = {
       for (const dx of [-12, 12]) R(cx + dx - 6, base - 30, 12, 30);
       x.beginPath(); x.moveTo(cx - 10, base - 30); x.lineTo(cx - 10, base - 48); x.lineTo(cx + 6, base - 58); x.lineTo(cx + 22, base - 48); x.lineTo(cx + 22, base - 30); x.closePath(); x.fill();
       x.strokeStyle = col; x.lineWidth = 1; x.beginPath(); x.moveTo(cx + 22, base - 50); x.lineTo(cx + 30, base - 50); x.lineTo(cx + 30, base - 34); x.stroke();
+    } else if (kind === 'pillars') {
+      // le sanctuaire de Melqart et ses deux colonnes (la Phénicie)
+      R(cx - 14, base - 24, 28, 24); R(cx - 16, base - 27, 32, 3);
+      for (let i = -14; i < 14; i += 5) R(cx + i, base - 31, 3, 4);
+      for (const dx of [-24, 21]) { R(cx + dx, base - 36, 3.2, 36); R(cx + dx - 1.2, base - 38.4, 5.6, 2.6); }
+    } else if (kind === 'cedars') {
+      // les cèdres du Liban, en étages
+      for (const [dx, hh] of [[-16, 30], [0, 40], [15, 26]]) {
+        R(cx + dx - 0.9, base - hh * 0.5, 1.8, hh * 0.5);
+        for (let k = 0; k < 4; k++) { x.beginPath(); x.ellipse(cx + dx, base - hh * 0.35 - k * hh * 0.17, hh * (0.42 - k * 0.08), hh * 0.06, 0, 0, TAU); x.fill(); }
+      }
+    } else if (kind === 'pylon') {
+      // le pylône d'un temple égyptien
+      for (const s of [-1, 1]) { x.beginPath(); x.moveTo(cx + s * 4, base); x.lineTo(cx + s * 4, base - 40); x.lineTo(cx + s * 22, base - 37); x.lineTo(cx + s * 25, base); x.closePath(); x.fill(); }
+      R(cx - 4, base - 30, 8, 30);
+    } else if (kind === 'obelisk') {
+      x.beginPath(); x.moveTo(cx - 3.4, base); x.lineTo(cx - 2.4, base - 50); x.lineTo(cx, base - 55); x.lineTo(cx + 2.4, base - 50); x.lineTo(cx + 3.4, base); x.closePath(); x.fill();
+    } else if (kind === 'nuraghe') {
+      // la tour tronconique des Sardes
+      x.beginPath(); x.moveTo(cx - 16, base); x.lineTo(cx - 10, base - 34); x.lineTo(cx + 10, base - 34); x.lineTo(cx + 16, base); x.closePath(); x.fill();
+      R(cx - 12, base - 37, 24, 3);
+      for (const dx of [-26, 26]) { x.beginPath(); x.moveTo(cx + dx - 7, base); x.lineTo(cx + dx - 4, base - 18); x.lineTo(cx + dx + 4, base - 18); x.lineTo(cx + dx + 7, base); x.closePath(); x.fill(); }
     } else if (kind === 'masts') {
       x.strokeStyle = col; x.lineWidth = 0.8;
       for (let k = 0; k < 6; k++) { x.beginPath(); x.moveTo(cx - 40 + k * 16, base); x.lineTo(cx - 40 + k * 16, base - 44 + (k % 2) * 6); x.moveTo(cx - 45 + k * 16, base - 38 + (k % 2) * 6); x.lineTo(cx - 35 + k * 16, base - 38 + (k % 2) * 6); x.stroke(); }
@@ -5269,13 +5294,14 @@ const PortScene = {
       const iced = this.winter ? this.winter.ice : 0;
       if (iced) this.drawIce(sx, qx, gy - 17, W - qx + 1, 17, iced, 5);
       // voiles au loin : jonques, ou voiles latines selon la mer
-      const lateen = SEA.portScene && SEA.portScene.farBoats === 'lateen';
+      const lateen = SEA.portScene && SEA.portScene.farBoats === 'lateen', square = SEA.portScene && SEA.portScene.farBoats === 'square';
       for (let i = 0; i < (iced > 0.5 ? 0 : 3); i++) {
         const jx = qx + 150 + i * 70 - (t * 3 % 40);
         sx.fillStyle = mixHex('#3c5470', tod.bot, 0.3);
         sx.beginPath(); sx.moveTo(jx - 1, gy - 18); sx.lineTo(jx + 11, gy - 18); sx.lineTo(jx + 9, gy - 16); sx.lineTo(jx + 1, gy - 16); sx.closePath(); sx.fill();
         sx.beginPath();
         if (lateen) { sx.moveTo(jx + 1.5, gy - 18.5); sx.lineTo(jx + 11.5, gy - 30); sx.quadraticCurveTo(jx + 9.5, gy - 22, jx + 8.5, gy - 18.5); }
+        else if (square) { sx.moveTo(jx + 1.6, gy - 27); sx.lineTo(jx + 8.4, gy - 27); sx.quadraticCurveTo(jx + 9.2, gy - 23, jx + 8, gy - 20); sx.lineTo(jx + 2, gy - 20); sx.quadraticCurveTo(jx + 0.8, gy - 23, jx + 1.6, gy - 27); sx.moveTo(jx + 4.7, gy - 20); sx.lineTo(jx + 5.3, gy - 20); sx.lineTo(jx + 5.3, gy - 18.5); sx.lineTo(jx + 4.7, gy - 18.5); }   // (voile carrée des galères antiques)
         else { sx.moveTo(jx + 5, gy - 18.5); sx.lineTo(jx + 5.4, gy - 27); sx.quadraticCurveTo(jx + 1.5, gy - 24, jx + 1.2, gy - 19); }
         sx.closePath(); sx.fill();
       }
@@ -5633,7 +5659,7 @@ const SeaScene = {
     const first = r.stats.sunk === 0 && !r.flags.metPirates;
     const g = first ? SEA.firstPirate : R.pick(groups);
     r.flags.metPirates = true;
-    if (first && Game.meta.runs < 2) setTimeout(() => Bus.emit('toast', { t: Input.touch
+    if (first && Game.meta.runs < 2) setTimeout(() => Bus.emit('toast', { t: TXT.firstFight ? TXT.firstFight() : Input.touch   // (une mer sans canons explique ses armes)
       ? 'Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.'
       : `Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis ${Input.label('KeyQ')} (bâbord) ou ${Input.label('KeyE')} (tribord), ou cliquez de son côté.`, k: 'gold' }), 1800);
     // (dans la brume, ils surgissent tout près)
@@ -5941,15 +5967,18 @@ const SeaScene = {
     if (Input.hit('down')) p.sail = Math.max(0, p.sail - 1);
     if (Input.hit('auto')) this.toggleAuto();
     if (Input.hit('fast')) this.fast = !this.fast;
-    if (Input.hit('fireL')) this.fire(p, -1);
-    if (Input.hit('fireR')) this.fire(p, 1);
-    if (Input.hit('fire')) this.smartFire();
-    const pt = Input.pointer;
-    if (pt.clicked && !Input.blocked && !Main.fadeDir && pt.type === 'mouse' && Main.bufPoint) {
-      const bp = Main.bufPoint(pt.x, pt.y);
-      const wx = bp.x + this.camX, wy = bp.y + this.camY;
-      const cross = Math.cos(p.a) * (wy - p.y) - Math.sin(p.a) * (wx - p.x);
-      this.fire(p, cross < 0 ? -1 : 1);
+    // (une mer sans canons a ses propres armes : l'éperon et les archers de la Phénicie)
+    if (!(SEA.rules && SEA.rules.seaInput && SEA.rules.seaInput(this, p))) {
+      if (Input.hit('fireL')) this.fire(p, -1);
+      if (Input.hit('fireR')) this.fire(p, 1);
+      if (Input.hit('fire')) this.smartFire();
+      const pt = Input.pointer;
+      if (pt.clicked && !Input.blocked && !Main.fadeDir && pt.type === 'mouse' && Main.bufPoint) {
+        const bp = Main.bufPoint(pt.x, pt.y);
+        const wx = bp.x + this.camX, wy = bp.y + this.camY;
+        const cross = Math.cos(p.a) * (wy - p.y) - Math.sin(p.a) * (wx - p.x);
+        this.fire(p, cross < 0 ? -1 : 1);
+      }
     }
     if (Input.hit('board')) { const t = this.boardTarget(); if (t) Bus.emit('board', t); }
     if (Input.hit('dock') && this.prompt && this.prompt.kind === 'dock') this.dock(this.prompt.pid);
@@ -5977,8 +6006,9 @@ const SeaScene = {
     const r = Game.run, p = this.player;
     this.t += dt; this.voyageT += dt;
     this.vt = (this.vt + dt * 24 / 150) % 24;
-    // temps de calendrier (ralenti pendant les combats)
-    const dd = dt * DAYS_PER_SEC * (this.combat ? 0.15 : 1);
+    // temps de calendrier (ralenti pendant les combats ; une mer peut l'allonger : les nuits passées sur la grève)
+    let dd = dt * DAYS_PER_SEC * (this.combat ? 0.15 : 1);
+    if (SEA.rules && SEA.rules.dayMul) dd *= SEA.rules.dayMul(this);
     Game.advance(dd);
     // la solde impayée peut faire déserter des marins pendant le voyage
     if (r.ship) p.crew = Math.min(p.crew, r.ship.crew);
@@ -6028,7 +6058,9 @@ const SeaScene = {
         const push = (m - d) / 2, nx = dx / d, ny = dy / d;
         a.x -= nx * push; a.y -= ny * push; b.x += nx * push; b.y += ny * push;
         const rel = Math.hypot(Math.cos(a.a) * a.v - Math.cos(b.a) * b.v, Math.sin(a.a) * a.v - Math.sin(b.a) * b.v);
-        if (rel > 34) {
+        // (une mer peut régler le choc elle-même : l'éperon des galères phéniciennes)
+        if (SEA.rules && SEA.rules.collide) SEA.rules.collide(a, b, rel, this);
+        else if (rel > 34) {
           const dmg = rel * 0.08;
           a.hull -= dmg * b.len / a.len; b.hull -= dmg * a.len / b.len;
           a.v *= 0.5; b.v *= 0.5;
@@ -6051,9 +6083,11 @@ const SeaScene = {
         for (const s of this.ships) {
           if (s === b.owner || s.dead) continue;
           if (b.owner !== p && s !== p && s.kind !== 'merchant') continue; // les pirates ne se tirent pas dessus
-          if (Math.hypot(s.x - b.x, s.y - b.y) < s.r * 1.15 + (b.owner === p ? 4 : 2)) { this.hitShip(s, b); b.hit = true; break; }
+          // (un projectile propre à la mer règle lui-même ses effets : les flèches des archers)
+          if (Math.hypot(s.x - b.x, s.y - b.y) < s.r * 1.15 + (b.owner === p ? 4 : 2)) { if (b.onHit) b.onHit(s, b, this); else this.hitShip(s, b); b.hit = true; break; }
         }
       }
+      if (!b.hit && b.t >= b.life && b.onMiss) { b.hit = true; b.onMiss(b, this); }
       if (!b.hit && b.t >= b.life) {
         b.hit = true;
         const land = World.sdf(b.x, b.y) < 0;
@@ -6126,7 +6160,7 @@ const SeaScene = {
     if (bt) pr = { kind: 'board', text: `Aborder ${bt.surrendered ? 'le navire rendu' : bt.name}`, key: 'B' };
     if (!pr) for (const port of World.ports) {
       const d = Math.hypot(port.x - p.x, port.y - p.y);
-      if (port.id === r.lastPort && this.voyageT < 8) continue;
+      if ((port.id === r.lastPort && this.voyageT < 8) || Game.portDormant(port.id)) continue;
       if (d < 46 && port.id !== this.dest && !this.combat) { pr = { kind: 'dock', pid: port.id, text: `Accoster à ${PORT[port.id].name}`, key: 'Entrée' }; break; }
     }
     if (!pr) for (const tr of r.treasures) {
@@ -6217,6 +6251,8 @@ const SeaScene = {
     if (s.surrendered) { s.turnIn = 0; s.sail = 0; return; }
     // (brouillard : le poursuivant qui a perdu le joueur de vue quelques secondes renonce)
     if (this.fogs.length && s.hostile && !s.sated) { if (this.seen(s)) s.lostT = 0; else if ((s.lostT = (s.lostT || 0) + dt) > 5) { s.ai = 'flee'; s.sated = true; } }
+    // (une mer peut mener ses ennemis à sa façon : les galères qui éperonnent)
+    if (SEA.rules && SEA.rules.think && SEA.rules.think(s, dt, this)) return;
     const dx = p.x - s.x, dy = p.y - s.y, d = Math.hypot(dx, dy);
     const angTo = Math.atan2(dy, dx);
     let des = angTo, sail = 2;
@@ -6573,7 +6609,7 @@ const SeaScene = {
     // villes, jetées, phares, destination
     const k = Gfx.k();
     for (const port of World.ports) {
-      if (!inView(port.x, port.y, 50)) continue;
+      if (!inView(port.x, port.y, 50) || Game.portDormant(port.id)) continue;   // (un site pas encore fondé : ni ville ni jetée)
       const town = World.town(port, k);
       ctx.drawImage(town.c, port.x - town.ox, port.y - town.oy, town.w, town.h);
       this.drawPier(ctx, port);
@@ -6637,8 +6673,9 @@ const SeaScene = {
         Gfx.rr(ctx, bx, by, Math.max(1.5, bw * f), 1.5, 0.75); ctx.fillStyle = f > 0.45 ? '#ee6e52' : '#f2c14e'; ctx.fill();
       }
     }
-    // boulets : ombre sur l'eau, boulet en l'air
+    // boulets : ombre sur l'eau, boulet en l'air (un projectile propre à la mer se dessine lui-même : les flèches)
     for (const b of this.balls) {
+      if (b.draw) { b.draw(ctx, b); continue; }
       const kk = b.t / b.life, z = Math.sin(kk * Math.PI) * 9;
       ctx.fillStyle = 'rgba(4,14,26,0.25)'; Gfx.ellipse(ctx, b.x, b.y, 1.3, 0.8); ctx.fill();
       ctx.fillStyle = '#1b1b21'; ctx.beginPath(); ctx.arc(b.x, b.y - z, 1.15, 0, TAU); ctx.fill();
@@ -6646,6 +6683,7 @@ const SeaScene = {
     }
     this.fx.draw(ctx, 0, 0, 'fx');
     this.fx.draw(ctx, 0, 0, 'smoke');
+    if (SEA.rules && SEA.rules.seaDraw) SEA.rules.seaDraw(ctx, this, t);   // (dessins propres à la mer, dans le repère du monde)
     ctx.restore();
     if (this.fogs.length) this.drawFog(ctx, cx, cy, W, H);
     // typhons : ciel assombri et spirale de nuages
@@ -6687,7 +6725,7 @@ const SeaScene = {
       }
       for (const port of World.ports) {
         const x = port.x - cx, y = port.y - cy;
-        if (x < -120 || y < -120 || x > W + 120 || y > H + 120) continue;
+        if (x < -120 || y < -120 || x > W + 120 || y > H + 120 || Game.portDormant(port.id)) continue;
         Gfx.glow(ctx, x, y, 30, '#ffb85c', la * 0.35);
         const lh = this.pierEnd(port), lx = lh.x - cx, ly = lh.y - cy;
         Gfx.glow(ctx, lx, ly, 12, '#fff0c0', la);
@@ -6804,7 +6842,7 @@ const SeaScene = {
     const tk = UI.isMobile() ? Math.max(1, 11 * (Main.dpr || 1) / (S * 4.6)) : 1;
     for (const port of World.ports) {
       const x = (port.x - cx) * S, y = (port.y - cy - 24) * S;
-      if (x < -200 || y < -80 || x > cw + 200 || y > ch + 80) continue;
+      if (x < -200 || y < -80 || x > cw + 200 || y > ch + 80 || Game.portDormant(port.id)) continue;
       const dest = port.id === this.dest;
       Gfx.text(sctx, PORT[port.id].name, x, y, { size: Math.round(S * 4.6 * tk), align: 'center', color: dest ? '#f7d58a' : '#f6efe0', font: 'title', weight: 800 });
       if (PORT[port.id].zh) Gfx.text(sctx, PORT[port.id].zh, x, y + S * 4.4 * tk, { size: Math.round(S * 3.1 * tk), align: 'center', color: dest ? '#f7d58a' : '#e6dcc6', font: 'title', weight: 700, alpha: 0.85, spacing: S * 0.6 });
@@ -6914,6 +6952,8 @@ const SeaScene = {
     const st = Game.stats(), range = 430 * (st ? st.vigie : 1) * (Game.buff('vigie') ? 1.5 : 1);
     for (const port of World.ports) {
       const [a, b] = P(port.x, port.y);
+      // (un site à fonder : un simple cercle)
+      if (Game.portDormant(port.id)) { x.strokeStyle = port.id === this.dest ? '#d8472b' : '#27486a'; x.lineWidth = 1.3; x.beginPath(); x.arc(a, b, 2.6, 0, TAU); x.stroke(); continue; }
       x.fillStyle = port.id === this.dest ? '#d8472b' : '#27486a';
       x.beginPath(); x.arc(a, b, port.id === this.dest ? 3.2 : 2.4, 0, TAU); x.fill();
       x.strokeStyle = '#f3ebda'; x.lineWidth = 1; x.stroke();
@@ -7126,7 +7166,19 @@ const UI = {
     this.el.prompt.hidden = true;
     this.el.prompt.innerHTML = '';
     if (mode === 'port') this.buildPortBar();
+    if (mode === 'sea') this.weaponLabels();
     this.refresh();
+  },
+  // libellés des armes en mer : les bordées, ou ce qu'une mer sans canons met à leur place (TXT.weapons : l'éperon, les archers)
+  weaponLabels() {
+    const els = [document.querySelector('#gunL span'), document.querySelector('#gunR span'), this.el.touch.querySelector('[data-act=fireL]'), this.el.touch.querySelector('[data-act=fireR]')];
+    if (!this.weaponDefaults) this.weaponDefaults = [els[0].textContent, els[1].textContent, els[2].innerHTML, els[3].innerHTML];
+    const W = TXT.weapons, d = this.weaponDefaults;
+    const want = W ? [W.left, W.right, W.touchL, W.touchR] : d;
+    if (els[0].textContent !== want[0]) els[0].textContent = want[0];
+    if (els[1].textContent !== want[1]) els[1].textContent = want[1];
+    if (els[2].innerHTML !== want[2]) els[2].innerHTML = want[2];
+    if (els[3].innerHTML !== want[3]) els[3].innerHTML = want[3];
   },
   refresh() {
     if (!Game.run || !this.mode || this.mode === 'title') return;
@@ -7211,10 +7263,11 @@ const UI = {
       let dtxt = '';
       if (dest) {
         const pp = World.ports.find(q => q.id === dest.id), d = Math.hypot(pp.x - p.x, pp.y - p.y);
-        const days = Math.max(1, Math.round(d * 1.15 / Math.max(20, p.speedMax * 0.85) * DAYS_PER_SEC));
+        // (une mer peut estimer elle-même la durée qui reste : les nuits sur la grève)
+        const days = Math.max(1, Math.round(SEA.rules && SEA.rules.eta ? SEA.rules.eta(dest.id, p, d) : d * 1.15 / Math.max(20, p.speedMax * 0.85) * DAYS_PER_SEC));
         dtxt = `Cap sur ${dest.name} · ~${days} j` + (SeaScene.auto ? ' · pilote auto' : ' · barre manuelle');
       }
-      if (SeaScene.combat) dtxt = 'Combat ! ' + (Input.touch ? 'Visez de flanc et tirez.' : `${Input.label('KeyQ')}/${Input.label('KeyE')} ou clic : bordées · Espace : feu`);
+      if (SeaScene.combat) dtxt = TXT.combatHint ? TXT.combatHint() : 'Combat ! ' + (Input.touch ? 'Visez de flanc et tirez.' : `${Input.label('KeyQ')}/${Input.label('KeyE')} ou clic : bordées · Espace : feu`);
       const de = document.getElementById('sh-dest');
       if (de.textContent !== dtxt) de.textContent = dtxt;
       document.getElementById('bt-auto').classList.toggle('on', SeaScene.auto);
@@ -7383,7 +7436,7 @@ const UI = {
   shipyard() {
     const r = Game.run, pid = r.port, P = PORT[pid];
     const body = h('div');
-    this.open({ title: `Chantier naval ${deLieu(P.name)}`, sub: 'Navires, réparations, canons et améliorations', icon: 'chantier', cls: 'wide', body });
+    this.open({ title: `Chantier naval ${deLieu(P.name)}`, sub: SEA.noCannons ? 'Navires, réparations et améliorations' : 'Navires, réparations, canons et améliorations', icon: 'chantier', cls: 'wide', body });
     const sideCanvas = (style, len, scheme) => {
       const k = Math.min(4, (window.devicePixelRatio || 1) * 1.7), mine = scheme === 'player';
       const s = ShipSide.get(style, len * 3, mine ? Game.playerScheme() : scheme, mine ? Game.sailScheme() : null, k);
@@ -7404,14 +7457,16 @@ const UI = {
           h('div', { class: 'stat' }, h('span', null, 'Coque'), h('b', { class: s.hull < st.hullMax * 0.5 ? 'neg' : '' }, `${Math.round(s.hull)} / ${st.hullMax}`)),
           h('div', { class: 'stat' }, h('span', null, 'Cale'), h('b', null, `${Game.used()} / ${st.hold} ${TXT.unit}`)),
           h('div', { class: 'stat' }, h('span', null, 'Vitesse'), h('b', null, `${(st.speed / 7).toFixed(1)} nœuds`)),
-          h('div', { class: 'stat' }, h('span', null, 'Canons'), h('b', null, `${s.cannons} / ${st.gunsMax} (3 ${TXT.unit} chacun)`)),
+          // (une mer sans canons : ses propres armes, l'éperon et les archers)
+          SEA.noCannons ? null : h('div', { class: 'stat' }, h('span', null, 'Canons'), h('b', null, `${s.cannons} / ${st.gunsMax} (3 ${TXT.unit} chacun)`)),
+          ...(SEA.rules && SEA.rules.shipStats ? SEA.rules.shipStats(st, s) : []).map(([a, b]) => h('div', { class: 'stat' }, h('span', null, a), h('b', null, b))),
           h('div', { class: 'stat' }, h('span', null, 'Équipage'), h('b', null, `${s.crew} (min. ${st.crewMin}, max. ${st.crewMax})`)));
         kids.push(h('h4', null, 'VOTRE NAVIRE'), h('div', { class: 'ship-card' }, sideCanvas(st.style, st.len, 'player'), hp));
         const rc = Game.repairCost();
         kids.push(h('div', { class: 'row', style: { margin: '10px 0' } },
           btn(rc > 0 ? `Réparer la coque (${monnaie(Math.min(rc, r.cash))})` : 'Coque en parfait état', () => { const n = Game.repair(); if (n) { this.toast(`Coque réparée de ${nb(n, 'point')}.`, 'good', 'hull'); this.after('coin'); } render(); }, 'jade', rc <= 0 || r.cash < 5 ? { disabled: true } : null),
-          btn(`Acheter un canon (${CANNON_PRICE})`, () => { if (Game.buyCannon()) { this.after('coin'); render(); } else Sound.sfxPlay('error'); }, '', s.cannons >= st.gunsMax || r.cash < CANNON_PRICE || Game.free() < CANNON_SPACE ? { disabled: true } : null),
-          btn(`Vendre un canon (+${CANNON_PRICE / 2})`, () => { if (Game.sellCannon()) { this.after('coin'); render(); } }, 'sm', s.cannons <= 0 ? { disabled: true } : null)));
+          SEA.noCannons ? null : btn(`Acheter un canon (${CANNON_PRICE})`, () => { if (Game.buyCannon()) { this.after('coin'); render(); } else Sound.sfxPlay('error'); }, '', s.cannons >= st.gunsMax || r.cash < CANNON_PRICE || Game.free() < CANNON_SPACE ? { disabled: true } : null),
+          SEA.noCannons ? null : btn(`Vendre un canon (+${CANNON_PRICE / 2})`, () => { if (Game.sellCannon()) { this.after('coin'); render(); } }, 'sm', s.cannons <= 0 ? { disabled: true } : null)));
         kids.push(h('h4', null, 'AMÉLIORATIONS'));
         const ups = h('div', { class: 'cards' });
         for (const up of UPGRADES) {
@@ -7434,7 +7489,7 @@ const UI = {
           sideCanvas(S.style, S.len, 'merchant'),
           h('h5', null, S.name, o.disc ? h('span', { class: 'tag-ev' }, 'occasion -20 %') : null),
           h('div', { class: 'd' }, S.desc),
-          h('div', { class: 'd' }, `Cale ${S.hold} · Coque ${S.hull} · ${(S.speed / 7).toFixed(1)} nœuds · ${S.guns} canons max · ${S.crewMin}-${S.crew} marins`),
+          h('div', { class: 'd' }, `Cale ${S.hold} · Coque ${S.hull} · ${(S.speed / 7).toFixed(1)} nœuds · ${SEA.noCannons ? (TXT.shipArms ? TXT.shipArms(S) : '') : `${S.guns} canons max`} · ${S.crewMin}-${S.crew} marins`),
           h('div', { class: 'row sb' },
             h('span', null, s ? ['Prix ', h('b', null, fmt(o.price)), h('br'), h('span', { class: 'hint' }, `reprise ${fmt(o.tradeIn)}`)] : ['Prix ', h('b', null, fmt(o.price))]),
             same ? h('span', { class: 'pill jade' }, 'Votre navire') :
@@ -7607,8 +7662,9 @@ const UI = {
     const render = () => {
       const buffs = [['calme', 'Mer apaisée (tempêtes moins violentes)'], ['vent', 'Vents favorables'], ['vigie', 'Œil perçant'], ['commerce', 'Chance au commerce (+5 %)'], ['paix', 'Pirates moins nombreux'], ['protection', TXT.emissary.buff]];
       const act = buffs.filter(([k]) => Game.buff(k));
-      put(body, 
+      put(body,
         h('p', { class: 'flavor' }, TT.flavor),
+        SEA.rules && SEA.rules.temple ? SEA.rules.temple(render) : null,   // (la faveur du dieu : Melqart)
         h('h4', null, 'OFFRANDES'),
         h('div', { class: 'stack' },
           [50, 200, 1000].map((amt, i) => {
@@ -7786,24 +7842,31 @@ const UI = {
       for (const p of World.ports) {
         const P = PORT[p.id], x = p.x / C, y = p.y / C;
         const isSel = p.id === sel, isHere = p.id === here;
+        const dorm = Game.portDormant(p.id), name = dorm && TXT.dormantTag ? P.name + TXT.dormantTag : P.name;
         if (isSel) { ctx.fillStyle = 'rgba(200,64,42,0.18)'; ctx.beginPath(); ctx.arc(x, y, 12 * LS, 0, TAU); ctx.fill(); }
-        ctx.fillStyle = isHere ? '#237a60' : isSel ? RED : INK;
-        ctx.beginPath(); ctx.arc(x, y, (isSel ? 6 : 4.6) * LS, 0, TAU); ctx.fill();
-        ctx.strokeStyle = '#f7f1e3'; ctx.lineWidth = 1.6; ctx.stroke();
-        if (Game.portClosed(p.id)) {
-          const c9 = 9 * LS, cross = () => { ctx.beginPath(); ctx.moveTo(x - c9, y - c9); ctx.lineTo(x + c9, y + c9); ctx.moveTo(x + c9, y - c9); ctx.lineTo(x - c9, y + c9); ctx.stroke(); };
-          ctx.lineCap = 'round'; ctx.strokeStyle = '#f7f1e3'; ctx.lineWidth = 5.4; cross(); ctx.strokeStyle = RED; ctx.lineWidth = 2.8; cross();
+        if (dorm) {
+          // un site à fonder (un comptoir) : un cercle en pointillés, sans croix
+          ctx.setLineDash([2.6 * LS, 2 * LS]); ctx.strokeStyle = isSel ? RED : INK; ctx.lineWidth = 1.8;
+          ctx.beginPath(); ctx.arc(x, y, (isSel ? 6.4 : 5.2) * LS, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+        } else {
+          ctx.fillStyle = isHere ? '#237a60' : isSel ? RED : INK;
+          ctx.beginPath(); ctx.arc(x, y, (isSel ? 6 : 4.6) * LS, 0, TAU); ctx.fill();
+          ctx.strokeStyle = '#f7f1e3'; ctx.lineWidth = 1.6; ctx.stroke();
+          if (Game.portClosed(p.id)) {
+            const c9 = 9 * LS, cross = () => { ctx.beginPath(); ctx.moveTo(x - c9, y - c9); ctx.lineTo(x + c9, y + c9); ctx.moveTo(x + c9, y - c9); ctx.lineTo(x - c9, y + c9); ctx.stroke(); };
+            ctx.lineCap = 'round'; ctx.strokeStyle = '#f7f1e3'; ctx.lineWidth = 5.4; cross(); ctx.strokeStyle = RED; ctx.lineWidth = 2.8; cross();
+          }
         }
         ctx.font = `${isSel ? 800 : 700} ${13 * LS}px ${FONT_TITLE}`;
         const lb = P.label || {};
         let left = !!lb.left;
         // noms grossis (petite carte) : un nom qui sortirait du cadre passe de l'autre côté de son point
-        if (LS > 1) { const tw = ctx.measureText(P.name).width + 9 * LS; if (left && x - tw < 2) left = false; else if (!left && x + tw > World.GW - 2) left = true; }
+        if (LS > 1) { const tw = ctx.measureText(name).width + 9 * LS; if (left && x - tw < 2) left = false; else if (!left && x + tw > World.GW - 2) left = true; }
         ctx.textAlign = left ? 'right' : 'left';
         ctx.lineWidth = 3.4; ctx.strokeStyle = 'rgba(243,235,218,0.92)';
         const tx = x + (left ? -9 : 9) * LS, ty = y + (lb.dy != null ? lb.dy : 4) * LS;
-        ctx.strokeText(P.name, tx, ty);
-        ctx.fillStyle = isSel ? '#9e2f1c' : '#1b2a3c'; ctx.fillText(P.name, tx, ty);
+        ctx.strokeText(name, tx, ty);
+        ctx.fillStyle = isSel ? '#9e2f1c' : dorm ? '#6a5640' : '#1b2a3c'; ctx.fillText(name, tx, ty);
       }
       // navire
       if (pos) {
@@ -7838,11 +7901,11 @@ const UI = {
         const openBy = !!(shut && departing && SEA.rules && SEA.rules.openOnArrival && SEA.rules.openOnArrival(sel, days));
         if (shut) kids.push(h('p', { class: 'neg' }, shut[0] + ' : ' + shut[1]));
         if (SEA.rules && SEA.rules.chartSide) kids.push(...SEA.rules.chartSide(sel, departing));
-        const k = Game.knownPrices(sel);
+        const dorm = Game.portDormant(sel), k = dorm ? null : Game.knownPrices(sel);   // (un site à fonder n'a pas encore de marché)
         if (k) {
           kids.push(h('div', { class: 'card prices' }, h('div', { class: 'd' }, k.live ? 'Prix en direct (informateurs)' : `Prix vus il y a ${Math.round(r.day - k.day)} j`),
             ...GOODS.map((g, gi) => h('div', { class: 'stat' }, h('span', null, ico(g.id, 'sm'), ' ', g.name), h('b', null, fmt(k.p[gi]))))));
-        } else kids.push(h('p', { class: 'hint' }, 'Prix inconnus : jamais visité.'));
+        } else if (!dorm) kids.push(h('p', { class: 'hint' }, 'Prix inconnus : jamais visité.'));
         const cs = r.contracts.filter(c => c.to === sel);
         if (cs.length) kids.push(h('div', { class: 'card' }, h('div', { class: 'd' }, 'Contrats pour ce port :'), ...cs.map(c => h('div', { class: 'd' }, '• ' + Game.contractText(c)))));
         if (departing) {
@@ -8026,7 +8089,8 @@ const UI = {
       h('h4', null, 'AU PORT'),
       h('p', null, k('KeyA'), ' ', k('KeyD'), ' ou flèches : marcher. ', k('KeyW'), ' / Entrée : entrer. Chiffres 1 à 9 : aller directement à un bâtiment. Cliquez ou touchez un bâtiment pour y aller.'),
       h('h4', null, 'EN MER'),
-      h('p', null, '← → (', k('KeyA'), k('KeyD'), ') : barre. ↑ ↓ (', k('KeyW'), k('KeyS'), ') : réduire ou envoyer la toile. ', k('KeyQ'), ' : bordée bâbord (gauche), ', k('KeyE'), ' : bordée tribord (droite). Clic gauche : bordée du côté du curseur. Espace : feu vers l\'ennemi le plus proche. B : aborder. Entrée : accoster. R : pilote automatique. F : accélérer le temps. M : carte.'),
+      // (une mer sans canons décrit ses propres armes)
+      TXT.helpSea ? h('p', null, TXT.helpSea(k)) : h('p', null, '← → (', k('KeyA'), k('KeyD'), ') : barre. ↑ ↓ (', k('KeyW'), k('KeyS'), ') : réduire ou envoyer la toile. ', k('KeyQ'), ' : bordée bâbord (gauche), ', k('KeyE'), ' : bordée tribord (droite). Clic gauche : bordée du côté du curseur. Espace : feu vers l\'ennemi le plus proche. B : aborder. Entrée : accoster. R : pilote automatique. F : accélérer le temps. M : carte.'),
       h('p', null, 'La boussole colorée montre votre vitesse selon le cap : vert, c\'est le bon angle par rapport au vent. Vent de face : rouge.'),
       h('h4', null, 'CONSEILS'),
       h('p', null, 'Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de taverne annoncent pénuries et surplus.'),
@@ -8171,7 +8235,7 @@ const UI = {
       res.dailyBest ? h('p', { class: 'pill jade', style: { display: 'flex', justifyContent: 'center' } }, 'Meilleur score du défi du jour !') : null,
       h('table', { class: 'ledger' }, h('tbody', null,
         line(`${TXT.Money} à bord`, r.cash), line('En banque', r.bank), line(`Dette envers ${TXT.lender}`, -r.debt, r.debt > 0 ? 'neg' : ''),
-        line('Navire et canons', Game.shipValue(r.ship)), line('Cargaison', Game.cargoValue(r.cargo)), line('Entrepôts', wares),
+        line(SEA.noCannons ? 'Navire' : 'Navire et canons', Game.shipValue(r.ship)), line('Cargaison', Game.cargoValue(r.cargo)), line('Entrepôts', wares),
         // (biens propres à la mer, comptés dans la fortune : le crédit chez les chefs du Pacifique…)
         ...(SEA.rules && SEA.rules.worthLines ? SEA.rules.worthLines(r) : []).map(([a, b]) => line(a, b)))),
       r.lostAtSea ? h('p', { class: 'flavor', style: { marginTop: '8px' } }, `Englouti avec le navire : ${monnaie(r.lostAtSea.cash)} à bord, ${fmt(r.lostAtSea.cargo)} de cargaison et un navire estimé à ${fmt(r.lostAtSea.ship)}. ${TXT.lostKeeps || 'Seuls la banque et les entrepôts comptent.'}`) : null,
@@ -15661,6 +15725,1363 @@ Seas.register({
   // le capitaine au chapeau de paille, le pagayeur du port couronné de fleurs
   captain: robe => People.make({ hat: 'straw', top: '#fbf6ea', bottom: '#2a3a4a', big: true, sash: robe, skin: PAL.skin[1] }),
   portScene: { boatman: P => P.id === 'canton' ? { hat: 'cone', top: '#2a2a33', bottom: '#2a2a33', skin: PAL.skin[2] } : P.id === 'sydney' ? { hat: 'sailor', top: '#e8e2d2', bottom: '#3a4a6a', skin: PAL.skin[0] } : { xhat: 'flower', top: '#6b3b22', bottom: '#6b3b22', skin: PAL.skin[3] }, farBoats: 'lateen', canoe: P => P.id !== 'sydney' && P.id !== 'canton' },
+  facades,
+  icons,
+  rules,
+});
+})();
+
+</script>
+<script>
+'use strict';
+// ─── Mers de Jade · extension « Pourpre de Tyr » : la Phénicie, 800 av. J.-C. ───
+// Jeune marchand de Tyr, le joueur court la mer de Byblos à Gadir, au-delà des Colonnes d'Héraclès, et peut fonder Carthage.
+// Mécaniques propres :
+//  • pas de canons : le combat se joue à l'éperon (dégâts selon la vitesse et l'angle du choc ; la proue s'enfonce, puis la
+//    galère se dégage), avec une cadence de charge des rameurs, des archers à courte portée, puis l'abordage ;
+//  • des comptoirs à fonder (la Sardaigne, puis Carthage) : des ports « dormants », déclarés dans les données, fermés et sans
+//    ville jusqu'à leur fondation ; fondés, ils comptent dans la fortune, grandissent et versent un tribut chaque mois ;
+//  • la nuit : sur la grève (plus lent, mais sûr, et l'on trouve vivres et calfats) ou aux étoiles (à ses risques) ;
+//  • l'hiver, la mer presque fermée ; l'argent pesé en sicles ; la faveur de Melqart, qui gronde si l'on néglige ses offrandes.
+(function () {
+
+const phe = () => Game.run.phe;
+const toast = (t, k) => Bus.emit('toast', { t, k: k || '' });
+// date courte en fin de phrase : « le 3 nov. », jamais « nov.. »
+const dateDot = d => { const s = fmtDate(d, true); return s.endsWith('.') ? s : s + '.'; };
+const andList = a => (a.length > 1 ? a.slice(0, -1).join(', ') + ' et ' + a[a.length - 1] : a.join(''));
+const worldPort = pid => World.ports.find(q => q.id === pid);
+
+// ════════════ Les comptoirs à fonder ════════════
+// (where : la côte, city : le nom de la ville fondée ; cash, cedar, men : le coût de base ; value : ce que vaut le comptoir
+// fondé, en part de ce qu'il a coûté ; tribute : la part de cette valeur versée chaque mois)
+const SITES = {
+  sardaigne: { city: 'Nora', where: 'le cap de Nora, au sud de la Sardaigne', cash: 2500, cedar: 15, men: 6, value: 1.5, tribute: 0.02, ach: 'nora' },
+  carthage: { city: 'Carthage', where: 'la presqu\'île de Byrsa, au fond du golfe de Tunis', cash: 9000, cedar: 40, men: 12, value: 1.5, tribute: 0.025, ach: 'carthage' },
+};
+const isSite = pid => !!SITES[pid];
+const founded = pid => { const P = Game.run && Game.run.phe; return !!(P && P.founded[pid] != null); };
+const dormant = pid => isSite(pid) && !founded(pid);
+function siteCost(pid) {
+  const S = SITES[pid], c = Game.her('colons');
+  return { cash: Math.round(S.cash * (1 - 0.15 * c) / 50) * 50, cedar: Math.ceil(S.cedar * (1 - 0.25 * c)), men: Math.max(2, Math.ceil(S.men * (1 - 0.25 * c))) };
+}
+// ce qui manque pour fonder (liste vide : on peut fonder)
+function missing(pid) {
+  const r = Game.run, c = siteCost(pid), ce = GOOD.cedre.idx, out = [];
+  if (r.cash < c.cash) out.push(monnaie(c.cash - Math.floor(r.cash)));
+  if (r.cargo[ce] < c.cedar) out.push(`${unites(c.cedar - r.cargo[ce])} de cèdre`);
+  if (!r.ship || r.ship.crew < c.men + 3) out.push(r.ship ? `${nb(c.men + 3 - r.ship.crew, 'marin')} (${nb(c.men, 'colon')} restent à terre)` : 'un navire');
+  return out;
+}
+// la valeur d'un comptoir fondé : ce qu'il a coûté, puis il grandit chaque jour
+function colonyValue(pid, day) {
+  const P = Game.run && Game.run.phe;
+  if (!P || P.founded[pid] == null) return 0;
+  return Math.round(P.colony[pid] * (1 + 0.006 * Math.max(0, (day == null ? Game.run.day : day) - P.founded[pid])));
+}
+const coloniesValue = () => U.sum(Object.keys(SITES), colonyValue);
+function found(pid) {
+  const r = Game.run, P = phe(), c = siteCost(pid), S = SITES[pid], ce = GOOD.cedre.idx;
+  if (missing(pid).length) return false;
+  r.cash -= c.cash; r.cargo[ce] -= c.cedar; if (!r.cargo[ce]) r.cost[ce] = 0;
+  r.ship.crew -= c.men;
+  if (SeaScene.player && Main.sceneName === 'sea') SeaScene.player.crew = r.ship.crew;
+  P.founded[pid] = r.day;
+  P.colony[pid] = Math.round((c.cash + c.cedar * GOOD.cedre.base + c.men * 60) * S.value);
+  P.favor = Math.min(100, P.favor + 15);   // (le premier sacrifice dans le sanctuaire du nouveau comptoir)
+  Game.unlock(S.ach);
+  Game.log(`Fondation de ${S.city} : ${monnaie(c.cash)}, ${unites(c.cedar)} de cèdre et ${nb(c.men, 'colon')}.`);
+  Game.checkTitle();
+  return true;
+}
+
+// ════════════ La nuit : sur la grève ou aux étoiles ════════════
+// sur la grève, la galère est tirée au sec chaque soir : le voyage dure plus longtemps près des côtes (les nuits sont plus
+// longues l'hiver), mais l'équipage trouve de l'eau et des vivres et calfate la coque ; loin de toute côte, il faut bien
+// naviguer de nuit. Aux étoiles, on va plus vite, au risque de s'égarer ou de talonner un écueil.
+const BEACH = [0.45, 0.42, 0.35, 0.3, 0.26, 0.24, 0.24, 0.26, 0.3, 0.35, 0.42, 0.45];
+const beachMul = m => 1 + BEACH[m];
+const COAST = 140;
+const nightMode = () => { const P = Game.run && Game.run.phe; return P ? P.night : 'greve'; };
+function setNight(mode, quiet) {
+  const P = phe();
+  if (!P || P.night === mode) return;
+  P.night = mode;
+  if (!quiet) toast(mode === 'greve' ? 'La nuit, la galère sera tirée sur la grève : plus lent, mais sûr.' : 'La nuit, vous suivrez les étoiles : plus vite, à vos risques.', mode === 'greve' ? 'good' : 'gold');
+  if (UI.mode) UI.refresh();
+}
+// risques d'une nuit aux étoiles : les Pilotes de l'Étoile polaire les réduisent
+const navK = () => [1, 0.5, 0.15][Math.min(2, Game.her('navigateur'))];
+
+// ════════════ Melqart ════════════
+const FAVOR0 = 60;
+const favor = () => { const P = Game.run && Game.run.phe; return P ? P.favor : FAVOR0; };
+const favorName = f => (f >= 75 ? 'Bienveillant' : f >= 45 ? 'Apaisé' : f >= 20 ? 'Impatient' : 'Courroucé');
+const favorCls = f => (f >= 45 ? 'pos' : f >= 20 ? '' : 'neg');
+// la colère du dieu : de 0 (apaisé) à 1 (faveur nulle)
+const wrath = () => U.clamp((20 - favor()) / 20, 0, 1) * (1 - 0.3 * Game.her('mazu'));
+const egersis = d => Game.festivalOf(d) && Game.festivalOf(d).name === 'Le Réveil de Melqart';
+
+// ════════════ Le combat : l'éperon, la cadence de charge, les archers ════════════
+const RAM = { k: 0.42, self: 0.08, lock: 1.1, close: 22, arc: 0.6, cap: 90 };
+const CHARGE = { time: 3.2, mul: 1.45, cd: 9 };
+const ARROWS = { range: 125, speed: 150, reload: 3.4, kill: 0.22 };
+// la force de l'éperon d'un navire : celle du navire du joueur (éperon, héritage), sinon selon le type (une galère éperonne,
+// un navire rond presque pas)
+function ramOf(v) {
+  if (v.kind === 'player') { if (v.ramK == null) v.ramK = Game.stats().ram; return v.ramK; }
+  return (v.oars ? 0.75 + 0.08 * (v.tier || 1) : 0.3) * (v.named ? 1.3 : 1);
+}
+function splinters(S, x, y, n) {
+  for (let k = 0; k < n; k++) S.fx.add({ x: x + R.range(-3, 3), y: y + R.range(-3, 3), vx: R.range(-55, 55), vy: R.range(-55, 55), vz: R.range(25, 60), grav: 90, life: 1.3, color: R.pick(['#8a5a30', '#b07a48', '#5a3a22', '#efdcbc']), size: R.range(1, 2.2), layer: 'fx' });
+  for (let k = 0; k < 6; k++) S.fx.add({ x, y, vx: R.range(-14, 14), vy: R.range(-14, 14), vz: R.range(20, 40), grav: 120, life: 0.9, color: R.pick(['#ffffff', '#dff3fb']), size: R.range(0.9, 1.6), layer: 'fx' });
+  S.ring(x, y, 2, 14, 1, 0.7);
+}
+function ram(att, tgt, close, S) {
+  const p = S.player;
+  const side = Math.abs(Math.sin(U.angDiff(att.a, tgt.a)));   // de flanc : 1 ; par l'avant ou par l'arrière : 0
+  const dmg = Math.min(close, RAM.cap) * RAM.k * (0.35 + 0.65 * side) * ramOf(att) * Math.sqrt(att.len / tgt.len);
+  tgt.hull -= dmg; tgt.flash = 0.22; att.hull -= dmg * RAM.self;
+  const thrown = Math.min(Math.max(0, tgt.crew - 1), Math.round(dmg / 18));   // des hommes jetés à l'eau
+  tgt.crew -= thrown;
+  // la proue s'enfonce : l'agresseur reste fiché un instant dans la coque, puis il se dégage
+  att.lockT = RAM.lock; att.v = 0; att.chargeT = 0;
+  tgt.v *= 0.35;
+  const hx = (att.x + tgt.x) / 2, hy = (att.y + tgt.y) / 2;
+  splinters(S, hx, hy, 18 + Math.round(dmg / 3));
+  Sound.sfxPlay('hit', { vol: 1 }); Sound.sfxPlay('creak', { vol: 0.8 });
+  if (att === p || tgt === p) S.shake = Math.max(S.shake, att === p ? 4 : 7);
+  S.float(tgt.x, tgt.y - 10, '-' + Math.round(dmg), tgt === p ? '#ff7a6a' : '#fff2c0');
+  if (att === p) {
+    S.float(hx, hy - 22, side > 0.6 ? 'Éperonné !' : 'Choc !', '#ffd87a');
+    if (!tgt.hostile && !tgt.provoked) tgt.provoked = true;   // (un marchand éperonné ne l'oublie pas)
+  }
+  if (tgt.hull <= 0) {
+    if (att === p && tgt.kind !== 'merchant') Game.unlock('eperon');
+    S.sinkOrSeize(tgt, att);
+  } else if (tgt.hostile && !tgt.named && !tgt.surrendered && tgt.hull < tgt.hullMax * 0.25 && R.chance(0.45)) S.surrender(tgt);
+  if (att.hull <= 0 && !att.dead) S.sinkOrSeize(att, tgt);
+}
+// le choc de deux navires : la proue de l'un dans le flanc de l'autre (seulement entre le joueur et un autre navire)
+function collide(a, b, rel, S) {
+  const p = S.player;
+  if (a !== p && b !== p) return;
+  let hit = false;
+  for (const [att, tgt] of [[a, b], [b, a]]) {
+    if (att.dead || tgt.dead || att.surrendered || att.lockT > 0) continue;
+    const ux = tgt.x - att.x, uy = tgt.y - att.y, d = Math.hypot(ux, uy) || 1;
+    if (Math.abs(U.angDiff(att.a, Math.atan2(uy, ux))) > RAM.arc) continue;
+    const close = ((Math.cos(att.a) * att.v - Math.cos(tgt.a) * tgt.v) * ux + (Math.sin(att.a) * att.v - Math.sin(tgt.a) * tgt.v) * uy) / d;
+    if (close < RAM.close) continue;
+    ram(att, tgt, close, S); hit = true;
+  }
+  // flanc contre flanc à vive allure : celui qui charge brise les rames de l'autre
+  if (!hit && rel > 30 && Math.abs(Math.sin(U.angDiff(a.a, b.a))) < 0.35) {
+    const [att, tgt] = a.chargeT > 0 && !(b.chargeT > 0) ? [a, b] : b.chargeT > 0 && !(a.chargeT > 0) ? [b, a] : [null, null];
+    if (att && tgt.oars && !(tgt.oarsBroken > 0)) {
+      tgt.oarsBroken = 10;
+      S.float(tgt.x, tgt.y - 14, 'Rames brisées !', tgt === p ? '#ff9a8a' : '#ffd87a');
+      Sound.sfxPlay('creak', { vol: 0.9 });
+      splinters(S, tgt.x, tgt.y, 8);
+    }
+  }
+}
+// la cadence de charge : les rameurs donnent tout quelques secondes
+function charge(v, S) {
+  if (v.rl > 0 || v.dead || v.surrendered || v.lockT > 0) return false;
+  if (!v.oars) { if (v === S.player && !(v.noOarT > S.t)) { v.noOarT = S.t + 2; S.float(v.x, v.y - 16, 'Pas de rameurs', '#ffd87a'); } return false; }
+  v.chargeT = CHARGE.time; v.rl = CHARGE.cd; v.rlMax = CHARGE.cd;
+  if (v === S.player) { Sound.sfxPlay('shout', { vol: 0.7 }); S.float(v.x, v.y - 16, 'Cadence de charge !', '#f7d58a'); }
+  return true;
+}
+function nearestFoe(v, S, x, y) {
+  const p = S.player;
+  let best = null, bd = 1e9;
+  x = x == null ? v.x : x; y = y == null ? v.y : y;
+  for (const s of S.ships) {
+    if (s === v || s.dead || s.surrendered) continue;
+    if (v === p ? !(s.hostile || s.provoked) : s !== p) continue;
+    if (S.fogs.length && !S.seen(s)) continue;
+    if (Math.hypot(s.x - v.x, s.y - v.y) > ARROWS.range) continue;
+    const d = Math.hypot(s.x - x, s.y - y);
+    if (d < bd) { bd = d; best = s; }
+  }
+  return best;
+}
+function arrowHit(s, b, S) {
+  const p = S.player;
+  if (b.owner === p && !s.hostile && !s.provoked) s.provoked = true;
+  s.hull -= 0.3; s.flash = Math.max(s.flash, 0.06);
+  if (s.crew > 1 && R.chance(ARROWS.kill)) {
+    s.crew--;
+    S.float(s.x + R.range(-6, 6), s.y - 8, '-1', s === p ? '#ff9a8a' : '#f3ebda');
+    if (s === p) S.shake = Math.max(S.shake, 1.5);
+    // un équipage décimé amène son pavillon
+    if (s.hostile && !s.named && !s.surrendered && s.crew0 && s.crew <= s.crew0 * 0.3 && R.chance(0.3)) S.surrender(s);
+  }
+  if (s.hull <= 0) S.sinkOrSeize(s, b.owner);
+}
+function arrowMiss(b, S) {
+  if (World.sdf(b.x, b.y) > 0) for (let k = 0; k < 2; k++) S.fx.add({ x: b.x, y: b.y, vx: R.range(-6, 6), vy: R.range(-6, 6), vz: R.range(10, 20), grav: 120, life: 0.5, color: '#eaf6f4', size: 0.7, layer: 'fx' });
+}
+function arrowDraw(ctx, b) {
+  const k = b.t / b.life, z = Math.sin(k * Math.PI) * 7, sp = Math.hypot(b.vx, b.vy) || 1, ux = b.vx / sp, uy = b.vy / sp;
+  ctx.fillStyle = 'rgba(4,14,26,0.2)'; Gfx.ellipse(ctx, b.x, b.y, 1.1, 0.5); ctx.fill();
+  ctx.strokeStyle = '#2a1c14'; ctx.lineWidth = 0.45; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(b.x - ux * 3.6, b.y - z - uy * 3.6 + (k - 0.5) * 1.2); ctx.lineTo(b.x, b.y - z); ctx.stroke();
+}
+// une volée de flèches vers l'ennemi le plus proche (ou celui que l'on désigne)
+function volley(v, S, tgt, aim) {
+  if (v.rr > 0 || v.dead || v.surrendered) return false;
+  const p = S.player;
+  tgt = tgt || nearestFoe(v, S, aim && aim[0], aim && aim[1]);
+  if (!tgt || Math.hypot(tgt.x - v.x, tgt.y - v.y) > ARROWS.range) {
+    if (v === p && !(v.outT > S.t)) { v.outT = S.t + 1.5; S.float(v.x, v.y - 16, 'Hors de portée', '#d8dce4'); }
+    return false;
+  }
+  const st = v === p ? Game.stats() : null;
+  let n = U.clamp(2 + Math.floor(v.crew / 8), 2, 8) + (st && st.archers ? 2 : 0);
+  if (v === p) n = Math.min(n, Math.max(1, v.crew - 1));
+  const d = Math.hypot(tgt.x - v.x, tgt.y - v.y), lead = d / ARROWS.speed;
+  const tx = tgt.x + Math.cos(tgt.a) * tgt.v * lead, ty = tgt.y + Math.sin(tgt.a) * tgt.v * lead;
+  const a0 = Math.atan2(ty - v.y, tx - v.x), L = Math.hypot(tx - v.x, ty - v.y);
+  for (let i = 0; i < n; i++) {
+    const a = a0 + R.gauss() * 0.07, u = (i / Math.max(1, n - 1) - 0.5) * v.len * 0.5, sp = ARROWS.speed * R.range(0.95, 1.05);
+    const bx = v.x + Math.cos(v.a) * u, by = v.y + Math.sin(v.a) * u;
+    S.balls.push({ x: bx, y: by, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, life: (L + R.range(-6, 10)) / sp, t: 0, owner: v, dmg: 0, onHit: arrowHit, onMiss: arrowMiss, draw: arrowDraw });
+  }
+  const reload = v === p ? st.arrowReload : ARROWS.reload * 1.15;
+  v.rr = reload; v.rrMax = reload;
+  Sound.sfxPlay('tick', { vol: 0.5 });
+  return true;
+}
+// l'ennemi à la rame : il intercepte, charge la proue dans l'axe, se dégage après le choc et revient ; ses archers tirent
+function think(s, dt, S) {
+  const p = S.player;
+  if (s.crew0 == null) s.crew0 = s.crew;
+  // un équipage décimé par les flèches et les chocs amène son pavillon
+  if (s.hostile && !s.named && !s.wang && !s.surrendered && s.crew <= Math.max(2, s.crew0 * 0.25)) { S.surrender(s); return true; }
+  const dx = p.x - s.x, dy = p.y - s.y, d = Math.hypot(dx, dy), angTo = Math.atan2(dy, dx);
+  let des = angTo, sail = 2;
+  const fleeing = s.ai === 'flee' || (!s.named && !s.wang && s.hull < s.hullMax * 0.25);
+  s.fleeing = fleeing;
+  s.react -= dt;
+  if (p.dead || fleeing) des = angTo + Math.PI;
+  else if (s.backT > 0) { s.backT -= dt; des = angTo + Math.PI * 0.7 * s.backDir; }
+  else {
+    const lead = Math.min(2.5, d / Math.max(30, s.speedMax));
+    des = Math.atan2(p.y + Math.sin(p.a) * p.v * lead - s.y, p.x + Math.cos(p.a) * p.v * lead - s.x);
+    // un abordeur (ou un navire sans rameurs) vient bord à bord, en douceur
+    const boarder = s.crew >= p.crew * 0.9 && (s.boarder || s.crew > p.crew * 1.3);
+    if ((boarder || !s.oars) && d < 80) sail = 1;
+    else if (s.oars && s.crew > s.crew0 * 0.5 && d < 150 && d > 38 && Math.abs(U.angDiff(s.a, des)) < 0.35 && s.rl <= 0) { charge(s, S); s.rl *= R.range(1, 1.4); }
+    if (s.react <= 0 && d < ARROWS.range * 0.95 && volley(s, S, p)) s.react = R.range(0.3, 0.8);
+  }
+  // éviter la côte
+  const lx = s.x + Math.cos(s.a) * 45, ly = s.y + Math.sin(s.a) * 45;
+  if (World.sdf(lx, ly) < 14) { const [gx, gy] = World.grad(lx, ly); des = Math.atan2(gy, gx); }
+  s.sail = sail;
+  s.turnIn = U.clamp(U.angDiff(s.a, des) * 2.2, -1, 1);
+  return true;
+}
+
+// ════════════ Durées des trajets (les nuits sur la grève comprises) ════════════
+const PACE = 0.82;
+// une route qui longe la côte s'allonge des nuits passées à terre ; en haute mer, on navigue jour et nuit
+function pathDays(path, sp, d0, mode) {
+  const r = Game.run;
+  mode = mode || nightMode();
+  let d = d0 == null ? (r ? r.day : 0) : d0, t = 0;
+  for (let i = 1; i < path.length; i++) {
+    const a = path[i - 1], b = path[i], seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if (seg < 0.5) continue;
+    const coast = mode === 'greve' && World.sdf((a[0] + b[0]) / 2, (a[1] + b[1]) / 2) < COAST;
+    const dd = seg / (sp * PACE) * DAYS_PER_SEC * (coast ? beachMul(monthOf(d)) : 1);
+    t += dd; d += dd;
+  }
+  return t;
+}
+const paths = new Map();
+let pathsOf = null;
+function routeOf(a, b) {
+  if (pathsOf !== World.ports) { paths.clear(); pathsOf = World.ports; }
+  const k = a + '|' + b;
+  if (!paths.has(k)) {
+    const pa = worldPort(a), pb = worldPort(b);
+    paths.set(k, pa && pb ? World.findPath(pa.x, pa.y, pb.x, pb.y) : null);
+  }
+  return paths.get(k);
+}
+// la part d'une route loin de toute côte (où l'on ne peut pas tirer la galère au sec)
+function openSea(path) {
+  let n = 0, far = 0;
+  for (let i = 1; i < path.length; i++) {
+    const a = path[i - 1], b = path[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    for (let s = 0; s < L; s += 24) { n++; if (World.sdf(a[0] + (b[0] - a[0]) * s / L, a[1] + (b[1] - a[1]) * s / L) >= COAST) far++; }
+  }
+  return n ? far / n : 0;
+}
+
+// ════════════ Les règles ════════════
+const rules = {
+  auto: null,   // (le banc d'essai répond lui-même aux questions posées en mer : la fondation)
+  onNewRun(run) {
+    run.phe = { favor: FAVOR0 + 10 * Game.her('mazu'), night: 'greve', founded: {}, colony: {}, heard: [], warned: 0, maxFavor: 0, greeted: false };
+  },
+  onNewDay(d) {
+    const r = Game.run, P = r && r.phe;
+    if (!P) return;
+    // la faveur de Melqart s'use avec le temps
+    const f0 = P.favor;
+    P.favor = Math.max(0, P.favor - 0.6 * (1 - 0.3 * Game.her('mazu')));
+    if (f0 >= 35 && P.favor < 35) toast('Melqart s\'impatiente : honorez-le au temple, ou la mer vous le fera payer.', 'bad');
+    if (f0 >= 20 && P.favor < 20) Bus.emit('banner', { title: 'COLÈRE DE MELQART', sub: 'Le dieu de Tyr se détourne de vous : tempêtes et malheurs vous guettent.', kind: 'red' });
+    const t = dateOf(d);
+    if (t.d === 1) {
+      // le tribut des comptoirs, déposé au Trésor
+      for (const pid of Object.keys(SITES)) {
+        if (P.founded[pid] == null || d - P.founded[pid] < 20) continue;
+        const v = Math.round(colonyValue(pid, d) * SITES[pid].tribute);
+        if (v <= 0) continue;
+        r.bank += v;
+        toast(`${SITES[pid].city} vous verse son tribut : ${monnaie(v)}, déposés au Trésor.`, 'gold');
+        Game.log(`Tribut de ${SITES[pid].city} : ${monnaie(v)}.`);
+      }
+      // la teinturerie familiale de Tyr
+      const tl = Game.her('teinturiers');
+      if (tl && d > 1) {
+        const n = 3 * tl;
+        Game.ware('tyr')[GOOD.pourpre.idx] += n;
+        toast(`La teinturerie familiale a produit ${unites(n)} de pourpre : ${n > 1 ? 'ils vous attendent' : 'il vous attend'} à l'entrepôt de Tyr.`, 'gold');
+      }
+    }
+  },
+  onDepart(from, dest) {
+    const S = SeaScene, P = phe();
+    S.fortWarned = null; S.pStuck = 0; S.pheDay = null; S.nightAcc = 0; S.chaseLog = 0;   // (état propre à une traversée)
+    P.voy = { d0: Game.run.day, stars: 0, incidents: 0 };
+  },
+  onArrive(pid, out) {
+    const r = Game.run, P = phe(), V = P.voy;
+    if (pid === 'gadir') Game.unlock('colonnes');
+    if (pid === 'tyr' && r.cargo[GOOD.argent.idx] >= 50) Game.unlock('argent');
+    if (V) {
+      if (r.day - V.d0 >= 10 && [11, 0, 1].includes(monthOf(r.day))) Game.unlock('hiver');
+      if (V.stars >= 8 && !V.incidents) Game.unlock('etoiles');
+    }
+    P.voy = null;
+    if (isSite(pid) && founded(pid) && !P.heard.includes('vu' + pid)) {
+      P.heard.push('vu' + pid);
+      out.push({ kind: 'toast', t: `${SITES[pid].city} sort de terre : des cabanes de cèdre, un sanctuaire, un quai. Le comptoir grandira chaque jour.`, k: 'gold' });
+    }
+    if (pid === 'tyr' && egersis(r.day)) out.push({ kind: 'toast', t: 'Le Réveil de Melqart : au temple de Tyr, vos offrandes comptent double.', k: 'gold' });
+  },
+  onEnterPort() {
+    const r = Game.run, P = r && r.phe;
+    if (!P || P.greeted || r.day > 2) return;
+    P.greeted = true;
+    setTimeout(() => UI.toast('En ces temps, pas de canons : votre arme, c\'est l\'éperon de votre galère, vos archers et vos hommes à l\'abordage. Honorez Melqart, et regardez vers l\'ouest : Carthage reste à fonder.', 'gold', 'temple'), 2600);
+  },
+  // ── Les comptoirs : des sites fermés jusqu'à leur fondation, vers lesquels on peut appareiller ──
+  dormant,
+  closed(pid) {
+    const r = Game.run;
+    if (!r || !r.phe || !dormant(pid)) return null;
+    return ['Site à fonder', `Personne n'a encore bâti sur ${SITES[pid].where}. Apportez de l'argent, du cèdre et des colons pour y fonder ${SITES[pid].city}.`];
+  },
+  closedAt(pid) { return dormant(pid); },
+  openOnArrival(pid) { return dormant(pid); },
+  quarantineIf() { return 0; },
+  // (pour le banc d'essai : la fondation, si l'on a tout ce qu'il faut)
+  submitCost(pid) { return dormant(pid) && !missing(pid).length ? siteCost(pid).cash : null; },
+  submit(pid) { return dormant(pid) && found(pid); },
+  shutOffer(pid) {
+    if (!dormant(pid)) return false;
+    const S = SITES[pid], c = siteCost(pid), miss = missing(pid);
+    const done = v => {
+      if (v === 'found' && found(pid)) {
+        SeaScene.shutWarned = null; SeaScene.setDest(pid); SeaScene.auto = true;   // (on accoste au nouveau comptoir)
+        Bus.emit('banner', { title: `${S.city.toUpperCase()} EST FONDÉE !`, sub: pid === 'carthage' ? 'Qart-Hadasht, la « ville nouvelle » : un jour, ses suffètes gouverneront la mer.' : 'Le comptoir de Nora tient la route de l\'ouest.', kind: 'jade' });
+        Sound.play('fanfare');
+      } else toast('Choisissez une autre destination sur la carte, ou revenez avec ce qu\'il faut.', 'bad');
+    };
+    if (rules.auto) { done(rules.auto('fondation', { pid })); return true; }
+    UI.choice(`Fonder ${S.city}`, [
+      `Devant vous, ${S.where}. Une bonne rade, de l'eau douce, des terres à blé : le lieu idéal d'un comptoir.`,
+      `Il faut ${monnaie(c.cash)} pour payer les terres et les bâtisseurs, ${unites(c.cedar)} de cèdre pour les maisons et le sanctuaire, et ${nb(c.men, 'colon')} parmi votre équipage, qui resteront à terre.`,
+      miss.length ? `Il vous manque : ${andList(miss)}.` : 'Fondé, le comptoir comptera dans votre fortune, grandira chaque jour et vous versera un tribut chaque mois. Son marché vous sera ouvert.'],
+    [{ label: 'Faire demi-tour', value: 'no' }, { label: `Fonder ${S.city}`, value: 'found', cls: 'gold', disabled: !!miss.length }], 'temple').then(done);
+    return true;
+  },
+  rumor() {
+    const r = Game.run, P = phe();
+    if (r.phe && !founded('carthage') && !P.heard.includes('carthage') && R.chance(0.35)) { P.heard.push('carthage'); return { text: 'Un pilote de Kition jure qu\'au fond du golfe de Tunis, sur la colline de Byrsa, une cité pourrait tenir toute la route de l\'ouest. Qui y bâtira le premier ?' }; }
+    if (favor() < 30 && R.chance(0.5)) return { text: 'Les prêtres le disent : Melqart a soif d\'offrandes. Les tempêtes d\'hiver sont sa colère.' };
+    if (!P.heard.includes('gadir') && R.chance(0.3)) { P.heard.push('gadir'); return { text: 'À Gadir, au-delà des Colonnes d\'Héraclès, l\'argent de Tartessos et l\'étain s\'échangent pour presque rien. Mais la route est longue.' }; }
+    return null;
+  },
+  // ── La faveur de Melqart ──
+  onOffering(amount) {
+    const r = Game.run, P = r && r.phe;
+    if (!P) return;
+    const gain = (amount >= 1000 ? 60 : amount >= 200 ? 25 : 10) * (r.port === 'tyr' && egersis(r.day) ? 2 : 1);
+    P.favor = Math.min(100, P.favor + gain);
+    if (P.favor >= 100) Game.unlock('melqart');
+  },
+  temple() {
+    const f = favor();
+    return h('div', { class: 'stack', style: { marginBottom: '10px' } },
+      h('div', { class: 'stat' }, h('span', null, 'Faveur de Melqart'), h('b', { class: favorCls(f) }, `${favorName(f)} (${Math.round(f)}/100)`)),
+      h('p', { class: 'hint' }, f < 20 ? 'Le dieu est courroucé : ses tempêtes vous guettent, et la mer réclamera des hommes. Une offrande, vite !' : 'La faveur du dieu s\'use chaque jour. Au-dessous de 20, sa colère vous suivra en mer : tempêtes plus fréquentes, hommes et cargaisons emportés.'));
+  },
+  stormChance(path, m) { return TYPHOON_SEASON[m] * (1 + 1.5 * wrath()) * (favor() >= 75 ? 0.85 : 1); },
+  // ── Le navire ──
+  stats(st, S, ship) {
+    const u = ship.upg || {};
+    st.ram = (S.ram || 0.3) * (u.eperon ? 1.3 : 1) * (1 + 0.15 * Game.her('canonniers'));
+    st.archers = !!u.archers;
+    st.arrowReload = ARROWS.reload * (1 - 0.1 * Game.her('canonniers')) * (u.archers ? 0.8 : 1);
+  },
+  shipStats(st) {
+    return [['Éperon', st.ram >= 0.6 ? `force ${st.ram.toFixed(2).replace('.', ',')}` : 'presque sans éperon (navire rond)'], ['Archers', `une volée toutes les ${st.arrowReload.toFixed(1).replace('.', ',')} s`]];
+  },
+  eat(s) { return (SHIPS[s.type].eat || 1) * (nightMode() === 'greve' ? 0.8 : 1); },
+  worth() { return coloniesValue(); },
+  worthLines(r) { const P = r && r.phe; return P && Object.keys(P.founded).length ? [['Comptoirs fondés', U.sum(Object.keys(SITES), pid => (P.founded[pid] == null ? 0 : Math.round(P.colony[pid] * (1 + 0.006 * Math.max(0, r.day - P.founded[pid])))))]] : []; },
+  travelDays(a, b) { const p = routeOf(a, b); return p ? pathDays(p, 60) : World.routeLen(a, b) * 1.3 / 60 * DAYS_PER_SEC; },
+  pathDays(path, sp) { return pathDays(path, sp); },
+  // le reste du trajet, au pilote, avec les nuits sur la grève
+  eta(pid, p, d) {
+    const S = SeaScene;
+    if (!S.path || S.dest !== pid) return d * 1.15 / Math.max(20, p.speedMax * 0.85) * DAYS_PER_SEC;
+    const rest = [[p.x, p.y]].concat(S.path.slice(Math.min(S.wp, S.path.length - 1)));
+    return pathDays(rest, p.speedMax);
+  },
+  // ── En mer ──
+  dayMul(S) {
+    const P = Game.run.phe;
+    if (!P || P.night !== 'greve' || S.combat) return 1;
+    const p = S.player;
+    return World.sdf(p.x, p.y) < COAST ? beachMul(monthOf(Game.run.day)) : 1;
+  },
+  drag(v) {
+    if (v.lockT > 0) return 0;
+    let k = 1;
+    if (v.chargeT > 0) k *= CHARGE.mul;
+    if (v.oarsBroken > 0) k *= 0.62;
+    // (une galère ennemie qui a perdu ses rameurs se traîne ; celle du joueur, le moteur s'en charge : équipage minimum)
+    if (v.rowing && v.crew0 && v.kind !== 'player') k *= 0.45 + 0.55 * U.clamp(v.crew / v.crew0 / 0.6, 0, 1);
+    return k;
+  },
+  collide,
+  think,
+  seaInput(S, p) {
+    if (Input.hit('fireL')) charge(p, S);
+    if (Input.hit('fireR') || Input.hit('fire')) volley(p, S);
+    const pt = Input.pointer;
+    if (pt.clicked && !Input.blocked && !Main.fadeDir && pt.type === 'mouse' && Main.bufPoint) {
+      const bp = Main.bufPoint(pt.x, pt.y);
+      volley(p, S, null, [bp.x + S.camX, bp.y + S.camY]);   // (le clic désigne la cible)
+    }
+    return true;
+  },
+  merchant(v) {
+    const x = v.x, y = v.y, near = (lon, lat, r) => Math.hypot(x - lonX(lon), y - latY(lat)) < r * WORLD.K;
+    if (near(31.6, 31.5, 3.2)) { v.scheme = 'phe_egypt'; v.name = 'Navire égyptien'; }
+    else if (near(24.5, 37.5, 4.5)) { v.scheme = 'phe_grec'; v.name = 'Navire grec'; }
+    else { v.scheme = 'phe_merchant'; v.name = v.style === 'cog' ? 'Gaulos marchand' : v.style === 'galley' ? 'Galère marchande' : 'Barque de cabotage'; }
+  },
+  // chaque image : les minuteries du combat (la proue fichée dans une coque, la charge, les rames brisées)
+  seaFrame(S, dt) {
+    for (const s of S.ships) {
+      if (s.lockT > 0 && (s.lockT -= dt) <= 0 && s !== S.player) { s.backT = 1.4; s.backDir = R.chance(0.5) ? 1 : -1; }
+      if (s.chargeT > 0) s.chargeT -= dt;
+      if (s.oarsBroken > 0) s.oarsBroken -= dt;
+    }
+  },
+  seaSpawn(S) {
+    const r = Game.run, P = r.phe, p = S.player;
+    if (!P) return;
+    S.unpinPlayer();
+    // les poursuivants immobilisés renoncent ; au large, une chasse qui ne gagne plus de terrain s'arrête ; les galères de
+    // guerre de Tyr, de Sidon et de Carthage couvrent les navires qu'elles accueillent
+    for (const s of S.ships) {
+      if (!s.hostile || s.dead || s.surrendered || s.sated) continue;
+      if (S.giveUpIfStuck(s)) continue;
+      if (s.kind === 'merchant') continue;
+      const d = Math.hypot(s.x - p.x, s.y - p.y);
+      if (s.chaseD == null || d < s.chaseD - 25) { s.chaseD = d; s.chaseT = 0; } else if (d > 140 && (s.chaseT = (s.chaseT || 0) + 1) > 12) { s.ai = 'flee'; s.sated = true; continue; }
+      const port = World.ports.find(q => (q.id === 'tyr' || q.id === 'sidon' || (q.id === 'carthage' && founded('carthage'))) && Math.hypot(q.x - p.x, q.y - p.y) < 220 && Math.hypot(q.x - s.x, q.y - s.y) < (Math.hypot(q.x - p.x, q.y - p.y) < 90 ? 600 : 140));
+      if (!port) continue;
+      s.ai = 'flee'; s.sated = true;
+      if (S.fortWarned !== port.id) { S.fortWarned = port.id; toast(`Les galères de guerre ${deLieu(PORT[port.id].name)} sortent du port : vos poursuivants rompent le combat.`, 'good'); }
+    }
+    // les nuits : une par jour de calendrier écoulé
+    if (S.pheDay == null) S.pheDay = r.day;
+    S.nightAcc = (S.nightAcc || 0) + (r.day - S.pheDay); S.pheDay = r.day;
+    while (S.nightAcc >= 1 && !S.over) { S.nightAcc -= 1; if (!S.combat) night(S); }
+  },
+  prompt(p, S) {
+    if (S.combat) return null;
+    for (const pid of Object.keys(SITES)) {
+      if (!dormant(pid)) continue;
+      const q = worldPort(pid);
+      // (bot : false — le banc d'essai fonde en mettant le cap sur le site, pas en passant devant)
+      if (Math.hypot(q.x - p.x, q.y - p.y) < 46) return { kind: 'sea', text: `Fonder ${SITES[pid].city}`, key: 'Entrée', bot: false, act: () => { S.shutWarned = null; S.dock(pid); } };
+    }
+    return null;
+  },
+  // un site à fonder, en mer : quelques pieux et un feu sur la plage
+  seaDraw(ctx, S, t) {
+    for (const pid of Object.keys(SITES)) {
+      if (!dormant(pid)) continue;
+      const q = worldPort(pid);
+      if (Math.abs(q.x - S.camX - S.W / 2) > S.W || Math.abs(q.y - S.camY - S.H / 2) > S.H) continue;
+      ctx.strokeStyle = 'rgba(247,213,138,0.7)'; ctx.lineWidth = 0.6; ctx.setLineDash([1.6, 1.6]);
+      ctx.beginPath(); ctx.arc(q.x, q.y, 9 + Math.sin(t * 2) * 0.8, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = '#6b4526';
+      for (let i = 0; i < 4; i++) ctx.fillRect(q.x - 4 + i * 2.4, q.y - 2.6 - (i % 2) * 0.8, 0.8, 3.2);
+      Gfx.glow(ctx, q.x + 3.5, q.y + 1.5, 3 + Math.sin(t * 9) * 0.5, '#ffb347', 0.8);
+    }
+  },
+  // ── Interface ──
+  hud(it) {
+    const P = Game.run.phe, out = [];
+    if (!P) return out;
+    const n = it('nuit', h('b', null, P.night === 'greve' ? 'Grève' : 'Étoiles'), 'hide-sm', P.night === 'greve' ? 'Les nuits sur la grève (plus lent, plus sûr). Toucher, ou N en mer : naviguer aux étoiles.' : 'Les nuits aux étoiles (plus vite, à vos risques). Toucher, ou N en mer : la grève.');
+    n.style.cursor = 'pointer'; n.onclick = () => setNight(P.night === 'greve' ? 'etoiles' : 'greve');
+    out.push(n);
+    const f = favor();
+    out.push(it('temple', h('b', { class: favorCls(f) }, f < 20 ? 'Courroux' : Math.round(f)), f < 35 ? '' : 'hide-sm', `Faveur de Melqart : ${favorName(f)} (${Math.round(f)}/100)`));
+    return out;
+  },
+  chartSide(sel, departing) {
+    const r = Game.run, P = r.phe, out = [];
+    if (!P) return out;
+    if (dormant(sel)) {
+      const c = siteCost(sel), miss = missing(sel);
+      out.push(h('p', { class: 'hint' }, `Fonder ${SITES[sel].city} : ${monnaie(c.cash)}, ${unites(c.cedar)} de cèdre et ${nb(c.men, 'colon')}. Faites voile : le comptoir se fonde à l'arrivée.`));
+      if (miss.length) out.push(h('p', { class: 'neg' }, `Il vous manque encore : ${andList(miss)}.`));
+    } else if (isSite(sel)) out.push(h('p', { class: 'hint' }, `Votre comptoir de ${SITES[sel].city} vaut ${monnaie(colonyValue(sel))} et grandit chaque jour.`));
+    const path = UI.routeCache && UI.routeCache.path, st = Game.stats();
+    if (path && st) {
+      const g = pathDays(path, st.speed, null, 'greve'), e = pathDays(path, st.speed, null, 'etoiles'), far = openSea(path);
+      const line = h('p', { class: 'hint' }, `Nuits sur la grève : ~${nb(Math.round(g), 'jour')} ; aux étoiles : ~${nb(Math.round(e), 'jour')}${far > 0.2 ? ` (${Math.round(far * 100)} % de la route en haute mer, sans grève possible)` : ''}.`);
+      const b = btn(P.night === 'greve' ? 'Naviguer aux étoiles' : 'Passer les nuits sur la grève', () => { setNight(P.night === 'greve' ? 'etoiles' : 'greve'); b.textContent = P.night === 'greve' ? 'Naviguer aux étoiles' : 'Passer les nuits sur la grève'; mode.textContent = P.night === 'greve' ? 'Choix actuel : la grève.' : 'Choix actuel : les étoiles.'; }, 'sm');
+      const mode = h('span', { class: 'hint' }, P.night === 'greve' ? 'Choix actuel : la grève.' : 'Choix actuel : les étoiles.');
+      out.push(line, h('div', { class: 'row' }, b, mode));
+    }
+    const m = monthOf(r.day);
+    if (departing && [10, 11, 0, 1, 2].includes(m)) out.push(h('p', { class: 'neg' }, 'Mare clausum : l\'hiver, les tempêtes sont fréquentes et les galères y sont fragiles. Les vieux capitaines attendent le printemps.'));
+    if (favor() < 20) out.push(h('p', { class: 'neg' }, 'Melqart est courroucé : ses tempêtes guettent votre route. Une offrande au temple l\'apaiserait.'));
+    return out;
+  },
+  tavern(pid, render) {
+    return [h('h4', null, 'ATTENDRE AU PORT'), h('div', { class: 'row' },
+      btn('Attendre une semaine', () => { Game.advance(7); UI.toast('Une semaine passe…', ''); UI.after(); render(); }, 'sm'),
+      h('span', { class: 'hint' }, 'Pour laisser passer l\'hiver, ou un coup de vent.'))];
+  },
+  // pour le banc d'essai
+  SITES, siteCost, missing, found, founded, colonyValue, setNight, favor, volley, charge, ARROWS, CHARGE,
+};
+// une nuit en mer : sur la grève près des côtes, sinon aux étoiles (avec ses risques)
+function night(S) {
+  const r = Game.run, P = r.phe, p = S.player, m = monthOf(r.day), winter = [10, 11, 0, 1, 2].includes(m);
+  const coast = World.sdf(p.x, p.y) < COAST, beach = P.night === 'greve' && coast;
+  const V = P.voy || (P.voy = { d0: r.day, stars: 0, incidents: 0 });
+  if (beach) {
+    // la galère tirée au sec : on calfate, on trouve de l'eau ; mais des pillards rôdent sur certaines côtes
+    const st = Game.stats();
+    if (p.hull < p.hullMax * 0.85) p.hull = Math.min(p.hullMax * 0.85, p.hull + p.hullMax * 0.004);
+    if (!P.beachTold && Game.meta.runs < 2) { P.beachTold = true; toast('Chaque soir, l\'équipage tire la galère sur une plage. Touche N (ou le bouton « Grève ») pour naviguer aux étoiles.', ''); }
+    const dz = World.danger(p.x, p.y);
+    if (R.chance(0.006 + 0.04 * dz)) {
+      V.incidents++;
+      const lost = Math.min(Math.max(0, p.crew - 2), R.int(1, 2));
+      p.crew -= lost; r.ship.crew = p.crew;
+      toast(lost ? `Des pillards ont attaqué le camp sur la grève : ${marinsPerdus(lost).toLowerCase()}.` : 'Des pillards rôdaient autour du camp : la garde les a chassés.', 'bad');
+    } else if (st && R.chance(0.025)) {
+      r.ship.food += Math.round(Game.mouths(r.ship) * 3);
+      toast('Des bergers vous vendent de l\'eau, du fromage et des chevreaux : trois jours de vivres en plus.', 'good');
+    }
+  } else {
+    // aux étoiles : la « phénicienne » (l'Étoile polaire) guide le pilote… quand le ciel est clair
+    V.stars++;
+    const k = navK() * (1 + 0.6 * wrath()) * (S.rain > 0.3 ? 1.5 : 1);
+    if (R.chance((winter ? 0.07 : 0.035) * k)) {
+      V.incidents++;
+      const n = R.int(1, 2);
+      Game.advance(n); Game.consumeFood(n);
+      toast(`Nuit sans étoiles : le pilote s'est égaré, ${nb(n, 'jour')} de perdu${n > 1 ? 's' : ''}.`, 'bad');
+    } else if (World.sdf(p.x, p.y) < 80 && R.chance(0.05 * k)) {
+      V.incidents++;
+      const dmg = p.hullMax * R.range(0.05, 0.1);
+      p.hull -= dmg; p.flash = 0.2; S.shake = 4;
+      S.float(p.x, p.y - 14, 'Écueil !', '#ffd87a');
+      toast('Dans la nuit, la galère a talonné un écueil : la coque est touchée.', 'bad');
+      if (p.hull <= 0) S.sink(p, null);
+    }
+  }
+  // la colère de Melqart : la mer réclame son dû
+  const w = wrath();
+  if (w > 0 && R.chance(0.05 * w)) {
+    const gi = r.cargo.map((n, i) => [n, i]).filter(x => x[0] > 0).sort((a, b) => b[0] - a[0])[0];
+    if (gi && R.chance(0.5)) { const n = Math.max(1, Math.round(gi[0] * 0.06)); r.cargo[gi[1]] -= n; toast(`Une lame de fond, envoyée par Melqart, emporte ${unites(n)} ${GOODS[gi[1]].de}.`, 'bad'); }
+    else if (p.crew > 3) { p.crew--; r.ship.crew = p.crew; toast('La mer réclame un homme : Melqart est en colère.', 'bad'); }
+  }
+}
+// N : la grève ou les étoiles (en mer comme au port)
+Bus.on('key', e => {
+  if (e.code !== 'KeyN' || Seas.current !== 'phenicie' || !Game.run || UI.isOpen() || (Main.sceneName !== 'sea' && Main.sceneName !== 'port')) return;
+  setNight(nightMode() === 'greve' ? 'etoiles' : 'greve');
+});
+
+// ════════════ Façades propres : le temple de Melqart, la maison du prêteur, la cour des osselets ════════════
+const facades = {
+  temple(it, cul, o) {
+    const x = this.x, { x0, w, top, cx } = o;
+    // l'enceinte de pierre claire, à assises régulières
+    x.fillStyle = Gfx.lin(x, 0, top + 10, 0, GY, [[0, '#efe2c4'], [1, '#d6c39b']]); x.fillRect(x0, top + 10, w, GY - 15 - top);
+    x.strokeStyle = rgba('#b39c70', 0.45); x.lineWidth = 0.3;
+    x.beginPath(); for (let y = top + 14; y < GY - 5; y += 4.6) { x.moveTo(x0, y); x.lineTo(x0 + w, y); } x.stroke();
+    for (let i = x0; i < x0 + w - 2; i += 6) this.rr(i, top + 6, 3.4, 4.4, 0.3, '#ecdfc0');
+    // la cella cubique, au centre, coiffée d'une gorge égyptisante et de merlons à degrés
+    const cw = 42, c0 = cx - cw / 2, ct = top - 6;
+    x.fillStyle = Gfx.lin(x, c0, 0, c0 + cw, 0, [[0, '#dcc89e'], [0.5, '#f5ead0'], [1, '#d2bc90']]); x.fillRect(c0, ct, cw, GY - 5 - ct);
+    this.rr(c0 - 3, ct - 3.4, cw + 6, 3.8, 0.4, '#f6efe0');
+    this.r(c0 - 3, ct + 0.4, cw + 6, 1.4, cul.trim);
+    for (let i = c0 - 2; i < c0 + cw; i += 6.2) { this.rr(i, ct - 7.4, 4, 4.4, 0.3, '#f1e6cc'); this.rr(i + 1, ct - 9.6, 2, 2.6, 0.3, '#f1e6cc'); }
+    // la porte voilée de pourpre, sous le disque ailé
+    const dw = 14, dy = GY - 31;
+    this.rr(cx - dw / 2 - 2.4, dy - 2.4, dw + 4.8, GY - 5 - dy + 2.4, 0.5, '#c4ab80');
+    x.fillStyle = Gfx.lin(x, 0, dy, 0, GY - 5, [[0, '#4a1430'], [1, '#7b2a4f']]); x.fillRect(cx - dw / 2, dy, dw, GY - 5 - dy);
+    x.strokeStyle = rgba('#2a0a18', 0.5); x.lineWidth = 0.4;
+    x.beginPath(); for (let i = 1; i < 4; i++) { const px = cx - dw / 2 + i * dw / 4; x.moveTo(px, dy + 1); x.quadraticCurveTo(px + 0.8, dy + 12, px - 0.4, GY - 5); } x.stroke();
+    x.fillStyle = PAL.gold; x.beginPath(); x.arc(cx, dy - 6, 1.9, 0, TAU); x.fill();
+    for (const s of [-1, 1]) { x.beginPath(); x.moveTo(cx + s * 1.8, dy - 6.4); x.quadraticCurveTo(cx + s * 7, dy - 9, cx + s * 11, dy - 6.6); x.quadraticCurveTo(cx + s * 7, dy - 5.6, cx + s * 1.8, dy - 5.2); x.fill(); }
+    // les deux colonnes de bronze devant le sanctuaire (Jakin et Boaz, comme au temple de Tyr)
+    for (const s of [-1, 1]) {
+      const px = cx + s * 17 - 2.5;
+      x.fillStyle = Gfx.lin(x, px, 0, px + 5, 0, [[0, '#8a5a24'], [0.4, '#e0b060'], [1, '#7a4a1c']]); x.fillRect(px, GY - 42, 5, 37);
+      this.rr(px - 1.6, GY - 45.5, 8.2, 3.6, 0.8, '#d8a940');
+      x.fillStyle = '#c99838'; Gfx.ellipse(x, px + 2.5, GY - 47, 3.4, 1.8); x.fill();
+      this.rr(px - 1.2, GY - 7, 7.4, 2.2, 0.4, '#b89a6a');
+    }
+    // l'autel des parfums, à cornes
+    this.rr(cx + 27, GY - 13, 9, 8, 0.5, '#bfa77a');
+    for (const hx of [cx + 27, cx + 34.6]) this.rr(hx, GY - 15, 1.4, 2.4, 0.4, '#a88c5c');
+    it.incense = { x: cx + 31.5, y: GY - 13 };
+    this.sign(it, cx - 19, ct + 7, 38, 8, 'dark');
+    it.roofTop = ct - 9.6;
+    this.lantern(x0 + 5, top + 16, cul.lantern); this.lantern(x0 + w - 6, top + 16, cul.lantern);
+  },
+  // le Trésor du temple : pierre de taille, porte de bronze, bannière de pourpre
+  banque(it, cul, o) {
+    const x = this.x, { x0, w, top, cx } = o;
+    x.fillStyle = Gfx.lin(x, 0, top, 0, GY, [[0, '#ece2cc'], [1, '#d4c4a2']]); x.fillRect(x0, top, w, GY - 5 - top);
+    x.strokeStyle = rgba('#b4a07a', 0.5); x.lineWidth = 0.3;
+    x.beginPath(); for (let y = top + 4; y < GY - 5; y += 5) { x.moveTo(x0, y); x.lineTo(x0 + w, y); for (let i = x0 + ((y / 5) % 2 ? 4 : 10); i < x0 + w; i += 12) { x.moveTo(i, y); x.lineTo(i, y + 5); } } x.stroke();
+    for (const px of [x0 + 6, x0 + w - 12]) { x.fillStyle = Gfx.lin(x, px, 0, px + 6, 0, [[0, '#cbbb98'], [0.5, '#f4ecd8'], [1, '#c2b08a']]); x.fillRect(px, top + 4, 6, GY - 9 - top); this.rr(px - 1, top + 2.4, 8, 2.2, 0.4, '#e8dcc0'); }
+    const dw = 16, dy = GY - 28;
+    this.rr(cx - dw / 2 - 2, dy - 2, dw + 4, GY - 5 - dy + 2, 0.6, '#b89a6a');
+    x.fillStyle = Gfx.lin(x, cx - dw / 2, 0, cx + dw / 2, 0, [[0, '#7a4a1c'], [0.5, '#d8a050'], [1, '#6a3a14']]); x.fillRect(cx - dw / 2, dy, dw, GY - 5 - dy);
+    x.fillStyle = '#5a3412'; for (let i = 0; i < 3; i++) for (const s of [-1, 1]) { x.beginPath(); x.arc(cx + s * 4, dy + 5 + i * 7, 0.8, 0, TAU); x.fill(); }
+    this.line(cx, dy, cx, GY - 5, '#4a2a10', 0.5);
+    for (const bx of [x0 + 15, x0 + w - 21]) { this.rr(bx, top + 14, 6, 22, 0.4, cul.trim); x.fillStyle = PAL.gold; x.beginPath(); x.arc(bx + 3, top + 20, 1.4, 0, TAU); x.fill(); x.fillStyle = cul.trim; x.beginPath(); x.moveTo(bx, top + 36); x.lineTo(bx + 3, top + 39); x.lineTo(bx + 6, top + 36); x.fill(); }
+    it.roofTop = this.roof('crenel', x0, top, w, cul);
+    this.sign(it, cx - 22, top + 5, 44, 9, 'white');
+    this.lantern(cx - dw / 2 - 6, dy + 2, cul.lantern); this.lantern(cx + dw / 2 + 6, dy + 2, cul.lantern);
+  },
+  usurier(it, cul, o) {
+    const x = this.x, { x0, w, top, cx } = o;
+    this.window('slit', x0 + 9, top + 8, 6, 10, cul); this.window('slit', x0 + w - 15, top + 8, 6, 10, cul);
+    // le comptoir du prêteur : la balance, les anneaux d'argent pesé
+    const ay = GY - 23;
+    this.r(x0 + 5, ay, w - 10, 18, '#2a1c14');
+    this.rr(x0 + 7, GY - 10, w - 14, 5, 0.6, '#6b4526');
+    this.line(cx, ay + 1.5, cx, GY - 10, '#c9a040', 0.6);
+    this.line(cx - 9, ay + 4, cx + 9, ay + 4, '#c9a040', 0.7);
+    for (const s of [-1, 1]) { this.line(cx + s * 9, ay + 4, cx + s * 7, ay + 9, '#c9a040', 0.3); this.line(cx + s * 9, ay + 4, cx + s * 11, ay + 9, '#c9a040', 0.3); x.fillStyle = '#d8a940'; x.beginPath(); x.ellipse(cx + s * 9, ay + 9.4, 2.6, 0.9, 0, 0, Math.PI); x.fill(); }
+    x.strokeStyle = '#e4e8ee'; x.lineWidth = 0.5;
+    for (let i = 0; i < 5; i++) { x.beginPath(); x.arc(x0 + 10 + i * 4.2, GY - 11.4, 1.1, 0, TAU); x.stroke(); }
+    this.lights.push({ x: cx, y: ay + 8, wx: x0 + 6, wy: ay + 1, w: w - 12, h: 8, kind: 'win', on: true, warm: true });
+    it.roofTop = this.roof(cul.roofType, x0, top, w, cul);
+    this.sign(it, cx - 20, top + 22, 40, 8, 'dark');
+  },
+  jeu(it, cul, o) {
+    const x = this.x, { x0, w, top, cx } = o;
+    this.window(cul.win, x0 + 9, top + 7, 7, 9, cul); this.window(cul.win, x0 + w - 16, top + 7, 7, 9, cul);
+    const oy = GY - 24;
+    this.r(x0 + 6, oy, w - 12, 19, '#2a1a14');
+    // l'auvent rayé de pourpre
+    const ay = oy - 5, n = Math.ceil((w - 4) / 6);
+    for (let i = 0; i < n; i++) { const ax = x0 + 2 + i * 6; x.fillStyle = i % 2 ? cul.awning[0] : cul.awning[1]; x.beginPath(); x.moveTo(ax, ay); x.lineTo(ax + 6, ay); x.lineTo(ax + 6, ay + 4.4); x.quadraticCurveTo(ax + 3, ay + 6.6, ax, ay + 4.4); x.closePath(); x.fill(); }
+    // la table basse et les osselets, deux amphores
+    this.rr(cx - 12, GY - 11, 24, 3, 0.5, '#8a5a30');
+    x.fillStyle = '#f2ecd8'; for (let i = 0; i < 5; i++) { Gfx.ellipse(x, cx - 7 + i * 3.4, GY - 11.8, 1, 0.6, i); x.fill(); }
+    for (const ax of [x0 + 9, x0 + w - 13]) { x.fillStyle = '#b8612e'; Gfx.ellipse(x, ax + 2, GY - 11, 2.6, 4.6); x.fill(); this.rr(ax + 1, GY - 17, 2, 2.4, 0.4, '#a0522a'); }
+    this.lights.push({ x: cx, y: GY - 14, wx: x0 + 7, wy: oy + 1, w: w - 14, h: 10, kind: 'win', on: true, warm: true });
+    it.roofTop = this.roof(cul.roofType, x0, top, w, cul);
+    this.sign(it, cx - 20, top + 18, 40, 8, 'dark');
+    this.lantern(x0 + 4, top + 2, cul.lantern); this.lantern(x0 + w - 5, top + 2, cul.lantern);
+  },
+};
+
+// ════════════ Icônes propres ════════════
+const icons = C => ({
+  huile: `<path d="M8.4 4.6h7.2l-.8 2.2c2.9 1.4 4.6 4.1 4.6 7.2 0 4-3.4 6.8-7.4 6.8s-7.4-2.8-7.4-6.8c0-3.1 1.7-5.8 4.6-7.2z" fill="#c9a74a"/><path d="M8.4 4.6h7.2" stroke="#8a6a24" stroke-width="1.6" stroke-linecap="round"/><path d="M7.4 11.2c.8-1.6 2-2.6 3.4-3" stroke="#f0dc8a" stroke-width="1.2" fill="none" stroke-linecap="round"/><ellipse cx="17.8" cy="5.2" rx="2.4" ry="1.2" transform="rotate(-30 17.8 5.2)" fill="#7a9a4a"/><circle cx="16.4" cy="6.6" r="1" fill="#4a5a2a"/>`,
+  cedre: `<path d="M12 2.4 5 9.4h3.4L4.2 14h4.4L5 18.4h14L15.4 14h4.4l-4.2-4.6H19z" fill="#3f6a3a"/><path d="M12 2.4 8.4 9.4M12 2.4l3.6 7" stroke="#6a9a5a" stroke-width=".9" fill="none"/><rect x="10.8" y="18.2" width="2.4" height="3.6" rx=".6" fill="#6a4428"/>`,
+  cuivre: `<path d="M3 14.6 7 9.4h10l4 5.2-4 5.2H7z" fill="#c87a3a"/><path d="M7 9.4h10l2.2 2.8H4.8z" fill="#e0a060"/><path d="M6 17.4h12" stroke="#8a4a1e" stroke-width="1"/><circle cx="12" cy="14.6" r="1.4" fill="#8a4a1e"/>`,
+  papyrus: `<rect x="5" y="4.2" width="14" height="15.6" rx="1" fill="#e8d8a0"/><rect x="3.4" y="3" width="17.2" height="2.8" rx="1.4" fill="#c9b070"/><rect x="3.4" y="18.2" width="17.2" height="2.8" rx="1.4" fill="#c9b070"/><path d="M8 9h8M8 12h6M8 15h7" stroke="#7a6a3a" stroke-width="1.2" stroke-linecap="round"/><path d="M15.6 13.4l1.4 1.4" stroke="#7b2a4f" stroke-width="1.4" stroke-linecap="round"/>`,
+  verre: `<path d="M9 2.6h6v2.2c2.6 1.4 4.2 4 4.2 7 0 4.4-3.2 8.4-7.2 9.6-4-1.2-7.2-5.2-7.2-9.6 0-3 1.6-5.6 4.2-7z" fill="#5fa8c8"/><path d="M8 7.4c-1.4 1.2-2 2.8-2 4.6" stroke="#bfe6f2" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M7.4 13.6c3 1.2 6.2 1.2 9.2 0" stroke="#f2c14e" stroke-width="1" fill="none"/><path d="M9 2.6h6" stroke="#3a7a98" stroke-width="1.6" stroke-linecap="round"/>`,
+  etain: `<rect x="3.6" y="9" width="16.8" height="7.4" rx="1.2" fill="#8a929e"/><path d="M5.2 9 7.4 5h9.2l2.2 4z" fill="#c4cad4"/><path d="M6 12.6h12" stroke="#6a7280" stroke-width="1"/><path d="M8.4 6.4h6" stroke="#eef1f6" stroke-width="1" stroke-linecap="round"/>`,
+  argent: `<circle cx="9" cy="12.6" r="5.2" fill="none" stroke="#d8dce4" stroke-width="2.6"/><circle cx="15.6" cy="10" r="4.2" fill="none" stroke="#b8bec8" stroke-width="2.4"/><path d="M5.4 18.6h13.2" stroke="#9aa3b2" stroke-width="2.2" stroke-linecap="round"/><path d="M6.4 9.6a4 4 0 0 1 2.6-1.8" stroke="#ffffff" stroke-width="1" fill="none" stroke-linecap="round"/>`,
+  pourpre: `<path d="M6.4 6.2c0-2 2.6-3.4 5.6-3.4s5.6 1.4 5.6 3.4v12.4c0 1.6-2.6 2.8-5.6 2.8s-5.6-1.2-5.6-2.8z" fill="#7b2a4f"/><ellipse cx="12" cy="6.2" rx="5.6" ry="2" fill="#a8406e"/><path d="M8.6 10.4v6.8" stroke="#c86a94" stroke-width="1.2" stroke-linecap="round"/><path d="M17.4 3.6c1.8.4 3 1.6 3 3.2" stroke="#d8a940" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
+  // (la monnaie : des anneaux d'argent pesé, le haksilber)
+  coin: `<circle cx="12" cy="12" r="10" fill="#9aa3b2"/><circle cx="12" cy="12" r="8.6" fill="#d8dce4"/><circle cx="12" cy="12" r="5" fill="none" stroke="#8a929e" stroke-width="1.6"/><path d="M12 7v10M8.6 12h6.8" stroke="#6a7280" stroke-width="1.2" stroke-linecap="round"/><path d="M6 9.4a6.6 6.6 0 0 1 3.8-3.8" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round"/>`,
+  temple: `<rect x="5" y="9.4" width="14" height="11.6" fill="${C.cream}"/><path d="M4 9.6h16" stroke="#d8a940" stroke-width="1.8"/><path d="M5 7.6h1.8V5.4h2v2.2h2.2V5.4h2v2.2h2.2V5.4h2v2.2H19v1.6H5z" fill="${C.cream}"/><path d="M9.6 21v-6a2.4 2.4 0 0 1 4.8 0v6z" fill="#7b2a4f"/><rect x="3" y="11" width="1.8" height="10" rx=".6" fill="#c99838"/><rect x="19.2" y="11" width="1.8" height="10" rx=".6" fill="#c99838"/>`,
+  nuit: `<path d="M14.6 3.6a8.4 8.4 0 1 0 5.8 13.4 7 7 0 0 1-5.8-13.4z" fill="#e8dcb4"/><path d="M6 5.4l.6 1.6 1.6.6-1.6.6L6 9.8l-.6-1.6-1.6-.6 1.6-.6z" fill="#f7d58a"/><circle cx="19" cy="6" r=".9" fill="#f7d58a"/>`,
+  jade: `<path d="M3.4 13.6c0-5.2 4-9.8 9.4-9.8 3.6 0 6.6 2 7.8 5.2l-3.2 1.6c-.6-1.8-2.4-3-4.6-3-3 0-5.4 2.6-5.4 6 0 1.4.4 2.6 1.2 3.6l-2.6 2.6c-1.6-1.6-2.6-3.8-2.6-6.2z" fill="#8a3a5a"/><path d="M12.6 11.2l8 1.2-3.2 2.6 1.8 4.4-4.4-2.2-3.6 3.2.6-4.6-4-2z" fill="#c86a94"/><circle cx="12.8" cy="13.4" r="1.4" fill="#f2d6e2"/>`,
+});
+
+// ════════════ Écran titre (planche A) : Tyr au couchant, les cèdres du Liban, la galère du joueur ════════════
+function cedar(c, x, y, h, col) {
+  c.fillStyle = col; c.fillRect(x - h * 0.03, y - h * 0.5, h * 0.06, h * 0.5);
+  for (let k = 0; k < 4; k++) { const yy = y - h * 0.35 - k * h * 0.17, w = h * (0.42 - k * 0.08); c.beginPath(); c.ellipse(x, yy, w, h * 0.06, 0, 0, TAU); c.fill(); }
+}
+function ridge(c, base, amp, seed, col, W, bottom, f, sx) {
+  const rng = new RNG(seed), p = [rng.range(0, 6), rng.range(0, 6), rng.range(0, 6)];
+  c.beginPath(); c.moveTo(0, bottom);
+  for (let x = 0; x <= W; x += 3) { const u = x / sx; c.lineTo(x, base - amp * (0.5 + 0.25 * Math.sin(u * 0.011 * f + p[0]) + 0.15 * Math.sin(u * 0.027 * f + p[1]) + 0.1 * Math.sin(u * 0.061 * f + p[2]))); }
+  c.lineTo(W, bottom); c.closePath(); c.fillStyle = col; c.fill();
+}
+const titleScene = {
+  layout(W, H, S) {
+    this.hz = H * 0.65;
+    const hz = this.hz, sx = W / 800, sy = H / 450;
+    const [kc, kx] = makeLayer(W, H, S);
+    // le couchant : bleu en haut (le titre s'y détache), rose et or à l'horizon
+    kx.fillStyle = Gfx.lin(kx, 0, 0, 0, hz, [[0, '#2c4474'], [0.42, '#5a6a9a'], [0.7, '#d8a0a0'], [0.88, '#f6d0a0'], [1, '#fbe6c0']]); kx.fillRect(0, 0, W, hz + 1);
+    this.sunX = 620 * sx;
+    Gfx.glow(kx, this.sunX, hz - 30 * sy, 170 * sy, '#ffe6b4', 0.75);
+    kx.fillStyle = '#fff4d8'; kx.beginPath(); kx.arc(this.sunX, hz - 28 * sy, 26 * sy, 0, TAU); kx.fill();
+    // le Liban : deux chaînes de montagnes, les cèdres
+    ridge(kx, hz - 90 * sy, 110 * sy, 41, '#9a8aa8', W, hz + 2, 0.6, sx);
+    ridge(kx, hz - 50 * sy, 80 * sy, 42, '#7a6a8a', W, hz + 2, 0.9, sx);
+    for (let i = 0; i < 9; i++) cedar(kx, (30 + i * 34) * sx, hz - (40 + (i % 3) * 8) * sy, (46 + (i % 2) * 10) * sy, '#4a4058');
+    // Tyr sur son île : les remparts crénelés, trois tours
+    kx.fillStyle = '#5a4a5e'; kx.fillRect(420 * sx, hz - 44 * sy, 220 * sx, 44 * sy);
+    for (let i = 0; i < 14; i++) kx.fillRect((420 + i * 16) * sx, hz - 52 * sy, 9 * sx, 9 * sy);
+    for (const tx of [440, 520, 600]) { kx.fillRect(tx * sx, hz - 78 * sy, 24 * sx, 40 * sy); for (let k = 0; k < 3; k++) kx.fillRect((tx + k * 9) * sx, hz - 84 * sy, 6 * sx, 7 * sy); }
+    kx.fillStyle = Gfx.lin(kx, 0, hz - 26 * sy, 0, hz + 1, [[0, 'rgba(251,230,192,0)'], [1, 'rgba(251,230,192,0.75)']]); kx.fillRect(0, hz - 26 * sy, W, 27 * sy);
+    this.sky = kc;
+    const [sc, sxx] = makeLayer(W, H - hz, S);
+    sxx.fillStyle = Gfx.lin(sxx, 0, 0, 0, H - hz, [[0, '#f0c8a0'], [0.22, '#5a8aa0'], [1, '#1e4a6a']]); sxx.fillRect(0, 0, W, H - hz);
+    this.sea = sc;
+  },
+  draw(ctx, W, H) {
+    const hz = this.hz, t = this.t;
+    ctx.drawImage(this.sky, 0, 0, W, H);
+    ctx.drawImage(this.sea, 0, hz, W, H - hz);
+    // le chemin du soleil qui scintille
+    ctx.lineCap = 'round';
+    for (let i = 0; i < 46; i++) {
+      const y = hz + 2 + hash2(i, 1, 6) * (H - hz) * 0.75, k = (y - hz) / (H - hz), w = 3 + hash2(i, 2, 6) * 14 * (1 - k), a = Math.sin(t * 2.5 + i * 1.7);
+      if (a < -0.2) continue;
+      ctx.strokeStyle = `rgba(255,240,208,${(0.35 + 0.45 * a).toFixed(3)})`; ctx.lineWidth = 0.8 + (1 - k) * 0.6;
+      const cx = this.sunX + (hash2(i, 3, 6) - 0.5) * 60 * (1 + (y - hz) / 30);
+      ctx.beginPath(); ctx.moveTo(cx - w / 2, y); ctx.lineTo(cx + w / 2, y); ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(255,236,200,0.28)'; ctx.lineWidth = 0.5; ctx.beginPath();
+    for (let i = 0; i < 56; i++) { const y = hz + 4 + hash2(i, 9, 2) * (H - hz - 6), x = (hash2(i, 8, 2) * (W + 60) + t * (8 + (y - hz) * 0.3)) % (W + 60) - 30; ctx.moveTo(x, y); ctx.lineTo(x + 3 + (i % 4), y); }
+    ctx.stroke();
+    // la galère du joueur et son reflet
+    const side = ShipSide.get('galley', 116, Game.meta ? Game.playerScheme() : 'phe_player', Game.meta ? Game.sailScheme() : null, Math.min(Main.S, 5));
+    const bx = W * (W > H ? 0.62 : 0.3) + Math.sin(t * 0.25) * 10, by = H * 0.9 + Math.sin(t * 1.3) * 1.5;
+    ctx.save(); ctx.beginPath(); ctx.rect(0, by + 1, W, H - by); ctx.clip();
+    ctx.globalAlpha = 0.22; ctx.translate(0, by * 2 + 2); ctx.scale(1, -1);
+    ctx.drawImage(side.c, bx - side.x0, by - side.wl, side.W, side.H); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, by + 1.2); ctx.clip();
+    ctx.drawImage(side.c, bx - side.x0, by - side.wl, side.W, side.H); ctx.restore();
+    ctx.strokeStyle = '#2a1a2a'; ctx.lineWidth = 0.6; ctx.lineJoin = 'round';
+    for (const p of this.fx.list) { const wing = Math.sin(t * 7 + p.ph) * 1.6; ctx.beginPath(); ctx.moveTo(p.x - 3, p.y - wing); ctx.quadraticCurveTo(p.x - 1.5, p.y - 0.8, p.x, p.y); ctx.quadraticCurveTo(p.x + 1.5, p.y - 0.8, p.x + 3, p.y - wing); ctx.stroke(); }
+  },
+};
+
+// ════════════ La mer ════════════
+Seas.register({
+  id: 'phenicie',
+  name: 'Phénicie', yearLabel: '800 av. J.-C.',   // (sélecteur de l'écran titre)
+  year: 800, era: ' av. J.-C.',
+  days: 366,
+
+  start: {
+    port: 'tyr', cash: 300, capitalStep: 400,
+    familyShips: ['hippos', 'triacontere', 'gaulos'], rescueShip: 'hippos',
+    known: { ports: ['sidon', 'byblos', 'kition', 'delta'], age: [12, 40] },
+  },
+  bigShipAch: { id: 'clipper', types: ['grandgaulos', 'bireme'] },
+  worthAch: [[10000, 'dixmille'], [100000, 'centmille'], [1000000, 'suffete']],
+  thieves: 0.1,
+  treasureGood: 'argent',
+  noCannons: true,    // pas de canons : l'éperon, les archers et l'abordage
+  pilotSight: true,   // caps et îles : le pilote ne coupe pas un virage à travers la terre
+  pathMargin: 8,
+
+  // ── Marchandises (facteurs de prix par port : huile, cèdre, cuivre, papyrus, verre, étain, argent, pourpre) ──
+  goods: [
+    { id: 'huile', name: 'Huile d\'olive', bulk: 'l\'huile', de: 'd\'huile d\'olive', base: 16, vol: 0.12, depth: 1200, color: '#c9a74a', desc: 'L\'huile des oliveraies de Crète et de Chypre, en jarres scellées. Une marge mince, toujours une demande.' },
+    { id: 'cedre', name: 'Cèdre du Liban', bulk: 'le cèdre', de: 'de cèdre', base: 30, vol: 0.13, depth: 1000, color: '#3f6a3a', desc: 'Les grumes des montagnes de Byblos : l\'Égypte, qui n\'a pas d\'arbres, les paie au prix fort. Il en faut aussi pour fonder un comptoir.' },
+    { id: 'cuivre', name: 'Cuivre de Chypre', bulk: 'le cuivre', de: 'de cuivre', base: 62, vol: 0.15, depth: 700, color: '#c87a3a', desc: 'Les lingots en peau de bœuf des mines de Chypre. Avec l\'étain, il fait le bronze.' },
+    { id: 'papyrus', name: 'Papyrus', bulk: 'le papyrus', de: 'de papyrus', base: 80, vol: 0.16, depth: 560, color: '#d9c78a', desc: 'Les rouleaux du Delta. Byblos en fait commerce depuis si longtemps que les Grecs appellent le livre « biblos ».' },
+    { id: 'verre', name: 'Verre de Sidon', bulk: 'le verre', de: 'de verre', base: 120, vol: 0.17, depth: 420, color: '#5fa8c8', fragile: true, desc: 'Flacons et perles de verre soufflés à Sidon. Fragile : les chocs et les tempêtes en brisent une partie.' },
+    { id: 'etain', name: 'Étain', bulk: 'l\'étain', de: 'd\'étain', base: 165, vol: 0.18, depth: 330, color: '#8a929e', desc: 'Le métal rare des îles Cassitérides, qui arrive à Gadir par l\'Océan. Sans lui, pas de bronze : l\'Orient le paie très cher.' },
+    { id: 'argent', name: 'Argent de Tartessos', bulk: 'l\'argent', de: 'd\'argent', base: 270, vol: 0.2, depth: 260, color: '#d8dce4', desc: 'L\'argent des mines du roi de Tartessos, que l\'on charge à Gadir pour presque rien. En Orient, il fait la fortune des marchands.' },
+    { id: 'pourpre', name: 'Pourpre de Tyr', bulk: 'la pourpre', de: 'de pourpre', base: 420, vol: 0.22, depth: 170, color: '#7b2a4f', desc: 'La teinture des rois, tirée du murex à Tyr et à Sidon. Plus on va vers l\'ouest, plus elle vaut son poids d\'argent.' },
+  ],
+  // saisons des prix : l'huile neuve de Crète en hiver, le papyrus après la crue du Nil, le cèdre coupé à la belle saison
+  seasons: [
+    { good: 'huile', ports: ['crete', 'kition'], m: [0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.15, 1.15, 1.1, 1.0, 0.85, 0.82] },
+    { good: 'papyrus', ports: ['delta'], m: [0.9, 0.9, 0.95, 1.0, 1.05, 1.1, 1.1, 1.05, 0.95, 0.85, 0.85, 0.88] },
+    { good: 'cedre', ports: ['byblos', 'tyr', 'sidon'], m: [1.15, 1.15, 1.05, 0.95, 0.9, 0.85, 0.85, 0.9, 0.95, 1.0, 1.1, 1.15] },
+    { good: 'pourpre', ports: ['tyr', 'sidon'], m: [1.05, 1.05, 1.0, 0.95, 0.92, 0.92, 0.95, 1.0, 1.0, 1.0, 1.05, 1.05] },
+  ],
+  festivals: [
+    { name: 'Le Réveil de Melqart', local: true, from: 50, to: 60, mult: 1.25, goods: ['pourpre', 'cedre', 'huile'], ports: ['tyr'], announce: 'Le Réveil de Melqart approche à Tyr : le dieu renaît au printemps, et vos offrandes y compteront double.', fx: 'lanterns', fxPorts: ['tyr'] },
+    { name: 'Les Adonies', local: true, from: 196, to: 204, mult: 1.2, goods: ['huile', 'verre', 'papyrus'], ports: ['byblos'], announce: 'Les Adonies approchent à Byblos : on y pleure Adonis, et l\'on y achète huile, verre et papyrus.' },
+    { name: 'La crue du Nil', local: true, from: 214, to: 244, mult: 1.25, goods: ['cedre', 'huile', 'cuivre'], ports: ['delta'], announce: 'Le Nil monte : dans le Delta, on paie cher le cèdre, l\'huile et le cuivre.' },
+    { name: 'La foire de Gadir', local: true, from: 150, to: 170, mult: 1.2, goods: ['pourpre', 'verre', 'huile'], ports: ['gadir'], announce: 'La foire d\'été s\'ouvre à Gadir : les gens de Tartessos y achètent pourpre, verre et huile.' },
+  ],
+
+  ports: [
+    {
+      id: 'tyr', name: 'Tyr', lon: 35.1, lat: 33.06, culture: 'tyrien', size: 1.3, label: { left: true },
+      f: [1.2, 0.75, 1.05, 1.15, 0.85, 1.45, 1.4, 0.5], customs: 0,
+      buildings: ['usurier', 'marche', 'banque', 'taverne', 'chantier', 'entrepot', 'temple', 'jeu'],
+      ships: ['hippos', 'triacontere', 'gaulos', 'pentecontere'],
+      desc: 'La reine des mers, sur son île fortifiée : la pourpre y est bon marché, l\'étain et l\'argent s\'y paient très cher. Temple de Melqart, chantiers, Trésor.',
+      bg: { hills: 'peak', marks: ['pillars', 'citywall', 'cedars', 'masts'] },
+      signs: { marche: 'Agora', entrepot: 'Teinturerie', taverne: 'Auberge', banque: 'Trésor', usurier: 'Ithobaal', temple: 'Melqart', jeu: 'Osselets', chantier: 'Chantier' },
+    },
+    {
+      id: 'sidon', name: 'Sidon', lon: 35.4, lat: 33.62, culture: 'tyrien', size: 1.1, label: { left: true },
+      f: [1.2, 0.8, 1.1, 1.15, 0.6, 1.4, 1.35, 0.6], customs: 0,
+      buildings: ['marche', 'banque', 'taverne', 'chantier', 'entrepot', 'temple'],
+      ships: ['hippos', 'triacontere', 'gaulos'],
+      desc: 'La vieille rivale de Tyr : ses souffleurs de verre font les plus beaux flacons du monde. Pourpre et verre à bas prix.',
+      bg: { hills: 'peak', marks: ['citywall', 'cedars', 'fort', 'masts'] },
+      signs: { marche: 'Agora', entrepot: 'Entrepôt', taverne: 'Auberge', banque: 'Trésor', temple: 'Eshmoun', chantier: 'Chantier' },
+    },
+    {
+      id: 'byblos', name: 'Byblos', lon: 35.69, lat: 34.2, culture: 'tyrien', size: 1.0, label: { left: true },
+      f: [1.25, 0.55, 1.1, 1.3, 0.9, 1.35, 1.3, 0.85], customs: 0,
+      buildings: ['marche', 'taverne', 'chantier', 'entrepot', 'temple'],
+      ships: ['hippos', 'gaulos'],
+      desc: 'La ville du cèdre et du papyrus : les grumes du Liban y descendent à vil prix, le papyrus d\'Égypte s\'y vend cher.',
+      bg: { hills: 'peak', marks: ['cedars', 'fort', 'cedars', 'masts'] },
+      signs: { marche: 'Agora', entrepot: 'Bois de cèdre', taverne: 'Auberge', temple: 'Baalat', chantier: 'Chantier' },
+    },
+    {
+      id: 'kition', name: 'Kition', lon: 33.7, lat: 34.84, culture: 'tyrien', size: 0.95,
+      f: [0.85, 1.1, 0.6, 1.1, 1.05, 1.3, 1.25, 1.0], customs: 0,
+      buildings: ['marche', 'taverne', 'chantier', 'entrepot', 'temple', 'jeu'],
+      ships: ['hippos', 'triacontere', 'gaulos'],
+      desc: 'Le comptoir tyrien de Chypre : le cuivre des mines y est presque donné, l\'huile aussi.',
+      bg: { hills: 'low', marks: ['pillars', 'cypress', 'masts'] },
+      signs: { marche: 'Agora', entrepot: 'Entrepôt', taverne: 'Auberge', temple: 'Astarté', jeu: 'Osselets', chantier: 'Chantier' },
+    },
+    {
+      id: 'crete', name: 'Crète', lon: 24.78, lat: 35.05, culture: 'cretois', size: 0.9,
+      f: [0.55, 1.4, 1.2, 1.35, 1.3, 1.3, 1.2, 1.3], customs: 0,
+      buildings: ['marche', 'taverne', 'chantier', 'entrepot', 'temple', 'jeu'],
+      ships: ['hippos', 'gaulos'],
+      desc: 'Le port de Kommos, au sud de l\'île : l\'huile y coule à bas prix ; une escale sur la route de l\'ouest, où les Phéniciens ont leur sanctuaire.',
+      bg: { hills: 'peak', marks: ['cypress', 'fort', 'cypress'] },
+      signs: { marche: 'Marché', entrepot: 'Entrepôt', taverne: 'Auberge', temple: 'Sanctuaire', jeu: 'Osselets', chantier: 'Chantier' },
+    },
+    {
+      id: 'delta', name: 'Delta du Nil', lon: 31.9, lat: 31.49, culture: 'egyptien', size: 1.2, label: { left: true },
+      f: [1.0, 1.45, 1.15, 0.6, 1.1, 1.35, 1.3, 1.2], customs: 0.05,
+      buildings: ['marche', 'banque', 'taverne', 'chantier', 'entrepot', 'temple'],
+      ships: ['hippos', 'gaulos', 'grandgaulos'],
+      desc: 'Les bouches du Nil et les quais de Tanis : le papyrus y est pour rien ; le cèdre, que l\'Égypte n\'a pas, s\'y vend à prix d\'or.',
+      bg: { hills: 'flat', marks: ['palm', 'pylon', 'obelisk', 'palm'] },
+      signs: { marche: 'Marché', entrepot: 'Grenier', taverne: 'Maison de bière', banque: 'Trésor du temple', temple: 'Camp des Tyriens', chantier: 'Chantier' },
+    },
+    {
+      id: 'sardaigne', name: 'Sardaigne', lon: 8.98, lat: 39.06, culture: 'sarde', size: 0.8,
+      f: [1.15, 1.3, 0.72, 1.4, 1.45, 1.05, 0.88, 1.45], customs: 0,
+      buildings: ['marche', 'taverne', 'chantier', 'entrepot', 'temple'],
+      ships: ['hippos', 'triacontere'],
+      desc: 'Nora, au sud de la Sardaigne : les gens des nuraghes y échangent leur cuivre et leur argent contre les produits d\'Orient.',
+      bg: { hills: 'green', marks: ['nuraghe', 'pillars', 'nuraghe'] },
+      signs: { marche: 'Marché', entrepot: 'Entrepôt', taverne: 'Auberge', temple: 'Sanctuaire', chantier: 'Chantier' },
+    },
+    {
+      id: 'carthage', name: 'Carthage', lon: 10.31, lat: 36.86, culture: 'punique', size: 1.15,
+      f: [1.0, 1.5, 1.3, 1.45, 1.4, 1.1, 1.05, 1.6], customs: 0,
+      buildings: ['marche', 'banque', 'taverne', 'chantier', 'entrepot', 'temple', 'jeu'],
+      ships: ['hippos', 'triacontere', 'pentecontere', 'grandgaulos', 'bireme'],
+      desc: 'Qart-Hadasht, la « ville nouvelle », au fond du golfe de Tunis : elle tient toute la route de l\'ouest et paie bien les produits d\'Orient.',
+      bg: { hills: 'low', marks: ['pillars', 'citywall', 'palm', 'masts'] },
+      signs: { marche: 'Agora', entrepot: 'Entrepôt', taverne: 'Auberge', banque: 'Trésor', temple: 'Melqart', jeu: 'Osselets', chantier: 'Chantier' },
+    },
+    {
+      id: 'gadir', name: 'Gadir', lon: -6.28, lat: 36.53, culture: 'iberique', size: 1.0,
+      f: [1.3, 1.6, 1.5, 1.6, 1.7, 0.45, 0.4, 1.8], customs: 0,
+      buildings: ['marche', 'taverne', 'chantier', 'entrepot', 'temple'],
+      ships: ['hippos', 'gaulos', 'grandgaulos'],
+      desc: 'Au-delà des Colonnes d\'Héraclès, sur l\'Océan : l\'argent de Tartessos et l\'étain y sont pour rien ; tout ce qui vient d\'Orient s\'y paie le triple.',
+      bg: { hills: 'flat', marks: ['pillars', 'fort', 'masts'] },
+      signs: { marche: 'Marché', entrepot: 'Entrepôt', taverne: 'Auberge', temple: 'Melqart', chantier: 'Chantier' },
+    },
+  ],
+  buildings: {
+    marche: { name: 'Agora', verb: 'Commercer', desc: 'Acheter et vendre des marchandises, faire des vivres. L\'argent s\'y pèse en sicles.' },
+    chantier: { name: 'Chantier naval', verb: 'Chantier', desc: 'Navires, réparations et améliorations.' },
+    taverne: { name: 'Auberge', verb: 'Auberge', desc: 'Marins, rumeurs et contrats.' },
+    banque: { name: 'Trésor', verb: 'Trésor', desc: 'Déposez votre argent au trésor du temple, à l\'abri des pirates.' },
+    usurier: { name: 'Maison d\'Ithobaal', verb: 'Prêteur', desc: 'Ithobaal prête à tout le monde. À ses conditions.' },
+    entrepot: { name: 'Entrepôt', verb: 'Entrepôt', desc: 'Stockez vos marchandises à terre.' },
+    temple: { name: 'Temple', verb: 'Temple', desc: 'Melqart, le roi de la ville, maître de la mer : honorez-le, ou craignez sa colère.' },
+    jeu: { name: 'Cour des osselets', verb: 'Osselets', desc: 'Les osselets : pariez sur le reste.' },
+    quai: { name: 'Quai', verb: 'Appareiller', desc: 'Prendre la mer.' },
+  },
+
+  // ── Navires : galères à rames (oars, eat, stormMul, ram : la force de l'éperon) et navires ronds à voile (gaulos) ──
+  ships: {
+    hippos: { name: 'Hippos', price: 2200, hold: 50, hull: 50, speed: 58, turn: 2.2, guns: 0, crew: 16, crewMin: 6, len: 24, style: 'galley', tier: 1, oars: 0.72, eat: 1.15, stormMul: 1.25, ram: 0.8, desc: 'Le petit caboteur à proue en tête de cheval : il longe les côtes et entre partout.' },
+    triacontere: { name: 'Triacontère', price: 6000, hold: 72, hull: 76, speed: 62, turn: 2.1, guns: 0, crew: 34, crewMin: 16, len: 30, style: 'galley', tier: 2, oars: 0.85, eat: 1.3, stormMul: 1.35, ram: 1.0, desc: 'Trente rameurs et un éperon de bronze : rapide, nerveuse, redoutable au combat.' },
+    gaulos: { name: 'Gaulos', price: 7500, hold: 160, hull: 92, speed: 52, turn: 1.35, guns: 0, crew: 16, crewMin: 7, len: 30, style: 'cog', tier: 2, ram: 0.3, desc: 'Le « baquet » rond des marchands, à voile seule : une grande cale, mais ni rames ni éperon.' },
+    pentecontere: { name: 'Pentécontère', price: 16000, hold: 120, hull: 122, speed: 64, turn: 1.9, guns: 0, crew: 56, crewMin: 26, len: 36, style: 'galley', tier: 3, oars: 0.85, eat: 1.3, stormMul: 1.3, ram: 1.15, desc: 'Cinquante rameurs : la galère des longues expéditions, aussi à l\'aise au combat qu\'au commerce.' },
+    grandgaulos: { name: 'Grand gaulos', price: 34000, hold: 330, hull: 180, speed: 54, turn: 1.15, guns: 0, crew: 30, crewMin: 12, len: 40, style: 'cog', tier: 4, ram: 0.3, desc: 'Le grand navire rond des routes d\'Occident : une cale immense, mais lent et sans défense.' },
+    bireme: { name: 'Birème de Tyr', price: 80000, hold: 240, hull: 300, speed: 64, turn: 1.5, guns: 0, crew: 110, crewMin: 48, len: 44, style: 'galley', tier: 5, oars: 0.85, eat: 1.3, stormMul: 1.2, ram: 1.5, desc: 'Deux rangs de rameurs, un éperon massif, une cale profonde : le navire d\'un suffète.' },
+  },
+  shipOrder: ['hippos', 'triacontere', 'gaulos', 'pentecontere', 'grandgaulos', 'bireme'],
+  upgrades: [
+    { id: 'cuivre', name: 'Carène goudronnée', desc: '+8 % de vitesse, +10 % de coque', max: 1, cost: (s, l) => Math.round(s.price * 0.1 + 400) },
+    { id: 'voiles', name: 'Voile de lin d\'Égypte', desc: '+6 % de vitesse par niveau', max: 2, cost: (s, l) => 450 * s.tier * (l + 1) },
+    { id: 'coque', name: 'Bordé de cèdre', desc: '+20 % de coque par niveau', max: 2, cost: (s, l) => 550 * s.tier * (l + 1) },
+    { id: 'cale', name: 'Cale agrandie', desc: '+15 % de capacité par niveau', max: 2, cost: (s, l) => 700 * s.tier * (l + 1) },
+    { id: 'eperon', name: 'Éperon à trois lames', desc: '+30 % de dégâts à l\'éperon', max: 1, cost: (s, l) => 700 * s.tier + 300 },
+    { id: 'archers', name: 'Archers de Tyr', desc: 'Volées plus fournies (+2 flèches) et plus rapides (-20 % de rechargement)', max: 1, cost: (s, l) => 600 * s.tier + 200 },
+    { id: 'armurerie', name: 'Guerriers de Sidon', desc: '+35 % de force à l\'abordage', max: 1, cost: (s, l) => 350 * s.tier + 150 },
+    { id: 'vigie', name: 'Vigie en tête de mât', desc: 'Repère les navires deux fois plus loin', max: 1, cost: () => 380 },
+  ],
+  schemes: {
+    phe_player: { sail: '#efdcbc', trim: '#7b2a4f', hull: '#4a2a1a', deck: '#b08a5a', roof: '#7b2a4f' },
+    phe_merchant: { sail: '#e6d6b4', trim: '#2f4a6a', hull: '#6b4a30', deck: '#bf9464', roof: '#3a2416' },
+    phe_egypt: { sail: '#f4eedc', trim: '#2f6a8a', hull: '#8a6a3a', deck: '#d0b07a', roof: '#2f6a8a' },
+    phe_grec: { sail: '#e8d8b0', trim: '#b8322a', hull: '#2a2a33', deck: '#8a7a5a', roof: '#1d1a22' },
+    phe_pirate: { sail: '#3a2a36', trim: '#b8322a', hull: '#2a1a24', deck: '#7a5a48', roof: '#2a1a24' },
+    phe_roi: { sail: '#1d1a22', trim: '#d8a940', hull: '#1a1210', deck: '#6a5040', roof: '#b8322a' },
+    phe_ithobaal: { sail: '#4a4552', trim: '#d8a940', hull: '#2a2027', deck: '#79624d', roof: '#1d1a22' },
+  },
+  playerScheme: 'phe_player',
+  playerSail: { sail: '#efdcbc', trim: '#7b2a4f' },   // la toile d'origine : lin écru et liseré de pourpre
+
+  // ── Pirates : galères à rames (elles éperonnent) ──
+  pirates: {
+    barque: { name: 'Barque d\'écumeurs', style: 'galley', len: 20, hull: 18, guns: 0, crew: 11, speed: 64, turn: 2.5, gold: [80, 260], cargo: 4, tier: 1, sail: 'phe_pirate', boarder: true, oars: 0.85 },
+    triacontere: { name: 'Triacontère pirate', style: 'galley', len: 27, hull: 46, guns: 0, crew: 17, speed: 60, turn: 2.1, gold: [220, 750], cargo: 18, tier: 2, sail: 'phe_pirate', oars: 0.82 },
+    pentecontere: { name: 'Pentécontère pirate', style: 'galley', len: 32, hull: 84, guns: 0, crew: 26, speed: 62, turn: 1.9, gold: [500, 1500], cargo: 30, tier: 3, sail: 'phe_pirate', oars: 0.82 },
+    bireme: { name: 'Birème de guerre', style: 'galley', len: 38, hull: 150, guns: 0, crew: 45, speed: 58, turn: 1.5, gold: [1200, 3600], cargo: 50, tier: 4, sail: 'phe_pirate', oars: 0.8 },
+    royale: { name: 'Grande birème royale', style: 'galley', len: 40, hull: 190, guns: 0, crew: 55, speed: 60, turn: 1.4, gold: [2500, 6000], cargo: 50, tier: 5, sail: 'phe_roi', oars: 0.8 },
+  },
+  named: [
+    { id: 'lemnos', name: 'le Pélasge de Lemnos', lon: 25.4, lat: 39.75, type: 'triacontere', escorts: ['barque', 'barque'], hullMul: 2.0, bounty: 6000, region: 'les parages de Lemnos' },
+    { id: 'cilicie', name: 'le Chacal de Cilicie', lon: 34.0, lat: 36.3, type: 'pentecontere', escorts: ['barque'], hullMul: 1.8, bounty: 8000, region: 'la côte cilicienne' },
+    { id: 'lipari', name: 'le Seigneur de Lipari', lon: 14.9, lat: 38.7, type: 'pentecontere', escorts: ['triacontere', 'barque'], hullMul: 1.8, bounty: 10000, region: 'les îles Éoliennes' },
+    { id: 'louve', name: 'la Louve de Corcyre', f: true, lon: 19.9, lat: 39.4, type: 'bireme', escorts: ['barque', 'barque'], hullMul: 1.3, bounty: 12000, region: 'les parages de Corcyre' },
+    { id: 'frondeur', name: 'le Frondeur des Baléares', lon: 3.0, lat: 39.3, type: 'bireme', escorts: ['triacontere'], hullMul: 1.4, bounty: 14000, region: 'les Baléares' },
+  ],
+  // le boss : le Roi-Pirate des îles, qui règne sur les Cyclades
+  boss: {
+    id: 'roi', name: 'le Roi-Pirate des îles', lon: 25.45, lat: 37.0, type: 'royale', escorts: ['bireme', 'pentecontere', 'triacontere'], hullMul: 3.2, gunsMul: 1, bounty: 50000, region: 'les Cyclades',
+    scheme: 'phe_roi', escortScheme: 'phe_roi', lenBonus: 6, dmgMul: 1.3, ach: 'roi',
+    alert: 'Les galères noires du Roi-Pirate des îles fondent sur vous !', defeatTitle: 'LE ROI-PIRATE EST VAINCU !',
+    contractDay: 130, contractPorts: ['tyr', 'sidon', 'crete'],
+    roamDay: 160, roamWorth: 150000,
+    emissaryDay: 45, emissaryPorts: ['crete', 'kition'],
+  },
+  danger: [
+    { lon: 25.4, lat: 37.0, r: 2.0, lvl: 0.85, name: 'Cyclades' },
+    { lon: 25.4, lat: 39.7, r: 1.5, lvl: 0.6, name: 'Lemnos' },
+    { lon: 34.0, lat: 36.3, r: 1.6, lvl: 0.6, name: 'Côte cilicienne' },
+    { lon: 29.5, lat: 36.0, r: 1.4, lvl: 0.45, name: 'Côte lycienne' },
+    { lon: 14.9, lat: 38.7, r: 1.6, lvl: 0.7, name: 'Îles Éoliennes' },
+    { lon: 11.5, lat: 40.6, r: 1.6, lvl: 0.5, name: 'Mer Tyrrhénienne' },
+    { lon: 19.9, lat: 39.4, r: 1.3, lvl: 0.6, name: 'Corcyre' },
+    { lon: 3.0, lat: 39.4, r: 1.5, lvl: 0.6, name: 'Baléares' },
+    { lon: 11.0, lat: 34.2, r: 1.8, lvl: 0.55, name: 'Petite Syrte' },
+    { lon: 22.0, lat: 32.9, r: 2.0, lvl: 0.45, name: 'Côte libyenne' },
+    { lon: -5.4, lat: 36.0, r: 1.0, lvl: 0.45, name: 'Colonnes d\'Héraclès' },
+  ],
+  pirateGroups: [
+    [0.45, [['barque'], ['barque'], ['triacontere']]],
+    [0.8, [['triacontere'], ['barque', 'barque'], ['triacontere', 'barque'], ['barque']]],
+    [1.2, [['pentecontere'], ['triacontere', 'triacontere'], ['pentecontere', 'barque'], ['triacontere', 'barque', 'barque']]],
+    [1.6, [['bireme'], ['pentecontere', 'triacontere'], ['pentecontere', 'pentecontere'], ['bireme', 'barque']]],
+    [Infinity, [['bireme', 'pentecontere'], ['royale'], ['bireme', 'barque', 'barque'], ['royale', 'triacontere']]],
+  ],
+  firstPirate: ['barque'],
+  // les pirates courent l'été ; l'hiver, la mer est fermée pour eux aussi
+  pirateSeason: [0.3, 0.3, 0.5, 0.8, 1.0, 1.15, 1.2, 1.2, 1.1, 0.9, 0.5, 0.3],
+  enforcers: { type: 'pentecontere', scheme: 'phe_ithobaal', gold: 300 },
+  merchants: { styles: ['cog', 'galley', 'cog', 'dhow'], lens: { cog: 30, galley: 32, dhow: 24 }, navy: 0 },
+
+  // ── Saisons : la mer fermée l'hiver (mare clausum), pluies, vents ──
+  storms: { season: [0.5, 0.45, 0.3, 0.12, 0.05, 0.03, 0.02, 0.04, 0.1, 0.25, 0.42, 0.5] },
+  stormSize: 0.78,
+  stormSpeed: 2,
+  groundDmg: 0.5,
+  rain: [0.35, 0.3, 0.3, 0.22, 0.12, 0.05, 0.03, 0.04, 0.1, 0.22, 0.32, 0.38],
+  winds: [
+    { a: 60, s: 1.2 }, { a: 55, s: 1.15 }, { a: 50, s: 1.05 }, { a: 70, s: 0.9 },
+    { a: 90, s: 0.75 }, { a: 100, s: 0.6 }, { a: 95, s: 0.45 }, { a: 90, s: 0.45 },
+    { a: 80, s: 0.6 }, { a: 60, s: 0.85 }, { a: 50, s: 1.05 }, { a: 55, s: 1.2 },
+  ],
+  // vents locaux : le mistral du golfe du Lion et la bora l'hiver, les vents étésiens de la mer Égée l'été
+  windZones: [
+    { lon: 4.8, lat: 42.3, r: 2.6, a: 70, s: 1.9, k: 0.9, months: [10, 11, 0, 1, 2, 3] },
+    { lon: 14.8, lat: 44.2, r: 2.2, a: 135, s: 1.7, k: 0.8, months: [11, 0, 1, 2] },
+    { lon: 25.2, lat: 37.8, r: 2.5, a: 95, s: 1.4, k: 0.7, months: [5, 6, 7] },
+  ],
+  rowEat: 1.35,   // les rameurs mangent davantage quand ils souquent
+
+  // ── Titres, héritage, hauts faits ──
+  titles: [
+    { min: -Infinity, name: 'Criblé de dettes' },
+    { min: 0, name: 'Rameur' },
+    { min: 5000, name: 'Colporteur' },
+    { min: 20000, name: 'Marchand de Tyr' },
+    { min: 60000, name: 'Maître de galère' },
+    { min: 150000, name: 'Armateur' },
+    { min: 400000, name: 'Prince marchand' },
+    { min: 1000000, name: 'Suffète de Carthage', supreme: true },
+    { min: 5000000, name: 'Roi des mers' },
+  ],
+  // socle commun (rebaptisé) + bonus « signature » qui adoucissent les mécaniques de la mer
+  heritage: [
+    { id: 'capital', name: 'Coffre de cèdre', desc: '+400 sicles au départ par niveau', costs: [15, 30, 55, 85, 130] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : hippos, puis triacontère, puis gaulos', costs: [40, 140, 320] },
+    { id: 'commerce', name: 'Poids justes', desc: 'Vos poids et votre balance sont réputés exacts : +2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
+    { id: 'wang', name: 'Crédit chez Ithobaal', desc: 'Intérêts -1 %/mois et +1 500 sicles d\'emprunt par niveau', costs: [20, 45, 90] },
+    { id: 'canonniers', name: 'Éperon de bronze', desc: 'Un éperon fondu à Tyr : +15 % de dégâts à l\'éperon et -10 % de rechargement des archers par niveau', costs: [30, 70, 140] },
+    { id: 'cale', name: 'Arrimeurs de Sidon', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
+    { id: 'teinturiers', name: 'Maîtres teinturiers', desc: 'La teinturerie familiale de Tyr : 3, puis 6 talents de pourpre chaque mois, à l\'entrepôt de Tyr', costs: [60, 150] },
+    { id: 'navigateur', name: 'Pilotes de l\'Étoile polaire', desc: 'Vos pilotes suivent la « phénicienne » : risques de la navigation de nuit -50 %, puis -85 %, et +5 % de vitesse par niveau', costs: [50, 130] },
+    { id: 'informateurs', name: 'Scribes de l\'alphabet', desc: 'Vos scribes vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
+    { id: 'mazu', name: 'Temple de Melqart', desc: 'Votre famille sert le dieu de Tyr : sa faveur s\'use 30 % moins vite et sa colère vous frappe moins, ses tempêtes font 25 % de dégâts en moins, par niveau', costs: [45, 110] },
+    { id: 'colons', name: 'Colons de Tyr', desc: 'Des familles prêtes à partir : fonder un comptoir coûte 15 % d\'argent, 25 % de cèdre et de colons en moins, par niveau', costs: [40, 100] },
+  ],
+  achievements: [
+    { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
+    { id: 'profit', name: 'Premier profit', desc: 'Vendre une marchandise plus cher que son prix d\'achat.', jade: 5 },
+    { id: 'sang', name: 'Premier sang', desc: 'Couler un navire pirate.', jade: 10 },
+    { id: 'eperon', name: 'Coup d\'éperon', desc: 'Envoyer un pirate par le fond d\'un coup d\'éperon.', jade: 10 },
+    { id: 'abordage', name: 'À l\'abordage !', desc: 'Capturer un navire par abordage.', jade: 10 },
+    { id: 'dette', name: 'Quitte envers Ithobaal', desc: 'Rembourser entièrement Ithobaal.', jade: 10 },
+    { id: 'dixmille', name: 'Dix mille sicles', desc: 'Atteindre 10 000 sicles de valeur nette.', jade: 5 },
+    { id: 'centmille', name: 'Cent mille sicles', desc: 'Atteindre 100 000 sicles de valeur nette.', jade: 15 },
+    { id: 'suffete', name: 'Suffète de Carthage', desc: 'Atteindre 1 000 000 de sicles de valeur nette.', jade: 60 },
+    { id: 'typhon', name: 'L\'œil de la tempête', desc: 'Traverser le cœur d\'une tempête et survivre.', jade: 15 },
+    { id: 'prime', name: 'Chasseur de pirates', desc: 'Vaincre un pirate recherché.', jade: 20 },
+    { id: 'roi', name: 'La chute du Roi-Pirate', desc: 'Vaincre le Roi-Pirate des îles.', jade: 60 },
+    { id: 'coup', name: 'Coup de maître', desc: 'Réaliser 20 000 sicles de bénéfice en une seule vente.', jade: 15 },
+    { id: 'clipper', name: 'Maître à bord', desc: 'Posséder un grand gaulos ou une birème de Tyr.', jade: 15 },
+    { id: 'tour', name: 'Les neuf ports', desc: 'Visiter les neuf ports en une seule partie (comptoirs fondés compris).', jade: 20 },
+    { id: 'mazu', name: 'Pieux serviteur', desc: 'Faire 5 offrandes au temple en une partie.', jade: 5 },
+    { id: 'melqart', name: 'Fils de Melqart', desc: 'Porter la faveur de Melqart à son comble.', jade: 10 },
+    { id: 'flambeur', name: 'Flambeur', desc: 'Gagner 3 fois de suite aux osselets.', jade: 10 },
+    { id: 'contrats', name: 'Parole de marchand', desc: 'Honorer 5 contrats en une partie.', jade: 10 },
+    { id: 'fuite', name: 'Insaisissable', desc: 'Semer des pirates 5 fois en une partie.', jade: 10 },
+    { id: 'tresor', name: 'Trésor enfoui', desc: 'Déterrer un trésor.', jade: 15 },
+    { id: 'shanghai', name: 'Racoleur', desc: 'Enrôler de force des marins à l\'auberge.', jade: 5 },
+    { id: 'nora', name: 'Le comptoir de Nora', desc: 'Fonder un comptoir en Sardaigne.', jade: 15 },
+    { id: 'carthage', name: 'Qart-Hadasht', desc: 'Fonder Carthage.', jade: 30 },
+    { id: 'colonnes', name: 'Au-delà des Colonnes', desc: 'Atteindre Gadir, sur l\'Océan.', jade: 15 },
+    { id: 'argent', name: 'L\'argent de Tartessos', desc: 'Entrer à Tyr avec 50 talents d\'argent dans la cale.', jade: 15 },
+    { id: 'etoiles', name: 'La phénicienne', desc: 'Arriver à bon port après huit nuits aux étoiles, sans incident.', jade: 10 },
+    { id: 'hiver', name: 'Mare clausum', desc: 'Arriver à bon port en plein hiver (décembre à février) après dix jours de mer.', jade: 10 },
+  ],
+
+  // ── Textes ──
+  intro: [
+    'Tyr, janvier 800 av. J.-C.',
+    'Votre père, marchand de pourpre, s\'est perdu corps et biens au large de Chypre. Il vous laisse son nom, quelques sicles et l\'amitié d\'Ithobaal le prêteur.',
+    'Tyr est la reine des mers : ses galères vont jusqu\'à Gadir, au-delà des Colonnes d\'Héraclès, chercher l\'argent de Tartessos. Mais sans canons, on se bat à l\'éperon, et les pirates des îles ne font pas de quartier.',
+    'Honorez Melqart, passez vos nuits sur la grève ou suivez les étoiles, et, si les dieux le veulent, fondez Carthage.',
+    'Vous avez un an pour devenir Suffète de Carthage.',
+  ],
+  captainNames: ['Abdmelqart', 'Elissa', 'Hiram', 'Batbaal', 'Ithobaal', 'Arishat', 'Mattan', 'Sapanbaal', 'Hannon', 'Tabnit', 'Bodashtart', 'Amotbaal'],
+  shipNames: ['Étoile de Tyr', 'Pourpre', 'Melqart', 'Hippocampe', 'Murex', 'Fille de Sidon', 'Cèdre', 'Astarté', 'Rameur de l\'aube', 'Baal Hammon', 'Colombe', 'Vent de Byblos'],
+  tavern: [
+    'L\'argent de Gadir vaut trois fois son poids à Tyr. Mais il y a trois mois de mer entre les deux.',
+    'Le cèdre ? L\'Égypte n\'a pas un arbre. Ils le paient en papyrus, en or, en blé. Surtout en or.',
+    'L\'hiver, la mer est fermée. Les vieux capitaines tirent leur galère au sec et attendent le Réveil de Melqart.',
+    'À l\'éperon, visez le flanc, jamais la proue. Et nagez à culer avant qu\'ils ne vous abordent.',
+    'Une galère sur la grève chaque soir, c\'est lent, mais c\'est sûr. Aux étoiles, on gagne des jours… ou on les perd.',
+    'Ithobaal prête à tout le monde. Ses hommes vous retrouveraient jusqu\'à Kition.',
+    'Gardez votre argent au Trésor du temple : les pirates des îles ne pillent que ce qui est à bord.',
+    'Un pirate désemparé, ça s\'aborde. Sa cale devient la vôtre.',
+    'Melqart n\'oublie pas ceux qui l\'oublient. On a vu des galères entières avalées par sa colère.',
+    'Le Roi-Pirate des îles tient les Cyclades. On dit que ses galères ont des voiles noires.',
+    'Au fond du golfe de Tunis, il y a une colline, Byrsa. Celui qui y bâtira tiendra toute la route de l\'ouest.',
+    'Les frondeurs des Baléares lancent une pierre à cent pas. Passez au large.',
+  ],
+  fortunes: [
+    { t: 'Melqart vous regarde avec bienveillance. La mer vous sera douce.', fx: 'calme' },
+    { t: 'Le vent tourne pour qui sait attendre.', fx: 'vent' },
+    { t: 'Ouvrez l\'œil : les voiles noires ne dorment jamais.', fx: 'vigie' },
+    { t: 'L\'argent appelle l\'argent.', fx: 'commerce' },
+    { t: 'Un ami inattendu montera à bord.', fx: 'marins' },
+    { t: 'La phénicienne brille pour qui sait la lire.', fx: null },
+    { t: 'Le pirate dort. Ne le réveillez pas.', fx: 'paix' },
+  ],
+  text: {
+    money: 'sicles', Money: 'Sicles', unit: 'talents', unitOne: 'talent', seaName: 'la mer de Phénicie',
+    tokens: 'coquillages de murex', token: 'murex',
+    lender: 'Ithobaal', house: 'la maison d\'Ithobaal', men: 'les hommes d\'Ithobaal', menShip: 'Hommes d\'Ithobaal',
+    storms: 'tempêtes', crates: 'jarres de contrebande', crateOne: 'jarre de contrebande',
+    sails: { jade: 'Vert de cèdre', pourpre: 'Pourpre de Tyr', or: 'Or de Melqart', creme: 'Lin écru' },
+    eyebrow: 'Tyr · 800 av. J.-C.', tagline: 'Un an pour devenir Suffète de Carthage.',
+    startLog: 'Début de carrière à Tyr. Objectif : devenir Suffète de Carthage avant la fin de l\'année.',
+    startToast: 'Les tablettes de votre père donnent les prix de quatre ports, relevés il y a quelques semaines.',
+    titleUp: 'Votre nom court de Tyr à Gadir',
+    chartTitle: 'Carte de la mer de Phénicie',
+    chartHint: 'Zones rouges : repaires de pirates. Cercles en pointillés : sites où fonder un comptoir (la Sardaigne, Carthage). La nuit, sur la grève ou aux étoiles : le choix se fait au départ, ou en mer (touche N).',
+    yearEnd: 'Fin de l\'année 800 av. J.-C.', endSub: 'Tyr retiendra votre nom',
+    supremeSeal: '',
+    lostKeeps: 'Seuls le Trésor, les entrepôts et les comptoirs fondés comptent.',
+    rescue: 'Le temple vous prête un vieil hippos',
+    shipyardEmpty: '« Pas de navire, pas de fortune. Ce vieil hippos ne demande qu\'à reprendre la mer. » — le maître charpentier',
+    bankFlavor: '« Les prêtres pèsent votre argent et l\'inscrivent sur leurs tablettes. Intérêts : 0,5 % par mois. »',
+    bankHint: 'Le Trésor du temple garde votre argent à Tyr, à Sidon et dans le Delta (et à Carthage, une fois fondée). Pour acheter, il faut retirer ses fonds.',
+    customs: 'Visite des scribes du roi',
+    foes: 'navires pirates',
+    foesAlert: ['VOILES PIRATES !', 'UN PIRATE !'],
+    dormantTag: ' (à fonder)',
+    weapons: { left: 'Cadence', right: 'Archers', touchL: 'Charge<small>éperon</small>', touchR: 'Flèches<small>archers</small>' },
+    firstFight: () => (Input.touch ? 'Pas de canons : pointez votre proue sur le flanc du pirate et touchez CHARGE pour l\'éperonner. FLÈCHES : une volée de vos archers.' : `Pas de canons : pointez votre proue sur le flanc du pirate et lancez la charge (${Input.label('KeyQ')}) pour l'éperonner. ${Input.label('KeyE')}, Espace ou un clic : une volée de flèches.`),
+    combatHint: () => 'Combat ! ' + (Input.touch ? 'Proue sur son flanc, puis CHARGE !' : `${Input.label('KeyQ')} : charge · ${Input.label('KeyE')}, Espace ou clic : flèches · B : aborder`),
+    helpSea: k => ['← → (', k('KeyA'), k('KeyD'), ') : barre. ↑ ↓ (', k('KeyW'), k('KeyS'), ') : réduire ou envoyer la toile. ', k('KeyQ'), ' : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le flanc ennemi pour l\'éperonner). ', k('KeyE'), ', Espace ou clic : une volée de flèches. B : aborder. N : passer les nuits sur la grève ou aux étoiles. Entrée : accoster. R : pilote automatique. F : accélérer le temps. M : carte.'],
+    shipArms: S => (S.oars ? `rames et éperon${S.ram >= 1.15 ? ' massif' : ''}` : 'voile seule, sans éperon'),
+    usurer: {
+      sub: 'Prêts sur gage… et sur votre vie',
+      fresh: '« Le fils de mon vieil ami ! Ithobaal prête volontiers aux jeunes marchands. Surtout à ceux qui remboursent. »',
+      angry: '« Ithobaal est très déçu. Ses hommes viendront vous voir. De nuit. »',
+      wait: due => `« Le temps, c'est de l'argent. Le vôtre, surtout. Ithobaal patientera encore ${nb(due, 'jour')}. »`,
+      hint: 'Ithobaal laisse 150 jours avant d\'envoyer ses hommes. Chaque remboursement complet efface l\'ardoise.',
+      visit: 'Trois colosses vous attendent sur le quai. « Ithobaal te salue. Il a besoin de son argent. »',
+    },
+    temple: {
+      sub: 'Melqart, roi de la ville et maître de la mer',
+      flavor: 'Devant les deux colonnes de bronze, la fumée de l\'encens monte vers le dieu. Les marins le savent : Melqart protège ceux qui l\'honorent, et frappe ceux qui l\'oublient.',
+      offerings: [
+        { label: 'Une coupe d\'encens', toast: 'Melqart agrée votre offrande.' },
+        { label: 'Un bélier pour l\'autel', toast: 'Le dieu apaise la mer et gonfle vos voiles.' },
+        { label: 'Une coupe d\'argent ciselée', toast: 'Les prêtres chantent pour vous : grande bénédiction !' },
+      ],
+      fortuneTitle: 'L\'ORACLE DU PRÊTRE', fortuneBtn: 'Consulter le prêtre',
+      fortuneAgain: 'Le prêtre a déjà parlé. Revenez dans quelques jours.',
+    },
+    game: { sub: 'Les osselets : devinez le reste quand le maître du jeu retire les osselets quatre par quatre' },
+    storm: ['TEMPÊTE !', 'Un coup de vent se lève sur votre route. Contournez-le… ou tentez l\'œil.'],
+    stormEye: ['L\'ŒIL DE LA TEMPÊTE', 'Vous avez traversé la tempête !'],
+    emissary: {
+      title: 'Un envoyé du Roi-Pirate',
+      text: 'Un homme aux bras tatoués s\'incline. « Mon maître, le Roi des îles, laisse passer les marchands avisés… moyennant tribut. »',
+      paid: 'Tribut payé au Roi-Pirate : ses galères vous laisseront (presque) tranquille.',
+      log: 'Tribut au Roi-Pirate', buff: 'Tribut au Roi-Pirate',
+    },
+    parcels: ['des tablettes du roi de Tyr', 'des amulettes d\'Égypte', 'le courrier du temple de Melqart', 'des jarres de vin de Byblos', 'un prêtre et ses bagages'],
+  },
+
+  // ── Palette (planche A) : mer bleu profond, côtes ocre, Liban vert de cèdres, déserts d'Afrique et du Levant au sud ──
+  palette: {
+    water: [[0, '#9fd2c6'], [5, '#76b8bd'], [16, '#4f90ad'], [42, '#346a99'], [95, '#264c78'], [190, '#1a315c']],
+    land: {
+      sand: '#e2cc9c', wet: '#c8ad7a', rock: '#a08f78',
+      grass: ['#9aa66a', '#aaa66e', '#d0b886'], forest: ['#5f7a46', '#6e8250', '#a8986a'],
+      high: '#aca07a', stone: '#948a78', snow: '#eef1f2', foam: '#eef6f0', reef: '#8fd0c4',
+    },
+    climate: { north: 43, south: 34.5, snow: 44.5 },
+    chart: { seaA: '#e8ece2', seaB: '#d2dcda', seaC: '#b8c8d0', landA: '#f3e6c6', landB: '#e2cfa0', coast: '#3a3a6a', iso: '#96a8b6' },
+    gl: {
+      water: [[0.62, 0.82, 0.78], [0.46, 0.72, 0.74], [0.31, 0.56, 0.68], [0.2, 0.42, 0.6], [0.15, 0.3, 0.47], [0.1, 0.19, 0.36]],
+      caustic: [0.86, 1.0, 0.95], crest: [0.9, 0.96, 1.0], foam: [0.95, 0.96, 0.94], reef: [0.56, 0.82, 0.77], reefRock: [0.6, 0.55, 0.47],
+      north: [40, 44], south: [31.5, 35.5], snowLat: [44, 46], arid: 0.9,
+      grass: [[0.6, 0.64, 0.42], [0.55, 0.62, 0.38], [0.82, 0.72, 0.52]], forest: [[0.32, 0.45, 0.27], [0.3, 0.46, 0.27], [0.66, 0.6, 0.42]],
+      rock: [0.63, 0.56, 0.47], sand: [[0.87, 0.78, 0.6], [0.94, 0.87, 0.68]], high: [0.66, 0.62, 0.48], stone: [0.58, 0.54, 0.48],
+      snow: [0.94, 0.95, 0.96], wet: [0.78, 0.68, 0.48],
+      // le Sinaï, la Libye et le Sahara : terres de sable, sans arbres
+      aridZones: [{ lon: 33.5, lat: 30.2, rx: 3.2, ry: 1.6 }, { lon: 22.5, lat: 30.6, rx: 7, ry: 1.6 }],
+    },
+    sky: [
+      [0, '#0b1430', '#1f2b52', 0.58], [4.5, '#111a3c', '#35305a', 0.55], [6, '#46508a', '#f6b080', 0.25],
+      [7.5, '#6488c8', '#ece2c4', 0], [16.5, '#5e84c4', '#f2dcae', 0], [18.3, '#3e4a82', '#f8a466', 0.22],
+      [19.8, '#20244e', '#8e4a6a', 0.45], [21.5, '#0b1430', '#1f2b52', 0.58], [24, '#0b1430', '#1f2b52', 0.58],
+    ],
+    harbor: { sea1: '#1e4a6a', sea2: '#2f6a8a', sea3: '#4a8aa0', sea4: '#7ab4c0', night: ['#1a3454', '#0e1e36'] },
+  },
+  titleScene,
+
+  // ── Le monde : de Gadir à Tyr (la carte de la Méditerranée, sans la mer Noire) ──
+  world: {
+    lon0: -7.5, lat0: 45.6, k: 64, w: 45, h: 16,
+    routes: true,   // les durées estimées suivent la vraie route : il faut contourner la Sicile, la Grèce et la Crète
+    geo: {
+      lands: [
+        // l'Europe, de l'Andalousie à la Crimée, fermée hors carte au nord
+        [[-8, 48], [-8, 37.25], [-6.95, 37.2], [-6.6, 37.0], [-6.4, 36.8], [-6.3, 36.55], [-6.15, 36.35], [-5.92, 36.18], [-5.75, 36.06], [-5.6, 36.01],
+          [-5.43, 36.07], [-5.35, 36.14], [-5.3, 36.25], [-5.15, 36.43], [-4.88, 36.51], [-4.6, 36.6], [-4.42, 36.72], [-4.0, 36.74], [-3.52, 36.72], [-3.0, 36.75],
+          [-2.46, 36.83], [-2.19, 36.72], [-1.9, 36.99], [-1.58, 37.4], [-1.2, 37.57], [-0.98, 37.6], [-0.69, 37.63], [-0.75, 37.85], [-0.68, 37.98], [-0.48, 38.35],
+          [-0.13, 38.54], [0.23, 38.73], [0.1, 38.84], [-0.16, 38.98], [-0.33, 39.45], [-0.22, 39.68], [-0.03, 39.97], [0.4, 40.36], [0.87, 40.72], [0.85, 40.88],
+          [1.25, 41.11], [1.65, 41.2], [2.17, 41.38], [2.5, 41.55], [2.8, 41.67], [3.13, 41.85], [3.2, 42.05], [3.32, 42.32], [3.11, 42.52], [3.05, 42.8],
+          [3.2, 43.1], [3.55, 43.28], [3.7, 43.4], [3.95, 43.53], [4.19, 43.52], [4.55, 43.4], [4.85, 43.33], [4.95, 43.4], [5.1, 43.33], [5.3, 43.35],
+          [5.37, 43.29], [5.54, 43.21], [5.6, 43.17], [5.93, 43.1], [6.15, 43.05], [6.4, 43.15], [6.64, 43.27], [6.74, 43.42], [7.01, 43.55], [7.27, 43.7],
+          [7.5, 43.77], [7.78, 43.82], [8.03, 43.88], [8.25, 44.05], [8.48, 44.31], [8.93, 44.42], [9.21, 44.33], [9.55, 44.18], [9.83, 44.08], [10.1, 43.95],
+          [10.25, 43.87], [10.31, 43.55], [10.5, 43.25], [10.52, 42.93], [10.8, 42.75], [11.21, 42.42], [11.5, 42.35], [11.8, 42.09], [12.28, 41.73], [12.63, 41.45],
+          [13.05, 41.25], [13.57, 41.21], [13.9, 41.05], [14.1, 40.9], [14.25, 40.84], [14.45, 40.75], [14.37, 40.63], [14.77, 40.68], [15.0, 40.4], [14.9, 40.25],
+          [15.4, 40.03], [15.63, 40.07], [15.78, 39.8], [16.03, 39.36], [16.1, 39.0], [16.2, 38.8], [15.83, 38.62], [15.9, 38.4], [15.64, 38.22], [15.65, 38.0],
+          [15.8, 37.93], [16.06, 37.92], [16.3, 38.2], [16.55, 38.45], [16.55, 38.68], [16.9, 38.95], [17.13, 39.08], [17.15, 39.4], [16.85, 39.6], [16.6, 39.73],
+          [16.8, 40.2], [17.23, 40.47], [17.6, 40.3], [17.99, 40.06], [18.36, 39.8], [18.49, 40.15], [18.2, 40.5], [17.95, 40.64], [17.4, 40.9], [16.87, 41.13],
+          [16.28, 41.32], [15.92, 41.63], [16.18, 41.88], [15.9, 41.95], [15.4, 41.92], [14.99, 42.0], [14.6, 42.2], [14.21, 42.46], [13.9, 42.9], [13.65, 43.35],
+          [13.52, 43.62], [13.1, 43.85], [12.57, 44.06], [12.35, 44.3], [12.29, 44.42], [12.35, 44.7], [12.55, 44.95], [12.35, 45.05], [12.28, 45.22], [12.25, 45.34],
+          [12.27, 45.45], [12.4, 45.53], [12.6, 45.55], [12.88, 45.6], [13.1, 45.65], [13.38, 45.7], [13.6, 45.78], [13.77, 45.65], [13.72, 45.55], [13.57, 45.52],
+          [13.6, 45.25], [13.63, 45.08], [13.85, 44.87], [13.95, 44.8], [14.1, 45.1], [14.3, 45.25], [14.44, 45.33], [14.6, 45.2], [14.9, 45.0], [15.1, 44.6],
+          [15.25, 44.25], [15.23, 44.12], [15.5, 43.95], [15.89, 43.73], [16.1, 43.55], [16.44, 43.51], [16.7, 43.45], [17.02, 43.3], [17.4, 43.05], [17.6, 42.93],
+          [17.85, 42.8], [18.09, 42.64], [18.3, 42.52], [18.55, 42.42], [18.75, 42.28], [19.09, 42.1], [19.2, 41.93], [19.5, 41.75], [19.45, 41.5], [19.44, 41.31],
+          [19.4, 41.0], [19.45, 40.7], [19.49, 40.47], [19.33, 40.4], [19.6, 40.2], [19.9, 40.0], [20.0, 39.87], [20.15, 39.65], [20.26, 39.5], [20.55, 39.2],
+          [20.75, 38.95], [20.85, 38.75], [21.1, 38.5], [21.35, 38.4], [21.78, 38.3], [21.73, 38.25], [21.4, 38.15], [21.15, 37.93], [21.35, 37.65], [21.6, 37.3],
+          [21.67, 36.91], [21.7, 36.82], [21.85, 36.75], [21.96, 36.8], [22.11, 37.02], [22.3, 36.75], [22.48, 36.39], [22.55, 36.6], [22.57, 36.76], [22.75, 36.7],
+          [23.0, 36.45], [23.2, 36.44], [23.1, 36.7], [23.06, 36.69], [22.9, 37.05], [22.75, 37.35], [22.8, 37.57], [23.05, 37.5], [23.2, 37.4], [23.45, 37.5],
+          [23.2, 37.65], [23.0, 37.8], [22.98, 37.93], [23.3, 37.98], [23.63, 37.94], [23.8, 37.8], [24.02, 37.65], [24.05, 37.9], [24.01, 38.02], [24.03, 38.15],
+          [23.8, 38.3], [23.6, 38.46], [23.3, 38.65], [22.9, 38.85], [22.6, 38.88], [22.8, 39.0], [23.0, 39.1], [22.94, 39.36], [23.1, 39.3], [23.34, 39.15],
+          [23.3, 39.4], [22.9, 39.7], [22.7, 39.9], [22.6, 40.0], [22.55, 40.4], [22.94, 40.64], [23.2, 40.35], [23.4, 39.95], [23.35, 40.25], [23.7, 40.2],
+          [23.9, 39.95], [23.95, 40.3], [24.4, 40.15], [24.05, 40.45], [23.85, 40.78], [24.4, 40.93], [24.8, 40.85], [25.2, 40.95], [25.6, 40.87], [25.87, 40.85],
+          [26.03, 40.73], [26.08, 40.72], [26.6, 40.58], [26.4, 40.45], [26.25, 40.3], [26.18, 40.04], [26.3, 40.12], [26.36, 40.19], [26.55, 40.33], [26.67, 40.41],
+          [26.9, 40.55], [27.11, 40.61], [27.35, 40.85], [27.51, 40.98], [27.9, 40.97], [28.25, 41.07], [28.6, 40.98], [28.97, 41.0], [29.02, 41.06], [29.05, 41.14],
+          [29.1, 41.23], [28.9, 41.35], [28.4, 41.5], [28.1, 41.63], [27.9, 41.9], [27.6, 42.2], [27.47, 42.5], [27.7, 42.7], [27.9, 43.0], [27.92, 43.21],
+          [28.47, 43.36], [28.6, 43.75], [28.65, 44.17], [28.85, 44.6], [29.6, 44.9], [29.7, 45.15], [29.8, 45.5], [30.3, 46.05], [30.73, 46.48], [31.0, 46.6],
+          [31.5, 46.6], [31.8, 46.5], [32.5, 46.0], [32.6, 45.6], [32.5, 45.35], [32.9, 45.3], [33.37, 45.19], [33.55, 44.8], [33.52, 44.62], [33.75, 44.4],
+          [34.16, 44.5], [34.41, 44.67], [34.97, 44.84], [35.38, 45.03], [35.85, 45.0], [36.4, 45.1], [36.47, 45.35], [36.65, 45.3], [36.75, 45.2], [37.1, 45.05],
+          [37.3, 44.95], [38, 44.8], [38, 48]],
+        // l'Anatolie, le Levant et l'Afrique, du Bosphore au Maroc, fermés hors carte au sud
+        [[29.16, 41.22], [29.61, 41.18], [30.15, 41.13], [31.12, 41.08], [31.79, 41.45], [32.39, 41.75], [33.0, 41.89], [33.76, 41.98], [34.3, 41.95], [35.15, 42.02],
+          [35.5, 41.65], [36.33, 41.29], [37.0, 41.2], [38, 41.1], [38, 28.5], [-8, 28.5], [-8, 33.55], [-6.84, 34.02], [-6.6, 34.3], [-6.16, 35.19],
+          [-6.03, 35.47], [-5.92, 35.79], [-5.8, 35.78], [-5.55, 35.85], [-5.3, 35.89], [-5.32, 35.6], [-5.1, 35.45], [-4.6, 35.25], [-3.93, 35.25], [-3.4, 35.2],
+          [-2.97, 35.44], [-2.94, 35.29], [-2.6, 35.1], [-2.2, 35.1], [-1.86, 35.1], [-1.4, 35.3], [-1.0, 35.6], [-0.64, 35.7], [-0.3, 35.85], [0.09, 35.93],
+          [0.6, 36.2], [1.31, 36.52], [1.8, 36.55], [2.19, 36.61], [2.45, 36.59], [2.8, 36.7], [3.06, 36.78], [3.23, 36.81], [3.6, 36.85], [3.91, 36.91],
+          [4.12, 36.89], [4.6, 36.88], [5.08, 36.75], [5.4, 36.65], [5.77, 36.82], [6.3, 36.98], [6.57, 37.01], [6.91, 36.88], [7.3, 37.0], [7.76, 36.9],
+          [8.44, 36.9], [8.76, 36.96], [9.22, 37.23], [9.87, 37.27], [10.1, 37.25], [10.19, 37.17], [10.33, 36.86], [10.2, 36.8], [10.34, 36.73], [10.6, 36.9],
+          [11.01, 37.05], [11.1, 36.85], [10.9, 36.6], [10.74, 36.45], [10.61, 36.4], [10.5, 36.1], [10.64, 35.83], [10.83, 35.77], [11.06, 35.5], [11.0, 35.2],
+          [10.9, 34.95], [10.76, 34.74], [10.4, 34.4], [10.1, 33.88], [10.4, 33.6], [10.7, 33.5], [11.11, 33.5], [11.5, 33.15], [12.08, 32.93], [12.6, 32.85],
+          [13.18, 32.89], [13.7, 32.8], [14.26, 32.65], [15.09, 32.37], [15.3, 31.9], [15.8, 31.4], [16.59, 31.21], [17.5, 30.9], [18.57, 30.49], [19.58, 30.4],
+          [19.9, 30.7], [20.1, 31.2], [20.0, 31.6], [20.07, 32.12], [20.58, 32.53], [21.2, 32.8], [21.8, 32.9], [22.64, 32.76], [23.1, 32.6], [23.3, 32.3],
+          [23.98, 32.08], [25.08, 31.76], [25.15, 31.57], [26.3, 31.55], [27.24, 31.35], [28.2, 31.05], [28.95, 30.83], [29.5, 31.0], [29.92, 31.2], [30.07, 31.32],
+          [30.25, 31.4], [30.4, 31.47], [30.8, 31.55], [31.05, 31.6], [31.5, 31.55], [31.83, 31.52], [32.1, 31.35], [32.3, 31.26], [32.8, 31.08], [33.8, 31.13],
+          [34.2, 31.32], [34.46, 31.52], [34.6, 31.8], [34.75, 32.05], [34.9, 32.5], [34.99, 32.82], [35.07, 32.93], [35.1, 33.1], [35.19, 33.27], [35.37, 33.56],
+          [35.5, 33.9], [35.64, 34.12], [35.83, 34.44], [35.95, 34.7], [35.88, 34.89], [35.9, 35.2], [35.78, 35.52], [35.85, 35.85], [35.95, 36.2], [36.17, 36.59],
+          [36.2, 36.75], [35.9, 36.85], [35.6, 36.6], [35.38, 36.57], [35.0, 36.75], [34.64, 36.8], [34.2, 36.55], [33.93, 36.28], [33.4, 36.12], [32.83, 36.02],
+          [32.4, 36.25], [32.0, 36.54], [31.4, 36.8], [30.95, 36.85], [30.7, 36.88], [30.6, 36.7], [30.57, 36.6], [30.45, 36.35], [30.4, 36.2], [30.0, 36.25],
+          [29.64, 36.2], [29.3, 36.3], [29.11, 36.62], [28.8, 36.68], [28.5, 36.65], [28.27, 36.85], [28.1, 36.7], [27.8, 36.75], [27.4, 36.7], [27.7, 36.8],
+          [27.8, 36.95], [27.6, 37.0], [27.43, 37.03], [27.25, 37.05], [27.35, 37.2], [27.27, 37.37], [27.35, 37.6], [27.26, 37.86], [27.0, 38.0], [26.6, 38.1],
+          [26.3, 38.32], [26.45, 38.6], [26.75, 38.67], [26.89, 39.07], [26.69, 39.32], [26.9, 39.55], [26.34, 39.49], [26.08, 39.48], [26.16, 39.95], [26.2, 40.0],
+          [26.41, 40.15], [26.55, 40.28], [26.69, 40.34], [27.1, 40.4], [27.5, 40.4], [27.85, 40.5], [27.97, 40.35], [28.4, 40.4], [28.88, 40.37], [29.15, 40.43],
+          [29.4, 40.7], [29.9, 40.76], [29.4, 40.8], [29.18, 40.89], [29.04, 41.02], [29.09, 41.1]],
+        // les îles
+        [[2.35, 39.6], [2.6, 39.54], [2.74, 39.51], [2.79, 39.37], [3.04, 39.27], [3.25, 39.4], [3.4, 39.55], [3.47, 39.73], [3.2, 39.82], [3.19, 39.96], [2.95, 39.92], [2.7, 39.82], [2.45, 39.7]],
+        [[3.8, 40.05], [4.1, 40.07], [4.3, 39.9], [4.2, 39.82], [3.85, 39.93]],
+        ell(1.43, 38.98, 0.2, 0.14, 8), ell(1.45, 38.7, 0.1, 0.05, 8),
+        [[9.4, 43.0], [9.47, 42.8], [9.55, 42.4], [9.55, 42.1], [9.4, 41.7], [9.25, 41.42], [9.1, 41.42], [8.8, 41.6], [8.7, 41.9], [8.6, 42.2], [8.65, 42.4], [8.9, 42.6], [9.2, 42.75]],
+        [[9.2, 41.24], [9.55, 41.1], [9.75, 40.8], [9.7, 40.4], [9.65, 39.9], [9.6, 39.4], [9.35, 39.1], [9.05, 39.2], [8.85, 38.87], [8.55, 38.9], [8.4, 39.1], [8.45, 39.6], [8.5, 40.0], [8.4, 40.4], [8.2, 40.6], [8.2, 40.95], [8.5, 40.9], [8.8, 41.05]],
+        [[12.4, 38.0], [13.0, 38.2], [13.4, 38.1], [14.0, 38.03], [14.6, 38.07], [15.1, 38.15], [15.55, 38.3], [15.62, 38.27], [15.3, 37.9], [15.2, 37.5], [15.1, 37.3], [15.25, 37.05], [15.1, 36.68], [14.8, 36.7], [14.3, 37.0], [13.8, 37.15], [13.0, 37.5], [12.6, 37.65], [12.43, 37.85]],
+        ell(14.4, 35.9, 0.12, 0.07, 8), ell(10.25, 42.78, 0.15, 0.07, 8),
+        [[23.55, 35.28], [23.95, 35.55], [24.3, 35.45], [24.75, 35.4], [25.15, 35.34], [25.6, 35.3], [26.1, 35.25], [26.3, 35.15], [26.2, 35.0], [25.6, 34.95], [25.0, 34.93], [24.7, 35.1], [24.2, 35.15], [23.6, 35.2]],
+        [[32.3, 34.85], [32.4, 35.1], [32.7, 35.2], [33.1, 35.35], [33.6, 35.37], [34.1, 35.5], [34.6, 35.7], [34.0, 35.2], [33.95, 34.95], [33.6, 34.8], [33.0, 34.6], [32.7, 34.65]],
+        ell(28.0, 36.2, 0.2, 0.28, 10),
+        [[22.85, 38.85], [23.3, 38.8], [23.6, 38.55], [24.1, 38.35], [24.55, 38.0], [24.35, 37.98], [24.0, 38.2], [23.6, 38.36], [23.2, 38.62]],
+        ell(26.25, 39.2, 0.3, 0.18, 10), ell(26.0, 38.4, 0.12, 0.22, 8), ell(26.75, 37.72, 0.22, 0.07, 8), ell(25.45, 37.05, 0.1, 0.13, 8), ell(25.15, 37.07, 0.08, 0.07, 8),
+        ell(24.85, 37.85, 0.07, 0.15, 8), ell(25.1, 37.6, 0.08, 0.06, 8), ell(23.0, 36.25, 0.07, 0.09, 8), ell(20.55, 38.22, 0.18, 0.18, 10), ell(19.85, 39.62, 0.1, 0.22, 8),
+        ell(20.8, 37.78, 0.1, 0.1, 8), ell(25.25, 39.9, 0.18, 0.12, 8), ell(24.7, 40.68, 0.1, 0.1, 8), ell(27.15, 35.6, 0.06, 0.2, 8), ell(27.1, 36.82, 0.2, 0.06, 8),
+        ell(25.43, 36.4, 0.06, 0.06, 8), ell(24.42, 36.7, 0.1, 0.06, 8),
+        ell(10.9, 33.8, 0.2, 0.15, 8), ell(11.2, 34.72, 0.15, 0.08, 8), ell(11.97, 36.78, 0.06, 0.06, 8), ell(12.6, 35.51, 0.05, 0.03, 8),
+        ell(16.6, 43.3, 0.25, 0.05, 8), ell(16.65, 43.15, 0.3, 0.04, 8), ell(16.9, 42.95, 0.25, 0.04, 8), ell(17.55, 42.75, 0.2, 0.04, 8),
+      ],
+      // hauts-fonds : le banc de Skerki, les Kerkennah
+      reefs: [[10.9, 37.8, 0.15], [11.35, 34.55, 0.2]],
+      // chenaux garantis : Dardanelles, Bosphore, détroit de Messine, bouches de Bonifacio ; et, pour la Phénicie, les
+      // Colonnes d'Héraclès (le détroit de Gibraltar, fermé sur la grille de navigation sans ce chenal)
+      channels: [
+        { w: 16, pts: [[26.0, 39.95], [26.3, 40.1], [26.5, 40.26], [26.7, 40.38], [27.0, 40.52]] },
+        { w: 14, pts: [[28.9, 40.95], [29.02, 41.02], [29.06, 41.1], [29.1, 41.18], [29.16, 41.3]] },
+        { w: 14, pts: [[15.5, 38.4], [15.62, 38.25], [15.62, 38.05]] },
+        { w: 12, pts: [[8.9, 41.32], [9.5, 41.32]] },
+        { w: 36, pts: [[-6.6, 35.97], [-6.2, 35.96], [-5.9, 35.95], [-5.6, 35.95], [-5.4, 35.97], [-5.1, 36.0], [-4.6, 36.1]] },
+      ],
+    },
+    // les hauts-fonds des Syrtes
+    randomReefs: { seed: 800, n: 12, lon: [10.4, 12.8], lat: [33.3, 34.5], r: [5, 12] },
+    chart: { lon: [-5, 35], lat: [30, 45], step: 5, rose: [408, 190] },
+  },
+
+  // ── Cultures des ports ──
+  cultures: {
+    tyrien: { wall: ['#efdcbc', '#e2c69a', '#d9b98a', '#ead2a8'], wood: '#6b3a22', pillar: '#efdcbc', roof: '#c9a676', roofL: '#e2c69a', roofType: 'crenel', trim: '#7b2a4f', lantern: '#e0b040', door: '#3a2218', win: 'slit', awning: ['#7b2a4f', '#efdcbc'], skyline: 'flat' },
+    cretois: { wall: ['#f2e6cc', '#e8d4ae', '#f6ecd8', '#e2cca0'], wood: '#8a3a22', pillar: '#b8322a', roof: '#d9c8a8', roofL: '#e8dcc0', roofType: 'crenel', trim: '#b8322a', lantern: '#e0b040', door: '#5a2414', win: 'slit', awning: ['#2f5a8a', '#f2e6cc'], skyline: 'flat' },
+    egyptien: { wall: ['#e8d6b4', '#f0e2c8', '#dcc6a0', '#e6d0a6'], wood: '#6b4a24', pillar: '#f0e2c8', roof: '#e2d2ac', roofL: '#efe2c4', roofType: 'crenel', trim: '#2f6a8a', lantern: '#e0b040', door: '#3a2a18', win: 'slit', awning: ['#2f6a8a', '#f4ead4'], skyline: 'flat' },
+    sarde: { wall: ['#c9bca4', '#b8aa90', '#d8ccb4', '#c2b49a'], wood: '#5a3a22', pillar: '#d8ccb4', roof: '#a08a62', roofL: '#c0a678', roofType: 'thatch', trim: '#7b2a4f', lantern: '#e0b040', door: '#3a2a1a', win: 'slit', awning: ['#7b2a4f', '#e8dcc4'] },
+    punique: { wall: ['#f4ead6', '#efdcbc', '#e8d2a8', '#f2e4c8'], wood: '#6b3a22', pillar: '#f4ead6', roof: '#d8c6a0', roofL: '#ecdcbc', roofType: 'crenel', trim: '#2f4a6a', lantern: '#e0b040', door: '#2a2a3a', win: 'slit', awning: ['#7b2a4f', '#f4ead6'], skyline: 'flat' },
+    iberique: { wall: ['#ecdcc0', '#d9c4a0', '#e6d2b0', '#d2b88e'], wood: '#5a3a22', pillar: '#ecdcc0', roof: '#b8543a', roofL: '#d8744a', roofType: 'tile', trim: '#8e1f1d', lantern: '#e0b040', door: '#4a2e1c', win: 'slit', awning: ['#8e1f1d', '#ecdcc0'] },
+  },
+  towns: {
+    tyrien: { roofs: ['#f2e8d4', '#e8d8b8', '#d9c49a'], walls: ['#efdcbc', '#e2c69a'] },
+    cretois: { roofs: ['#f4ecd8', '#e8dcc0'], walls: ['#f2e6cc', '#e8d4ae'] },
+    egyptien: { roofs: ['#f2e6cc', '#e6d4ae', '#d8c49a'], walls: ['#f0e2c8', '#e8d6b4'] },
+    sarde: { roofs: ['#a08a62', '#b89a6a'], walls: ['#c9bca4', '#b8aa90'] },
+    punique: { roofs: ['#f8f2e4', '#efe4cc', '#e2d2ae'], walls: ['#f4ead6', '#efdcbc'] },
+    iberique: { roofs: ['#c2552e', '#b8543a', '#d27040'], walls: ['#ecdcc0', '#d9c4a0'] },
+  },
+  people(P) {
+    const tyr = [
+      { xhat: 'pilos', band: '#7b2a4f', robe: true, top: '#efdcbc', skin: PAL.skin[2] },
+      { xhat: 'veil', band: '#7b2a4f', robe: true, top: '#e2c69a', skin: PAL.skin[1] },
+      { top: '#efdcbc', bottom: '#8a5a30', skin: PAL.skin[2], carry: 'box' },
+      { xhat: 'pilos', band: '#2f4a6a', top: '#c9713a', bottom: '#efdcbc', skin: PAL.skin[2] },
+      { hat: 'bun', robe: true, top: '#2f6a8a', skin: PAL.skin[1], carry: 'parasol', parasol: '#7b2a4f' },
+      { top: '#8a5a30', bottom: '#efdcbc', skin: PAL.skin[3], carry: 'pole', load: '#b8612e' },
+    ];
+    const egypt = [
+      { top: '#f4eedc', bottom: '#f4eedc', skin: PAL.skin[3], carry: 'pole', load: '#d9c78a' },
+      { xhat: 'veil', band: '#f4eedc', robe: true, top: '#f4eedc', skin: PAL.skin[3] },
+      { hat: 'bun', robe: true, top: '#2f6a8a', skin: PAL.skin[3], carry: 'parasol', parasol: '#f2c14e' },
+      { top: '#f4eedc', bottom: '#d8c49a', skin: PAL.skin[2], carry: 'box' },
+    ];
+    const west = [
+      { xhat: 'pilos', band: '#7b2a4f', robe: true, top: '#efdcbc', skin: PAL.skin[2] },
+      { top: '#6b4a2a', bottom: '#3a3a44', skin: PAL.skin[1], carry: 'box' },
+      { xhat: 'veil', band: '#2f4a6a', robe: true, top: '#c9a676', skin: PAL.skin[1] },
+      { xhat: 'fur', top: '#8a5a30', bottom: '#5a3a22', skin: PAL.skin[1] },
+      { top: '#efdcbc', bottom: '#8a5a30', skin: PAL.skin[2], carry: 'pole', load: '#9aa3b2' },
+    ];
+    const crete = [
+      { top: '#b8322a', bottom: '#f2e6cc', skin: PAL.skin[1] },
+      { xhat: 'veil', band: '#2f5a8a', robe: true, top: '#f2e6cc', skin: PAL.skin[1] },
+      { top: '#f2e6cc', bottom: '#2f5a8a', skin: PAL.skin[1], carry: 'pole', load: '#c9a74a' },
+    ];
+    switch (P.culture) {
+      case 'egyptien': return egypt.concat([tyr[0], tyr[2]]);
+      case 'sarde': case 'iberique': return west;
+      case 'cretois': return crete.concat([tyr[0], tyr[5]]);
+    }
+    return tyr;
+  },
+  // le capitaine en robe pourpre ceinte d'or, coiffé du bonnet pilos
+  captain: robe => People.make({ xhat: 'pilos', band: '#7b2a4f', robe: true, top: robe, big: true, sash: '#d8a940', skin: PAL.skin[2] }),
+  portScene: { farBoats: 'square', boatman: { xhat: 'pilos', band: '#6b3a22', top: '#efdcbc', bottom: '#8a5a30', skin: PAL.skin[2] } },
   facades,
   icons,
   rules,
