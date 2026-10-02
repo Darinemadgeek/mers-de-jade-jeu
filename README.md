@@ -1,4 +1,4 @@
-# Mers de Jade
+# Silk & Cannons
 
 Un an pour devenir Taï-pan : commerce, pirates et typhons en mer de Chine, 1840.
 
