@@ -720,6 +720,9 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .street-bubble.out { opacity: 0; transition: opacity 0.35s; }
 @keyframes bubble-in { from { opacity: 0; transform: translate(-50%, -90%) scale(0.92); } to { opacity: 1; transform: translate(-50%, -100%); } }
 @media (prefers-reduced-motion: reduce) { .street-bubble { animation: none; } }
+.jr-prices th.jr-good { text-align: center; }
+.jr-prices th.jr-good .ico { width: 30px; height: 30px; vertical-align: middle; }
+.jr-prices td.r { text-align: center; }
 
 </style>
 </head>
@@ -102472,7 +102475,8 @@ const UI = {
     const age = k => k.here ? T('journal.prix.ici') : k.live ? T('journal.prix.direct') : (n => n ? T('journal.prix.age', { n }) : T('journal.prix.auj'))(Math.max(0, Math.round(r.day - k.day)));
     const ageCls = k => { const a = k.here || k.live ? 0 : r.day - k.day; return a < 15 ? 'fresh' : a < 45 ? 'mid' : 'old'; };
     const table = h('table', { class: 'ledger jr-prices' },
-      h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r' }, g.name)))),
+      // (en-têtes : l'icône de la marchandise, comme au marché ; son nom au survol et pour les lecteurs d'écran)
+      h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id))))),
       h('tbody', null, rows.map(x => h('tr', { class: ageCls(x.k) },
         h('td', null, h('b', null, x.p.name), h('small', { class: 'hint' }, ' · ' + age(x.k))),
         ...GOODS.map((g, i) => { const v = x.k.p[i], cls = 'r' + (rows.length > 1 && v === lo[i] ? ' lo' : rows.length > 1 && v === hi[i] ? ' hi' : ''); return h('td', { class: cls }, fmt(v)); })))));
