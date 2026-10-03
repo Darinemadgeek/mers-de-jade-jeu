@@ -777,6 +777,7 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .g-txt p { margin: 0 0 6px; }
 .g-txt b { color: var(--gold-hi); font-weight: 700; }
 .g-list { list-style: none; margin: 4px 0 2px; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+.g-list + p { margin-top: 10px; }
 .g-list li { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; color: var(--text-2); }
 .g-list li i { flex: none; width: 19px; height: 19px; margin-top: 1px; border-radius: 50%; display: grid; place-items: center; font: 900 11px/1 var(--font-ui); font-style: normal; color: var(--gold-ink); background: var(--gold); }
 .g-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
@@ -802,6 +803,8 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .mobile .g-hint.out { transform: translateX(-50%) translateY(-6px); }
 .mobile .g-bubble { gap: 10px; padding: 10px 12px 9px; border-radius: 13px; }
 .mobile .g-seal { width: 40px; height: 40px; font-size: 22px; line-height: 40px; border-radius: 10px; }
+/* le sceau de cire d'un mentor d'Occident (SEA.mentorWax) : rond, l'initiale en relief */
+.g-seal.wax, .mobile .g-seal.wax { border-radius: 50%; background: radial-gradient(circle at 34% 30%, #e45a44, #a3281a 60%, #7a1b10); color: #f8dccb; font-style: italic; box-shadow: inset 0 0 0 3px rgba(122, 27, 16, 0.6), inset 0 0 0 5px rgba(248, 220, 203, 0.2), 0 4px 12px rgba(0, 0, 0, 0.4); }
 .mobile .g-txt { font-size: 13.5px; line-height: 1.42; }
 .mobile .g-bubble h3 { font-size: 19px; }
 .mobile .g-row { margin-top: 6px; }
@@ -2304,6 +2307,13 @@ Lang.ui('fr', {
   'aides.heritage.ameliorations.d': 'Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.',
   'aides.heritage.voiles.t': 'Les voiles',
   'aides.heritage.voiles.d': 'Des couleurs pour votre toile, valables dans toutes les mers.',
+  // (l'hôtel du gouverneur, dans les Caraïbes : quatre nations, Angleterre, France, Espagne et Hollande)
+  'aides.gouverneur.reputation.t': 'Réputation',
+  'aides.gouverneur.reputation.d': 'Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chuter. À −25, ses garde-côtes vous attaquent ; à −50, ses ports vous sont fermés.',
+  'aides.gouverneur.lettre.t': 'Lettre de marque',
+  'aides.gouverneur.lettre.d': 'Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d\'elle au lieu de vous faire pendre. Une seule lettre à la fois.',
+  'aides.gouverneur.graces.t': 'Lettres de grâce',
+  'aides.gouverneur.graces.d': 'Contre de l\'argent, elles ramènent à −15 votre réputation auprès d\'une nation qui vous en veut : de quoi rouvrir ses ports.',
 
   // ── Aide : la notice du jeu, en chapitres (<b>…</b> : mots mis en valeur) ──
   // valeurs : celles des aides « ? », plus Maison et Hommes (avec majuscule, en début de phrase) et unite (« picul »)
@@ -2311,6 +2321,9 @@ Lang.ui('fr', {
   'notice.sousTitre': 'Tout ce qu\'il faut savoir pour faire fortune',
   'notice.rejouer': 'Rejouer le prologue',
   'notice.rejouerTitre': 'Le prologue, le premier voyage guidé, se rejoue depuis l\'Aide de l\'écran titre.',
+  // (une mer qui a ses propres règles a son chapitre, et son mentor les présente au premier passage au port)
+  'notice.revoirAccueil': 'Revoir la présentation',
+  'notice.revoirAccueilPort': 'La présentation de ces règles se revoit au port, pendant une partie.',
   'notice.but.titre': 'Le but du jeu',
   'notice.but.1': 'Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {fin}.',
   'notice.but.2': 'Votre fortune, c\'est votre <b>valeur nette</b> : argent, banque, navire et cargaison, moins la dette. Elle vous fait monter en titre, et rapporte des {jetons} à la fin.',
@@ -3740,6 +3753,18 @@ Lang.ui('en', {
   'aides.heritage.voiles.t': 'Sail colors',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Colors for your canvas, good in every sea.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Reputation',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'Your reputation with each nation, from −100 to +100. Trade and contracts fulfilled in its ports raise it; attacking its ships sends it plunging. At −25, its coast guards attack you; at −50, its ports are closed to you.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'Letter of marque',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': 'For 150 days, the ships of this nation\'s enemies are fair prize: taking them earns you its favor instead of a hanging. Only one letter at a time.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Pardons',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'For a price, they bring your reputation with a nation that bears you a grudge back up to −15: enough to reopen its ports.',
   // Aide du capitaine
   'notice.titre': 'Captain\'s handbook',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -3748,6 +3773,10 @@ Lang.ui('en', {
   'notice.rejouer': 'Replay the prologue',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'The prologue, the guided first voyage, can be replayed from Help on the title screen.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Replay the introduction',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'The introduction to these rules can be replayed in port, during a career.',
   // Le but du jeu
   'notice.but.titre': 'The goal',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -6436,6 +6465,72 @@ Lang.sea('en', 'caraibes', {
   'text/parcels/3': 'a planter and his trunks',
   // des cartes marines espagnoles
   'text/parcels/4': 'Spanish sea charts',
+  // Le vieux Barnabé
+  'text/mentorName': 'Old Barnaby',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'your family\'s boatswain',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'I\'m <b>Barnaby</b>. I was your family\'s boatswain when Port Royal slid into the sea. I\'m not about to cast you adrift now.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'The Islands have their own rules, captain. <b>Four nations</b> fight over the gold of the Americas here: England, France, Spain and Holland. Every port flies the flag of one of them. Listen well, I\'ll keep it short.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Out here, everything hangs on <b>your reputation</b> with each nation:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': 'It rises with <b>trade and contracts fulfilled</b> in her ports.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': 'It plummets when you <b>attack a ship flying her flag</b>, and the other nations remember it too.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Let it fall too low and the nation brands you a <b>pirate</b>: her coast guards attack you, then <b>her ports are closed to you</b>. In time, she forgets.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'All that\'s settled at the <b>governor\'s</b>. Go and pay your respects: press “{bouton}”.',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'His Excellency keeps the books:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>Your reputation</b> with the four nations, from −100 to +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>The letter of marque</b>: for 150 days, the ships of this nation\'s enemies become <b>lawful prizes</b>. Taking them wins you favor with the nation that signed it.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>Pardons</b> wipe out a bad reputation, for a price. Any governor grants them: handy when a nation shuts her ports to you.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'One last thing: the Islands\' calendar.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>Yellow fever</b> strikes a few ports in summer. Put in at one, and your men fall sick at sea.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>The Treasure Fleet</b> leaves Cartagena in early summer, laden with gold, and sails north to Havana.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Hurricanes</b> sweep the islands from August to October. At the tavern, you can wait a week in port for them to pass.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'You\'ve chosen <b>trade</b>. Pirates will hunt you, and honest merchantmen are no prey of yours, unless you carry a letter of marque. Set your sights on the <b>governor\'s chair</b>. Fair winds!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'You\'ve chosen the <b>black flag</b>. No wages: your men live on <b>their share of the plunder</b>, and if they go a month and a half without a prize, they mutiny. Don\'t rob every flag at once: you need ports to sell in. Fair winds!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Close this window: the cross, top right.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation} doesn\'t like the look of you: her <b>coast guards</b> will attack on sight, and her customs men will search everything. One more slip, and her ports will be closed to you.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'Now you\'re an <b>outlaw</b> in the eyes of {nation}: her forts bar you from her ports. To open them again, buy a <b>pardon</b> from another nation\'s governor.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>Fever</b> is aboard: it will carry men off until we next make port. On the map, steer clear of ports where it\'s raging.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>The Treasure Fleet</b>! Let it pass: attack it and you\'ll have all of Spain on your back.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>The Treasure Fleet</b>! Galleons full of gold, and frigates to guard them. Prepare well: Spain won\'t forgive you.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'The men are <b>grumbling</b>: not a single prize in {jours} days. Take one soon, or keep enough in hand to pay their share at the next port.',
+  // Les Îles
+  'text/notice/titre': 'The Islands',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Four nations</b> contend for the Islands: England, France, Spain and Holland. Every port flies the flag of one of them; Tortuga and Nassau, buccaneers\' havens, welcome all comers.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>Reputation</b> with each nation runs from −100 to +100. Trade and contracts fulfilled in its ports raise it; attacking its ships sends it plunging, and the other nations remember too. At −25, its coast guards attack you, its customs officers search more thoroughly and its forts no longer protect you; at −50, its ports are closed to you. Reputation slowly drifts back toward neutral.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>The governor\'s residence</b> sells letters of marque (for 150 days, the ships of his nation\'s enemies are fair prize, and each prize wins you that nation\'s favor) and pardons, which wipe out a bad reputation.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>The calendar</b>: yellow fever strikes a few ports in summer (a call there leaves sailors sick during the next crossing); the Treasure Fleet sails from Cartagena to Havana in early summer, then heads up the Florida Straits; hurricanes sweep through from August to October. The tavern lets you wait a week in port.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Two paths</b>: the merchant aims for the title of Governor and fears pirates. The buccaneer aims to become King of the Buccaneers: he pays no wages, but the crew takes its share of every prize, and mutinies if it goes too long without one.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>Powder and muskets</b> are contraband in Spanish territory, and fetch a fortune there. Near a friendly port, the fort\'s guns drive off your pursuers.',
   // Angleterre
   'text/nations/en/name': 'England',
   // l'Angleterre
@@ -12679,6 +12774,18 @@ Lang.ui('zh', {
   'aides.heritage.voiles.t': '帆色',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': '为你的船帆换上颜色，在所有海域通用。',
+  // Réputation
+  'aides.gouverneur.reputation.t': '声望',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': '你在各国的声望，从−100到+100。在一国港口做买卖、完成合约，声望便上升；攻击其船只，声望便下跌。降到−25，该国缉私船会攻击你；降到−50，其港口对你关闭。',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': '私掠许可证',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': '150天内，该国之敌的船只均可合法捕获：捕获它们，你非但不会被送上绞架，反而能赢得该国好感。同一时间只能持有一张。',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': '赦免状',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': '某国记恨你时，花钱买一张，便可将你在该国的声望恢复到−15，足以让其港口重新开放。',
   // Aide du capitaine
   'notice.titre': '船长手册',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -12687,6 +12794,10 @@ Lang.ui('zh', {
   'notice.rejouer': '重玩序章',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': '序章（有人领航的首次出海）可在标题画面的“帮助”中重玩。',
+  // Revoir la présentation
+  'notice.revoirAccueil': '重看介绍',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': '这些规则的介绍，可在游戏中停靠港口时重看。',
   // Le but du jeu
   'notice.but.titre': '游戏目标',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -15367,6 +15478,72 @@ Lang.sea('zh', 'caraibes', {
   'text/parcels/3': '一位种植园主和他的箱笼',
   // des cartes marines espagnoles
   'text/parcels/4': '西班牙海图',
+  // Le vieux Barnabé
+  'text/mentorName': '老巴纳贝',
+  // maître d'équipage de votre famille
+  'text/mentorRole': '你家族的水手长',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': '我是<b>巴纳贝</b>。皇家港滑进海里那年，我在你家船上当水手长。事到如今，我可不会撇下你不管。',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': '群岛有群岛的规矩，船长。<b>四个国家</b>在这儿争夺美洲的黄金：英格兰、法兰西、西班牙和荷兰。每个港口都挂着其中一国的旗。听好了，我长话短说。',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': '在这儿，什么都看<b>你在各国的声望</b>：',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '在哪国的港口<b>做买卖、办妥合约</b>，哪国的声望就涨。',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>攻击挂着国旗的船</b>，声望就会大跌，别的国家也会记下这笔账。',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': '声望跌得太低，那个国家就会把你当<b>海盗</b>：先是缉私船来打你，接着<b>港口也不让你进了</b>。日子一久，人家也就淡忘了。',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': '这些事都归<b>总督</b>管。去拜会他吧：点“{bouton}”。',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': '总督阁下这儿管着三样：',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>你在四国的声望</b>，从−100到+100。',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>私掠许可证</b>：有了它，150天之内，签发国的敌国船只都是<b>合法猎物</b>。拿下它们，签发国就会高看你一眼。',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>赦免状</b>：花点钱，就能洗掉坏名声。哪个总督都签发：哪国对你关了港口，正好用得上。',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': '最后一件事：群岛的时令。',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '夏天，<b>黄热病</b>会在几个港口闹起来。在那儿靠一回岸，你的人出了海就会病倒。',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>珍宝船队</b>初夏从卡塔赫纳出发，满载黄金，北上哈瓦那。',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '八月到十月，<b>飓风</b>横扫群岛。到酒馆去，能在港里等上一周，躲过风头。',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': '你嘛，选了<b>经商</b>这条路。海盗会追着你打；挂国旗的商船也不是你的猎物，除非你手里有私掠许可证。冲着<b>总督</b>那把交椅去吧。一路顺风！',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': '你嘛，扬起了<b>黑旗</b>。没有薪饷：弟兄们全靠<b>战利品里的份子</b>过活，一个半月没有斩获，他们就要哗变。别把各国一齐抢个遍：你总得留几个港口卖货。一路顺风！',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': '关掉这个窗口：点右上角的叉。',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation}已经看你不顺眼了：它的<b>缉私船</b>见你就打，关吏也会把你的船翻个底朝天。再出一次差错，它的港口就要对你关门了。',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': '这下，在{nation}眼里你成了<b>法外之徒</b>：它的要塞不许你进港。想重新进港，就去别国总督那儿买一纸<b>赦免状</b>。',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>热病</b>上了船：到下次靠岸之前，它会一个接一个带走弟兄。看地图时，避开热病肆虐的港口。',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>珍宝船队</b>！让它过去：谁敢碰它，整个西班牙都跟谁没完。',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>珍宝船队</b>！满载黄金的盖伦船，还有巡航舰护航。准备妥当再动手：西班牙可不会饶你。',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': '弟兄们<b>怨声四起</b>：已经{jours}天没有一件战利品了。赶紧拿下一条船，要么就备足钱，到下个港口给他们发份子。',
+  // Les Îles
+  'text/notice/titre': '群岛',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>四国</b>争夺群岛：英格兰、法兰西、西班牙与荷兰。每个港口都挂着其中一国的旗帜；托尔图加和拿骚是海盗巢穴，来者不拒。',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '你在各国的<b>声望</b>介于−100与+100之间。在一国港口做买卖、完成合约，声望便会上升；攻击其船只，声望便会下跌，其他国家也会记下这笔账。降到−25，该国缉私船会攻击你，关吏搜查更严，要塞也不再庇护你；降到−50，其港口对你关闭。声望会慢慢回归中立。',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>总督府</b>出售私掠许可证和赦免状。持私掠许可证，150天内可合法捕获该国之敌的船只，每捕获一艘都能赢得该国好感；赦免状则可洗清坏名声。',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>时令</b>：夏季，黄热病会在几个港口流行（在那里停靠，下一程航行中便会有水手病倒）；初夏，珍宝船队从卡塔赫纳驶往哈瓦那，随后北上佛罗里达海峡；八月至十月有飓风过境。在酒馆可留港等待一周。',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>两条道路</b>：商人志在总督头衔，须提防海盗。海盗志在海盗之王：不发薪饷，但每笔战利品船员都要分走一份；太久没有斩获，他们便会哗变。',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>火药火枪</b>在西班牙属地是走私货，在那里能卖出高价。靠近友方港口时，要塞的大炮会赶走追兵。',
   // Angleterre
   'text/nations/en/name': '英格兰',
   // l'Angleterre
@@ -21589,6 +21766,18 @@ Lang.ui('zht', {
   'aides.heritage.voiles.t': '帆色',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': '為你的船帆換上顏色，所有海域通用。',
+  // Réputation
+  'aides.gouverneur.reputation.t': '聲望',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': '你在各國的聲望，從−100到+100。在該國港口經商、履行合約，聲望便會上升；攻擊該國船隻，聲望便會暴跌。降到−25，該國緝私船會攻擊你；降到−50，該國港口將對你關閉。',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': '私掠許可證',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': '150天內，該國之敵的船隻皆可合法捕獲：拿下它們非但不會讓你上絞架，還能贏得該國的好感。一次只能持有一張。',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': '赦免狀',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': '某國若對你懷恨在心，花一筆錢，就能把你在該國的聲望拉回−15：足以讓其港口重新開放。',
   // Aide du capitaine
   'notice.titre': '船長須知',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -21597,6 +21786,10 @@ Lang.ui('zht', {
   'notice.rejouer': '重玩序章',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': '序章帶你完成第一趟航行，可從標題畫面的「說明」重玩。',
+  // Revoir la présentation
+  'notice.revoirAccueil': '重看介紹',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': '這些規則的介紹，可在一局進行中、身在港口時重看。',
   // Le but du jeu
   'notice.but.titre': '遊戲目標',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -24277,6 +24470,72 @@ Lang.sea('zht', 'caraibes', {
   'text/parcels/3': '一位種植園主和他的箱籠',
   // des cartes marines espagnoles
   'text/parcels/4': '西班牙海圖',
+  // Le vieux Barnabé
+  'text/mentorName': '老巴納貝',
+  // maître d'équipage de votre famille
+  'text/mentorRole': '你家族的水手長',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': '我是<b>巴納貝</b>。皇家港滑進海裡那年，我是你家的水手長。到了這步田地，我更不會丟下你。',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': '群島有群島的規矩，船長。<b>四個國家</b>在這裡爭奪美洲的黃金：英格蘭、法蘭西、西班牙和荷蘭。每個港口都掛著其中一國的旗。聽好了，我長話短說。',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': '在這裡，凡事都看<b>你的聲望</b>，每個國家各算各的：',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '在一國的港口<b>做買賣、履行合約</b>，聲望就會上升。',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>攻擊掛國旗的船</b>，聲望就會暴跌，別的國家也會記在心上。',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': '聲望跌得太低，那個國家就把你當成<b>海盜</b>：先是緝私船見你就打，接著<b>港口也不讓你進</b>。時間久了，他們自會淡忘。',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': '這些事，都要到<b>總督</b>那裡去辦。去拜會他吧：點選「{bouton}」。',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': '總督閣下把帳記得清清楚楚：',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>你在四國的聲望</b>，從−100到+100。',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>私掠許可證</b>：150天內，發證那一國的敵國船隻，都成了<b>合法獵物</b>。拿下它們，發證的國家只會更器重你。',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>赦免狀</b>花點錢就能抹掉壞名聲。每個總督都肯開：哪國對你關了港口，正好用得上。',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': '最後一件事：群島的時令。',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>黃熱病</b>夏天會襲擊幾個港口。在那裡停靠過，你的人到了海上就會病倒。',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>珍寶船隊</b>初夏滿載黃金駛離卡塔赫納，北上哈瓦那。',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>颶風</b>八月到十月橫掃群島。在酒館可以留在港裡等上一週，等風頭過去。',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': '你呢，走的是<b>經商</b>這條路。海盜會追著你打；掛國旗的商船也不是你的獵物，除非你有私掠許可證。衝著<b>總督</b>的位子去吧。一路順風！',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': '你呢，掛的是<b>黑旗</b>。不發薪餉：你的人靠<b>戰利品的份子</b>過活，一個半月沒有斬獲，他們就會譁變。別把各國同時得罪光：總得留幾個港口讓你銷贓。一路順風！',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': '關掉這個視窗：點右上角的「X」。',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation}看你不順眼了：他們的<b>緝私船</b>見你就打，關吏會把你的貨翻個底朝天。再出一次岔子，他們的港口就不讓你進了。',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': '你成了{nation}的<b>法外之徒</b>：他們的要塞不讓你進港。想重新進去，就到別國總督那裡買一紙<b>赦免狀</b>。',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>熱病</b>上船了：到下一個港口靠岸前，它會不時帶走人命。看看地圖，別去熱病肆虐的港口。',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>珍寶船隊</b>！讓它過去吧：誰敢動它，就得跟整個西班牙為敵。',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>珍寶船隊</b>！一艘艘蓋倫船裝滿黃金，還有巡防艦護航。準備妥當再動手：西班牙可不會饒你。',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': '弟兄們<b>有怨言</b>了：都{jours}天沒撈到一件戰利品了。趕快拿下一條船，要不就留夠錢，到下個港口發他們的份子。',
+  // Les Îles
+  'text/notice/titre': '群島',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>四個國家</b>在群島角逐：英格蘭、法蘭西、西班牙與荷蘭。每個港口都掛著其中一國的旗幟；托爾圖加與拿索是海盜巢穴，對所有人開放。',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>聲望</b>按國家分別計算，從−100到+100。在該國港口經商、履行合約會使聲望上升；攻擊該國船隻會使聲望暴跌，其他國家也會記上一筆。降到−25時，該國緝私船會攻擊你，關吏搜查更嚴，要塞也不再保護你；降到−50時，該國港口對你關閉。聲望會慢慢回歸中立。',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>總督府</b>出售私掠許可證（150天內，該國之敵的船隻皆可合法捕獲，每拿下一艘都能提升你在該國的聲望），以及能抹去壞名聲的赦免狀。',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>時令</b>：夏天，黃熱病會襲擊幾個港口（在那裡停靠，下一段航程就會有水手染病）；初夏，珍寶船隊從卡塔赫納駛往哈瓦那，隨後北上佛羅里達海峽；八月至十月是颶風季節。在酒館可留港等待一週。',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>兩條道路</b>：商人的目標是總督頭銜，要提防海盜。海盜的目標是海盜之王：不發薪餉，但每筆戰利品船員都要分走份子；太久沒有斬獲，船員就會譁變。',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>火藥火槍</b>在西班牙屬地是違禁品，在那裡賣得極貴。在友方港口附近，要塞的大砲會替你驅退追兵。',
   // Angleterre
   'text/nations/en/name': '英格蘭',
   // l'Angleterre
@@ -30500,6 +30759,18 @@ Lang.ui('ja', {
   'aides.heritage.voiles.t': '帆の色',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': '帆に染める色。どの海でも使える。',
+  // Réputation
+  'aides.gouverneur.reputation.t': '評判',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': '国ごとの評判（−100から+100）。その国の港での商いや依頼の達成で上がり、その国の船を襲うと下がる。−25になると沿岸警備船に襲われ、−50になると港を閉ざされる。',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': '私掠免許状',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': '150日のあいだ、この国の敵の船が正当な獲物になる。拿捕しても縛り首にはならず、かえってこの国での評判が上がる。免許状は一度に一通まで。',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': '恩赦状',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': '金と引き換えに、恨みを買った国での評判を−15まで戻す。閉ざされた港もふたたび開く。',
   // Aide du capitaine
   'notice.titre': '船長の手引き',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -30508,6 +30779,10 @@ Lang.ui('ja', {
   'notice.rejouer': '序章をもう一度',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': '序章（案内つきの最初の航海）は、タイトル画面の「手引き」から遊び直せる。',
+  // Revoir la présentation
+  'notice.revoirAccueil': '説明をもう一度',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'この決まりの説明は、航海中、港でもう一度聞ける。',
   // Le but du jeu
   'notice.but.titre': 'ゲームの目的',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -33188,6 +33463,72 @@ Lang.sea('ja', 'caraibes', {
   'text/parcels/3': '農園主とその荷物',
   // des cartes marines espagnoles
   'text/parcels/4': 'スペインの海図',
+  // Le vieux Barnabé
+  'text/mentorName': 'バルナベ爺さん',
+  // maître d'équipage de votre famille
+  'text/mentorRole': '一家の水夫長',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'わしは<b>バルナベ</b>だ。ポートロイヤルが海に滑り落ちたとき、お前さんの一家で水夫長を務めとった。今さら放り出しはせんよ。',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': '諸島には諸島の掟がある、船長。ここじゃ<b>四つの国</b>がアメリカの黄金を奪い合っとる。イングランド、フランス、スペイン、オランダだ。港ごとに、そのどれかの旗が揚がっとる。よく聞いとけ。手短に話す。',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'ここじゃ何もかも、<b>お前さんの評判</b>しだいだ。国ごとにな。',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': 'その国の港で<b>商いをし、依頼を果たせば</b>上がる。',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>国旗を掲げた船を襲えば</b>下がる。ほかの国々も、それを忘れんぞ。',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': '下がりすぎれば、その国はお前さんを<b>海賊</b>とみなす。沿岸警備船が襲ってきて、しまいには<b>港を閉ざされる</b>。時がたてば、向こうも忘れてくれるがな。',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'こういうことは全部、<b>総督</b>のところで片をつける。挨拶に行っておけ。「{bouton}」を押すんだ。',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': '閣下は何もかも帳面につけておいでだ。',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '四つの国それぞれでの<b>お前さんの評判</b>。−100から+100まである。',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>私掠免許状</b>：150日のあいだ、その国の敵の船が<b>正当な獲物</b>になる。拿捕すれば、免許状を出した国の覚えもめでたくなる。',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>恩赦状</b>は、金と引き換えに悪い評判を帳消しにしてくれる。どこの総督でも出してくれるから、港を閉ざされたときに重宝するぞ。',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': '最後にもうひとつ。諸島の暦だ。',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '夏には<b>黄熱病</b>がいくつかの港を襲う。そんな港に寄れば、沖に出てから水夫どもが病に倒れる。',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>財宝船団</b>は初夏、黄金を積んでカルタヘナを出て、ハバナへ北上する。',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '八月から十月は<b>ハリケーン</b>が島々を荒らし回る。酒場で一週間待って、港でやり過ごす手もある。',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'お前さんが選んだのは<b>商い</b>の道だ。海賊には追い回されるし、国旗を掲げた商船は獲物にはならん。私掠免許状があれば話は別だがな。目指すは<b>総督</b>の椅子だ。順風を祈る！',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'お前さんが選んだのは<b>黒旗</b>だ。給金はない。水夫どもは<b>戦利品の分け前</b>で食っとる。ひと月半も獲物がなけりゃ、叛乱を起こすぞ。誰も彼も一度に襲うんじゃない。売りさばく港が要るんだからな。順風を祈る！',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': '右上の×印で、この画面を閉じろ。',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation}ににらまれたぞ。<b>沿岸警備船</b>は見つけしだい襲ってくるし、税関吏は何もかも調べ上げる。もうひとつ下手を打てば、港を閉ざされる。',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'これでお前さんは{nation}の<b>お尋ね者</b>だ。あの国の港じゃ、砦の大砲に追い返される。港をまた開かせたけりゃ、よその国の総督から<b>恩赦状</b>を買え。',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>熱病</b>が船に入りこんだ。次の港に着くまで、何人か連れていかれる。地図を見て、病がはやっとる港は避けろ。',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>財宝船団</b>だ！　手を出さずに通してやれ。襲えば、スペインじゅうを敵に回すぞ。',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>財宝船団</b>だ！　黄金を詰めこんだガレオンに、護衛のフリゲートがついとる。抜かりなく支度しろ。スペインは決して許さんぞ。',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': '水夫どもが<b>不満を漏らしとる</b>。{jours}日も獲物がないからな。早いとこ一隻ぶんどるか、次の港で分け前を払えるだけの金を残しておけ。',
+  // Les Îles
+  'text/notice/titre': '諸島',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>四つの国</b>が諸島を奪い合っている。イングランド、フランス、スペイン、オランダ。どの港もいずれかの国旗を掲げるが、海賊の根城であるトルトゥーガとナッソーは、誰でも受け入れる。',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '国ごとの<b>評判</b>は−100から+100まで。その国の港で商いをし、依頼を果たせば上がり、その国の船を襲えば下がる。ほかの国々もそれを忘れない。−25になると、その国の沿岸警備船に襲われ、税関の調べは厳しくなり、砦にも守ってもらえなくなる。−50になると、その国の港には入れない。評判は時とともに少しずつ中立へ戻る。',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>総督邸</b>では私掠免許状と恩赦状を売っている。私掠免許状があれば、150日のあいだその国の敵の船が正当な獲物になり、拿捕するたびにその国での評判が上がる。恩赦状は悪い評判を帳消しにする。',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>諸島の暦。</b>夏には黄熱病がいくつかの港を襲う（寄港すれば、次の航海のあいだ水夫が病に倒れる）。財宝船団は初夏にカルタヘナからハバナへ向かい、そのあとフロリダ海峡を北上する。ハリケーンは八月から十月。酒場では、港で一週間待つことができる。',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>道はふたつ。</b>商人は総督の称号を目指し、海賊を恐れる身。海賊は海賊の王の称号を目指す。給金は払わない代わりに、獲物があるたびに船員が分け前を取る。獲物のない日が長く続けば、叛乱が起きる。',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>火薬と銃</b>はスペイン領では禁制品で、そのぶん高値で売れる。味方の港の近くでは、砦の大砲が追っ手を追い払ってくれる。',
   // Angleterre
   'text/nations/en/name': 'イングランド',
   // l'Angleterre
@@ -39444,6 +39785,18 @@ Lang.ui('ko', {
   'aides.heritage.voiles.t': '돛 색',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': '돛에 입힐 색입니다. 모든 바다에서 쓸 수 있습니다.',
+  // Réputation
+  'aides.gouverneur.reputation.t': '평판',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': '나라마다 따로 매겨지는 평판입니다. −100에서 +100까지이며, 그 나라 항구에서 교역하고 계약을 완수하면 오르고 그 나라 배를 공격하면 떨어집니다. −25에 이르면 해안 경비선이 공격해 오고, −50에 이르면 항구가 닫힙니다.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': '나포 면허장',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': '150일 동안 이 나라의 적국 배가 정당한 나포 대상이 됩니다. 그런 배를 잡으면 교수대에 오르기는커녕 이 나라에서 평판이 오릅니다. 면허장은 한 번에 하나만 가질 수 있습니다.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': '사면장',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': '돈을 내면 선장에게 등을 돌린 나라에서의 평판을 −15까지 끌어올려 줍니다. 그 나라 항구가 다시 열리기에 충분합니다.',
   // Aide du capitaine
   'notice.titre': '선장 안내서',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -39452,6 +39805,10 @@ Lang.ui('ko', {
   'notice.rejouer': '프롤로그 다시 하기',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': '안내를 받으며 떠나는 첫 항해, 프롤로그는 타이틀 화면의 도움말에서 다시 할 수 있습니다.',
+  // Revoir la présentation
+  'notice.revoirAccueil': '안내 다시 보기',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': '이 규칙 안내는 항해 도중 항구에 있을 때 다시 볼 수 있습니다.',
   // Le but du jeu
   'notice.but.titre': '게임의 목표',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -42132,6 +42489,72 @@ Lang.sea('ko', 'caraibes', {
   'text/parcels/3': '농장주와 그 짐 궤짝들',
   // des cartes marines espagnoles
   'text/parcels/4': '스페인 해도',
+  // Le vieux Barnabé
+  'text/mentorName': '바르나베 영감',
+  // maître d'équipage de votre famille
+  'text/mentorRole': '집안의 갑판장',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': '난 <b>바르나베</b>다. 포트로열이 바닷속으로 미끄러져 들어가던 날에도 네 집안의 갑판장이었지. 이제 와서 널 내버려 둘 순 없다.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': '섬에는 섬의 법도가 있다, 선장. 여기선 <b>네 나라</b>가 아메리카의 금을 두고 다툰다. 잉글랜드, 프랑스, 스페인, 네덜란드. 항구마다 그중 한 나라의 깃발이 걸려 있지. 잘 들어라. 길게 말하진 않으마.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': '여기선 모든 게 나라마다 쌓은 <b>네 평판</b>에 달렸다:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '그 나라 항구에서 <b>장사하고 계약을 지키면</b> 평판이 오른다.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>나라 깃발을 단 배를 치면</b> 평판이 곤두박질친다. 다른 나라들도 그 일을 잊지 않지.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': '평판이 너무 떨어지면 그 나라한테 <b>해적</b>으로 찍힌다. 해안 경비선이 덤벼들고, 그다음엔 <b>항구 문이 닫힌다</b>. 그래도 시간이 지나면 잊어 주지.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': '이런 일은 모두 <b>총독</b>을 찾아가 해결한다. 가서 인사부터 드려라. “{bouton}”을(를) 눌러라.',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': '총독 각하께서 장부를 쥐고 계시지:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '나라마다 매긴 <b>네 평판</b>. −100에서 +100까지다.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>나포 면허장</b>: 150일 동안 면허장을 내준 나라의 적국 배가 <b>정당한 나포 대상</b>이 된다. 잡으면 잡을수록 그 나라가 널 좋게 보지.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>사면장</b>은 돈을 받고 나쁜 평판을 지워 준다. 어느 총독이든 내주니까, 어떤 나라가 항구를 닫아 버렸을 때 요긴하다.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': '마지막으로, 섬의 한 해가 어떻게 돌아가는지 일러 주마.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '여름이면 몇몇 항구에 <b>황열병</b>이 돈다. 거기 한 번만 들러도 바다에 나가서 선원들이 앓아눕는다.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>보물 선단</b>은 초여름에 금을 가득 싣고 카르타헤나를 떠나 아바나로 올라간다.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '8월부터 10월까지는 <b>허리케인</b>이 섬들을 휩쓴다. 주점에선 항구에 일주일 머물며 그놈들이 지나가길 기다릴 수 있다.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': '넌 <b>교역</b>의 길을 골랐다. 해적들은 널 쫓을 거고, 나라 깃발을 단 상선은 나포 면허장이 없으면 먹잇감이 아니다. <b>총독</b> 자리를 노려라. 순풍을 빈다!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': '넌 <b>검은 깃발</b>을 골랐다. 급료는 없다. 선원들은 <b>전리품 몫</b>으로 먹고살고, 한 달 반 동안 노획이 없으면 반란을 일으킨다. 한꺼번에 모든 나라를 털진 마라. 물건 팔 항구는 있어야 하니까. 순풍을 빈다!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': '이 창을 닫아라. 오른쪽 위의 X 표시다.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation}의 눈 밖에 났다. 그 나라 <b>해안 경비선</b>이 보는 족족 덤벼들고, 세관원은 샅샅이 뒤질 거다. 한 번만 더 엇나가면 그 나라 항구가 닫힌다.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': '이제 {nation}에게 넌 <b>무법자</b>다. 그 나라 요새들이 항구에 발도 못 들이게 막는다. 항구를 다시 열려면 다른 나라 총독한테 가서 <b>사면장</b>을 사라.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>열병</b>이 배에 돌고 있다. 다음 항구에 닿을 때까지 선원이 하나둘 죽어 나갈 거다. 지도를 보고 열병이 도는 항구는 피해라.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>보물 선단</b>이다! 그냥 지나가게 둬라. 건드렸다간 스페인이 통째로 들고일어난다.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>보물 선단</b>이다! 금을 가득 실은 갤리온에, 그걸 지키는 프리깃들까지. 단단히 준비해라. 스페인은 용서하지 않는다.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': '선원들이 <b>투덜댄다</b>. {jours}일째 노획이 하나도 없다. 얼른 한 척 잡든지, 다음 항구에서 내줄 몫을 마련해 둬라.',
+  // Les Îles
+  'text/notice/titre': '서인도 제도',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '잉글랜드, 프랑스, 스페인, 네덜란드, 이렇게 <b>네 나라</b>가 서인도 제도를 두고 다툽니다. 항구마다 그중 한 나라의 깃발이 걸려 있으며, 해적의 소굴인 토르투가와 나소는 누구나 받아 줍니다.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>평판</b>은 나라마다 따로 매겨지며, −100에서 +100까지입니다. 그 나라 항구에서 교역하고 계약을 완수하면 오르고, 그 나라 배를 공격하면 떨어지며, 다른 나라들도 그 일을 잊지 않습니다. −25에 이르면 그 나라의 해안 경비선이 공격해 오고, 세관원의 수색이 엄해지며, 요새도 더는 지켜 주지 않습니다. −50에 이르면 그 나라 항구에 들어갈 수 없습니다. 평판은 천천히 중립으로 돌아갑니다.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>총독 관저</b>에서는 나포 면허장과 사면장을 팝니다. 나포 면허장이 있으면 150일 동안 면허장을 내준 나라의 적국 배가 정당한 나포 대상이 되고, 나포할 때마다 그 나라에서 평판이 오릅니다. 사면장은 나쁜 평판을 지워 줍니다.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>계절</b>: 여름이면 몇몇 항구에 황열병이 돌아, 그곳에 들르면 다음 항해 동안 선원들이 앓습니다. 보물 선단은 초여름에 카르타헤나에서 아바나로 간 뒤 플로리다 해협을 거슬러 오릅니다. 허리케인은 8월부터 10월까지 지나갑니다. 주점에서는 항구에 일주일 머물며 기다릴 수 있습니다.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>두 갈래 길</b>: 상인은 총독 칭호를 노리며 해적을 경계해야 합니다. 해적은 버커니어의 왕 칭호를 노립니다. 급료를 주지 않는 대신 노획할 때마다 선원들이 몫을 떼어 가고, 노획 없이 너무 오래 지나면 반란을 일으킵니다.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>화약과 머스킷</b>은 스페인 영토에서 밀수품이라 아주 비싸게 팔립니다. 적대 관계가 아닌 나라의 항구 근처에서는 요새의 대포가 추격자를 쫓아 줍니다.',
   // Angleterre
   'text/nations/en/name': '잉글랜드',
   // l'Angleterre
@@ -48353,6 +48776,18 @@ Lang.ui('ru', {
   'aides.heritage.voiles.t': 'Паруса',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Цвета для ваших парусов — во всех морях.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Репутация',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'Ваша репутация у каждой державы — от −100 до +100. Её поднимают торговля и выполненные контракты в портах этой державы, а роняют нападения на её корабли. При −25 на вас нападают её сторожевые корабли, при −50 её порты для вас закрыты.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'Каперская грамота',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': 'На 150 дней корабли врагов этой державы становятся законной добычей: за их захват вас ждёт её благосклонность, а не виселица. Одновременно можно иметь только одну грамоту.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Помилования',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'За деньги они возвращают к −15 вашу репутацию у державы, которая на вас в обиде: этого хватит, чтобы снова открыть её порты.',
   // Aide du capitaine
   'notice.titre': 'Справочник капитана',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -48361,6 +48796,10 @@ Lang.ui('ru', {
   'notice.rejouer': 'Пройти пролог заново',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'Пролог — первое плавание под присмотром наставника — можно пройти заново из «Справки» на титульном экране.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Снова выслушать наставника',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'Снова выслушать рассказ наставника об этих правилах можно в порту, во время партии.',
   // Le but du jeu
   'notice.but.titre': 'Цель игры',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -51081,6 +51520,72 @@ Lang.sea('ru', 'caraibes', {
   'text/parcels/3': 'семейство плантатора с сундуками',
   // des cartes marines espagnoles
   'text/parcels/4': 'испанские морские карты',
+  // Le vieux Barnabé
+  'text/mentorName': 'Старый Барнабе',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'боцман вашей семьи',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'Я <b>Барнабе</b>. Был боцманом у твоей семьи, когда Порт-Ройал ушёл под воду. Не брошу же я тебя теперь.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'На Островах свои порядки, капитан. <b>Четыре державы</b> делят здесь золото Америки: Англия, Франция, Испания и Голландия. Над каждым портом — флаг одной из них. Слушай хорошенько, я недолго.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Здесь всё решает <b>твоя репутация</b> у каждой державы:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': 'Её поднимают <b>торговля и выполненные контракты</b> в портах этой державы.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>Нападёшь на корабль под её флагом</b> — репутация рухнет, да и другие державы это запомнят.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Упадёт слишком низко — держава сочтёт тебя <b>пиратом</b>: на тебя начнут нападать её сторожевые корабли, а потом <b>её порты для тебя закроются</b>. Со временем обиды забываются.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'Всё это решается у <b>губернатора</b>. Ступай к нему с поклоном: нажми «{bouton}».',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'У его превосходительства всё на учёте:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>Твоя репутация</b> у всех четырёх держав, от −100 до +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>Каперская грамота</b>: на 150 дней корабли врагов этой державы становятся <b>законной добычей</b>. Бери их — и держава, что подписала грамоту, будет ценить тебя выше.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>Помилования</b> за деньги стирают дурную славу. Их выдаёт любой губернатор — пригодится, если какая-нибудь держава закроет перед тобой свои порты.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'И напоследок — календарь Островов.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>Жёлтая лихорадка</b> летом приходит в некоторые порты. Зайдёшь туда — и твои люди сляжут уже в море.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>Серебряный флот</b> в начале лета выходит из Картахены, гружёный золотом, и идёт на север, к Гаване.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Ураганы</b> проносятся над островами с августа по октябрь. В таверне можно переждать их, простояв неделю в порту.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'А ты выбрал <b>торговлю</b>. Пираты будут на тебя охотиться, а купцы под флагом державы тебе не добыча — разве что с каперской грамотой. Твоя цель — кресло <b>губернатора</b>. Попутного ветра!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'А ты выбрал <b>чёрный флаг</b>. Жалованья нет: твои люди живут <b>своей долей добычи</b>, и если полтора месяца не будет призов, они взбунтуются. Не грабь всех подряд: тебе ведь нужны порты, где продавать. Попутного ветра!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Закрой это окно: крестик вверху справа.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation} косо на тебя смотрит: её <b>сторожевые корабли</b> нападут, едва тебя завидят, а таможенники перероют весь трюм. Ещё одна выходка — и её порты для тебя закроются.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'Вот ты и <b>вне закона</b>: где правит {nation}, форты не пустят тебя в гавань. Чтобы порты снова открылись, купи <b>помилование</b> у губернатора другой державы.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>Лихорадка</b> на борту: пока не зайдём в порт, она будет косить людей. Смотри по карте и обходи порты, где она свирепствует.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>Серебряный флот</b>! Пропусти его: кто на него нападёт, на того ополчится вся Испания.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>Серебряный флот</b>! Галеоны, полные золота, и фрегаты, чтобы их стеречь. Готовься как следует: Испания такого не простит.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'Люди <b>ропщут</b>: ни одного приза за {jours, plural, one {# день} few {# дня} many {# дней} other {# дня}}. Захвати кого-нибудь поскорее или припаси денег на их долю к следующему порту.',
+  // Les Îles
+  'text/notice/titre': 'Острова',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Четыре державы</b> делят Острова: Англия, Франция, Испания и Голландия. Над каждым портом поднят флаг одной из них; Тортуга и Нассау, логова флибустьеров, принимают всех.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>Репутация</b> у каждой державы — от −100 до +100. Торговля и выполненные контракты в её портах поднимают репутацию, нападения на её корабли — роняют, и другие державы тоже это запоминают. При −25 её сторожевые корабли нападают на вас, таможенники обыскивают строже, а форты больше не защищают; при −50 её порты для вас закрыты. Понемногу репутация возвращается к нейтралитету.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': 'В <b>доме губернатора</b> продаются каперские грамоты (150 дней корабли врагов его державы — законная добыча, и каждый приз поднимает вас в её глазах) и помилования, которые стирают дурную славу.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>Календарь</b>: летом жёлтая лихорадка поражает некоторые порты (после захода туда моряки болеют в следующем плавании); в начале лета Серебряный флот идёт из Картахены в Гавану, а затем уходит Флоридским проливом; ураганы бушуют с августа по октябрь. В таверне можно переждать неделю в порту.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Два пути</b>: купец добивается звания губернатора и боится пиратов. Флибустьер метит в короли флибустьеров: жалованья он не платит, зато команда берёт долю с каждой добычи и бунтует, если слишком долго остаётся без призов.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>Порох и мушкеты</b> на испанских землях — контрабанда, и стоят они там очень дорого. У дружественного порта пушки форта отгоняют ваших преследователей.',
   // Angleterre
   'text/nations/en/name': 'Англия',
   // l'Angleterre
@@ -57402,6 +57907,18 @@ Lang.ui('es', {
   'aides.heritage.voiles.t': 'Las velas',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Colores para tus velas, válidos en todos los mares.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Reputación',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'Tu reputación ante cada nación, de −100 a +100. El comercio y los contratos cumplidos en sus puertos la hacen subir; atacar sus barcos la hace caer. A −25, sus guardacostas te atacan; a −50, sus puertos se te cierran.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'Patente de corso',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': 'Durante 150 días, los barcos de los enemigos de esta nación son buena presa: apresarlos te gana su favor en vez de llevarte a la horca. Una sola patente a la vez.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Indultos',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'A cambio de dinero, dejan en −15 tu reputación ante una nación que te guarda rencor: lo justo para que te reabra sus puertos.',
   // Aide du capitaine
   'notice.titre': 'Manual del capitán',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -57410,6 +57927,10 @@ Lang.ui('es', {
   'notice.rejouer': 'Volver a jugar el prólogo',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'Puedes volver a jugar el prólogo, el primer viaje guiado, desde la Ayuda de la pantalla de título.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Volver a ver la presentación',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'Puedes volver a ver la presentación de estas reglas en el puerto, durante una partida.',
   // Le but du jeu
   'notice.but.titre': 'El objetivo',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -60098,6 +60619,72 @@ Lang.sea('es', 'caraibes', {
   'text/parcels/3': 'un hacendado y sus baúles',
   // des cartes marines espagnoles
   'text/parcels/4': 'cartas de marear españolas',
+  // Le vieux Barnabé
+  'text/mentorName': 'El viejo Bernabé',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'contramaestre de tu familia',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'Soy <b>Bernabé</b>. Era el contramaestre de tu familia cuando Port Royal se hundió en el mar. Ahora no pienso dejarte en la estacada.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'Las Islas tienen sus reglas, capitán. <b>Cuatro naciones</b> se disputan aquí el oro de América: Inglaterra, Francia, España y Holanda. Cada puerto enarbola la bandera de una de ellas. Escúchame bien, que seré breve.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Aquí todo depende de <b>tu reputación</b> ante cada nación:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '<b>El comercio y los contratos cumplidos</b> en sus puertos la hacen subir.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>Atacar un barco de bandera nacional</b> la hunde, y las demás naciones tampoco lo olvidan.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Si cae demasiado, la nación te tiene por <b>pirata</b>: sus guardacostas te atacan y luego <b>sus puertos se te cierran</b>. Con el tiempo, olvida.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'Todo eso se arregla con el <b>gobernador</b>. Ve a presentarle tus respetos: toca «{bouton}».',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'Su Excelencia lleva las cuentas:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>Tu reputación</b> ante las cuatro naciones, de −100 a +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>La patente de corso</b>: durante 150 días, los barcos de los enemigos de esa nación pasan a ser <b>presas legales</b>. Apresarlos te gana el favor de la nación que la firmó.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>Los indultos</b> borran una mala reputación, a cambio de dinero. Cualquier gobernador los concede: viene bien cuando una nación te cierra sus puertos.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'Una última cosa: el calendario de las Islas.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>La fiebre amarilla</b> azota algunos puertos en verano. Una escala allí y tus hombres enferman en alta mar.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>La Flota de Indias</b> sale de Cartagena a principios del verano, cargada de oro, y pone rumbo a La Habana.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Los huracanes</b> barren las islas de agosto a octubre. En la taberna puedes esperar una semana en puerto a que pasen.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'Tú elegiste el <b>comercio</b>. Los piratas te darán caza, y los mercantes de bandera nacional no son presas, salvo con patente de corso. Apunta al sillón de <b>gobernador</b>. ¡Buen viento y buena mar!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'Tú elegiste la <b>bandera negra</b>. No hay soldada: tus hombres viven de <b>su parte del botín</b>, y si pasan mes y medio sin una presa, se amotinan. No saquees a todo el mundo a la vez: necesitas puertos donde vender. ¡Buen viento y buena mar!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Cierra esta ventana: la cruz, arriba a la derecha.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation} te mira con malos ojos: sus <b>guardacostas</b> te atacarán en cuanto te vean y sus aduaneros lo registrarán todo. Un desliz más y te cerrará sus puertos.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'Ya estás <b>fuera de la ley</b> para {nation}: sus fuertes te impiden la entrada en sus puertos. Para reabrirlos, cómprale un <b>indulto</b> al gobernador de otra nación.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>La fiebre</b> está a bordo: se llevará hombres hasta la próxima escala. En el mapa, evita los puertos donde hace estragos.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>¡La Flota de Indias!</b> Déjala pasar: quien la ataca se echa encima a toda España.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>¡La Flota de Indias!</b> Galeones repletos de oro, y fragatas para guardarlos. Prepárate bien: España no te lo perdonará.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'Los hombres <b>refunfuñan</b>: ni una presa en {jours} días. Consigue una pronto, o guarda con qué pagarles su parte en el próximo puerto.',
+  // Les Îles
+  'text/notice/titre': 'Las Islas',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Cuatro naciones</b> se disputan las Islas: Inglaterra, Francia, España y Holanda. Cada puerto enarbola la bandera de una de ellas; Tortuga y Nassau, refugios de filibusteros, están abiertos a todos.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>La reputación</b> ante cada nación va de −100 a +100. El comercio y los contratos cumplidos en sus puertos la hacen subir; atacar sus barcos la hace caer, y las demás naciones tampoco lo olvidan. A −25, sus guardacostas te atacan, sus aduaneros registran más a fondo y sus fuertes ya no te protegen; a −50, sus puertos se te cierran. Con el tiempo, vuelve poco a poco hacia la neutralidad.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>La casa del gobernador</b> vende patentes de corso (durante 150 días, los barcos de los enemigos de su nación son buena presa, y cada presa te gana el favor de esa nación) e indultos, que borran una mala reputación.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>El calendario</b>: la fiebre amarilla azota algunos puertos en verano (una escala allí deja marineros enfermos durante la travesía siguiente); la Flota de Indias va de Cartagena a La Habana a principios del verano y luego remonta el estrecho de Florida; los huracanes pasan de agosto a octubre. En la taberna se puede esperar una semana en puerto.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Dos caminos</b>: el mercader aspira al título de Gobernador y teme a los piratas. El filibustero aspira al de Rey de los filibusteros: no paga soldada, pero la tripulación se lleva su parte de cada botín, y se amotina si pasa demasiado tiempo sin una presa.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>La pólvora y los mosquetes</b> son contrabando en territorio español, y allí se venden muy caros. Cerca de un puerto amigo, los cañones del fuerte ahuyentan a tus perseguidores.',
   // Angleterre
   'text/nations/en/name': 'Inglaterra',
   // l'Angleterre
@@ -66337,6 +66924,18 @@ Lang.ui('pt', {
   'aides.heritage.voiles.t': 'As velas',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Cores para o seu velame, válidas em todos os mares.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Reputação',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'Sua reputação junto a cada nação, de −100 a +100. O comércio e os contratos cumpridos nos portos dela a fazem subir; atacar os navios dela a faz despencar. Em −25, os navios guarda-costa dela atacam você; em −50, os portos dela se fecham para você.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'Carta de corso',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': 'Por 150 dias, os navios dos inimigos desta nação são presa legítima: tomá-los põe você nas boas graças dela, em vez de levá-lo à forca. Uma carta de cada vez.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Cartas de perdão',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'Em troca de dinheiro, elas elevam a −15 sua reputação junto a uma nação que guarda rancor de você: o bastante para reabrir os portos dela.',
   // Aide du capitaine
   'notice.titre': 'Manual do capitão',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -66345,6 +66944,10 @@ Lang.ui('pt', {
   'notice.rejouer': 'Refazer o prólogo',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'O prólogo, a primeira viagem guiada, pode ser refeito pela Ajuda da tela inicial.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Rever a apresentação',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'A apresentação destas regras pode ser revista no porto, durante uma partida.',
   // Le but du jeu
   'notice.but.titre': 'O objetivo do jogo',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -69033,6 +69636,72 @@ Lang.sea('pt', 'caraibes', {
   'text/parcels/3': 'um fazendeiro e seus baús',
   // des cartes marines espagnoles
   'text/parcels/4': 'cartas náuticas espanholas',
+  // Le vieux Barnabé
+  'text/mentorName': 'O velho Barnabé',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'contramestre da sua família',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'Eu sou <b>Barnabé</b>. Era contramestre da sua família quando Port Royal deslizou para o mar. Não é agora que vou te largar.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'As Ilhas têm suas regras, capitão. <b>Quatro nações</b> disputam aqui o ouro da América: a Inglaterra, a França, a Espanha e a Holanda. Cada porto hasteia a bandeira de uma delas. Escute bem, que vou ser breve.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Aqui, tudo depende da <b>sua reputação</b> junto a cada nação:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '<b>O comércio e os contratos cumpridos</b> nos portos dela a fazem subir.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>Atacar um navio de bandeira nacional</b> a faz despencar, e as outras nações também não esquecem.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Se ela cair demais, a nação passa a te considerar <b>pirata</b>: os navios guarda-costa dela te atacam, e depois <b>os portos dela se fecham para você</b>. Com o tempo, ela esquece.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'Tudo isso se resolve com o <b>governador</b>. Vá cumprimentá-lo: toque em “{bouton}”.',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'Sua Excelência tem tudo anotado:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>Sua reputação</b> junto às quatro nações, de −100 a +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>A carta de corso</b>: por 150 dias, os navios dos inimigos dessa nação viram <b>presas legais</b>. Tomá-los te põe nas boas graças de quem a assinou.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>As cartas de perdão</b> apagam uma má reputação, em troca de dinheiro. Todo governador as concede: bem útil quando uma nação fecha os portos para você.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'Última coisa: o calendário das Ilhas.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>A febre amarela</b> ataca alguns portos no verão. Uma escala por lá, e seus homens adoecem no mar.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>A Frota do Tesouro</b> deixa Cartagena no começo do verão, carregada de ouro, e sobe rumo a Havana.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Os furacões</b> varrem as ilhas de agosto a outubro. Na taverna, dá para esperar uma semana no porto até eles passarem.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'Quanto a você, escolheu o <b>comércio</b>. Os piratas vão te caçar, e os mercantes de bandeira nacional não são presa, a não ser com uma carta de corso. Mire na cadeira de <b>governador</b>. Bons ventos!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'Quanto a você, escolheu a <b>bandeira negra</b>. Sem soldo: seus homens vivem da <b>parte deles no butim</b>, e se passarem um mês e meio sem presa, eles se amotinam. Não saqueie todo mundo ao mesmo tempo: você precisa de portos onde vender. Bons ventos!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Feche esta janela: o X, no alto à direita.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': 'A {nation} anda te olhando torto: os <b>navios guarda-costa</b> dela vão te atacar assim que te avistarem, e a alfândega vai revistar tudo. Mais um deslize, e os portos dela se fecharão para você.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'Agora você está <b>fora da lei</b> para a {nation}: os fortes dela te barram a entrada nos portos. Para reabri-los, compre uma <b>carta de perdão</b> com o governador de outra nação.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>A febre</b> está a bordo: vai levar homens até a próxima escala. No mapa, evite os portos onde ela grassa.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>A Frota do Tesouro</b>! Deixe-a passar: quem a ataca põe a Espanha inteira no próprio encalço.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>A Frota do Tesouro</b>! Galeões cheios de ouro, e fragatas para guardá-los. Prepare-se bem: a Espanha não vai perdoar.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'Os homens estão <b>resmungando</b>: nenhuma presa há {jours} dias. Tome uma logo, ou guarde dinheiro para pagar a parte deles no próximo porto.',
+  // Les Îles
+  'text/notice/titre': 'As Ilhas',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Quatro nações</b> disputam as Ilhas: a Inglaterra, a França, a Espanha e a Holanda. Cada porto hasteia a bandeira de uma delas; Tortuga e Nassau, covis dos flibusteiros, estão abertos a todos.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>A reputação</b> junto a cada nação vai de −100 a +100. O comércio e os contratos cumpridos nos portos dela a fazem subir; atacar os navios dela a faz despencar, e as outras nações também não esquecem. Em −25, os navios guarda-costa dela atacam você, a alfândega revista mais a fundo e os fortes dela já não protegem você; em −50, os portos dela se fecham para você. Com o tempo, ela volta devagar ao neutro.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>O palácio do governador</b> vende cartas de corso (por 150 dias, os navios dos inimigos da nação dele são presa legítima, e cada presa melhora sua reputação junto a ela) e cartas de perdão, que apagam uma má reputação.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>O calendário</b>: a febre amarela ataca alguns portos no verão (uma escala ali faz marinheiros adoecerem na travessia seguinte); a Frota do Tesouro vai de Cartagena a Havana no começo do verão, e depois sobe o estreito da Flórida; os furacões passam de agosto a outubro. A taverna permite esperar uma semana no porto.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Dois caminhos</b>: o mercador mira o título de Governador e teme os piratas. O flibusteiro mira o de Rei dos Flibusteiros: não paga soldo, mas a tripulação fica com sua parte de cada butim, e se amotina se passar tempo demais sem presa.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>A pólvora e os mosquetes</b> são contrabando em território espanhol, e lá se vendem muito caro. Perto de um porto amigo, os canhões do forte afugentam seus perseguidores.',
   // Angleterre
   'text/nations/en/name': 'Inglaterra',
   // l'Angleterre
@@ -75270,6 +75939,18 @@ Lang.ui('de', {
   'aides.heritage.voiles.t': 'Segelfarben',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Farben für deine Segel, gültig in allen Meeren.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Ruf',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'Dein Ruf bei jeder Nation, von −100 bis +100. Handel und erfüllte Aufträge in ihren Häfen heben ihn; Angriffe auf ihre Schiffe lassen ihn tief sinken. Bei −25 greift dich ihre Küstenwache an, bei −50 sind dir ihre Häfen verschlossen.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'Kaperbrief',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': '150 Tage lang sind die Schiffe der Feinde dieser Nation gute Prise: Kaperst du sie, steigt dein Ruf bei ihr, statt dass man dich aufknüpft. Nur ein Kaperbrief auf einmal.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Gnadenbriefe',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'Gegen Geld heben sie deinen Ruf bei einer Nation, die dir grollt, auf −15 an: genug, damit sie dir ihre Häfen wieder öffnet.',
   // Aide du capitaine
   'notice.titre': 'Kapitänshandbuch',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -75278,6 +75959,10 @@ Lang.ui('de', {
   'notice.rejouer': 'Prolog erneut spielen',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'Den Prolog, die erste geführte Fahrt, kannst du über die Hilfe auf dem Titelbildschirm erneut spielen.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Einführung erneut ansehen',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'Die Einführung in diese Regeln kannst du während einer Partie im Hafen erneut ansehen.',
   // Le but du jeu
   'notice.but.titre': 'Ziel des Spiels',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -77966,6 +78651,72 @@ Lang.sea('de', 'caraibes', {
   'text/parcels/3': 'einen Pflanzer samt seinen Truhen',
   // des cartes marines espagnoles
   'text/parcels/4': 'spanische Seekarten',
+  // Le vieux Barnabé
+  'text/mentorName': 'Der alte Barnabas',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'Bootsmann deiner Familie',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'Ich bin <b>Barnabas</b>. Als Port Royal im Meer versank, war ich Bootsmann deiner Familie. Jetzt lasse ich dich nicht im Stich.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'Die Inseln haben ihre eigenen Regeln, Kapitän. <b>Vier Nationen</b> streiten hier um das Gold Amerikas: England, Frankreich, Spanien und Holland. Über jedem Hafen weht die Flagge einer von ihnen. Hör gut zu, ich mache es kurz.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Hier hängt alles von <b>deinem Ruf</b> bei jeder Nation ab:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '<b>Handel und erfüllte Aufträge</b> in ihren Häfen lassen ihn steigen.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>Ein Angriff auf ein Schiff unter Nationalflagge</b> lässt ihn tief sinken, und auch die anderen Nationen vergessen das nicht.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Sinkt er zu tief, hält dich die Nation für einen <b>Piraten</b>: Erst greift dich ihre Küstenwache an, dann <b>sind dir ihre Häfen verschlossen</b>. Mit der Zeit vergisst sie.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'All das regelt man beim <b>Gouverneur</b>. Geh und mach ihm deine Aufwartung: Drück auf „{bouton}“.',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'Seine Exzellenz führt Buch:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>Dein Ruf</b> bei den vier Nationen, von −100 bis +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>Der Kaperbrief</b>: 150 Tage lang werden die Schiffe der Feinde dieser Nation zu <b>rechtmäßigen Prisen</b>. Kaperst du sie, steigt dein Ruf bei der Nation, die ihn ausgestellt hat.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>Gnadenbriefe</b> waschen einen schlechten Ruf rein, gegen klingende Münze. Jeder Gouverneur stellt sie aus: praktisch, wenn dir eine Nation ihre Häfen sperrt.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'Eins noch: der Kalender der Inseln.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>Das Gelbfieber</b> sucht im Sommer manche Häfen heim. Ein Halt dort, und deine Leute werden auf See krank.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>Die Silberflotte</b> verlässt Cartagena zu Sommerbeginn, voller Gold, und segelt nordwärts nach Havanna.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Die Hurrikane</b> fegen von August bis Oktober über die Inseln. In der Schenke kannst du eine Woche im Hafen warten, bis sie vorüber sind.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'Du hast den <b>Handel</b> gewählt. Die Piraten werden Jagd auf dich machen, und Kauffahrer unter Nationalflagge sind keine Beute, außer mit einem Kaperbrief. Nimm Kurs auf den Sessel des <b>Gouverneurs</b>. Allzeit gute Fahrt!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'Du hast die <b>schwarze Flagge</b> gewählt. Keine Heuer: Deine Leute leben von <b>ihrem Beuteanteil</b>, und bleiben sie anderthalb Monate ohne Prise, meutern sie. Plündere nicht alle auf einmal: Du brauchst Häfen, um zu verkaufen. Allzeit gute Fahrt!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Schließ dieses Fenster: das Kreuz oben rechts.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation} sieht dich schief an: Seine <b>Küstenwache</b> greift dich an, sobald sie dich sichtet, und seine Zöllner durchsuchen alles. Noch ein Fehltritt, und seine Häfen sind dir verschlossen.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'Jetzt hat dich {nation} <b>geächtet</b>: Seine Forts lassen dich in keinen seiner Häfen mehr ein. Willst du wieder hinein, kauf beim Gouverneur einer anderen Nation einen <b>Gnadenbrief</b>.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>Das Fieber</b> ist an Bord: Bis du wieder anlegst, wird es Seeleute dahinraffen. Wähl auf der Karte keinen Hafen, in dem es wütet.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>Die Silberflotte</b>! Lass sie ziehen: Wer sie angreift, hat ganz Spanien am Hals.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>Die Silberflotte</b>! Galeonen voller Gold und Fregatten, die sie bewachen. Bereite dich gut vor: Spanien verzeiht nichts.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'Die Männer <b>murren</b>: seit {jours} Tagen keine Prise. Kapere schnell eine, oder leg genug Geld beiseite, um im nächsten Hafen ihren Anteil zu zahlen.',
+  // Les Îles
+  'text/notice/titre': 'Die Inseln',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Vier Nationen</b> streiten um die Inseln: England, Frankreich, Spanien und Holland. Über jedem Hafen weht die Flagge einer von ihnen; Tortuga und Nassau, die Schlupfwinkel der Freibeuter, stehen allen offen.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>Der Ruf</b> bei jeder Nation reicht von −100 bis +100. Handel und erfüllte Aufträge in ihren Häfen heben ihn; Angriffe auf ihre Schiffe lassen ihn tief sinken, und auch die anderen Nationen vergessen das nicht. Bei −25 greift dich ihre Küstenwache an, ihre Zöllner durchsuchen gründlicher und ihre Forts schützen dich nicht mehr; bei −50 sind dir ihre Häfen verschlossen. Mit der Zeit wird er langsam wieder neutral.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>Der Gouverneur</b> verkauft Kaperbriefe (150 Tage lang sind die Schiffe der Feinde seiner Nation gute Prise, und jede Prise hebt deinen Ruf bei ihr) und Gnadenbriefe, die einen schlechten Ruf reinwaschen.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>Der Kalender</b>: Im Sommer sucht das Gelbfieber manche Häfen heim (ein Halt dort macht Seeleute auf der folgenden Überfahrt krank); die Silberflotte segelt zu Sommerbeginn von Cartagena nach Havanna und dann durch die Floridastraße nordwärts; von August bis Oktober fegen Hurrikane über die Inseln. In der Schenke kannst du eine Woche im Hafen warten.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Zwei Wege</b>: Der Kaufmann will Gouverneur werden und fürchtet die Piraten. Der Freibeuter will König der Freibeuter werden: Er zahlt keine Heuer, doch die Mannschaft nimmt ihren Anteil an jeder Beute und meutert, wenn sie zu lange ohne Prise bleibt.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>Pulver und Musketen</b> sind im spanischen Gebiet Schmuggelware und werden dort teuer bezahlt. Nahe einem befreundeten Hafen vertreiben die Kanonen des Forts deine Verfolger.',
   // Angleterre
   'text/nations/en/name': 'England',
   // l'Angleterre
@@ -84203,6 +84954,18 @@ Lang.ui('it', {
   'aides.heritage.voiles.t': 'Le vele',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Colori per le tue vele, validi in tutti i mari.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Reputazione',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'La tua reputazione presso ogni nazione, da −100 a +100. Il commercio e i contratti onorati nei suoi porti la fanno salire; attaccare le sue navi la fa crollare. A −25 i suoi guardacoste ti attaccano; a −50 i suoi porti ti sono chiusi.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'Lettera di corsa',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': 'Per 150 giorni le navi dei nemici di questa nazione sono buona preda: catturarle ti vale il suo favore anziché la forca. Una sola lettera alla volta.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Lettere di grazia',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'A pagamento, riportano a −15 la tua reputazione presso una nazione che ti serba rancore: quanto basta per riaprirne i porti.',
   // Aide du capitaine
   'notice.titre': 'Manuale del capitano',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -84211,6 +84974,10 @@ Lang.ui('it', {
   'notice.rejouer': 'Rigioca il prologo',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'Il prologo, il primo viaggio guidato, si rigioca dall\'Aiuto della schermata iniziale.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Rivedi la presentazione',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'La presentazione di queste regole si può rivedere in porto, durante una partita.',
   // Le but du jeu
   'notice.but.titre': 'Lo scopo del gioco',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -86899,6 +87666,72 @@ Lang.sea('it', 'caraibes', {
   'text/parcels/3': 'un piantatore e i suoi bauli',
   // des cartes marines espagnoles
   'text/parcels/4': 'carte nautiche spagnole',
+  // Le vieux Barnabé
+  'text/mentorName': 'Il vecchio Barnaba',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'nostromo della tua famiglia',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'Io sono <b>Barnaba</b>. Ero il nostromo della tua famiglia quando Port Royal è scivolata in mare. Non ti mollo certo adesso.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'Le Isole hanno le loro regole, capitano. <b>Quattro nazioni</b> si contendono l\'oro delle Americhe: l\'Inghilterra, la Francia, la Spagna e l\'Olanda. Ogni porto batte la bandiera di una di loro. Ascoltami bene, sarò breve.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Qui tutto dipende dalla <b>tua reputazione</b> presso ogni nazione:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '<b>Il commercio e i contratti onorati</b> nei suoi porti la fanno salire.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>Attaccare una delle sue navi</b> la fa crollare, e anche le altre nazioni se ne ricordano.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Se scende troppo, la nazione ti considera un <b>pirata</b>: i suoi guardacoste ti attaccano, poi <b>i suoi porti ti sono chiusi</b>. Col tempo, dimentica.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'Tutto questo si sbriga dal <b>governatore</b>. Va\' a salutarlo: tocca «{bouton}».',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'Sua Eccellenza tiene i conti:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>La tua reputazione</b> presso le quattro nazioni, da −100 a +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>La lettera di corsa</b>: per 150 giorni le navi dei nemici di questa nazione diventano <b>prede legittime</b>. Catturarle ti mette in buona luce presso chi l\'ha firmata.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>Le lettere di grazia</b> cancellano una cattiva reputazione, a pagamento. Ogni governatore ne rilascia: comodo, quando una nazione ti chiude i porti.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'Un\'ultima cosa: il calendario delle Isole.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>La febbre gialla</b> colpisce alcuni porti d\'estate. Basta uno scalo lì, e i tuoi uomini si ammalano in mare.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>La Flotta del Tesoro</b> lascia Cartagena all\'inizio dell\'estate, carica d\'oro, e risale fino all\'Avana.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Gli uragani</b> spazzano le isole da agosto a ottobre. In taverna puoi restare in porto una settimana e lasciarli passare.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'Tu hai scelto il <b>commercio</b>. I pirati ti daranno la caccia, e i mercantili delle quattro nazioni non sono prede, salvo con una lettera di corsa. Punta al seggio di <b>governatore</b>. Buon vento!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'Tu hai scelto la <b>bandiera nera</b>. Niente paga: i tuoi uomini vivono della <b>loro parte di bottino</b>, e dopo un mese e mezzo senza prede si ammutinano. Non depredare tutti in una volta: ti servono porti dove vendere. Buon vento!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Chiudi questa finestra: la crocetta, in alto a destra.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation} ti guarda storto: i suoi <b>guardacoste</b> ti attaccheranno a vista e i suoi doganieri ti perquisiranno da cima a fondo. Un altro passo falso, e ti chiuderà i porti.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': 'Eccoti <b>fuorilegge</b> per {nation}: i suoi forti ti vietano l\'ingresso nei porti. Per riaprirli, compra una <b>lettera di grazia</b> dal governatore di un\'altra nazione.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>La febbre</b> è a bordo: si porterà via degli uomini fino al prossimo scalo. Sulla mappa, evita i porti dove infuria.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>La Flotta del Tesoro</b>! Lasciala passare: chi la attacca si tira addosso tutta la Spagna.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>La Flotta del Tesoro</b>! Galeoni pieni d\'oro, e fregate a far loro la guardia. Preparati bene: la Spagna non perdonerà.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'Gli uomini <b>mugugnano</b>: nessuna preda da {jours} giorni. Fanne una in fretta, o tieni pronto il denaro per la loro parte al prossimo porto.',
+  // Les Îles
+  'text/notice/titre': 'Le Isole',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Quattro nazioni</b> si contendono le Isole: l\'Inghilterra, la Francia, la Spagna e l\'Olanda. Ogni porto batte la bandiera di una di loro; Tortuga e Nassau, covi della filibusta, accolgono tutti.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>La reputazione</b> presso ogni nazione va da −100 a +100. Il commercio e i contratti onorati nei suoi porti la fanno salire; attaccare le sue navi la fa crollare, e anche le altre nazioni se ne ricordano. A −25 i suoi guardacoste ti attaccano, i suoi doganieri perquisiscono più a fondo e i suoi forti non ti proteggono più; a −50 i suoi porti ti sono chiusi. Col tempo torna lentamente verso la neutralità.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>Il palazzo del governatore</b> vende lettere di corsa (per 150 giorni le navi dei nemici della sua nazione sono buona preda, e ogni preda ti mette in buona luce presso di lei) e lettere di grazia, che cancellano una cattiva reputazione.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>Il calendario</b>: la febbre gialla colpisce alcuni porti d\'estate (uno scalo lì fa ammalare dei marinai durante la traversata successiva); la Flotta del Tesoro va da Cartagena all\'Avana all\'inizio dell\'estate, poi risale lo stretto della Florida; gli uragani passano da agosto a ottobre. In taverna puoi attendere una settimana in porto.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Due vie</b>: il mercante punta al titolo di Governatore e teme i pirati. Il filibustiere punta a quello di Re della Filibusta: niente paga, ma l\'equipaggio prende la sua parte di ogni bottino, e si ammutina se resta troppo a lungo senza prede.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>La polvere e i moschetti</b> sono contrabbando in territorio spagnolo, e lì si vendono a peso d\'oro. Vicino a un porto amico, i cannoni del forte mettono in fuga i tuoi inseguitori.',
   // Angleterre
   'text/nations/en/name': 'Inghilterra',
   // l'Angleterre
@@ -93139,6 +93972,18 @@ Lang.ui('pl', {
   'aides.heritage.voiles.t': 'Żagle',
   // Des couleurs pour votre toile, valables dans toutes les mers.
   'aides.heritage.voiles.d': 'Kolory płótna dla twoich żagli, na wszystkich morzach.',
+  // Réputation
+  'aides.gouverneur.reputation.t': 'Reputacja',
+  // Votre réputation auprès de chaque nation, de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chute
+  'aides.gouverneur.reputation.d': 'Twoja reputacja w oczach każdego narodu, od −100 do +100. Handel i wykonane kontrakty w jego portach ją podnoszą; atak na jego statki ją obniża. Przy −25 atakuje cię jego straż przybrzeżna; przy −50 jego porty są dla ciebie zamknięte.',
+  // Lettre de marque
+  'aides.gouverneur.lettre.t': 'List kaperski',
+  // Pendant 150 jours, les navires des ennemis de cette nation sont de bonne prise : les prendre vous fait bien voir d'elle au lieu de vous faire pendre. Une seule 
+  'aides.gouverneur.lettre.d': 'Przez 150 dni statki wrogów tego narodu są legalną zdobyczą: zdobywając je, zyskujesz w jego oczach, zamiast trafić na szubienicę. Naraz możesz mieć tylko jeden list.',
+  // Lettres de grâce
+  'aides.gouverneur.graces.t': 'Akty łaski',
+  // Contre de l'argent, elles ramènent à −15 votre réputation auprès d'une nation qui vous en veut : de quoi rouvrir ses ports.
+  'aides.gouverneur.graces.d': 'Za opłatą podnoszą do −15 twoją reputację w oczach narodu, który ma do ciebie urazę: dość, by znów otworzył przed tobą porty.',
   // Aide du capitaine
   'notice.titre': 'Poradnik kapitana',
   // Tout ce qu'il faut savoir pour faire fortune
@@ -93147,6 +93992,10 @@ Lang.ui('pl', {
   'notice.rejouer': 'Powtórz prolog',
   // Le prologue, le premier voyage guidé, se rejoue depuis l'Aide de l'écran titre.
   'notice.rejouerTitre': 'Prolog, czyli pierwszy rejs z przewodnikiem, można powtórzyć z Pomocy na ekranie tytułowym.',
+  // Revoir la présentation
+  'notice.revoirAccueil': 'Powtórz wprowadzenie',
+  // La présentation de ces règles se revoit au port, pendant une partie.
+  'notice.revoirAccueilPort': 'Wprowadzenie do tych zasad można powtórzyć w porcie, w trakcie rozgrywki.',
   // Le but du jeu
   'notice.but.titre': 'Cel gry',
   // Vous commencez avec un nom, quelques {monnaie} et une réputation à reconstruire. Le but : <b>la plus grande fortune possible</b> avant la fin de la partie, le {
@@ -95867,6 +96716,72 @@ Lang.sea('pl', 'caraibes', {
   'text/parcels/3': 'plantator z kuframi',
   // des cartes marines espagnoles
   'text/parcels/4': 'hiszpańskie mapy morskie',
+  // Le vieux Barnabé
+  'text/mentorName': 'Stary Barnaba',
+  // maître d'équipage de votre famille
+  'text/mentorRole': 'bosman twojej rodziny',
+  // Je suis <b>Barnabé</b>. J'étais maître d'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.
+  'text/accueil/bienvenue': 'Jestem <b>Barnaba</b>. Byłem bosmanem u twojej rodziny, kiedy Port Royal osunął się w morze. Teraz cię nie zostawię.',
+  // Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s'y disputent l'or de l'Amérique : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port ba
+  'text/accueil/bienvenue2': 'Wyspy rządzą się własnymi prawami, kapitanie. <b>Cztery narody</b> walczą tu o złoto Ameryki: Anglia, Francja, Hiszpania i Holandia. Nad każdym portem powiewa flaga jednego z nich. Słuchaj uważnie, nie zajmie to długo.',
+  // Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :
+  'text/accueil/reputation': 'Tutaj wszystko zależy od <b>twojej reputacji</b> w oczach każdego narodu:',
+  // <b>Le commerce et les contrats honorés</b> dans ses ports la font monter.
+  'text/accueil/reputation1': '<b>Handel i wykonane kontrakty</b> w jego portach ją podnoszą.',
+  // <b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s'en souviennent aussi.
+  'text/accueil/reputation2': '<b>Atak na statek pod banderą</b> ją obniża, a inne narody też to zapamiętają.',
+  // Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.
+  'text/accueil/reputation3': 'Jeśli spadnie za nisko, naród ma cię za <b>pirata</b>: najpierw atakuje cię jego straż przybrzeżna, potem <b>jego porty zamykają się przed tobą</b>. Ale z czasem wszystko się zapomina.',
+  // Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».
+  'text/accueil/gouverneurAller': 'Wszystko to załatwia się u <b>gubernatora</b>. Idź się z nim przywitać: naciśnij „{bouton}”.',
+  // Son Excellence tient les comptes :
+  'text/accueil/gouverneur': 'Jego Ekscelencja prowadzi rachunki:',
+  // <b>Ta réputation</b> auprès des quatre nations, de −100 à +100.
+  'text/accueil/gouverneur1': '<b>Twoja reputacja</b> w oczach czterech narodów, od −100 do +100.',
+  // <b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de c
+  'text/accueil/gouverneur2': '<b>List kaperski</b>: przez 150 dni statki wrogów tego narodu są <b>legalną zdobyczą</b>. Zdobywając je, zyskujesz w oczach narodu, który go wystawił.',
+  // <b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.
+  'text/accueil/gouverneur3': '<b>Akty łaski</b> wymazują złą reputację — za pieniądze. Wydaje je każdy gubernator: przydają się, gdy jakiś naród zamknie przed tobą porty.',
+  // Dernière chose : le calendrier des Îles.
+  'text/accueil/saisons': 'I ostatnia rzecz: kalendarz Wysp.',
+  // <b>La fièvre jaune</b> frappe quelques ports l'été. Une escale là-bas, et tes hommes tombent malades en mer.
+  'text/accueil/saisons1': '<b>Żółta febra</b> nawiedza latem niektóre porty. Zawiniesz tam, a twoi ludzie zachorują na morzu.',
+  // <b>La Flotte du Trésor</b> quitte Carthagène au début de l'été, chargée d'or, et remonte vers La Havane.
+  'text/accueil/saisons2': '<b>Srebrna Flota</b> opuszcza Kartagenę na początku lata, obładowana złotem, i płynie na północ, do Hawany.',
+  // <b>Les ouragans</b> balaient les îles d'août à octobre. À la taverne, on peut attendre une semaine au port qu'ils passent.
+  'text/accueil/saisons3': '<b>Huragany</b> pustoszą wyspy od sierpnia do października. W tawernie możesz poczekać tydzień w porcie, aż przejdą.',
+  // Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le 
+  'text/accueil/voies/marchand': 'Twoja droga to <b>handel</b>. Piraci będą na ciebie polować, a kupcy pod banderą to nie zdobycz — chyba że masz list kaperski. Celuj w fotel <b>gubernatora</b>. Pomyślnych wiatrów!',
+  // Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent
+  'text/accueil/voies/flibustier': 'Twoja droga to <b>czarna bandera</b>. Żadnego żołdu: twoi ludzie żyją z <b>udziału w łupie</b>, a po półtora miesiąca bez zdobyczy się buntują. Nie łup wszystkich naraz: musisz mieć gdzie sprzedawać. Pomyślnych wiatrów!',
+  // Ferme cette fenêtre : la croix, en haut à droite.
+  'text/accueil/fermer': 'Zamknij to okno: krzyżyk w prawym górnym rogu.',
+  // {nation} te regarde de travers : ses <b>garde-côtes</b> t'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.
+  'text/hints/nationHostile': '{nation} patrzy na ciebie krzywym okiem: jej <b>straż przybrzeżna</b> rzuci się na ciebie, gdy tylko cię wypatrzy, a celnicy przetrząsną wszystko. Jeszcze jeden wybryk, a jej porty się przed tobą zamkną.',
+  // Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t'interdisent l'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneu
+  'text/hints/horsLaLoi': '{nation} stawia cię <b>poza prawem</b>: działa jej fortów zagradzają ci wejście do portów. Żeby znów cię wpuściła, kup <b>akt łaski</b> u gubernatora innego narodu.',
+  // <b>La fièvre</b> est à bord : elle emportera des hommes jusqu'à la prochaine escale. Sur la carte, évite les ports où elle sévit.
+  'text/hints/fievre': '<b>Febra</b> na pokładzie: będzie zabierać ludzi, dopóki nie zawiniemy do portu. Na mapie omijaj porty, w których szaleje.',
+  // <b>La Flotte du Trésor</b> ! Laisse-la passer : qui l'attaque a toute l'Espagne sur le dos.
+  'text/hints/flotte': '<b>Srebrna Flota</b>! Przepuść ją: kto ją zaatakuje, ten ma na karku całą Hiszpanię.',
+  // <b>La Flotte du Trésor</b> ! Des galions pleins d'or, et des frégates pour les garder. Prépare-toi bien : l'Espagne ne pardonnera pas.
+  'text/hints/flotteFlib': '<b>Srebrna Flota</b>! Galeony pełne złota i fregaty na straży. Przygotuj się dobrze: Hiszpania tego nie wybaczy.',
+  // Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.
+  'text/hints/grogne': 'Ludzie <b>szemrzą</b>: ani jednej zdobyczy od {jours, plural, one {# dnia} few {# dni} many {# dni} other {# dnia}}. Zdobądź coś szybko albo miej czym wypłacić im dolę w najbliższym porcie.',
+  // Les Îles
+  'text/notice/titre': 'Wyspy',
+  // <b>Quatre nations</b> se disputent les Îles : l'Angleterre, la France, l'Espagne et la Hollande. Chaque port bat le pavillon de l'une d'elles ; Tortuga et Nassa
+  'text/notice/p/0': '<b>Cztery narody</b> rywalizują o Wyspy: Anglia, Francja, Hiszpania i Holandia. Nad każdym portem powiewa flaga jednego z nich; Tortuga i Nassau, kryjówki flibustierów, przyjmują wszystkich.',
+  // <b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait
+  'text/notice/p/1': '<b>Reputacja</b> w oczach każdego narodu mieści się w skali od −100 do +100. Handel i wykonane kontrakty w jego portach ją podnoszą; atak na jego statki ją obniża, a inne narody też to zapamiętują. Przy −25 atakuje cię jego straż przybrzeżna, celnicy dokładniej przeszukują ładownię, a forty przestają cię osłaniać; przy −50 jego porty są dla ciebie zamknięte. Reputacja powoli wraca do neutralności.',
+  // <b>L'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait 
+  'text/notice/p/2': '<b>U gubernatora</b> kupisz listy kaperskie (przez 150 dni statki wrogów jego narodu są legalną zdobyczą, a każda zdobycz zjednuje ci przychylność tego narodu) i akty łaski, które wymazują złą reputację.',
+  // <b>Le calendrier</b> : la fièvre jaune frappe quelques ports l'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va
+  'text/notice/p/3': '<b>Kalendarz</b>: żółta febra nawiedza latem niektóre porty (po postoju w takim porcie marynarze chorują w następnym rejsie); Srebrna Flota płynie na początku lata z Kartageny do Hawany, a potem przez Cieśninę Florydzką; huragany nadciągają od sierpnia do października. W tawernie możesz poczekać tydzień w porcie.',
+  // <b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mai
+  'text/notice/p/4': '<b>Dwie drogi</b>: kupiec celuje w tytuł gubernatora i boi się piratów. Flibustier celuje w tytuł króla flibustierów: nie płaci żołdu, ale załoga bierze swoją dolę z każdego łupu i buntuje się, jeśli zbyt długo nie ma zdobyczy.',
+  // <b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s'y vendent très cher. Près d'un port ami, les canons du fort chassent vos p
+  'text/notice/p/5': '<b>Proch i muszkiety</b> są w posiadłościach hiszpańskich kontrabandą i sprzedają się tam bardzo drogo. W pobliżu przyjaznego portu działa fortu odpędzają pościg.',
   // Angleterre
   'text/nations/en/name': 'Anglia',
   // l'Angleterre
@@ -108078,8 +108993,9 @@ const UI = {
   // appelé à chaque image
   frame(dt) {
     if (this.anims.length) this.anims = this.anims.filter(fn => { try { return !fn(dt || 1 / 60); } catch (e) { console.error(e); return false; } });
-    // le guide : l'étape du prologue, puis les éléments montrés suivis à l'écran
+    // le guide : l'étape du prologue ou de la présentation de la mer, puis les éléments montrés suivis à l'écran
     Prologue.tick();
+    SeaIntro.tick();
     Guide.frame();
     const mode = this.mode;
     if (mode === 'sea') {
@@ -109059,20 +109975,28 @@ const UI = {
   },
   // ════════════ Aide : la notice du jeu, en chapitres (sommaire à gauche, ou en onglets sur téléphone) ════════════
   // notice.<chapitre>.titre et notice.<chapitre>.1, .2… (le premier paragraphe du marché, les vivres, mis en avant) ;
-  // le chapitre des commandes reprend les phrases aide.* ; « Rejouer le prologue » depuis l'écran titre
+  // le chapitre des commandes reprend les phrases aide.* ; « Rejouer le prologue » depuis l'écran titre ; une mer qui a ses
+  // propres règles ajoute son chapitre après le premier (« regles » : TXT.notice, titre et paragraphes)
   NOTICE: { but: 3, port: 2, marche: 5, dette: 3, mer: 3, combat: 4, journal: 1, heritage: 2, touches: 0 },
   help(ch) {
     const r = Game.run, end = r ? r.endDay : (DEMO && DEMO.endDay) || SEA.days;
     const P = Object.assign(Help.params(), { fin: fmtDate(end - 0.5), unite: TXT.unitOne });
     const k = c => h('kbd', { class: 'pill' }, Input.label(c));
+    const chs = Object.keys(this.NOTICE);
+    if (TXT.notice) chs.splice(1, 0, 'regles');
     let cur = ch || this.noticeCh || 'but';
+    if (!chs.includes(cur)) cur = 'but';
+    const titre = c => (c === 'regles' ? TXT.notice.titre : T('notice.' + c + '.titre'));
     const nav = h('div', { class: 'notice-nav', role: 'tablist' });
     const page = h('div', { class: 'notice-page' });
     const render = () => {
       this.noticeCh = cur;
-      put(nav, Object.keys(this.NOTICE).map(c => btn(T('notice.' + c + '.titre'), () => { cur = c; render(); page.scrollTop = 0; }, 'sm' + (c === cur ? ' on' : ''), { role: 'tab', 'aria-selected': c === cur ? 'true' : 'false' })),
+      put(nav, chs.map(c => btn(titre(c), () => { cur = c; render(); page.scrollTop = 0; }, 'sm' + (c === cur ? ' on' : ''), { role: 'tab', 'aria-selected': c === cur ? 'true' : 'false' })),
         Prologue.available() ? btn([ico('scroll', 'sm'), ' ', T('notice.rejouer')], () => { this.closeAll(); Prologue.start(); }, 'sm jade notice-replay') : null);
-      const n = this.NOTICE[cur], kids = [h('h3', null, T('notice.' + cur + '.titre'))];
+      const n = this.NOTICE[cur] || 0, kids = [h('h3', null, titre(cur))];
+      // (les règles de la mer, et la présentation de son mentor à revoir, au port)
+      if (cur === 'regles') kids.push(...TXT.notice.p.map(t => h('p', { html: Lang.fmt(t, P) })),
+        SEA.accueil && TXT.accueil ? (SeaIntro.replayable() ? h('div', { class: 'row' }, btn([ico('scroll', 'sm'), ' ', T('notice.revoirAccueil')], () => SeaIntro.replay(), 'sm jade')) : h('p', { class: 'hint' }, T('notice.revoirAccueilPort'))) : null);
       for (let i = 1; i <= n; i++) {
         const p = h('p', { html: T('notice.' + cur + '.' + i, P) });
         kids.push(cur === 'marche' && i === 1 ? h('div', { class: 'mk-foot notice-key' }, ico('vivres', 'big'), p) : p);
@@ -109349,8 +110273,9 @@ const UI = {
 <script>
 'use strict';
 // ─── Silk & Cannons · le guide : un calque d'explications par-dessus le jeu ───
-// Trois usages :
+// Quatre usages :
 //  • le prologue (js/prologue.js) : le mentor de la mer prend le joueur par la main, étape par étape ;
+//  • la présentation d'une mer (SeaIntro) : son mentor en présente les règles propres, au premier passage au port ;
 //  • les aides « ? » (Help) : la première fois qu'un écran s'affiche (ou à la demande, bouton « ? »), ses éléments
 //    utiles sont cerclés d'une pastille qu'on touche (ou survole) pour savoir à quoi ils servent ;
 //  • les conseils du mentor (Hints) : une bulle, la première fois qu'un danger se présente.
@@ -109579,7 +110504,7 @@ const Guide = {
       (B.buttons || []).map(o => btn(o.label, o.fn, o.cls || '')));
     const el = h('div', { class: 'g-bubble g-live' + (M ? '' : ' plain') + (B.cls ? ' ' + B.cls : ''), role: 'dialog', 'aria-label': (M && M.name) || B.who || B.title || '' },
       // (sur téléphone, toucher le sceau replie la bulle, pour voir ce qu'elle cache)
-      M ? h('button', { class: 'g-seal', type: 'button', 'aria-label': M.name, title: M.name, onclick: () => { el.classList.toggle('min'); this.placedKey = ''; } }, M.seal) : null,
+      M ? h('button', { class: 'g-seal' + (SEA.mentorWax ? ' wax' : ''), type: 'button', 'aria-label': M.name, title: M.name, onclick: () => { el.classList.toggle('min'); this.placedKey = ''; } }, M.seal) : null,
       h('div', { class: 'g-col' }, B.who ? h('div', { class: 'g-who' }, B.who) : null, B.title ? h('h3', null, B.title) : null, txt, row));
     return el;
   },
@@ -109590,7 +110515,7 @@ const Guide = {
     clearTimeout(this.hintT);
     const close = () => { el.classList.add('out'); setTimeout(() => el.remove(), 300); if (this.hintEl === el) this.hintEl = null; };
     const el = h('div', { class: 'g-hint g-live', role: 'status' },
-      h('span', { class: 'g-seal sm', 'aria-hidden': 'true' }, seal),
+      h('span', { class: 'g-seal sm' + (SEA.mentorWax ? ' wax' : ''), 'aria-hidden': 'true' }, seal),
       h('div', { class: 'g-col' }, h('div', { class: 'g-who' }, who), h('p', { html: text }),
         h('div', { class: 'g-row' }, h('span', { class: 'g-sp' }), btn(T('guide.compris'), close, 'sm jade'))));
     this.root.append(el);
@@ -109619,6 +110544,7 @@ const Help = {
     carte: [['ch-map', 'carte'], ['ch-card', 'voyage'], ['ch-prices', 'prix'], ['ch-go', 'partir']],
     journal: [['jr-tabs', 'onglets'], ['jr-table', 'prix'], ['jr-legend', 'age']],
     heritage: [['hr-count', 'jetons'], ['hr-cards', 'ameliorations'], ['hr-sails', 'voiles']],
+    gouverneur: [['gv-rep', 'reputation'], ['gv-lettre', 'lettre'], ['gv-graces', 'graces']],
   },
   // les mots de la mer glissés dans les textes
   params() {
@@ -109632,7 +110558,7 @@ const Help = {
   // la première fois qu'un écran s'affiche (sauf pendant le prologue, qui explique lui-même)
   auto(id, tries) {
     const s = Game.global && Game.global.settings;
-    if (!s || s.helps === false || !this.has(id) || this.seen(id) || this.active || Prologue.busy()) return;
+    if (!s || s.helps === false || !this.has(id) || this.seen(id) || this.active || Prologue.busy() || SeaIntro.busy()) return;
     // (un fondu, ou une autre explication à l'écran : on réessaie un peu plus tard)
     tries = tries == null ? 8 : tries;
     if (Guide.owner || Main.fadeDir) { if (tries > 0) setTimeout(() => this.auto(id, tries - 1), 500); return; }
@@ -109642,7 +110568,7 @@ const Help = {
   },
   show(id, forced) {
     const list = this.SCREENS[id];
-    if (!list || Prologue.busy()) return false;
+    if (!list || Prologue.busy() || SeaIntro.busy()) return false;
     const items = list.map(([s, k, at]) => ({ sel: gSel(s), k, at })).filter(it => Guide.rect(it.sel));
     if (!items.length) return false;
     Sound.sfxPlay('click');
@@ -109695,12 +110621,98 @@ const Hints = {
   say(id, p) {
     const g = Game.global, s = g && g.settings;
     if (!s || s.chen === false || !SEA.mentorSeal || !TXT.hints || !TXT.hints[id] || !Game.run) return false;
-    if (Prologue.busy() || Help.active) return false;
+    if (Prologue.busy() || SeaIntro.busy() || Help.active) return false;
     const seen = g.hintsSeen || (g.hintsSeen = {});
     if (seen[id]) return false;
     seen[id] = 1; Game.saveGlobal();
     Guide.hint(Lang.fmt(TXT.hints[id], p || {}), TXT.mentorName, SEA.mentorSeal);
     return true;
+  },
+};
+
+// ════════════ Présentation d'une mer ════════════
+// Une mer qui a ses propres règles (SEA.accueil : les étapes ; TXT.accueil : les répliques de son mentor) les fait
+// présenter par son mentor au premier passage au port, dans une vraie partie (une fois par mer : meta.accueilDone).
+// Une bulle par étape : <k> (et <k>2), ou <k> suivi d'une liste numérotée <k>1, <k>2… (list : leur nombre) ; la dernière
+// ajoute le mot de la voie choisie (voie : TXT.accueil.voies[run.path]). Une étape « go » conduit au bâtiment (la flèche
+// sur son bouton : <k>Aller), puis numérote ce qu'on voit dans sa fenêtre (zones : <k>1, <k>2…). On peut passer à tout
+// moment ; l'étape en cours est rangée dans la partie (run.accueil), et l'Aide du capitaine la fait revoir.
+const SeaIntro = {
+  since: 0,   // depuis quand tout est prêt pour commencer (on laisse le joueur arriver au port)
+  get on() { const r = Game.run; return !!(r && r.accueil && SEA.accueil && TXT.accueil && r.mode !== 'prologue' && !r.over); },
+  busy() { return this.on; },
+  // (revoir la présentation, depuis l'Aide : au port, pendant une partie)
+  replayable() { const r = Game.run; return !!(SEA.accueil && TXT.accueil && r && r.mode !== 'prologue' && !r.over && Main.sceneName === 'port'); },
+  replay() { UI.closeAll(); Game.run.accueil = { i: 0 }; Game.saveRun(); },
+  X(k, p) { return Lang.fmt(TXT.accueil[k], p || {}); },
+  wants() { const r = Game.run, m = Game.meta; return !!(SEA.accueil && TXT.accueil && r && !r.accueil && r.mode !== 'prologue' && !r.over && m && !m.accueilDone); },
+  next() {
+    const A = Game.run.accueil;
+    A.i++;
+    if (A.i >= SEA.accueil.length) this.end(); else Game.saveRun();
+  },
+  // fin, ou « Passer » : la présentation ne revient plus d'elle-même dans cette mer ; les fenêtres qu'elle a présentées
+  // n'affichent plus leurs aides « ? » d'elles-mêmes
+  end() {
+    const r = Game.run, A = r && r.accueil;
+    if (A && A.shown) Help.markSeen(A.shown);
+    if (r) delete r.accueil;
+    Game.meta.accueilDone = true; Game.saveMeta();
+    Game.saveRun();
+    Guide.hide('accueil');
+  },
+
+  // ── À chaque image ──
+  tick() {
+    if (!this.on) {
+      if (Guide.owner === 'accueil') Guide.hide('accueil');
+      const ready = this.wants() && Main.sceneName === 'port' && !UI.isOpen() && !Main.fadeDir && !Guide.owner && !Help.active && !Prologue.busy();
+      if (!ready) { this.since = 0; return; }
+      const now = performance.now();
+      if (!this.since) this.since = now;
+      else if (now - this.since > 1500) { this.since = 0; Game.run.accueil = { i: 0 }; Game.saveRun(); }
+      return;
+    }
+    // (en mer, pendant un fondu ou une aide « ? » : la présentation attend)
+    const cfg = Main.fadeDir || Main.sceneName !== 'port' || Help.active ? null : this.view(Game.run);
+    if (cfg) Guide.show(cfg, 'accueil');
+    else if (Guide.owner === 'accueil') Guide.hide('accueil');
+  },
+  // la bulle du mentor : textes, puis [Passer] et le bouton de l'étape (next : son libellé, false : aucun ; fn : son action)
+  bub(text, o) {
+    const A = Game.run.accueil, n = SEA.accueil.length, last = A.i >= n - 1;
+    const b = Object.assign({ mentor: { seal: SEA.mentorSeal, name: TXT.mentorName }, who: T('guide.qui', { nom: TXT.mentorName, role: TXT.mentorRole }), text, step: { i: A.i + 1, n } }, o);
+    b.buttons = [{ label: T('guide.passer'), cls: 'ghost sm', fn: () => this.end() }];
+    if (o.next !== false) b.buttons.push({ label: o.next || T(last ? 'guide.enRoute' : 'guide.suivant'), cls: 'jade', fn: o.fn || (() => this.next()) });
+    delete b.next; delete b.fn;
+    return b;
+  },
+  // fermer la fenêtre du dessus : sa croix, seul bouton actif
+  closeV() {
+    const top = UI.top(), sel = '[data-g="x-' + (top || 'win') + '"]';
+    if (!document.querySelector(sel)) return null;
+    return { key: 'accueil:fermer:' + top, spot: [sel], lock: [sel], bubble: this.bub([this.X('fermer')], { anchor: sel, next: false }) };
+  },
+  view(r) {
+    const A = r.accueil, st = SEA.accueil[A.i];
+    if (!st) { this.end(); return null; }
+    if (st.go) {
+      if (UI.top() === st.go) {
+        if (!(A.shown || (A.shown = [])).includes(st.go)) A.shown.push(st.go);
+        const z = st.zones;
+        return { key: 'accueil:' + st.k, spot: z, badges: z.map((sel, i) => ({ sel, n: String(i + 1) })), lock: [],
+          bubble: this.bub([this.X(st.k)], { list: z.map((_, i) => this.X(st.k + (i + 1))), cls: 'narrow', next: T('guide.compris'), fn: () => { UI.closeAll(); this.next(); } }) };
+      }
+      if (UI.isOpen()) return this.closeV();
+      const sel = 'bar-' + st.go;
+      return { key: 'accueil:aller:' + st.k, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel)], bubble: this.bub([this.X(st.k + 'Aller', { bouton: Prologue.label(st.go) })], { anchor: sel, next: false }) };
+    }
+    if (UI.isOpen()) return this.closeV();
+    const text = [this.X(st.k)];
+    if (!st.list && TXT.accueil[st.k + '2']) text.push(this.X(st.k + '2'));
+    const voie = st.voie && TXT.accueil.voies && TXT.accueil.voies[r.path];
+    return { key: 'accueil:' + st.k, veil: true, lock: [],
+      bubble: this.bub(text, { list: st.list ? Array.from({ length: st.list }, (_, i) => this.X(st.k + (i + 1))) : null, body: voie ? h('p', { html: Lang.fmt(voie, {}) }) : null, dock: 'center', anchor: null }) };
   },
 };
 
@@ -113126,7 +114138,9 @@ function addRep(n, d) {
   if (before > CLOSE_AT && C.rep[n] <= CLOSE_AT) {
     toast(TS('rep.pirate', { nation: capFirst(NT(n).le) }), 'bad');
     Game.log(TS('rep.horsLaLoiJournal', { nation: capFirst(NT(n).le) }));
+    Bus.emit('hint', { id: 'horsLaLoi', p: { nation: NT(n).le } });   // (le conseil du mentor, la première fois)
   } else if (before <= CLOSE_AT && C.rep[n] > CLOSE_AT) toast(TS('rep.rouverts', { nation: NT(n).le }), 'good');
+  else if (before > HOSTILE_AT && C.rep[n] <= HOSTILE_AT) Bus.emit('hint', { id: 'nationHostile', p: { nation: capFirst(NT(n).le) } });
 }
 // la lettre de marque en cours (ou null)
 const letter = () => { const L = car().letter; return L && L.until > day() ? L : null; };
@@ -113289,6 +114303,7 @@ const rules = {
     if (feverAt(from, r.day) && r.ship && r.ship.crew > 2) {
       C.sick = Math.max(1, Math.round(r.ship.crew * R.range(0.12, 0.25) * (1 - 0.35 * Game.her('creole'))));
       toast(TS('fievre.aBord', { n: C.sick }), 'bad');
+      Bus.emit('hint', { id: 'fievre' });
     }
   },
   onArrive(pid, out) {
@@ -113300,7 +114315,7 @@ const rules = {
     if (isPirate() && r.ship && r.ship.crew >= 6) {
       const idle = r.day - C.lastPrize;
       if (idle > mutinyDelay()) C.mutiny = true;
-      else if (idle > mutinyDelay() * 0.7 && !C.grumbled) { C.grumbled = true; out.push({ kind: 'toast', t: TS('mutinerie.grogne', { jours: Math.round(idle) }), k: 'bad' }); }
+      else if (idle > mutinyDelay() * 0.7 && !C.grumbled) { C.grumbled = true; out.push({ kind: 'toast', t: TS('mutinerie.grogne', { jours: Math.round(idle) }), k: 'bad' }); Bus.emit('hint', { id: 'grogne', p: { jours: Math.round(idle) } }); }
     }
   },
   onEnterPort() { const C = Game.run && Game.run.car; if (C && C.mutiny) setTimeout(() => rules.mutinyPrompt(), 500); },
@@ -113448,6 +114463,7 @@ const rules = {
       });
       S.alert(TS('flotte.titre'), TS(pirate ? 'flotte.escorteAlmirante' : 'flotte.escorte'), 'jade');
       Sound.sfxPlay('gong');
+      Bus.emit('hint', { id: isPirate() ? 'flotteFlib' : 'flotte' });
     }
     // pilote automatique plaqué contre une côte (après un combat, la route recalculée coupe un cap) :
     // on dégage le navire vers le large et on recalcule la route
@@ -113512,7 +114528,7 @@ const rules = {
   building(type) {
     if (type !== 'gouverneur') return;
     const body = h('div'), pid = Game.run.port, P = PORT[pid];
-    UI.open({ title: (P.signs && P.signs.gouverneur) || BUILDINGS.gouverneur.name, sub: P.haven ? TS('gouv.repaire') : TS('gouv.auNomDe', { nation: NT(P.nation).le }), icon: 'gouverneur', cls: 'narrow', body });
+    UI.open({ id: 'gouverneur', title: (P.signs && P.signs.gouverneur) || BUILDINGS.gouverneur.name, sub: P.haven ? TS('gouv.repaire') : TS('gouv.auNomDe', { nation: NT(P.nation).le }), icon: 'gouverneur', cls: 'narrow', body });
     const render = () => {
       const r = Game.run, C = car(), n = P.nation, L = letter();
       const rows = NAT_IDS.map(m => h('div', { class: 'stat' }, h('span', null, NT(m).name), h('b', { class: C.rep[m] <= HOSTILE_AT ? 'neg' : C.rep[m] >= 10 ? 'pos' : '' }, `${repTxt(C.rep[m])} · ${repState(C.rep[m])}`)));
@@ -113523,15 +114539,17 @@ const rules = {
       });
       put(body,
         h('p', { class: 'flavor' }, TS(P.haven ? 'gouv.citationRepaire' : 'gouv.citation')),
-        h('h4', null, TS('gouv.reputation')), ...rows,
-        h('h4', null, TS('gouv.lettreMarque')),
-        h('p', { class: 'hint' }, TS('lettre.aide', { nation: NT(n).f, proies: preyOf(n), aupres: NT(n).le })),
-        mine ? h('p', { class: 'pill gold' }, TS(L.perm ? 'lettre.enCoursPerm' : 'lettre.enCours', { nation: NT(n).f, date: dateDot(L.until) }))
-          : C.rep[n] < -10 ? h('p', { class: 'neg' }, TS('lettre.refusee', { nation: NT(n).name }))
-            : btn(TS('lettre.acheter', { nation: NT(n).f, prix: fmt(lc) }), () => { if (buyLetter(n)) { UI.toast(TS('lettre.enPoche', { nation: NT(n).f }), 'gold', 'scroll'); UI.after('cash'); } render(); }, 'gold wide', r.cash < lc ? { disabled: true } : null),
-        L && !mine ? h('p', { class: 'hint' }, TS('lettre.remplacerait', { nation: NT(L.n).f })) : null,
-        h('h4', null, TS('gouv.graces')),
-        pardons.length ? h('div', { class: 'stack' }, pardons) : h('p', { class: 'hint' }, TS('grace.aucune')));
+        // (chaque partie, titre compris, porte son repère pour le guide)
+        h('h4', { 'data-g': 'gv-rep' }, TS('gouv.reputation')), h('div', { 'data-g': 'gv-rep' }, ...rows),
+        h('h4', { 'data-g': 'gv-lettre' }, TS('gouv.lettreMarque')),
+        h('div', { 'data-g': 'gv-lettre' },
+          h('p', { class: 'hint' }, TS('lettre.aide', { nation: NT(n).f, proies: preyOf(n), aupres: NT(n).le })),
+          mine ? h('p', { class: 'pill gold' }, TS(L.perm ? 'lettre.enCoursPerm' : 'lettre.enCours', { nation: NT(n).f, date: dateDot(L.until) }))
+            : C.rep[n] < -10 ? h('p', { class: 'neg' }, TS('lettre.refusee', { nation: NT(n).name }))
+              : btn(TS('lettre.acheter', { nation: NT(n).f, prix: fmt(lc) }), () => { if (buyLetter(n)) { UI.toast(TS('lettre.enPoche', { nation: NT(n).f }), 'gold', 'scroll'); UI.after('cash'); } render(); }, 'gold wide', r.cash < lc ? { disabled: true } : null),
+          L && !mine ? h('p', { class: 'hint' }, TS('lettre.remplacerait', { nation: NT(L.n).f })) : null),
+        h('h4', { 'data-g': 'gv-graces' }, TS('gouv.graces')),
+        pardons.length ? h('div', { class: 'stack', 'data-g': 'gv-graces' }, pardons) : h('p', { class: 'hint', 'data-g': 'gv-graces' }, TS('grace.aucune')));
     };
     render();
   },
@@ -113799,6 +114817,16 @@ Seas.register({
       },
     },
   },
+  // ── Le mentor des Îles (le vieux Barnabé : son sceau de cire ; nom, répliques et conseils dans text) et sa
+  //    présentation des règles de la mer, au premier passage au port (js/guide.js, SeaIntro) : une bulle par étape,
+  //    go : un bâtiment où le conduire (zones : ce qu'on y montre, numérotées)
+  mentorSeal: 'B', mentorWax: true,
+  accueil: [
+    { k: 'bienvenue' },
+    { k: 'reputation', list: 3 },
+    { k: 'gouverneur', go: 'gouverneur', zones: ['gv-rep', 'gv-lettre', 'gv-graces'] },
+    { k: 'saisons', list: 3, voie: true },
+  ],
   bigShipAch: { id: 'clipper', types: ['fregate', 'galion'] },
   worthAch: [[10000, 'dixmille'], [100000, 'centmille'], [1000000, 'gouverneur']],
   thieves: 0.1,
@@ -114163,6 +115191,55 @@ Seas.register({
       log: 'Protection du Capitaine Sans-Visage', buff: 'Protection de Sans-Visage',
     },
     parcels: ['des lettres pour le gouverneur', 'une cassette de doublons', 'du quinquina pour l\'hôpital', 'un planteur et ses malles', 'des cartes marines espagnoles'],
+    // ── Le mentor : le vieux Barnabé, maître d'équipage de la famille, rescapé du séisme (il tutoie le joueur ; le reste
+    //    du jeu le vouvoie) ──
+    mentorName: 'Le vieux Barnabé', mentorRole: 'maître d\'équipage de votre famille',
+    // sa présentation des règles des Îles, au premier passage au port (js/guide.js, SeaIntro) : <k> (la bulle), <k>1, <k>2…
+    // (la liste numérotée) ; <k>Aller : le conduire au bâtiment ({bouton} : son libellé dans la barre du port) ;
+    // voies : le dernier mot, selon la voie choisie
+    accueil: {
+      bienvenue: 'Je suis <b>Barnabé</b>. J\'étais maître d\'équipage de ta famille quand Port-Royal a glissé dans la mer. Je ne vais pas te lâcher maintenant.',
+      bienvenue2: 'Les Îles ont leurs règles, capitaine. <b>Quatre nations</b> s\'y disputent l\'or de l\'Amérique : l\'Angleterre, la France, l\'Espagne et la Hollande. Chaque port bat le pavillon de l\'une d\'elles. Écoute-moi bien, ce sera court.',
+      reputation: 'Ici, tout tient à <b>ta réputation</b> auprès de chaque nation :',
+      reputation1: '<b>Le commerce et les contrats honorés</b> dans ses ports la font monter.',
+      reputation2: '<b>Attaquer un navire sous pavillon</b> la fait chuter, et les autres nations s\'en souviennent aussi.',
+      reputation3: 'Si elle tombe trop bas, la nation te tient pour <b>pirate</b> : ses garde-côtes t\'attaquent, puis <b>ses ports te sont fermés</b>. Avec le temps, elle oublie.',
+      gouverneurAller: 'Tout ça se règle chez le <b>gouverneur</b>. Va le saluer : touche « {bouton} ».',
+      gouverneur: 'Son Excellence tient les comptes :',
+      gouverneur1: '<b>Ta réputation</b> auprès des quatre nations, de −100 à +100.',
+      gouverneur2: '<b>La lettre de marque</b> : pendant 150 jours, les navires des ennemis de cette nation deviennent des <b>prises légales</b>. Les prendre te fait bien voir de celle qui l\'a signée.',
+      gouverneur3: '<b>Les lettres de grâce</b> effacent une mauvaise réputation, contre de l\'argent. Tout gouverneur en délivre : pratique quand une nation te ferme ses ports.',
+      saisons: 'Dernière chose : le calendrier des Îles.',
+      saisons1: '<b>La fièvre jaune</b> frappe quelques ports l\'été. Une escale là-bas, et tes hommes tombent malades en mer.',
+      saisons2: '<b>La Flotte du Trésor</b> quitte Carthagène au début de l\'été, chargée d\'or, et remonte vers La Havane.',
+      saisons3: '<b>Les ouragans</b> balaient les îles d\'août à octobre. À la taverne, on peut attendre une semaine au port qu\'ils passent.',
+      voies: {
+        marchand: 'Toi, tu as choisi le <b>commerce</b>. Les pirates te chasseront, et les marchands sous pavillon ne sont pas des proies, sauf avec une lettre de marque. Vise le fauteuil de <b>gouverneur</b>. Bon vent !',
+        flibustier: 'Toi, tu as choisi le <b>pavillon noir</b>. Pas de solde : tes hommes vivent de <b>leur part du butin</b>, et sans prise pendant un mois et demi, ils se mutinent. Ne pille pas tout le monde à la fois : il te faut des ports où vendre. Bon vent !',
+      },
+      fermer: 'Ferme cette fenêtre : la croix, en haut à droite.',
+    },
+    // les conseils de Barnabé, la première fois que ça arrive (js/guide.js, Hints ; nation : « l'Espagne »)
+    hints: {
+      nationHostile: '{nation} te regarde de travers : ses <b>garde-côtes</b> t\'attaqueront à vue et ses douaniers fouilleront tout. Encore un écart, et ses ports te seront fermés.',
+      horsLaLoi: 'Te voilà <b>hors-la-loi</b> pour {nation} : ses forts t\'interdisent l\'entrée de ses ports. Pour les rouvrir, achète une <b>lettre de grâce</b> chez le gouverneur d\'une autre nation.',
+      fievre: '<b>La fièvre</b> est à bord : elle emportera des hommes jusqu\'à la prochaine escale. Sur la carte, évite les ports où elle sévit.',
+      flotte: '<b>La Flotte du Trésor</b> ! Laisse-la passer : qui l\'attaque a toute l\'Espagne sur le dos.',
+      flotteFlib: '<b>La Flotte du Trésor</b> ! Des galions pleins d\'or, et des frégates pour les garder. Prépare-toi bien : l\'Espagne ne pardonnera pas.',
+      grogne: 'Les hommes <b>grognent</b> : pas une prise depuis {jours} jours. Fais-en une vite, ou garde de quoi payer leur part au prochain port.',
+    },
+    // le chapitre de la mer dans l'Aide du capitaine (UI.help)
+    notice: {
+      titre: 'Les Îles',
+      p: [
+        '<b>Quatre nations</b> se disputent les Îles : l\'Angleterre, la France, l\'Espagne et la Hollande. Chaque port bat le pavillon de l\'une d\'elles ; Tortuga et Nassau, repaires de la flibuste, accueillent tout le monde.',
+        '<b>La réputation</b> auprès de chaque nation va de −100 à +100. Le commerce et les contrats honorés dans ses ports la font monter ; attaquer ses navires la fait chuter, et les autres nations s\'en souviennent aussi. À −25, ses garde-côtes vous attaquent, ses douaniers fouillent davantage et ses forts ne vous protègent plus ; à −50, ses ports vous sont fermés. Elle revient lentement vers le neutre.',
+        '<b>L\'hôtel du gouverneur</b> vend des lettres de marque (pendant 150 jours, les navires des ennemis de sa nation sont de bonne prise, et chaque prise vous fait bien voir d\'elle) et des lettres de grâce, qui effacent une mauvaise réputation.',
+        '<b>Le calendrier</b> : la fièvre jaune frappe quelques ports l\'été (une escale y rend des marins malades pendant la traversée suivante) ; la Flotte du Trésor va de Carthagène à La Havane au début de l\'été, puis remonte le détroit de Floride ; les ouragans passent d\'août à octobre. La taverne permet d\'attendre une semaine au port.',
+        '<b>Deux voies</b> : le marchand vise le titre de Gouverneur et craint les pirates. Le flibustier vise celui de Roi de la Flibuste : il ne paie pas de solde, mais l\'équipage prend sa part de chaque butin, et se mutine s\'il reste trop longtemps sans prise.',
+        '<b>La poudre et les mousquets</b> sont de la contrebande en territoire espagnol, et s\'y vendent très cher. Près d\'un port ami, les canons du fort chassent vos poursuivants.',
+      ],
+    },
     // ── Les nations : nom, avec article (le), adjectif masculin (adj), au pluriel (pl) et au féminin (f) ──
     nations: {
       en: { name: 'Angleterre', le: 'l\'Angleterre', adj: 'anglais', pl: 'anglais', f: 'anglaise' },
