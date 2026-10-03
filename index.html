@@ -839,6 +839,24 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .mobile .notice-nav .btn.on { box-shadow: inset 0 -3px 0 var(--gold); }
 .mobile .notice-nav .notice-replay { margin-top: 0; }
 
+/* ── Manette (js/pad.js) : le repère doré dans les fenêtres, les symboles des boutons (classe « pad » du body) ── */
+.pg { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 0.32em; margin: 0 0.12em; border-radius: 0.75em; font: 800 0.74em/1 var(--font-ui); letter-spacing: 0; vertical-align: 0.08em; color: #0b1220; background: #d6dce6; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.28); }
+.pg-a, [data-pad=a]::after { background: #5cc06a; }
+.pg-b, [data-pad=b]::after { background: #e0604c; }
+.pg-x, [data-pad=x]::after { background: #4f8fe0; color: #fff; }
+.pg-y, [data-pad=y]::after { background: #f2c14e; }
+.pg-lb, .pg-rb, .pg-lt, .pg-rt { border-radius: 0.38em; }
+.pg-stick, .pg-rstick { border-radius: 50%; background: transparent; color: var(--text); box-shadow: inset 0 0 0 2px currentColor; }
+.prompt .pg { font-size: 11px; height: 22px; min-width: 22px; margin: 0 8px 0 0; }
+.pk { display: none; }
+.pad .pk { display: inline-flex; margin-left: 6px; font-size: 0.78em; }
+.pad [data-pad]::after { content: attr(data-pad); display: inline-flex; align-items: center; justify-content: center; width: 1.5em; height: 1.5em; margin-left: 6px; border-radius: 50%; font: 800 0.72em/1 var(--font-ui); color: #0b1220; text-transform: uppercase; }
+.pad [data-pad=x]::after { color: #fff; }
+.pad .portbar .btn kbd { display: none; }
+.pad .pad-focus { outline: 2px solid var(--gold-hi) !important; outline-offset: 3px; box-shadow: 0 0 0 6px rgba(232, 181, 74, 0.2); }
+.pad .chart-cv.pad-focus { outline-offset: -2px; box-shadow: none; }
+.pad-help { line-height: 2; }
+
 </style>
 </head>
 <body>
@@ -1104,6 +1122,7 @@ const Input = {
   layout: null,
   touch: false,
   blocked: false, // vrai quand un panneau modal capte le clavier
+  steer: 0,       // la barre tenue au stick de la manette, de -1 (bâbord) à 1 (tribord) (js/pad.js)
 
   init(target) {
     addEventListener('keydown', e => {
@@ -1589,6 +1608,7 @@ Lang.ui('fr', {
   'mer.cap': 'Cap sur {port} · ~{jours} j · {auto, select, oui {pilote auto} other {barre manuelle}}',
   'mer.combatTactile': 'Combat ! Visez de flanc et tirez.',
   'mer.combatClavier': 'Combat ! {q}/{e} ou clic : bordées · Espace : feu',   // q, e : touches du clavier
+  'mer.combatManette': 'Combat ! {lt} / {rt} : bordées · {a} : aborder',   // lt, rt, a : boutons de la manette (LT, RT, A)
 
   'commun.citation': '« {texte} »',   // une réplique entre guillemets
   'port.batimentDe': '{batiment} {dePort}',   // titre d'un bâtiment : « Marché de Canton », « Taverne d'Alexandrie » (dePort : « de » + le port, élidé en français)
@@ -1756,6 +1776,7 @@ Lang.ui('fr', {
   'carte.choisir': 'Choisissez votre destination sur la carte',
   'carte.toucherPort': 'Touchez un port pour y mettre le cap',
   'carte.cliquerPort': 'Cliquez un port pour y mettre le cap',
+  'carte.choisirManette': 'Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap',   // a : le bouton A de la manette
   'carte.nord': 'N',   // points cardinaux, en une lettre (graticule, rose des vents, boussole)
   'carte.sud': 'S',
   'carte.est': 'E',
@@ -1895,6 +1916,11 @@ Lang.ui('fr', {
   'aide.enMer': 'EN MER',
   'aide.mer': '← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : bordée bâbord (gauche), {e} : bordée tribord (droite). Clic gauche : bordée du côté du curseur. Espace : feu vers l\'ennemi le plus proche. B : aborder. Entrée : accoster. R : pilote automatique. F : accélérer le temps. M : carte.',
   'aide.boussole': 'La boussole colorée montre votre vitesse selon le cap : vert, c\'est le bon angle par rapport au vent. Vent de face : rouge.',
+  // (à la manette : {a} {b} {x} {y} {lb} {rb} {lt} {rt} {start} {view} {stick} (stick gauche) {rstick} (stick droit) {croix} sont des symboles de boutons)
+  'aide.aLaManette': 'À LA MANETTE',
+  'aide.manettePort': 'Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.',
+  'aide.manetteMer': 'En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour le pilote automatique, {y} pour la carte, {b} pour accélérer le temps.',
+  'aide.manetteMenus': 'Dans les fenêtres : {croix} ou {stick} pour passer d\'un bouton à l\'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d\'onglet, {y} pour les aides de l\'écran, {rstick} pour faire défiler. Partout : {start} pour le menu, {view} pour le journal de bord.',
   'aide.conseils': 'CONSEILS',
   'aide.commerce': 'Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de taverne annoncent pénuries et surplus.',
   'aide.banque': 'Gardez vos {monnaie} à la banque : les pirates qui vous abordent pillent ce qui est à bord. Un navire ennemi très endommagé peut se rendre : abordez-le pour saisir sa cargaison.',
@@ -2122,6 +2148,8 @@ Lang.ui('fr', {
   'fin.merOuverte': 'Nouvelle mer ouverte : {mer} !',   // mer : le nom court de la mer ouverte (« Caraïbes »)
   'tuto.tactile': 'Suivez l\'objectif en haut de l\'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.',
   'tuto.clavier': 'Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.',
+  'tuto.manette': 'Suivez les objectifs en haut à gauche. {lb} {rb} : aller d\'un bâtiment à l\'autre, {a} : entrer.',   // lb, rb, a : boutons de la manette
+  'manette.connectee': 'Manette connectée',
   'tuto.paysage': 'Astuce : tournez votre téléphone en paysage pour mieux voir la mer.',
   'port.aVendre': ' · {qte} à vendre',   // à l'arrivée, sous le nom du port : « 3 février 1840 · 120 piculs à vendre »
   'mer.sauve': 'Sauvé des eaux',
@@ -2187,6 +2215,7 @@ Lang.ui('fr', {
   'aides.ecran': 'Aide · {ecran}',
   'aides.consigne': 'Passez la souris sur un « ? », ou cliquez dessus, pour savoir à quoi sert chaque élément.',
   'aides.consigneTactile': 'Touchez un « ? » pour savoir à quoi sert chaque élément.',
+  'aides.consigneManette': 'Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.',   // b : le bouton B de la manette
   'aides.plusAfficher': 'Ne plus afficher les aides',
   'aides.compris': 'J\'ai compris',
   'aides.ecran.port': 'Le port',
@@ -2481,6 +2510,8 @@ Lang.ui('en', {
   'mer.combatTactile': 'Combat! Turn broadside-on and fire.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': 'Combat! {q}/{e} or click: broadsides · Space: fire',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': 'Combat! {lt} / {rt}: broadsides · {a}: board',
   // « {texte} »
   'commun.citation': '“{texte}”',
   // {batiment} {dePort}
@@ -2771,6 +2802,8 @@ Lang.ui('en', {
   'carte.toucherPort': 'Tap a port to set course for it',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Click a port to set course for it',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Choose a port with the stick or D-pad, then press {a} to set course for it',
   // N
   'carte.nord': 'N',
   // S
@@ -3027,6 +3060,14 @@ Lang.ui('en', {
   'aide.mer': '← → ({a}{d}): steer. ↑ ↓ ({w}{s}): make or shorten sail. {q}: port broadside (left), {e}: starboard broadside (right). Left click: broadside on the cursor\'s side. Space: fire at the nearest enemy. B: board. Enter: dock. R: autopilot. F: speed up time. M: map.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'The colored compass shows your speed on each heading: green is a good angle to the wind, red is the wind dead ahead.',
+  // À LA MANETTE
+  'aide.aLaManette': 'WITH A CONTROLLER',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'In port: {stick} or {croix} to walk, {a} to go in, {lb} {rb} to move to the previous or next building, {y} to head for the wharf.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'At sea: {stick} to steer, {lb} {rb} to shorten or make sail, {lt} {rt} for the port and starboard broadsides, {a} to dock or board, {x} for the autopilot, {y} for the map, {b} to speed up time.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'In windows: {croix} or {stick} to move from button to button, {a} to confirm, {b} to close, {lb} {rb} to switch tabs, {y} for help on this screen, {rstick} to scroll. Anywhere: {start} for the menu, {view} for the logbook.',
   // CONSEILS
   'aide.conseils': 'TIPS',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -3415,6 +3456,10 @@ Lang.ui('en', {
   'tuto.tactile': 'Follow the objective at the top of the screen. Tap a building, or a shortcut at the bottom, to go there.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Follow the objectives at the top left. Click a building or use the number keys 1 to 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Follow the objectives at the top left. {lb} / {rb}: move between buildings, {a}: go in.',
+  // Manette connectée
+  'manette.connectee': 'Controller connected',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Tip: turn your phone to landscape for a better view of the sea.',
   //  · {qte} à vendre
@@ -3513,6 +3558,8 @@ Lang.ui('en', {
   'aides.consigne': 'Hover over a “?”, or click it, to see what each item is for.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Tap a “?” to see what each item is for.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Select a “?” with the D-pad or stick to see what each item is for. Press {b} to close.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'Stop showing help',
   // J'ai compris
@@ -11303,6 +11350,8 @@ Lang.sea('en', 'phenicie', {
   'text/phrases/combat.bandeau': 'Battle! {q}: charge · {e}, Space or click: arrows · B: board',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': 'Battle! Ram her flank: CHARGE!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': 'Battle! {lt}: charge · {rt}: arrows · {a}: board',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): steer. ↑ ↓ ({w}{s}): make or shorten sail. {q}: ramming speed (the oarsmen give their all for a few seconds: point your bow at the enemy\'s flank to ram her). {e}, Space or click: a volley of arrows. B: board. N: spend the nights on the beach or by the stars. Enter: dock. R: autopilot. F: speed up time. M: map.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -11502,6 +11551,8 @@ Lang.ui('zh', {
   'mer.combatTactile': '交战！侧舷对敌，开火。',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': '交战！{q}/{e}或点击：舷炮齐射 · 空格：开火',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': '交战！{lt}/{rt}：舷炮齐射 · {a}：接舷',
   // « {texte} »
   'commun.citation': '“{texte}”',
   // {batiment} {dePort}
@@ -11792,6 +11843,8 @@ Lang.ui('zh', {
   'carte.toucherPort': '点按港口，即可设定航向',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': '点击港口，即可设定航向',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': '用摇杆或十字键选择港口，再按{a}设定航向',
   // N
   'carte.nord': '北',
   // S
@@ -12048,6 +12101,14 @@ Lang.ui('zh', {
   'aide.mer': '← →（{a}{d}）：转舵。↑ ↓（{w}{s}）：加帆或减帆。{q}：左舷齐射（左），{e}：右舷齐射（右）。鼠标左键：向光标一侧齐射。空格：向最近的敌船开火。B：接舷。回车：靠岸。R：自动航行。F：加快时间。M：地图。',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': '彩色罗盘显示各个航向上的航速：绿色表示与风向的角度正好，红色表示顶风。',
+  // À LA MANETTE
+  'aide.aLaManette': '手柄操作',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': '在港口：用{stick}或{croix}行走，按{a}进入，按{lb} {rb}走到上一座或下一座建筑，按{y}前往码头。',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': '在海上：用{stick}转舵，按{lb} {rb}减帆或加帆，按{lt} {rt}左舷或右舷齐射，按{a}靠岸或接舷，按{x}自动航行，按{y}打开地图，按{b}加快时间。',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': '在窗口中：用{croix}或{stick}在按钮间移动，按{a}确认，按{b}关闭，按{lb} {rb}切换分页，按{y}查看本画面帮助，用{rstick}滚动页面。随时可按{start}打开菜单，按{view}打开航海日志。',
   // CONSEILS
   'aide.conseils': '诀窍',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -12436,6 +12497,10 @@ Lang.ui('zh', {
   'tuto.tactile': '跟着屏幕上方的目标走。点按建筑或下方的快捷按钮即可前往。',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '跟着左上角的目标走。点击建筑，或用数字键1至9。',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': '跟着左上角的目标走。按{lb}/{rb}走到相邻建筑，按{a}进入。',
+  // Manette connectée
+  'manette.connectee': '手柄已连接',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': '提示：把手机横过来，海面看得更清楚。',
   //  · {qte} à vendre
@@ -12534,6 +12599,8 @@ Lang.ui('zh', {
   'aides.consigne': '将鼠标移到“?”上或点击它，即可了解各项的用途。',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': '点按“?”，即可了解各项的用途。',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': '用十字键或摇杆选中“?”，即可了解各项的用途。按{b}关闭。',
   // Ne plus afficher les aides
   'aides.plusAfficher': '不再显示帮助',
   // J'ai compris
@@ -20300,6 +20367,8 @@ Lang.sea('zh', 'phenicie', {
   'text/phrases/combat.bandeau': '交战！{q}：冲撞 · {e}、空格或点击：放箭 · B：接舷',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': '交战！船首对准其侧舷，然后“冲撞”！',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': '交战！{lt}：冲撞 · {rt}：放箭 · {a}：接舷',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← →（{a}{d}）：转舵。↑ ↓（{w}{s}）：收帆或扬帆。{q}：全速冲撞（桨手拼尽全力划上几秒：把船首对准敌船侧舷将其撞穿）。{e}、空格或点击：放一轮箭。B：接舷。N：夜里宿滩或观星夜航。回车：靠岸。R：自动航行。F：加快时间。M：地图。',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -20494,6 +20563,8 @@ Lang.ui('zht', {
   'mer.combatTactile': '交戰！側舷對敵，開火。',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': '交戰！{q}/{e}或點擊：舷砲齊射 · 空白鍵：開火',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': '交戰！{lt}/{rt}：舷砲齊射 · {a}：接舷',
   // « {texte} »
   'commun.citation': '「{texte}」',
   // {batiment} {dePort}
@@ -20784,6 +20855,8 @@ Lang.ui('zht', {
   'carte.toucherPort': '點選港口，即可設定航向',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': '點擊港口，即可設定航向',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': '用搖桿或十字鍵選擇港口，再按{a}設定航向',
   // N
   'carte.nord': '北',
   // S
@@ -21040,6 +21113,14 @@ Lang.ui('zht', {
   'aide.mer': '← →（{a}{d}）：轉舵。↑ ↓（{w}{s}）：加帆或減帆。{q}：左舷齊射（左），{e}：右舷齊射（右）。滑鼠左鍵：向游標一側齊射。空白鍵：向最近的敵船開火。B：接舷。Enter：靠岸。R：自動航行。F：加快時間。M：地圖。',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': '彩色羅盤顯示各個航向上的航速：綠色表示與風向的角度正好，紅色表示頂風。',
+  // À LA MANETTE
+  'aide.aLaManette': '手把操作',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': '在港口：用{stick}或{croix}行走，按{a}進入，按{lb}/{rb}前往上一座或下一座建築，按{y}直達碼頭。',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': '在海上：用{stick}轉舵，按{lb}/{rb}減帆或加帆，按{lt}/{rt}左舷或右舷齊射，按{a}靠岸或接舷，按{x}自動航行，按{y}開啟地圖，按{b}加快時間。',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': '在視窗中：用{croix}或{stick}在按鈕間移動，按{a}確定，按{b}關閉，按{lb}/{rb}切換分頁，按{y}查看本畫面說明，用{rstick}捲動內容。隨時可按{start}開啟選單、按{view}開啟航海日誌。',
   // CONSEILS
   'aide.conseils': '訣竅',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -21428,6 +21509,10 @@ Lang.ui('zht', {
   'tuto.tactile': '跟著螢幕上方的目標走。點選建築或下方的快捷按鈕即可前往。',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '跟著左上角的目標走。點擊建築，或用數字鍵1至9。',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': '跟著左上角的目標走。按{lb}/{rb}在建築間移動，按{a}進入。',
+  // Manette connectée
+  'manette.connectee': '手把已連接',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': '小提示：把手機轉成橫向，海面看得更清楚。',
   //  · {qte} à vendre
@@ -21526,6 +21611,8 @@ Lang.ui('zht', {
   'aides.consigne': '將滑鼠移到「？」上或點擊它，即可查看各項用途。',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': '點選「？」，即可查看各項用途。',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': '用十字鍵或搖桿選擇「？」，即可查看各項用途。按{b}關閉。',
   // Ne plus afficher les aides
   'aides.plusAfficher': '不再顯示說明',
   // J'ai compris
@@ -29292,6 +29379,8 @@ Lang.sea('zht', 'phenicie', {
   'text/phrases/combat.bandeau': '交戰！{q}：衝撞 · {e}、空白鍵或點擊：放箭 · B：接舷',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': '交戰！船首對準其側舷，然後「衝撞」！',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': '交戰！{lt}：衝撞 · {rt}：放箭 · {a}：接舷',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← →（{a}{d}）：轉舵。↑ ↓（{w}{s}）：收帆或揚帆。{q}：全速衝撞（槳手拼盡全力划上幾秒：把船首對準敵船側舷將其撞穿）。{e}、空白鍵或點擊：放一輪箭。B：接舷。N：夜裡宿灘或觀星夜航。Enter：靠岸。R：自動航行。F：加快時間。M：地圖。',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -29487,6 +29576,8 @@ Lang.ui('ja', {
   'mer.combatTactile': '戦闘！　舷側を敵に向けて砲撃',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': '戦闘！　{q}/{e}またはクリック：舷側斉射 · スペース：砲撃',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': '戦闘！　{lt}/{rt}：舷側斉射 · {a}：接舷',
   // « {texte} »
   'commun.citation': '「{texte}」',
   // {batiment} {dePort}
@@ -29777,6 +29868,8 @@ Lang.ui('ja', {
   'carte.toucherPort': '港をタップすると針路をとります',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': '港をクリックすると針路をとります',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'スティックか十字キーで港を選び、{a}ボタンで針路をとります',
   // N
   'carte.nord': '北',
   // S
@@ -30033,6 +30126,14 @@ Lang.ui('ja', {
   'aide.mer': '← →（{a}{d}）：舵。↑ ↓（{w}{s}）：帆を張る・絞る。{q}：左舷斉射、{e}：右舷斉射。左クリック：カーソルの側へ斉射。スペース：最寄りの敵へ砲撃。B：接舷。Enter：入港。R：自動航行。F：時間を早める。M：地図。',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': '色つきの羅針盤は、針路ごとの船足を示す。緑は風に対してよい角度、赤は向かい風。',
+  // À LA MANETTE
+  'aide.aLaManette': 'コントローラー操作',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': '港では、{stick}スティックか{croix}で歩き、{a}で入る。{lb}・{rb}で隣の建物へ、{y}で波止場へ向かう。',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': '海上では、{stick}スティックで舵、{lb}・{rb}で帆を絞る・張る、{lt}・{rt}で左舷・右舷の斉射、{a}で入港・接舷、{x}で自動航行、{y}で地図、{b}で時間を早める。',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'ウィンドウでは、{croix}か{stick}スティックでボタンを選び、{a}で決定、{b}で閉じる。{lb}・{rb}でタブの切り替え、{y}で画面の解説、{rstick}スティックでスクロール。どの画面でも、{start}でメニュー、{view}で航海日誌を開く。',
   // CONSEILS
   'aide.conseils': '心得',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -30421,6 +30522,10 @@ Lang.ui('ja', {
   'tuto.tactile': '画面上部の目標に従いましょう。建物か、下のショートカットに触れると、そこへ向かいます。',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '左上の目標に従いましょう。建物をクリックするか、数字キー1〜9を使います。',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': '左上の目標に従いましょう。{lb}/{rb}ボタンで建物から建物へ移り、{a}ボタンで入ります。',
+  // Manette connectée
+  'manette.connectee': 'コントローラーを検出しました',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'ヒント：スマートフォンを横向きにすると、海がよく見えます。',
   //  · {qte} à vendre
@@ -30519,6 +30624,8 @@ Lang.ui('ja', {
   'aides.consigne': '「？」にマウスを重ねるかクリックすると、各項目の役割がわかります。',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': '「？」をタップすると、各項目の役割がわかります。',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': '十字キーかスティックで「？」を選ぶと、各項目の役割がわかります。{b}ボタンで閉じます。',
   // Ne plus afficher les aides
   'aides.plusAfficher': '今後は解説を表示しない',
   // J'ai compris
@@ -38285,6 +38392,8 @@ Lang.sea('ja', 'phenicie', {
   'text/phrases/combat.bandeau': '戦闘だ！　{q}：突撃 · {e}、スペース、クリック：斉射 · B：接舷',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': '戦闘だ！　舳先を敵の舷側に向けて突撃！',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': '戦闘だ！　{lt}：突撃 · {rt}：斉射 · {a}：接舷',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← →（{a}{d}）：操舵。↑ ↓（{w}{s}）：帆の増減。{q}：突撃（漕ぎ手が数秒間全力で漕ぐ。舳先を敵の舷側に向けて衝角を当てる）。{e}、スペース、クリック：矢の斉射。B：接舷。N：夜を浜で過ごすか、星を頼りに進むか。Enter：入港。R：自動航行。F：時間を早める。M：地図。',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -38513,6 +38622,8 @@ Lang.ui('ko', {
   'mer.combatTactile': '전투! 적에게 뱃전을 돌리고 쏘십시오.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': '전투! {q}/{e} 또는 클릭: 일제 사격 · 스페이스: 발사',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': '전투! {lt}/{rt}: 일제 사격 · {a}: 백병전',
   // « {texte} »
   'commun.citation': '“{texte}”',
   // {batiment} {dePort}
@@ -38803,6 +38914,8 @@ Lang.ui('ko', {
   'carte.toucherPort': '항구를 누르면 그쪽으로 침로를 잡습니다',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': '항구를 클릭하면 그쪽으로 침로를 잡습니다',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': '스틱이나 방향 패드로 항구를 고른 뒤 {a} 버튼을 누르면 그쪽으로 침로를 잡습니다',
   // N
   'carte.nord': '북',
   // S
@@ -39059,6 +39172,14 @@ Lang.ui('ko', {
   'aide.mer': '← → ({a}{d}): 조타. ↑ ↓ ({w}{s}): 돛 펴기·줄이기. {q}: 좌현 일제 사격 (왼쪽), {e}: 우현 일제 사격 (오른쪽). 왼쪽 클릭: 커서 쪽으로 일제 사격. 스페이스: 가장 가까운 적에게 발사. B: 백병전. 엔터: 입항. R: 자동 항해. F: 시간 가속. M: 지도.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': '색깔 나침반은 침로마다 낼 수 있는 속력을 보여 줍니다. 초록은 바람을 잘 받는 각도, 빨강은 맞바람입니다.',
+  // À LA MANETTE
+  'aide.aLaManette': '컨트롤러 조작',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': '항구에서 — {stick} 또는 {croix}: 걷기. {a}: 들어가기. {lb} {rb}: 이전·다음 건물로 가기. {y}: 부두로 가기.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': '바다에서 — {stick}: 조타. {lb} {rb}: 돛 줄이기·펴기. {lt} {rt}: 좌현·우현 일제 사격. {a}: 입항·백병전. {x}: 자동 항해. {y}: 지도. {b}: 시간 가속.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': '창에서 — {croix} 또는 {stick}: 버튼 사이 이동. {a}: 확인. {b}: 닫기. {lb} {rb}: 탭 바꾸기. {y}: 화면 도움말. {rstick}: 스크롤. 어디서나 — {start}: 메뉴. {view}: 항해 일지.',
   // CONSEILS
   'aide.conseils': '요령',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -39447,6 +39568,10 @@ Lang.ui('ko', {
   'tuto.tactile': '화면 위쪽의 목표를 따르십시오. 건물이나 아래쪽 바로 가기를 누르면 그리로 갑니다.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '왼쪽 위의 목표를 따르십시오. 건물을 클릭하거나 숫자 1~9를 누르십시오.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': '왼쪽 위의 목표를 따르십시오. {lb} {rb}: 건물 사이 이동, {a}: 들어가기.',
+  // Manette connectée
+  'manette.connectee': '컨트롤러 연결됨',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': '요령: 휴대폰을 가로로 돌리면 바다가 더 잘 보입니다.',
   //  · {qte} à vendre
@@ -39545,6 +39670,8 @@ Lang.ui('ko', {
   'aides.consigne': '“?” 표시에 마우스를 올리거나 클릭하면 각 요소의 쓰임새를 알 수 있습니다.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': '“?” 표시를 누르면 각 요소의 쓰임새를 알 수 있습니다.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': '방향 패드나 스틱으로 “?” 표시를 고르면 각 요소의 쓰임새를 알 수 있습니다. {b} 버튼으로 닫습니다.',
   // Ne plus afficher les aides
   'aides.plusAfficher': '도움말 다시 표시하지 않기',
   // J'ai compris
@@ -47311,6 +47438,8 @@ Lang.sea('ko', 'phenicie', {
   'text/phrases/combat.bandeau': '전투! {q}: 돌격 · {e}, 스페이스 또는 클릭: 화살 · B: 백병전',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': '전투! 뱃머리를 옆구리로, 그리고 돌격!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': '전투! {lt}: 돌격 · {rt}: 화살 · {a}: 백병전',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): 조타. ↑ ↓ ({w}{s}): 돛 펴기·줄이기. {q}: 충각 돌격 (노잡이들이 몇 초 동안 전력을 다합니다. 뱃머리를 적의 옆구리로 돌려 들이받으십시오). {e}, 스페이스 또는 클릭: 화살 일제 사격. B: 백병전. N: 밤을 해변에서 보낼지, 별을 보며 항해할지 선택. Enter: 입항. R: 자동 항해. F: 시간 빨리 감기. M: 지도.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -47504,6 +47633,8 @@ Lang.ui('ru', {
   'mer.combatTactile': 'Бой! Развернитесь бортом к врагу и стреляйте.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': 'Бой! {q}/{e} или щелчок: залп с борта · Пробел: огонь',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': 'Бой! {lt} / {rt}: залп с борта · {a}: абордаж',
   // « {texte} »
   'commun.citation': '«{texte}»',
   // {batiment} {dePort}
@@ -47794,6 +47925,8 @@ Lang.ui('ru', {
   'carte.toucherPort': 'Коснитесь порта, чтобы взять на него курс',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Щёлкните по порту, чтобы взять на него курс',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Выберите порт стиком или крестовиной и нажмите {a}, чтобы взять на него курс',
   // N
   'carte.nord': 'С',
   // S
@@ -48050,6 +48183,14 @@ Lang.ui('ru', {
   'aide.mer': '← → ({a}{d}): руль. ↑ ↓ ({w}{s}): прибавить или убавить парусов. {q}: залп левым бортом, {e}: залп правым бортом. Левый щелчок: залп с того борта, где курсор. Пробел: огонь по ближайшему врагу. B: абордаж. Enter: причалить. R: автопилот. F: ускорить время. M: карта.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'Цветной компас показывает скорость на каждом курсе: зелёный — выгодный угол к ветру, красный — ветер прямо в лоб.',
+  // À LA MANETTE
+  'aide.aLaManette': 'ГЕЙМПАД',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'В порту: {stick} или {croix} — идти, {a} — войти, {lb} {rb} — перейти к предыдущему или следующему зданию, {y} — выйти на причал.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'В море: {stick} — руль, {lb} {rb} — убавить или прибавить парусов, {lt} {rt} — залп левым или правым бортом, {a} — причалить или пойти на абордаж, {x} — автопилот, {y} — карта, {b} — ускорить время.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'В окнах: {croix} или {stick} — переходить от кнопки к кнопке, {a} — подтвердить, {b} — закрыть, {lb} {rb} — сменить вкладку, {y} — подсказки к экрану, {rstick} — прокрутка. Везде: {start} — меню, {view} — судовой журнал.',
   // CONSEILS
   'aide.conseils': 'СОВЕТЫ',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -48438,6 +48579,10 @@ Lang.ui('ru', {
   'tuto.tactile': 'Следуйте цели вверху экрана. Коснитесь здания или ярлыка внизу, чтобы пройти туда.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Следуйте целям вверху слева. Щёлкните по зданию или нажмите цифру от 1 до 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Следуйте целям вверху слева. {lb} {rb}: идти от здания к зданию, {a}: войти.',
+  // Manette connectée
+  'manette.connectee': 'Геймпад подключён',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Совет: поверните телефон горизонтально — так лучше видно море.',
   //  · {qte} à vendre
@@ -48536,6 +48681,8 @@ Lang.ui('ru', {
   'aides.consigne': 'Наведите курсор на «?» или щёлкните по нему, чтобы узнать, для чего служит каждый элемент.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Коснитесь «?», чтобы узнать, для чего служит каждый элемент.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Выберите «?» крестовиной или стиком, чтобы узнать, для чего служит каждый элемент. {b}: закрыть.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'Больше не показывать подсказки',
   // J'ai compris
@@ -56426,6 +56573,8 @@ Lang.sea('ru', 'phenicie', {
   'text/phrases/combat.bandeau': 'Бой! {q}: таран · {e}, пробел или щелчок: стрелы · B: абордаж',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': 'Бой! Нос на его борт — и ТАРАН!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': 'Бой! {lt}: таран · {rt}: стрелы · {a}: абордаж',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): руль. ↑ ↓ ({w}{s}): прибавить или убавить парусов. {q}: таранный ход (гребцы выкладываются несколько секунд: наведите нос на борт врага, чтобы протаранить его). {e}, пробел или щелчок: залп из луков. B: абордаж. N: ночевать на берегу или идти по звёздам. Enter: пристать. R: автопилот. F: ускорить время. M: карта.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -56635,6 +56784,8 @@ Lang.ui('es', {
   'mer.combatTactile': '¡Combate! Ponte de costado y dispara.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': '¡Combate! {q}/{e} o clic: andanadas · Espacio: fuego',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': '¡Combate! {lt} / {rt}: andanadas · {a}: abordar',
   // « {texte} »
   'commun.citation': '«{texte}»',
   // {batiment} {dePort}
@@ -56925,6 +57076,8 @@ Lang.ui('es', {
   'carte.toucherPort': 'Toca un puerto para poner rumbo hacia él',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Haz clic en un puerto para poner rumbo hacia él',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Elige un puerto con el stick o la cruceta y pulsa {a} para poner rumbo hacia él',
   // N
   'carte.nord': 'N',
   // S
@@ -57181,6 +57334,14 @@ Lang.ui('es', {
   'aide.mer': '← → ({a}{d}): timón. ↑ ↓ ({w}{s}): dar o quitar vela. {q}: andanada de babor (izquierda), {e}: andanada de estribor (derecha). Clic izquierdo: andanada por el lado del cursor. Espacio: fuego contra el enemigo más cercano. B: abordar. Intro: atracar. R: piloto automático. F: acelerar el tiempo. M: mapa.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'La brújula de colores muestra tu velocidad según el rumbo: el verde indica un buen ángulo respecto al viento; el rojo, viento de proa.',
+  // À LA MANETTE
+  'aide.aLaManette': 'CON EL MANDO',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'En puerto: {stick} o {croix} para caminar, {a} para entrar, {lb} {rb} para pasar al edificio anterior o al siguiente, {y} para ir al muelle.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'En el mar: {stick} para el timón, {lb} {rb} para quitar o dar vela, {lt} {rt} para las andanadas de babor y de estribor, {a} para atracar o abordar, {x} para el piloto automático, {y} para el mapa, {b} para acelerar el tiempo.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'En las ventanas: {croix} o {stick} para pasar de un botón a otro, {a} para confirmar, {b} para cerrar, {lb} {rb} para cambiar de pestaña, {y} para las ayudas de la pantalla, {rstick} para desplazar el contenido. En todo momento: {start} para el menú, {view} para la bitácora.',
   // CONSEILS
   'aide.conseils': 'CONSEJOS',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -57569,6 +57730,10 @@ Lang.ui('es', {
   'tuto.tactile': 'Sigue el objetivo de la parte superior de la pantalla. Toca un edificio, o un atajo de la parte inferior, para ir allí.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Sigue los objetivos de arriba a la izquierda. Haz clic en un edificio o usa las teclas 1 a 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Sigue los objetivos de arriba a la izquierda. {lb} {rb}: ir de un edificio a otro, {a}: entrar.',
+  // Manette connectée
+  'manette.connectee': 'Mando conectado',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Consejo: pon el teléfono en horizontal para ver mejor el mar.',
   //  · {qte} à vendre
@@ -57667,6 +57832,8 @@ Lang.ui('es', {
   'aides.consigne': 'Pasa el ratón sobre un «?», o haz clic en él, y verás para qué sirve cada elemento.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Toca un «?» y verás para qué sirve cada elemento.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Elige un «?» con la cruceta o el stick y verás para qué sirve cada elemento. Pulsa {b} para cerrar.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'No volver a mostrar las ayudas',
   // J'ai compris
@@ -65457,6 +65624,8 @@ Lang.sea('es', 'phenicie', {
   'text/phrases/combat.bandeau': '¡Combate! {q}: embestida · {e}, Espacio o clic: flechas · B: abordar',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': '¡Combate! Proa a su costado, y luego ¡EMBESTIDA!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': '¡Combate! {lt}: embestida · {rt}: flechas · {a}: abordar',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): timón. ↑ ↓ ({w}{s}): acortar o largar vela. {q}: boga de embestida (los remeros lo dan todo durante unos segundos: apunta la proa al costado enemigo para clavarle el espolón). {e}, Espacio o clic: una andanada de flechas. B: abordar. N: pasar las noches en la playa o navegar por las estrellas. Intro: atracar. R: piloto automático. F: acelerar el tiempo. M: mapa.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -65652,6 +65821,8 @@ Lang.ui('pt', {
   'mer.combatTactile': 'Combate! Mostre o costado e atire.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': 'Combate! {q}/{e} ou clique: bordadas · Espaço: fogo',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': 'Combate! {lt} / {rt}: bordadas · {a}: abordar',
   // « {texte} »
   'commun.citation': '“{texte}”',
   // {batiment} {dePort}
@@ -65942,6 +66113,8 @@ Lang.ui('pt', {
   'carte.toucherPort': 'Toque em um porto para rumar até ele',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Clique em um porto para rumar até ele',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Escolha um porto com o analógico ou o direcional e aperte {a} para rumar até ele',
   // N
   'carte.nord': 'N',
   // S
@@ -66198,6 +66371,14 @@ Lang.ui('pt', {
   'aide.mer': '← → ({a}{d}): leme. ↑ ↓ ({w}{s}): largar ou recolher o pano. {q}: bordada a bombordo (esquerda), {e}: bordada a estibordo (direita). Clique esquerdo: bordada do lado do cursor. Espaço: fogo no inimigo mais próximo. B: abordar. Enter: atracar. R: piloto automático. F: acelerar o tempo. M: mapa.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'A bússola colorida mostra sua velocidade em cada rumo: verde é um bom ângulo em relação ao vento. Vento de proa: vermelho.',
+  // À LA MANETTE
+  'aide.aLaManette': 'NO CONTROLE',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'No porto: {stick} ou {croix} para andar, {a} para entrar, {lb} {rb} para ir ao prédio anterior ou ao seguinte, {y} para ir ao cais.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'No mar: {stick} para o leme, {lb} {rb} para recolher ou largar o pano, {lt} {rt} para as bordadas a bombordo e a estibordo, {a} para atracar ou abordar, {x} para o piloto automático, {y} para o mapa, {b} para acelerar o tempo.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'Nas janelas: {croix} ou {stick} para ir de um botão a outro, {a} para confirmar, {b} para fechar, {lb} {rb} para trocar de aba, {y} para as ajudas da tela, {rstick} para rolar. Em qualquer tela: {start} para o menu, {view} para o diário de bordo.',
   // CONSEILS
   'aide.conseils': 'CONSELHOS',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -66586,6 +66767,10 @@ Lang.ui('pt', {
   'tuto.tactile': 'Siga o objetivo no alto da tela. Toque em um prédio, ou em um atalho embaixo, para ir até lá.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Siga os objetivos no alto à esquerda. Clique em um prédio ou use as teclas 1 a 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Siga os objetivos no alto à esquerda. {lb} {rb}: ir de um prédio a outro, {a}: entrar.',
+  // Manette connectée
+  'manette.connectee': 'Controle conectado',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Dica: vire o celular na horizontal para ver melhor o mar.',
   //  · {qte} à vendre
@@ -66684,6 +66869,8 @@ Lang.ui('pt', {
   'aides.consigne': 'Passe o mouse sobre um “?”, ou clique nele, para saber a função de cada elemento.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Toque em um “?” para saber a função de cada elemento.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Escolha um “?” com o direcional ou o analógico para saber a função de cada elemento. Aperte {b} para fechar.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'Não mostrar mais as ajudas',
   // J'ai compris
@@ -74474,6 +74661,8 @@ Lang.sea('pt', 'phenicie', {
   'text/phrases/combat.bandeau': 'Combate! {q}: investida · {e}, Espaço ou clique: flechas · B: abordar',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': 'Combate! Proa contra o flanco inimigo e INVESTIDA!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': 'Combate! {lt}: investida · {rt}: flechas · {a}: abordar',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): leme. ↑ ↓ ({w}{s}): reduzir ou largar o pano. {q}: investida (os remadores dão tudo por alguns segundos: aponte a proa para o flanco inimigo para abalroá-lo). {e}, Espaço ou clique: uma saraivada de flechas. B: abordar. N: passar as noites na praia ou pelas estrelas. Enter: atracar. R: piloto automático. F: acelerar o tempo. M: mapa.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -74667,6 +74856,8 @@ Lang.ui('de', {
   'mer.combatTactile': 'Gefecht! Dreh die Breitseite zum Feind und feuere.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': 'Gefecht! {q}/{e} oder Klick: Breitseiten · Leertaste: Feuer',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': 'Gefecht! {lt}/{rt}: Breitseiten · {a}: entern',
   // « {texte} »
   'commun.citation': '„{texte}“',
   // {batiment} {dePort}
@@ -74957,6 +75148,8 @@ Lang.ui('de', {
   'carte.toucherPort': 'Tippe auf einen Hafen, um Kurs darauf zu nehmen',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Klicke auf einen Hafen, um Kurs darauf zu nehmen',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Wähle mit Stick oder Steuerkreuz einen Hafen und nimm mit {a} Kurs darauf',
   // N
   'carte.nord': 'N',
   // S
@@ -75213,6 +75406,14 @@ Lang.ui('de', {
   'aide.mer': '← → ({a}{d}): Ruder. ↑ ↓ ({w}{s}): Segel setzen oder reffen. {q}: Breitseite Backbord (links), {e}: Breitseite Steuerbord (rechts). Linksklick: Breitseite zur Seite des Mauszeigers. Leertaste: Feuer auf den nächsten Feind. B: entern. Eingabe: anlegen. R: Autopilot. F: Zeitraffer. M: Karte.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'Der farbige Kompass zeigt deine Fahrt auf jedem Kurs: Grün ist ein guter Winkel zum Wind, Rot heißt Wind von vorn.',
+  // À LA MANETTE
+  'aide.aLaManette': 'MIT DEM CONTROLLER',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'Im Hafen: {stick} oder {croix} zum Gehen, {a} zum Eintreten, {lb} {rb} zum vorherigen oder nächsten Gebäude, {y} zum Kai.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'Auf See: {stick} zum Steuern, {lb} {rb} zum Reffen oder Setzen der Segel, {lt} {rt} für die Breitseite nach Backbord oder Steuerbord, {a} zum Anlegen oder Entern, {x} für den Autopiloten, {y} für die Karte, {b} für den Zeitraffer.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'In Fenstern: {croix} oder {stick} zum Springen zwischen Schaltflächen, {a} zum Bestätigen, {b} zum Schließen, {lb} {rb} zum Wechseln des Reiters, {y} für die Bildschirmhilfe, {rstick} zum Blättern. Überall: {start} für das Menü, {view} für das Logbuch.',
   // CONSEILS
   'aide.conseils': 'TIPPS',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -75601,6 +75802,10 @@ Lang.ui('de', {
   'tuto.tactile': 'Folge dem Ziel oben auf dem Bildschirm. Tippe auf ein Gebäude oder unten auf eine Abkürzung, um hinzugehen.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Folge den Zielen oben links. Klicke auf ein Gebäude oder nutze die Ziffern 1 bis 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Folge den Zielen oben links. {lb} {rb}: von Gebäude zu Gebäude, {a}: eintreten.',
+  // Manette connectée
+  'manette.connectee': 'Controller verbunden',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Tipp: Dreh dein Telefon quer, dann siehst du mehr vom Meer.',
   //  · {qte} à vendre
@@ -75699,6 +75904,8 @@ Lang.ui('de', {
   'aides.consigne': 'Fahre mit der Maus über ein „?“ oder klicke darauf, um zu erfahren, wozu ein Element dient.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Tippe auf ein „?“, um zu erfahren, wozu ein Element dient.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Wähle mit Steuerkreuz oder Stick ein „?“, um zu erfahren, wozu ein Element dient. {b} zum Schließen.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'Hilfen nicht mehr zeigen',
   // J'ai compris
@@ -83489,6 +83696,8 @@ Lang.sea('de', 'phenicie', {
   'text/phrases/combat.bandeau': 'Kampf! {q}: Rammfahrt · {e}, Leertaste oder Klick: Pfeile · B: entern',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': 'Kampf! Bug auf seine Flanke, dann RAMMEN!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': 'Kampf! {lt}: Rammfahrt · {rt}: Pfeile · {a}: entern',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): Ruder. ↑ ↓ ({w}{s}): Segel setzen oder reffen. {q}: Rammfahrt (die Ruderer geben einige Sekunden lang alles: Richte den Bug auf die Flanke des Feindes, um ihn zu rammen). {e}, Leertaste oder Klick: eine Salve Pfeile. B: entern. N: die Nächte am Strand oder nach den Sternen verbringen. Eingabe: anlegen. R: Autopilot. F: Zeit beschleunigen. M: Karte.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -83682,6 +83891,8 @@ Lang.ui('it', {
   'mer.combatTactile': 'Combattimento! Presenta il fianco e fai fuoco.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': 'Combattimento! {q}/{e} o clic: bordate · Spazio: fuoco',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': 'Combattimento! {lt} / {rt}: bordate · {a}: arrembaggio',
   // « {texte} »
   'commun.citation': '«{texte}»',
   // {batiment} {dePort}
@@ -83972,6 +84183,8 @@ Lang.ui('it', {
   'carte.toucherPort': 'Tocca un porto per tracciare la rotta',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Clicca su un porto per tracciare la rotta',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Scegli un porto con la levetta o la croce direzionale, poi premi {a} per tracciare la rotta',
   // N
   'carte.nord': 'N',
   // S
@@ -84228,6 +84441,14 @@ Lang.ui('it', {
   'aide.mer': '← → ({a}{d}): timone. ↑ ↓ ({w}{s}): spiega o riduci la vela. {q}: bordata a babordo (sinistra), {e}: bordata a tribordo (destra). Clic sinistro: bordata dal lato del cursore. Spazio: fuoco sul nemico più vicino. B: arrembaggio. Invio: attracca. R: pilota automatico. F: accelera il tempo. M: mappa.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'La bussola colorata mostra la tua velocità secondo la rotta: verde, l\'angolo giusto rispetto al vento. Vento in prua: rosso.',
+  // À LA MANETTE
+  'aide.aLaManette': 'CON IL CONTROLLER',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'In porto: {stick} o {croix} per camminare, {a} per entrare, {lb} {rb} per passare all\'edificio precedente o successivo, {y} per andare al molo.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'In mare: {stick} per il timone, {lb} {rb} per ridurre o spiegare la vela, {lt} {rt} per le bordate a babordo e a tribordo, {a} per attraccare o andare all\'arrembaggio, {x} per il pilota automatico, {y} per la mappa, {b} per accelerare il tempo.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'Nelle finestre: {croix} o {stick} per passare da un pulsante all\'altro, {a} per confermare, {b} per chiudere, {lb} {rb} per cambiare scheda, {y} per gli aiuti della schermata, {rstick} per scorrere. Ovunque: {start} per il menu, {view} per il diario di bordo.',
   // CONSEILS
   'aide.conseils': 'CONSIGLI',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -84616,6 +84837,10 @@ Lang.ui('it', {
   'tuto.tactile': 'Segui l\'obiettivo in cima allo schermo. Tocca un edificio, o una scorciatoia in basso, per andarci.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Segui gli obiettivi in alto a sinistra. Clicca su un edificio o usa i tasti da 1 a 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Segui gli obiettivi in alto a sinistra. {lb} {rb}: passa da un edificio all\'altro, {a}: entra.',
+  // Manette connectée
+  'manette.connectee': 'Controller connesso',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Consiglio: gira il telefono in orizzontale per vedere meglio il mare.',
   //  · {qte} à vendre
@@ -84714,6 +84939,8 @@ Lang.ui('it', {
   'aides.consigne': 'Passa il mouse su un «?», o cliccaci sopra, per sapere a cosa serve ogni elemento.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Tocca un «?» per sapere a cosa serve ogni elemento.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Scegli un «?» con la croce direzionale o la levetta per sapere a cosa serve ogni elemento. {b} per chiudere.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'Non mostrare più gli aiuti',
   // J'ai compris
@@ -92504,6 +92731,8 @@ Lang.sea('it', 'phenicie', {
   'text/phrases/combat.bandeau': 'Combattimento! {q}: carica · {e}, Spazio o clic: frecce · B: arrembaggio',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': 'Combattimento! Prua sul suo fianco, poi CARICA!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': 'Combattimento! {lt}: carica · {rt}: frecce · {a}: arrembaggio',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): timone. ↑ ↓ ({w}{s}): spiega o riduci la vela. {q}: carica (i rematori danno tutto per qualche secondo: punta la prua sul fianco nemico per speronarlo). {e}, Spazio o clic: un nugolo di frecce. B: arrembaggio. N: notti sulla spiaggia o con le stelle. Invio: attracca. R: pilota automatico. F: accelera il tempo. M: mappa.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -92700,6 +92929,8 @@ Lang.ui('pl', {
   'mer.combatTactile': 'Bitwa! Ustaw się burtą i strzelaj.',
   // Combat ! {q}/{e} ou clic : bordées · Espace : feu
   'mer.combatClavier': 'Bitwa! {q}/{e} lub klik: salwy · Spacja: ogień',
+  // Combat ! {lt} / {rt} : bordées · {a} : aborder
+  'mer.combatManette': 'Bitwa! {lt}/{rt}: salwy · {a}: abordaż',
   // « {texte} »
   'commun.citation': '„{texte}”',
   // {batiment} {dePort}
@@ -92990,6 +93221,8 @@ Lang.ui('pl', {
   'carte.toucherPort': 'Dotknij portu, by obrać na niego kurs',
   // Cliquez un port pour y mettre le cap
   'carte.cliquerPort': 'Kliknij port, by obrać na niego kurs',
+  // Choisissez un port au stick ou à la croix, puis {a} pour y mettre le cap
+  'carte.choisirManette': 'Wybierz port gałką lub krzyżakiem i naciśnij {a}, by obrać na niego kurs',
   // N
   'carte.nord': 'N',
   // S
@@ -93246,6 +93479,14 @@ Lang.ui('pl', {
   'aide.mer': '← → ({a}{d}): ster. ↑ ↓ ({w}{s}): zwijanie lub stawianie żagli. {q}: salwa z lewej burty, {e}: salwa z prawej burty. Lewy przycisk myszy: salwa z burty po stronie kursora. Spacja: ogień do najbliższego wroga. B: abordaż. Enter: przybicie do brzegu. R: autopilot. F: przyspieszenie czasu. M: mapa.',
   // La boussole colorée montre votre vitesse selon le cap : vert, c'est le bon angle par rapport au vent. Vent de face : rouge.
   'aide.boussole': 'Kolorowy kompas pokazuje prędkość na każdym kursie: zielony to dobry kąt względem wiatru. Czerwony: wiatr prosto w dziób.',
+  // À LA MANETTE
+  'aide.aLaManette': 'KONTROLER',
+  // Au port : {stick} ou {croix} pour marcher, {a} pour entrer, {lb} {rb} pour aller au bâtiment précédent ou suivant, {y} pour gagner le quai.
+  'aide.manettePort': 'W porcie: {stick} lub {croix} — chodzenie, {a} — wejście, {lb} {rb} — poprzedni lub następny budynek, {y} — przejście na nabrzeże.',
+  // En mer : {stick} pour la barre, {lb} {rb} pour réduire ou envoyer la toile, {lt} {rt} pour les bordées bâbord et tribord, {a} pour accoster ou aborder, {x} pour
+  'aide.manetteMer': 'Na morzu: {stick} — ster, {lb} {rb} — zwijanie lub stawianie żagli, {lt} {rt} — salwy z lewej i prawej burty, {a} — przybicie do brzegu lub abordaż, {x} — autopilot, {y} — mapa, {b} — przyspieszenie czasu.',
+  // Dans les fenêtres : {croix} ou {stick} pour passer d'un bouton à l'autre, {a} pour valider, {b} pour fermer, {lb} {rb} pour changer d'onglet, {y} pour les aides
+  'aide.manetteMenus': 'W oknach: {croix} lub {stick} — przechodzenie między przyciskami, {a} — zatwierdzenie, {b} — zamknięcie, {lb} {rb} — zmiana zakładki, {y} — pomoc do ekranu, {rstick} — przewijanie. Wszędzie: {start} — menu, {view} — dziennik pokładowy.',
   // CONSEILS
   'aide.conseils': 'RADY',
   // Achetez là où une marchandise est produite, revendez là où elle manque. Les prix bougent tous les jours et vos propres ventes les font baisser. Les rumeurs de t
@@ -93634,6 +93875,10 @@ Lang.ui('pl', {
   'tuto.tactile': 'Kieruj się celem u góry ekranu. Dotknij budynku lub skrótu na dole, by tam przejść.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Kieruj się celami w lewym górnym rogu. Kliknij budynek lub użyj cyfr od 1 do 9.',
+  // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
+  'tuto.manette': 'Kieruj się celami w lewym górnym rogu. {lb}/{rb}: przejście między budynkami, {a}: wejście.',
+  // Manette connectée
+  'manette.connectee': 'Kontroler podłączony',
   // Astuce : tournez votre téléphone en paysage pour mieux voir la mer.
   'tuto.paysage': 'Rada: obróć telefon poziomo, a lepiej zobaczysz morze.',
   //  · {qte} à vendre
@@ -93732,6 +93977,8 @@ Lang.ui('pl', {
   'aides.consigne': 'Najedź myszą na „?” albo go kliknij, by sprawdzić, do czego służy każdy element.',
   // Touchez un « ? » pour savoir à quoi sert chaque élément.
   'aides.consigneTactile': 'Dotknij „?”, by sprawdzić, do czego służy każdy element.',
+  // Choisissez un « ? » à la croix ou au stick pour savoir à quoi sert chaque élément. {b} pour fermer.
+  'aides.consigneManette': 'Wybierz „?” krzyżakiem lub gałką, by sprawdzić, do czego służy każdy element. Naciśnij {b}, by zamknąć.',
   // Ne plus afficher les aides
   'aides.plusAfficher': 'Nie pokazuj więcej podpowiedzi',
   // J'ai compris
@@ -101622,6 +101869,8 @@ Lang.sea('pl', 'phenicie', {
   'text/phrases/combat.bandeau': 'Bitwa! {q}: szarża · {e}, Spacja lub klik: strzały · B: abordaż',
   // Combat ! Proue sur son flanc, puis CHARGE !
   'text/phrases/combat.bandeauTactile': 'Bitwa! Dziób w jego burtę, potem SZARŻA!',
+  // Combat ! {lt} : charge · {rt} : flèches · {a} : aborder
+  'text/phrases/combat.bandeauManette': 'Bitwa! {lt}: szarża · {rt}: strzały · {a}: abordaż',
   // ← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le 
   'text/phrases/aide.mer': '← → ({a}{d}): ster. ↑ ↓ ({w}{s}): zwijanie lub stawianie żagla. {q}: szarża (wioślarze przez kilka sekund dają z siebie wszystko: skieruj dziób w burtę wroga, by go staranować). {e}, Spacja lub klik: salwa strzał. B: abordaż. N: noce na brzegu lub według gwiazd. Enter: przybicie do brzegu. R: autopilot. F: przyspieszenie czasu. M: mapa.',
   // Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.
@@ -107754,6 +108003,7 @@ const SeaScene = {
     let turn = 0;
     if (Input.down('left')) turn -= 1;
     if (Input.down('right')) turn += 1;
+    if (!Input.blocked && Input.steer) turn = U.clamp(turn + Input.steer, -1, 1);   // (le stick de la manette, en douceur)
     if (turn && this.auto) { this.auto = false; }
     if (this.auto && this.path) {
       const w = this.path[Math.min(this.wp, this.path.length - 1)];
@@ -108750,6 +109000,11 @@ function btn(label, fn, cls, attrs) {
     onclick: e => { e.stopPropagation(); Sound.sfxPlay('click'); fn(e); },
   }, attrs || {}), label);
 }
+function padGlyph(k, cls) {
+  const t = { a: 'A', b: 'B', x: 'X', y: 'Y', lb: 'LB', rb: 'RB', lt: 'LT', rt: 'RT', start: '☰', view: '⧉', stick: 'L', rstick: 'R', croix: '✛' }[k] || k;
+  return h('kbd', { class: 'pg pg-' + k + (cls ? ' ' + cls : ''), 'aria-label': k.toUpperCase() }, t);
+}
+const PAD_GLYPHS = () => Object.fromEntries(['a', 'b', 'x', 'y', 'lb', 'rb', 'lt', 'rt', 'start', 'view', 'stick', 'rstick', 'croix'].map(k => [k, padGlyph(k)]));
 function money(n, cls) { return h('b', { class: 'num ' + (cls || '') }, fmt(n)); }
 // nom d'un bâtiment dans le port courant : l'enseigne propre au port (« Rialto »…), sinon le nom générique
 function bldName(t) { const P = Game.run && PORT[Game.run.port]; return (P && P.signs && P.signs[t]) || BUILDINGS[t].name; }
@@ -108776,6 +109031,9 @@ const UI = {
     document.getElementById('bt-map').onclick = () => { Sound.sfxPlay('click'); this.chart(false); };
     document.getElementById('bt-auto').onclick = () => { Sound.sfxPlay('click'); SeaScene.toggleAuto(); };
     document.getElementById('bt-fast').onclick = () => { Sound.sfxPlay('click'); SeaScene.fast = !SeaScene.fast; };
+    // (à la manette, chaque bouton de la mer montre le sien : Y la carte, X le pilote, B le temps)
+    //  (un attribut, dessiné en CSS : la traduction de la page réécrit le texte de ces boutons)
+    for (const [id, k] of [['bt-map', 'y'], ['bt-auto', 'x'], ['bt-fast', 'b']]) document.getElementById(id).dataset.pad = k;
     this.el.prompt.onclick = () => this.promptAction && this.promptAction();
     this.el.objectives.onclick = () => { this.objTouched = true; this.el.objectives.classList.toggle('min'); };
     Bus.on('layout', () => this.keyLabels());
@@ -108808,8 +109066,15 @@ const UI = {
     head.addEventListener('pointerup', end); head.addEventListener('pointercancel', end);
   },
   keyLabels() {
-    document.getElementById('gunLk').textContent = Input.label('KeyQ');
-    document.getElementById('gunRk').textContent = Input.label('KeyE');
+    document.getElementById('gunLk').textContent = Pad.active ? 'LT' : Input.label('KeyQ');
+    document.getElementById('gunRk').textContent = Pad.active ? 'RT' : Input.label('KeyE');
+  },
+  // les commandes tactiles en mer : selon le réglage, mais jamais pendant qu'on joue à la manette (Steam Deck)
+  touchOn() { const s = Game.global.settings.touch; return !Pad.active && (s === 'always' || (s === 'auto' && Input.touch)); },
+  touchControls() {
+    const on = this.mode === 'sea' && this.touchOn();
+    this.el.touch.hidden = !on;
+    document.body.classList.toggle('touch-sea', on);
   },
 
   // ════════════ Modales ════════════
@@ -108903,9 +109168,7 @@ const UI = {
     this.el.objectives.hidden = !inGame || (!Game.global.settings.hints && !Prologue.on);   // (le carnet du prologue reste)
     this.el.seahud.hidden = mode !== 'sea';
     this.el.portbar.hidden = mode !== 'port';
-    const touch = Game.global.settings.touch === 'always' || (Game.global.settings.touch === 'auto' && Input.touch);
-    this.el.touch.hidden = !(mode === 'sea' && touch);
-    document.body.classList.toggle('touch-sea', mode === 'sea' && touch);
+    this.touchControls();
     // sur mobile, seul l'objectif en cours est affiché (toucher pour déplier)
     if (inGame && this.isMobile() && !this.objTouched) this.el.objectives.classList.add('min');
     this.el.prompt.hidden = true;
@@ -108959,8 +109222,8 @@ const UI = {
       h('span', { class: 'it title hide-sm', 'data-g': 'hud-title' }, TITLES[titleIndex(Game.worth())].name),
       // (les aides « ? » de l'écran : le port, ou la mer)
       btn('?', () => Help.show(this.mode === 'sea' ? 'mer' : 'port', true), 'sm glass menu-btn q', { 'aria-label': T('aides.bouton'), title: T('aides.bouton'), 'data-g': 'hud-help' }),
-      btn([ico('scroll', 'sm'), h('span', { class: 'hide-xs' }, T('hud.journal'))], () => this.journal(), 'sm glass menu-btn', { 'aria-label': T('pause.journal'), 'data-g': 'hud-journal' }),
-      btn([ico('menu', 'sm'), h('span', { class: 'hide-xs' }, T('hud.menu'))], () => this.pauseMenu(), 'sm glass menu-btn', { 'aria-label': T('hud.menu'), 'data-g': 'hud-menu' }));
+      btn([ico('scroll', 'sm'), h('span', { class: 'hide-xs' }, T('hud.journal')), padGlyph('view', 'pk')], () => this.journal(), 'sm glass menu-btn', { 'aria-label': T('pause.journal'), 'data-g': 'hud-journal' }),
+      btn([ico('menu', 'sm'), h('span', { class: 'hide-xs' }, T('hud.menu')), padGlyph('start', 'pk')], () => this.pauseMenu(), 'sm glass menu-btn', { 'aria-label': T('hud.menu'), 'data-g': 'hud-menu' }));
     // téléphone : un bandeau trop plein (une dette en portrait…) coupait l'équipage. On le resserre, puis les alertes
     // en rouge (dette, patente brute) ne gardent que leur icône (le montant de la dette reste dans les objectifs) ;
     // en dernier recours, la date quitte le bandeau (elle reste dans le menu et le journal)
@@ -109024,7 +109287,7 @@ const UI = {
         const days = Math.max(1, Math.round(SEA.rules && SEA.rules.eta ? SEA.rules.eta(dest.id, p, d) : d * 1.15 / Math.max(20, p.speedMax * 0.85) * DAYS_PER_SEC));
         dtxt = T('mer.cap', { port: dest.name, jours: days, auto: SeaScene.auto ? 'oui' : 'non' });
       }
-      if (SeaScene.combat) dtxt = TXT.combatHint ? TXT.combatHint() : Input.touch ? T('mer.combatTactile') : T('mer.combatClavier', { q: Input.label('KeyQ'), e: Input.label('KeyE') });
+      if (SeaScene.combat) dtxt = TXT.combatHint ? TXT.combatHint() : Pad.active ? T('mer.combatManette', { lt: 'LT', rt: 'RT', a: 'A' }) : Input.touch ? T('mer.combatTactile') : T('mer.combatClavier', { q: Input.label('KeyQ'), e: Input.label('KeyE') });
       const de = document.getElementById('sh-dest');
       if (de.textContent !== dtxt) de.textContent = dtxt;
       document.getElementById('bt-auto').classList.toggle('on', SeaScene.auto);
@@ -109050,7 +109313,8 @@ const UI = {
   setPrompt(text, key, action) {
     const p = this.el.prompt;
     if (!text || this.isOpen()) { if (!p.hidden) p.hidden = true; this.promptAction = null; return; }
-    const html = (key ? `<kbd>${key}</kbd>` : '') + text;
+    // (à la manette, l'action se fait avec A)
+    const html = (Pad.active && action ? padGlyph('a').outerHTML : key ? `<kbd>${key}</kbd>` : '') + text;
     this.promptTick = (this.promptTick || 0) + 1;
     if (p.innerHTML !== html || p.hidden || this.promptTick % 20 === 0) {
       if (p.innerHTML !== html) p.innerHTML = html;
@@ -109549,7 +109813,7 @@ const UI = {
     let sel = departing ? (this.lastDest && this.lastDest !== here && PORT[this.lastDest] ? this.lastDest : null) : SeaScene.dest;
     if (departing && Prologue.on && SEA.prologue.to !== here) sel = SEA.prologue.to;   // (le prologue a choisi la destination)
     let food = true;
-    const entry = this.open({ id: 'carte', title: departing ? T('port.appareiller') : TXT.chartTitle, sub: departing ? T('carte.choisir') : T(Input.touch ? 'carte.toucherPort' : 'carte.cliquerPort'), icon: 'map', cls: 'wide chartp', body });
+    const entry = this.open({ id: 'carte', title: departing ? T('port.appareiller') : TXT.chartTitle, sub: departing ? T('carte.choisir') : Pad.active ? T('carte.choisirManette', { a: 'A' }) : T(Input.touch ? 'carte.toucherPort' : 'carte.cliquerPort'), icon: 'map', cls: 'wide chartp', body });
     const CS = World.chartScale || 1;
     // une mer en paysage (Méditerranée…) : la carte au-dessus du panneau, à ses proportions
     const land = World.GW > World.GH, ar = World.GW / World.GH;
@@ -109750,6 +110014,24 @@ const UI = {
       }
       put(side, ...kids);
     };
+    // à la manette (js/pad.js) : la croix ou le stick désigne le port voisin dans cette direction, A appareille ou met le cap
+    cv.tabIndex = 0; cv.dataset.padFirst = '';
+    cv.padDir = (dx, dy) => {
+      const from = World.ports.find(q => q.id === sel) || pos;
+      if (!from) return false;
+      let best = null, bs = Infinity;
+      for (const p of World.ports) {
+        if (p.id === here || p.id === sel) continue;
+        const vx = p.x - from.x, vy = p.y - from.y, along = vx * dx + vy * dy;
+        if (along <= 0) continue;
+        const s = along + Math.abs(vx * dy - vy * dx) * 2;
+        if (s < bs) { bs = s; best = p.id; }
+      }
+      if (!best) return false;
+      sel = best; Sound.sfxPlay('click'); draw(); renderSide();
+      return true;
+    };
+    cv.padA = () => { const g = side.querySelector('[data-g="ch-go"]'); if (g && !g.disabled) g.click(); };
     cv.addEventListener('pointerdown', e => {
       const rect = cv.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width * World.GW * WORLD.CELL, y = (e.clientY - rect.top) / rect.height * World.GH * WORLD.CELL;
@@ -109858,7 +110140,7 @@ const UI = {
         Game.saveRun();
         this.closeAll(); Main.toTitle();
       }, 'wide'));
-    const entry = this.open({ title: T('pause.titre'), icon: 'anchor', cls: 'narrow', body });
+    const entry = this.open({ id: 'pause', title: T('pause.titre'), icon: 'anchor', cls: 'narrow', body });
   },
   // ════════════ Journal de bord ════════════
   // Cinq onglets : les prix connus (le plus utile pour commercer), les contrats, le carnet (commerce, voyages, combats,
@@ -110007,7 +110289,9 @@ const UI = {
         h('h4', null, T('aide.enMer')),
         // (une mer sans canons décrit ses propres armes)
         TXT.helpSea ? h('p', null, TXT.helpSea(k)) : h('p', null, ...Tn('aide.mer', { a: k('KeyA'), d: k('KeyD'), w: k('KeyW'), s: k('KeyS'), q: k('KeyQ'), e: k('KeyE') })),
-        h('p', null, T('aide.boussole')));
+        h('p', null, T('aide.boussole')),
+        h('h4', null, T('aide.aLaManette')),
+        ...['manettePort', 'manetteMer', 'manetteMenus'].map(c => h('p', { class: 'pad-help' }, ...Tn('aide.' + c, PAD_GLYPHS()))));
       if (SEA.prologue && TXT.prologue && !Prologue.available() && cur === 'but') kids.push(h('p', { class: 'hint' }, T('notice.rejouerTitre')));
       put(page, kids);
     };
@@ -110596,7 +110880,7 @@ const Help = {
       bubble: {
         cls: 'help', anchor: null,
         who: A.forced ? T('aides.ecran', { ecran: this.name(A.id) }) : T('aides.premiere', { ecran: this.name(A.id) }),
-        text: [T(Input.touch ? 'aides.consigneTactile' : 'aides.consigne')],
+        text: [Pad.active ? T('aides.consigneManette', { a: 'A', b: 'B' }) : T(Input.touch ? 'aides.consigneTactile' : 'aides.consigne')],
         extra: chk ? h('label', { class: 'chk g-chk' }, chk, T('aides.plusAfficher')) : null,
         buttons: [{ label: T('aides.compris'), cls: 'jade', fn: () => this.close(chk && chk.checked) }],
       },
@@ -111009,6 +111293,273 @@ const Prologue = {
     };
     if (UI.top() === 'heritage' && x) return { key: 'heritage', spot: ['hr-h-' + x.id], veil: false, bubble: Object.assign(b, { anchor: 'hr-h-' + x.id }) };
     return { key: 'heritage:seul', veil: false, bubble: Object.assign(b, { dock: 'center', anchor: null }) };
+  },
+};
+
+</script>
+<script>
+'use strict';
+// ─── Silk & Cannons · la manette (manette Xbox, Steam Deck : la disposition « standard » de l'API Gamepad) ───
+// Lue à chaque image (Main.frame, avant la scène). Deux façons de jouer :
+//  • au port et en mer, sans fenêtre : la manette pousse les mêmes commandes que le clavier et le tactile (Input.virt) ;
+//    en mer, le stick gauche tient la barre en douceur (Input.steer) ;
+//  • dans une fenêtre, sur l'écran titre ou pendant une étape du guide : un repère doré passe d'un élément à l'autre
+//    (croix ou stick), A valide, B ferme, LB / RB changent d'onglet, Y montre les aides « ? », le stick droit fait défiler. Un élément peut prendre
+//    la main sur les directions (el.padDir(dx, dy) : vrai s'il s'en sert, la carte marine) et sur A (el.padA()).
+// Au port : stick ou croix pour marcher, A pour entrer, LB / RB pour aller au bâtiment précédent ou suivant, Y pour le
+// quai. En mer : stick pour la barre, LB / RB pour la toile, LT / RT pour les bordées, A pour accoster ou aborder, X pour
+// le pilote automatique, Y pour la carte, B pour le temps accéléré. Partout : Start pour le menu, View pour le journal.
+// Les symboles affichés (invites, boutons de feu, aide) passent à la manette dès qu'on s'en sert (classe « pad » du body),
+// et reviennent au clavier à la première touche ou au premier geste de la souris.
+
+const PAD = { a: 0, b: 1, x: 2, y: 3, lb: 4, rb: 5, lt: 6, rt: 7, view: 8, start: 9, ls: 10, rs: 11, up: 12, down: 13, left: 14, right: 15 };
+const PAD_DEAD = 0.28;   // zone morte des sticks
+const PAD_SEL = 'button, input, select, [role=button], canvas.chart-cv';
+
+const Pad = {
+  active: false,
+  cur: {}, prev: {}, ax: [0, 0, 0, 0],
+  rep: { key: '', t: 0, n: 0 },   // une direction tenue se répète (de plus en plus vite sur une réglette)
+  vs: {},                          // commandes virtuelles tenues par la manette (Input.virt)
+  focus: null, last: null, lastScope: null,
+  greeted: false,
+
+  init() {
+    addEventListener('gamepadconnected', () => { if (!this.greeted) { this.greeted = true; UI.toast(T('manette.connectee'), 'good'); } });
+    // retour au clavier ou à la souris
+    addEventListener('keydown', () => this.use(false), true);
+    addEventListener('pointerdown', () => this.use(false), true);
+    addEventListener('pointermove', e => { if (Math.abs(e.movementX) + Math.abs(e.movementY) > 3) this.use(false); }, true);
+  },
+  use(on) {
+    if (this.active === on) return;
+    this.active = on;
+    document.body.classList.toggle('pad', on);
+    if (!on) { this.mark(null); this.release(); }
+    UI.keyLabels();
+    UI.touchControls();
+  },
+  read() {
+    const list = navigator.getGamepads ? navigator.getGamepads() : [];
+    let g = null;
+    for (const p of list) if (p && p.connected) { if (p.mapping === 'standard') return p; if (!g) g = p; }
+    return g;
+  },
+
+  // ── À chaque image ──
+  poll(dt) {
+    const g = this.read();
+    if (!g) { if (this.active) this.use(false); return; }
+    const prev = this.cur, cur = {};
+    for (const k in PAD) { const b = g.buttons[PAD[k]]; cur[k] = !!(b && (b.pressed || b.value > 0.5)); }
+    const dz = v => (Math.abs(v) < PAD_DEAD ? 0 : (v - Math.sign(v) * PAD_DEAD) / (1 - PAD_DEAD));
+    this.ax = [0, 1, 2, 3].map(i => dz(g.axes[i] || 0));
+    this.prev = prev; this.cur = cur; this.gp = g;
+    const hit = k => cur[k] && !prev[k];
+    if (Object.keys(cur).some(hit) || this.ax.some(v => Math.abs(v) > 0.5)) this.use(true);
+    if (!this.active) return;   // (une manette posée qui dérive un peu ne prend pas la main)
+    // une direction : la croix, ou le stick gauche franchement penché ; tenue, elle se répète
+    let dx = cur.left ? -1 : cur.right ? 1 : 0, dy = cur.up ? -1 : cur.down ? 1 : 0;
+    const [lx, ly] = this.ax;
+    if (!dx && !dy && Math.max(Math.abs(lx), Math.abs(ly)) > 0.55) { if (Math.abs(lx) >= Math.abs(ly)) dx = Math.sign(lx); else dy = Math.sign(ly); }
+    const key = dx + ',' + dy;
+    let nav = null;
+    if (!dx && !dy) this.rep = { key: '', t: 0, n: 0 };
+    else if (key !== this.rep.key) { this.rep = { key, t: 0.34, n: 0 }; nav = [dx, dy]; }
+    else if ((this.rep.t -= dt) <= 0) { this.rep.n++; this.rep.t = 0.09; nav = [dx, dy]; }
+    if (Main.fadeDir) { this.release(); return; }
+    const scope = this.scope();
+    if (scope) { this.release(); this.menu(scope, nav, hit, dt); }
+    else { if (this.focus) this.mark(null); this.lastScope = null; this.game(hit); }
+  },
+
+  // ── Au port et en mer ──
+  hold(k, on) { if (!!this.vs[k] !== on) { this.vs[k] = on; Input.virt[k] = on; } },
+  release() { for (const k in this.vs) if (this.vs[k]) Input.virt[k] = false; this.vs = {}; Input.steer = 0; },
+  game(hit) {
+    const port = Main.sceneName === 'port', sea = Main.sceneName === 'sea';
+    if (!port && !sea) { this.release(); return; }
+    const c = this.cur, lx = this.ax[0];
+    this.hold('left', c.left || (port && lx < -0.35));
+    this.hold('right', c.right || (port && lx > 0.35));
+    Input.steer = sea ? lx : 0;
+    if (hit('start')) { UI.pauseMenu(); return; }
+    if (hit('view')) { UI.journal(); return; }
+    const tap = a => { Input.virtHits[a] = true; };
+    if (port) {
+      if (hit('a')) { if (PortScene.near) PortScene.open(PortScene.near); else this.bubbleOk() || this.hintOk(); }
+      if (hit('lb') || hit('rb')) this.walkTo(hit('rb') ? 1 : -1);
+      if (hit('y')) tap('map');
+      return;
+    }
+    if (hit('lb')) tap('down');
+    if (hit('rb')) tap('up');
+    if (hit('lt')) { tap('fireL'); this.rumble(); }
+    if (hit('rt')) { tap('fireR'); this.rumble(); }
+    if (hit('x')) tap('auto');
+    if (hit('b')) tap('fast');
+    if (hit('y')) { UI.chart(false); return; }
+    if (hit('a')) { if (SeaScene.prompt && UI.promptAction) UI.promptAction(); else this.bubbleOk() || this.hintOk(); }
+  },
+  // au port, LB / RB : le capitaine va jusqu'au bâtiment précédent ou suivant (A pour y entrer)
+  walkTo(d) {
+    const cap = PortScene.cap, x = cap.target != null ? cap.target : cap.x;
+    const its = PortScene.shortcuts().slice().sort((a, b) => a.door - b.door);
+    const it = d > 0 ? its.find(i => i.door > x + 4) : its.reverse().find(i => i.door < x - 4);
+    if (!it) return;
+    Sound.sfxPlay('click');
+    cap.target = it.door; cap.fast = Math.abs(it.door - cap.x) > 40; cap.openOnArrive = null;
+  },
+  // une bulle du guide sans verrou (en mer, pendant le prologue), ou un conseil du mentor : A la referme
+  bubbleOk() { const b = Guide.bub && Guide.bub.querySelector('.g-row .btn.jade'); if (b) { b.click(); return true; } return false; },
+  hintOk() { const b = Guide.hintEl && Guide.hintEl.querySelector('button'); if (b) { b.click(); return true; } return false; },
+  rumble() { try { const v = this.gp && this.gp.vibrationActuator; if (v && v.playEffect) v.playEffect('dual-rumble', { duration: 90, strongMagnitude: 0.45, weakMagnitude: 0.3 }); } catch (e) { /* facultatif */ } },
+
+  // ── Dans les fenêtres ──
+  // où va le repère : l'étape du guide qui verrouille l'écran (ses boutons et ce qu'elle laisse toucher), la fenêtre du
+  // dessus, l'écran titre ; null : le port ou la mer. Une bulle du guide sans verrou garde ses boutons atteignables.
+  scope() {
+    // (une nouvelle étape du guide repart de son premier élément ; les aides « ? », redessinées à chaque explication, non)
+    if (Help.active) return { key: 'aide:' + Help.active.id, guide: true };
+    if (Guide.cfg && Guide.lock) return { key: 'guide:' + Guide.key, guide: true };
+    if (UI.isOpen()) { const e = UI.stack[UI.stack.length - 1]; return { key: e, root: e.panel, entry: e }; }
+    const t = Main.sceneName === 'title' && document.querySelector('.title-screen');
+    if (t) return { key: t, root: t };
+    return null;
+  },
+  // ce qu'on voit d'un élément : la case à cocher, c'est son étiquette
+  box(el) { return ((el.type === 'checkbox' || el.type === 'radio') && el.closest('label')) || el; },
+  usable(el) {
+    if (el.disabled || el.type === 'hidden' || el.closest('[hidden]')) return false;
+    if (el.tabIndex < 0 && !el.matches('[role=button], canvas.chart-cv')) return false;
+    const r = this.box(el).getBoundingClientRect();
+    return r.width > 2 && r.height > 2;
+  },
+  list(scope) {
+    let els = [];
+    const lock = Guide.cfg && Guide.lock ? Guide.lock : [];
+    const under = s => [...document.querySelectorAll(s)].flatMap(e => (e.matches(PAD_SEL) ? [e] : [...e.querySelectorAll(PAD_SEL)]));
+    if (scope.guide) els = [...document.querySelectorAll('#guide .g-live :is(button, input, [role=button]), #guide [role=button].g-live')].concat(...lock.map(under));
+    else els = [...scope.root.querySelectorAll(PAD_SEL), ...document.querySelectorAll('#guide .g-bubble button')];
+    // (le sceau du mentor replie la bulle, sur téléphone ; « ? » et la croix d'une fenêtre : Y et B les remplacent, sauf
+    //  quand le guide demande justement de fermer la fenêtre)
+    const skip = scope.guide ? '.g-seal' : '.g-seal, .panel-head .x';
+    return [...new Set(els)].filter(el => !el.matches(skip) && this.usable(el));
+  },
+  // le premier repère d'un écran : ce que l'étape du guide demande de toucher, la carte marine, le bouton principal du
+  // pied de la fenêtre, sinon le bouton qui a déjà le focus (UI.open le pose sur le premier), sinon un bouton principal
+  first(scope, els) {
+    const pick = sel => els.find(el => el.matches(sel));
+    if (scope.guide) {
+      if (Help.active) return pick('.g-badge') || els[0];
+      const lk = (Guide.lock || []).flatMap(s => [...document.querySelectorAll(s)]);
+      return els.find(el => lk.some(l => l === el || l.contains(el))) || pick('#guide .btn.jade') || els[els.length - 1];
+    }
+    const a = document.activeElement;
+    return pick('[data-pad-first]') || pick('.panel-foot .btn.jade') || (els.includes(a) && a.tagName !== 'INPUT' ? a : null) ||
+      pick('.btn.jade:not(.sm)') || els.find(el => !el.matches('.x, input[type=text]')) || els[0];
+  },
+  mark(el) {
+    if (this.focus) this.box(this.focus).classList.remove('pad-focus');
+    this.focus = el;
+    if (!el) return;
+    const b = this.box(el);
+    b.classList.add('pad-focus');
+    try { el.focus({ preventScroll: true }); } catch (e) { /* rien */ }
+    b.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    const r = b.getBoundingClientRect();
+    this.last = { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    // (une aide « ? » : le repère sur une pastille en montre l'explication, comme le survol de la souris)
+    if (Help.active && el.classList.contains('g-badge')) el.dispatchEvent(new MouseEvent('mouseenter'));
+  },
+  // l'élément le plus proche d'un point (un écran redessiné : le repère reste à sa place)
+  nearest(els, p) {
+    let best = null, bd = Infinity;
+    for (const el of els) { const r = this.box(el).getBoundingClientRect(), d = Math.hypot(r.left + r.width / 2 - p.x, r.top + r.height / 2 - p.y); if (d < bd) { bd = d; best = el; } }
+    return best;
+  },
+  // le voisin dans une direction : le plus proche dans l'axe, en pénalisant l'écart de côté
+  near(f, els, dx, dy) {
+    const a = this.box(f).getBoundingClientRect(), ax = a.left + a.width / 2, ay = a.top + a.height / 2;
+    let best = null, bs = Infinity;
+    for (const el of els) {
+      if (el === f) continue;
+      const b = this.box(el).getBoundingClientRect(), bx = b.left + b.width / 2, by = b.top + b.height / 2;
+      if ((dx ? (bx - ax) * dx : (by - ay) * dy) <= 4) continue;
+      const gap = dx ? (dx > 0 ? b.left - a.right : a.left - b.right) : (dy > 0 ? b.top - a.bottom : a.top - b.bottom);
+      const side = dx ? Math.max(0, Math.max(a.top, b.top) - Math.min(a.bottom, b.bottom)) : Math.max(0, Math.max(a.left, b.left) - Math.min(a.right, b.right));
+      const s = Math.max(0, gap) + side * 3 + Math.abs(dx ? by - ay : bx - ax) * 0.3;
+      if (s < bs) { bs = s; best = el; }
+    }
+    return best;
+  },
+  menu(scope, nav, hit, dt) {
+    const els = this.list(scope);
+    let f = this.focus && els.includes(this.focus) ? this.focus : null;
+    if (!f && els.length) {
+      f = this.lastScope === scope.key && this.last ? this.nearest(els, this.last) : this.first(scope, els);
+      this.mark(f);
+    }
+    this.lastScope = scope.key;
+    if (nav && f) {
+      const [dx, dy] = nav;
+      if (f.padDir && f.padDir(dx, dy)) { /* (la carte marine a choisi un port) */ }
+      // (une réglette prend la gauche et la droite, sauf en butée : on passe alors à l'élément voisin)
+      else if (f.type === 'range' && dx && this.slide(f, dx)) { /* réglée */ }
+      else { const n = this.near(f, els, dx, dy); if (n) { this.mark(n); Sound.sfxPlay('tick', { vol: 0.25 }); } }
+    }
+    if (hit('a') && f) this.press(f);
+    if (hit('b')) this.back(scope);
+    if (hit('lb') || hit('rb')) this.tab(scope, hit('rb') ? 1 : -1);
+    if (hit('y') && scope.root) { const q = scope.root.querySelector('.panel-head .x.q'); if (q) q.click(); }   // (les aides « ? » de l'écran)
+    if (hit('start') && UI.top() === 'pause') UI.close();
+    if (hit('view') && UI.top() === 'journal') UI.close();
+    // le stick droit fait défiler la fenêtre
+    if (this.ax[3]) { const sc = this.scroller(f, scope); if (sc) sc.scrollTop += this.ax[3] * dt * 900; }
+  },
+  press(f) {
+    if (f.padA) { f.padA(); return; }
+    // (une réglette : le bouton de sa ligne, « Acheter 12 »)
+    if (f.type === 'range') { const row = f.closest('.mk-row, .row, .stat, .card'), b = row && [...row.querySelectorAll('button')].find(x => !x.disabled); if (b) b.click(); return; }
+    if (f.tagName === 'INPUT' && f.type === 'text') { f.focus(); f.select(); return; }
+    f.click();
+  },
+  slide(el, dx) {
+    const min = +el.min || 0, max = el.max === '' ? 100 : +el.max, st = +el.step || 1;
+    const step = st * (this.rep.n < 4 ? 1 : Math.max(1, Math.round((max - min) / 25 / st)));
+    const v = U.clamp(+el.value + dx * step, min, max);
+    if (v === +el.value) return false;
+    el.value = v;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    Sound.sfxPlay('tick', { vol: 0.2 });
+    return true;
+  },
+  back(scope) {
+    if (Help.active) { Help.close(false); return; }
+    if (scope.guide || !scope.entry) return;   // (une étape du guide ne se saute pas par mégarde ; l'écran titre reste)
+    if (scope.entry.o.closable !== false) { Sound.sfxPlay('click'); UI.close(scope.entry); }
+  },
+  // LB / RB : l'onglet précédent ou suivant de la fenêtre (marché, journal, notice…)
+  tab(scope, d) {
+    const box = scope.root && scope.root.querySelector('[role=tablist], [data-g=mk-tabs], [data-g=jr-tabs]');
+    if (!box) return;
+    const bs = [...box.querySelectorAll('button')].filter(b => !b.disabled);
+    const i = bs.findIndex(b => b.classList.contains('on') || b.getAttribute('aria-selected') === 'true');
+    const n = bs[i + d];
+    if (!n) return;
+    n.click();
+    // (l'écran se redessine : le repère suit l'onglet choisi)
+    const box2 = scope.root.querySelector('[role=tablist], [data-g=mk-tabs], [data-g=jr-tabs]');
+    const on = box2 && [...box2.querySelectorAll('button')].find(b => b.classList.contains('on') || b.getAttribute('aria-selected') === 'true');
+    if (on) this.mark(on);
+  },
+  scroller(f, scope) {
+    for (let el = f; el && el !== document.body; el = el.parentElement) {
+      const cs = getComputedStyle(el);
+      if (/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 2) return el;
+    }
+    return scope.root ? scope.root.querySelector('.panel-body') : null;
   },
 };
 
@@ -123190,7 +123741,7 @@ Seas.register({
     weapons: { left: 'Cadence', right: 'Archers', touchL: 'Charge<small>éperon</small>', touchR: 'Flèches<small>archers</small>' },
     // (fonctions appelées par le moteur : leurs phrases sont dans text.phrases)
     firstFight: () => (Input.touch ? TS('combat.premierTactile') : TS('combat.premier', { q: Input.label('KeyQ'), e: Input.label('KeyE') })),
-    combatHint: () => (Input.touch ? TS('combat.bandeauTactile') : TS('combat.bandeau', { q: Input.label('KeyQ'), e: Input.label('KeyE') })),
+    combatHint: () => (Pad.active ? TS('combat.bandeauManette', { lt: 'LT', rt: 'RT', a: 'A' }) : Input.touch ? TS('combat.bandeauTactile') : TS('combat.bandeau', { q: Input.label('KeyQ'), e: Input.label('KeyE') })),
     helpSea: k => TSn('aide.mer', { a: k('KeyA'), d: k('KeyD'), w: k('KeyW'), s: k('KeyS'), q: k('KeyQ'), e: k('KeyE') }),
     shipArms: S => TS(S.oars ? (S.ram >= 1.15 ? 'navire.armesMassif' : 'navire.armes') : 'navire.voileSeule'),
     usurer: {
@@ -123292,6 +123843,7 @@ Seas.register({
       'combat.premierTactile': 'Pas de canons : pointez votre proue sur le flanc du pirate et touchez CHARGE pour l\'éperonner. FLÈCHES : une volée de vos archers.',
       'combat.bandeau': 'Combat ! {q} : charge · {e}, Espace ou clic : flèches · B : aborder',
       'combat.bandeauTactile': 'Combat ! Proue sur son flanc, puis CHARGE !',
+      'combat.bandeauManette': 'Combat ! {lt} : charge · {rt} : flèches · {a} : aborder',   // lt, rt, a : boutons de la manette
       'aide.mer': '← → ({a}{d}) : barre. ↑ ↓ ({w}{s}) : réduire ou envoyer la toile. {q} : cadence de charge (les rameurs donnent tout quelques secondes : pointez la proue sur le flanc ennemi pour l\'éperonner). {e}, Espace ou clic : une volée de flèches. B : aborder. N : passer les nuits sur la grève ou aux étoiles. Entrée : accoster. R : pilote automatique. F : accélérer le temps. M : carte.',   // a, d, w, s, q, e : les touches
       'fort.galeres': 'Les galères de guerre {dePort} sortent du port : vos poursuivants rompent le combat.',
       // les navires
@@ -123772,6 +124324,7 @@ const Main = {
     Game.loadMeta();
     Icons.build();
     UI.init();
+    Pad.init();
     World.init();
     SeaGL.init(document.getElementById('gl'));
     this.resize();
@@ -123879,7 +124432,7 @@ const Main = {
       this.enterPort(SEA.start.port);
       if (o.mode === 'prologue') return;   // (le prologue explique lui-même)
       setTimeout(() => {
-        if (!Game.meta.tutorialDone && Game.meta.runs === 0) UI.toast(Input.touch ? T('tuto.tactile') : T('tuto.clavier'), '');
+        if (!Game.meta.tutorialDone && Game.meta.runs === 0) UI.toast(Pad.active ? T('tuto.manette', { lb: 'LB', rb: 'RB', a: 'A' }) : Input.touch ? T('tuto.tactile') : T('tuto.clavier'), '');
         UI.toast(TXT.startToast, 'gold', 'scroll');
       }, 900);
     });
@@ -123973,6 +124526,7 @@ const Main = {
     const dt = forcedDt !== undefined ? forcedDt : Math.min(0.05, Math.max(0, (ts - (this.last || ts)) / 1000));
     this.last = ts; this.lastReal = ts;
     try {
+      Pad.poll(dt);   // (la manette : commandes du port et de la mer, ou repère dans les fenêtres)
       const paused = this.sceneName === 'sea' && (UI.isOpen() || Guide.pausing);   // (une fenêtre, ou une explication du guide)
       if (this.scene && !paused) this.scene.update(dt);
       if (this.sceneName === 'port' && !this.fadeDir && !UI.isOpen() && Game.isYearOver() && !Game.run.over) this.endRun('end');
