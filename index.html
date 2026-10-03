@@ -1696,6 +1696,9 @@ Lang.ui('fr', {
   // ── Options (suite) ──
   'options.musique': 'Musique',
   'options.bruitages': 'Bruitages',
+  'options.styleMusique': 'Style musical',
+  'options.style.moderne': 'Moderne',
+  'options.style.retro': 'Rétro (Amstrad)',
   'options.couper': 'Couper le son',
   'options.objectifs': 'Afficher les objectifs',
   'options.tactile': 'COMMANDES TACTILES EN MER',
@@ -2511,6 +2514,9 @@ Lang.ui('en', {
   'options.musique': 'Music',
   // Bruitages
   'options.bruitages': 'Sound effects',
+  'options.styleMusique': 'Music style',
+  'options.style.moderne': 'Modern',
+  'options.style.retro': 'Retro (Amstrad)',
   // Couper le son
   'options.couper': 'Mute',
   // Afficher les objectifs
@@ -10415,6 +10421,9 @@ Lang.ui('zh', {
   'options.musique': '音乐',
   // Bruitages
   'options.bruitages': '音效',
+  'options.styleMusique': '音乐风格',
+  'options.style.moderne': '现代',
+  'options.style.retro': '复古（Amstrad）',
   // Couper le son
   'options.couper': '静音',
   // Afficher les objectifs
@@ -18292,6 +18301,9 @@ Lang.ui('zht', {
   'options.musique': '音樂',
   // Bruitages
   'options.bruitages': '音效',
+  'options.styleMusique': '音樂風格',
+  'options.style.moderne': '現代',
+  'options.style.retro': '復古（Amstrad）',
   // Couper le son
   'options.couper': '靜音',
   // Afficher les objectifs
@@ -26170,6 +26182,9 @@ Lang.ui('ja', {
   'options.musique': '音楽',
   // Bruitages
   'options.bruitages': '効果音',
+  'options.styleMusique': '音楽のスタイル',
+  'options.style.moderne': 'モダン',
+  'options.style.retro': 'レトロ（Amstrad）',
   // Couper le son
   'options.couper': '消音',
   // Afficher les objectifs
@@ -34081,6 +34096,9 @@ Lang.ui('ko', {
   'options.musique': '음악',
   // Bruitages
   'options.bruitages': '효과음',
+  'options.styleMusique': '음악 스타일',
+  'options.style.moderne': '모던',
+  'options.style.retro': '레트로(Amstrad)',
   // Couper le son
   'options.couper': '음소거',
   // Afficher les objectifs
@@ -41957,6 +41975,9 @@ Lang.ui('ru', {
   'options.musique': 'Музыка',
   // Bruitages
   'options.bruitages': 'Звуки',
+  'options.styleMusique': 'Стиль музыки',
+  'options.style.moderne': 'Современный',
+  'options.style.retro': 'Ретро (Amstrad)',
   // Couper le son
   'options.couper': 'Выключить звук',
   // Afficher les objectifs
@@ -49973,6 +49994,9 @@ Lang.ui('es', {
   'options.musique': 'Música',
   // Bruitages
   'options.bruitages': 'Efectos de sonido',
+  'options.styleMusique': 'Estilo musical',
+  'options.style.moderne': 'Moderno',
+  'options.style.retro': 'Retro (Amstrad)',
   // Couper le son
   'options.couper': 'Silenciar',
   // Afficher les objectifs
@@ -57875,6 +57899,9 @@ Lang.ui('pt', {
   'options.musique': 'Música',
   // Bruitages
   'options.bruitages': 'Efeitos sonoros',
+  'options.styleMusique': 'Estilo musical',
+  'options.style.moderne': 'Moderno',
+  'options.style.retro': 'Retrô (Amstrad)',
   // Couper le son
   'options.couper': 'Sem som',
   // Afficher les objectifs
@@ -65775,6 +65802,9 @@ Lang.ui('de', {
   'options.musique': 'Musik',
   // Bruitages
   'options.bruitages': 'Geräusche',
+  'options.styleMusique': 'Musikstil',
+  'options.style.moderne': 'Modern',
+  'options.style.retro': 'Retro (Amstrad)',
   // Couper le son
   'options.couper': 'Ton aus',
   // Afficher les objectifs
@@ -73675,6 +73705,9 @@ Lang.ui('it', {
   'options.musique': 'Musica',
   // Bruitages
   'options.bruitages': 'Effetti sonori',
+  'options.styleMusique': 'Stile musicale',
+  'options.style.moderne': 'Moderno',
+  'options.style.retro': 'Retrò (Amstrad)',
   // Couper le son
   'options.couper': 'Silenzia',
   // Afficher les objectifs
@@ -81578,6 +81611,9 @@ Lang.ui('pl', {
   'options.musique': 'Muzyka',
   // Bruitages
   'options.bruitages': 'Efekty dźwiękowe',
+  'options.styleMusique': 'Styl muzyki',
+  'options.style.moderne': 'Nowoczesny',
+  'options.style.retro': 'Retro (Amstrad)',
   // Couper le son
   'options.couper': 'Wyłącz dźwięk',
   // Afficher les objectifs
@@ -90446,6 +90482,7 @@ function parseTrack(ch) {
   return { ev, len: pos };
 }
 
+const THEME_OF = { title: 'title', port: 'port', sea: 'sea', battle: 'battle', boss: 'boss', fanfare: 'victory', defeat: 'defeat' };
 const Sound = {
   ctx: null, master: null, music: null, sfx: null, echo: null,
   noiseBuf: null, waves: {}, amb: {},
@@ -90465,6 +90502,9 @@ const Sound = {
     const wet = c.createGain(); wet.gain.value = 0.22;
     const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2600;
     this.music.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(wet); wet.connect(this.master);
+    // les thèmes des mers (js/music.js) ont leur propre réverbération : ils passent par un bus sans écho, au même volume
+    this.theme = c.createGain(); this.theme.connect(this.master);
+    if (typeof Music !== 'undefined') Music.init(c, this.theme);
     // bruit blanc
     const len = c.sampleRate * 2;
     this.noiseBuf = c.createBuffer(1, len, c.sampleRate);
@@ -90496,12 +90536,19 @@ const Sound = {
     const t = this.ctx.currentTime;
     this.master.gain.setTargetAtTime(s.muted ? 0 : 0.9, t, 0.05);
     this.music.gain.setTargetAtTime(s.music, t, 0.05);
+    this.theme.gain.setTargetAtTime(s.music * 0.9, t, 0.05);
     this.sfx.gain.setTargetAtTime(s.sfx, t, 0.05);
   },
 
   // ── Musique ──
+  // Chaque mer du jeu de base a ses thèmes (js/music.js), en style moderne ou rétro (Options) ; les autres mers gardent
+  // les morceaux d'origine ci-dessus. « boss » : un combat contre un pirate nommé ou le boss de la mer.
   play(name) {
     if (!this.ctx) { this.pending = name; return; }
+    const key = THEME_OF[name], sea = typeof MUSIC_SONGS !== 'undefined' && MUSIC_SONGS[Seas.current];
+    if (sea && sea.songs[key]) return this.playTheme(name, sea.songs[key], key);
+    if (this.themeId) { Music.stop(); this.themeId = null; }
+    if (name === 'boss') name = 'battle';
     if (this.songName === name && this.song && this.song.loop) return;
     const def = SONGS[name];
     if (!def) { this.song = null; this.songName = null; return; }
@@ -90514,7 +90561,24 @@ const Sound = {
     this.step = 0;
     this.nextTime = this.ctx.currentTime + 0.12;
   },
-  stopMusic() { this.song = null; this.songName = null; },
+  playTheme(name, def, key) {
+    const style = (Game.global && Game.global.settings.musicStyle) || 'moderne', id = Seas.current + ':' + key + ':' + style;
+    if (this.themeId === id && def.loop) return;
+    this.song = null;
+    // un jingle interrompt la boucle en cours, qui reprend ensuite
+    if (!def.loop && this.themeId && this.themeLoop) this.resume = this.themeLoop;
+    else if (def.loop) { this.resume = null; this.themeLoop = name; }
+    this.songName = name; this.themeId = id;
+    Music.play(Seas.current, key, style);
+    clearTimeout(this.resumeT);
+    if (!def.loop) {
+      const secs = Music.steps(def.ch[0]) * 60 / def.bpm / (def.beat || 4);
+      this.resumeT = setTimeout(() => { if (this.themeId === id) { this.themeId = null; const n = this.resume; this.resume = null; if (n) this.play(n); } }, (secs + 0.6) * 1000);
+    }
+  },
+  // le style a changé dans les Options : la musique en cours repart dans le nouveau style
+  restyle() { if (this.themeId && this.themeLoop) { this.themeId = null; this.play(this.themeLoop); } },
+  stopMusic() { this.song = null; this.songName = null; if (this.themeId) { Music.stop(); this.themeId = null; } },
   tick() {
     const c = this.ctx;
     if (!c) return;
@@ -90703,6 +90767,444 @@ const Sound = {
     a.lg.gain.setTargetAtTime(vol * 0.45, t, 0.6);
   },
   ambientOff() { for (const k in this.amb) this.ambient(k, 0); },
+};
+
+</script>
+<script>
+'use strict';
+// ─── Silk & Cannons · musique : un thème par mer, joué en « moderne » (instruments de synthèse) ou en « rétro » (puce façon AY-3) ───
+// Tout est généré par le code (aucun fichier audio). Une mélodie est écrite une seule fois ; le style choisit les instruments.
+// Notation : NOTE:durée en pas (double-croches en 4/4, croches quand beat = 3 ou 2), accords NOTE+NOTE, r = silence, | ignoré.
+// Batterie : une lettre par pas, « . » = rien ; chaque morceau dit quel instrument joue chaque lettre (kit).
+
+const MUSIC_SONGS = {
+  // ════════════ Mer de Chine, 1840 : pentatonique ; dizi, guzheng, erhu, gong, taïkos ════════════
+  chine: {
+    name: 'Mer de Chine', era: '1840',
+    kit: { k: 'taikoS', t: 'taiko', s: 'rim', w: 'wood', g: 'gong', h: 'shaker', x: 'gong' },
+    songs: {
+      title: { label: 'Titre', bpm: 76, loop: true, ch: [
+        { i: 'dizi', role: 'mel', v: 0.8, rev: 0.35, n: 'A4:4 C5:4 D5:4 E5:4 | G5:6 E5:2 D5:8 | E5:4 D5:2 C5:2 A4:8 | G4:4 A4:4 C5:8 | A5:6 G5:2 E5:4 D5:4 | E5:4 G5:4 A5:8 | G5:4 E5:2 D5:2 C5:4 D5:4 | A4:16' },
+        { i: 'guzheng', role: 'harm', v: 0.55, rev: 0.3, n: 'A3:2 E4:2 A4:2 C5:2 E5:2 C5:2 A4:2 E4:2 | G3:2 D4:2 G4:2 A4:2 D5:2 A4:2 G4:2 D4:2 | C4:2 G4:2 C5:2 E5:2 G5:2 E5:2 C5:2 G4:2 | G3:2 D4:2 G4:2 D5:2 G4:2 D4:2 G3:2 D4:2 | A3:2 E4:2 A4:2 C5:2 E5:2 C5:2 A4:2 E4:2 | C4:2 G4:2 C5:2 E5:2 G5:2 E5:2 C5:2 G4:2 | G3:2 D4:2 G4:2 A4:2 D5:2 A4:2 G4:2 D4:2 | A3:2 E4:2 A4:2 C5:2 E5:4 r:4' },
+        { i: 'gbass', role: 'bass', v: 0.7, n: 'A2:16 | G2:16 | C3:16 | G2:16 | A2:16 | C3:16 | G2:16 | A2:16' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'g.......w.......k.......w...w...k.......w.......k.......w...w.w.g.......w.......k.......w...w...k.......w.......k.......k...w...' },
+      ] },
+      port: { label: 'Au port', bpm: 108, loop: true, ch: [
+        { i: 'dizi', role: 'mel', v: 0.75, rev: 0.25, n: 'C5:2 D5:2 E5:2 G5:2 A5:4 G5:4 | E5:2 D5:2 C5:2 D5:2 E5:8 | G5:2 A5:2 G5:2 E5:2 D5:4 C5:4 | D5:2 E5:2 D5:2 C5:2 A4:8 | C5:2 D5:2 E5:2 G5:2 A5:4 C6:4 | D6:2 C6:2 A5:2 G5:2 A5:8 | G5:2 E5:2 D5:2 E5:2 G5:4 D5:4 | C5:12 r:4' },
+        { i: 'guzheng', role: 'harm', v: 0.45, rev: 0.2, n: 'r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 | r:2 D4+G4:2 r:2 D4+G4:2 r:2 D4+G4:2 r:2 D4+G4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 C4+G4:2' },
+        { i: 'gbass', role: 'bass', v: 0.65, n: 'C3:4 G3:4 C3:4 G3:4 | C3:4 G3:4 C3:4 G3:4 | C3:4 G3:4 C3:4 G3:4 | A2:4 E3:4 A2:4 E3:4 | C3:4 G3:4 C3:4 G3:4 | A2:4 E3:4 A2:4 E3:4 | G2:4 D3:4 G2:4 D3:4 | C3:4 G3:4 C3:8' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'k...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.wwk...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.ww' },
+      ] },
+      sea: { label: 'En mer', bpm: 66, loop: true, ch: [
+        { i: 'erhu', role: 'mel', v: 0.7, rev: 0.45, n: 'A4:8 C5:4 D5:4 | E5:12 D5:4 | C5:8 A4:4 G4:4 | A4:16 | E5:8 G5:4 A5:4 | G5:12 E5:4 | D5:8 E5:4 D5:2 C5:2 | A4:16' },
+        { i: 'pad', role: 'pad', v: 0.5, rev: 0.5, n: 'A3+E4:16 | C4+G4:16 | G3+D4:16 | A3+E4:16 | C4+G4:16 | G3+D4:16 | G3+D4:16 | A3+E4:16' },
+        { i: 'guzheng', role: 'harm', v: 0.4, rev: 0.4, n: 'A3:4 E4:4 A4:8 | C4:4 G4:4 C5:8 | G3:4 D4:4 G4:8 | A3:4 E4:4 A4:8 | C4:4 G4:4 C5:8 | G3:4 D4:4 G4:8 | G3:4 D4:4 G4:8 | A3:4 E4:4 A4:8' },
+        { i: 'drums', role: 'drum', v: 0.35, n: 'g.......................w...............................w.......g...............................w...............................' },
+      ] },
+      battle: { label: 'Combat', bpm: 144, loop: true, ch: [
+        { i: 'erhu', role: 'mel', v: 0.75, rev: 0.2, n: 'E5:2 E5:2 D5:2 E5:2 G5:4 E5:4 | D5:2 D5:2 B4:2 D5:2 E5:4 B4:4 | G4:2 A4:2 B4:2 D5:2 E5:4 D5:2 B4:2 | A4:4 B4:2 A4:2 G4:4 E4:4 | E5:2 E5:2 G5:2 A5:2 B5:4 A5:4 | G5:2 A5:2 G5:2 E5:2 D5:4 E5:4 | B4:2 D5:2 E5:2 G5:2 A5:2 G5:2 E5:2 D5:2 | E5:8 E4:8' },
+        { i: 'guzheng', role: 'harm', v: 0.4, rev: 0.15, n: 'E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 | D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 | G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 | A3:1 E4:1 A4:1 E4:1 A3:1 E4:1 A4:1 E4:1 A3:1 E4:1 A4:1 E4:1 A3:1 E4:1 A4:1 E4:1 | E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 | G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 | D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 | E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1' },
+        { i: 'gbass', role: 'bass', v: 0.7, n: 'E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 | A2:2 A3:2 A2:2 A3:2 A2:2 A3:2 A2:2 A3:2 | E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | E2:2 E3:2 E2:2 E3:2 E2:8' },
+        { i: 'drums', role: 'drum', v: 0.65, n: 't.k.s.k.t.k.s.k.t.k.s.k.t.t.s.k.t.k.s.k.t.k.s.k.t.k.s.k.t.t.s.s.t.k.s.k.t.k.s.k.t.k.s.k.t.t.s.k.t.k.s.k.t.k.s.k.t.k.t.k.t.t.t.t.' },
+      ] },
+      boss: { label: 'Boss : le Dragon Écarlate', bpm: 152, loop: true, ch: [
+        { i: 'erhu', role: 'mel', v: 0.8, rev: 0.25, n: 'E4:4 F4:4 E4:4 r:4 | B4:4 C5:2 B4:2 A4:8 | E4:4 F4:4 A4:4 B4:4 | C5:4 B4:2 A4:2 F4:4 E4:4 | E5:4 F5:4 E5:2 D5:2 C5:4 | B4:4 C5:2 B4:2 A4:4 F4:4 | E4:2 F4:2 A4:2 B4:2 C5:2 B4:2 A4:2 F4:2 | E4:16' },
+        { i: 'guzheng', role: 'harm', v: 0.4, rev: 0.15, n: 'E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 | E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 | E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 | E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 | E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 | E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 | E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 E3:1 E4:1 F4:1 E4:1 | E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1 E3:1 B3:1 C4:1 B3:1' },
+        { i: 'drone', role: 'pad', v: 0.6, rev: 0.3, n: 'E2+B2:16 | E2+B2:16 | E2+B2:16 | E2+B2:16 | F2+C3:16 | E2+B2:16 | E2+B2:16 | E2+B2:16' },
+        { i: 'drums', role: 'drum', v: 0.7, n: 'g.k.k.s.t.k.k.s.t.k.k.s.t.k.kks.t.k.k.s.t.k.k.s.t.k.k.s.t.t.t.t.g.k.k.s.t.k.k.s.t.k.k.s.t.k.kks.t.k.k.s.t.k.k.s.t.t.t.t.tttt..x.' },
+      ] },
+      victory: { label: 'Victoire', bpm: 120, loop: false, ch: [
+        { i: 'dizi', role: 'mel', v: 0.85, rev: 0.35, n: 'C5:2 E5:2 G5:2 C6:6 A5:2 C6:10' },
+        { i: 'guzheng', role: 'harm', v: 0.5, rev: 0.3, n: 'C4+G4+C5:8 G3+D4+G4:4 C4+E4+G4+C5:12' },
+        { i: 'gbass', role: 'bass', v: 0.7, n: 'C3:8 G2:4 C2:12' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'k.k.k.s.....k.s.g.......' },
+      ] },
+      defeat: { label: 'Défaite', bpm: 60, loop: false, ch: [
+        { i: 'erhu', role: 'mel', v: 0.75, rev: 0.45, n: 'A4:4 G4:4 E4:4 D4:4 C4:4 D4:4 A3:16' },
+        { i: 'gbass', role: 'bass', v: 0.6, n: 'A2:8 E2:8 G2:8 A1:16' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'g.......................................' },
+      ] },
+    },
+  },
+
+  // ════════════ Caraïbes, 1700 : chants de marins ; violon de taverne, guitare, flûte irlandaise, bodhrán ════════════
+  caraibes: {
+    name: 'Caraïbes', era: '1700',
+    kit: { k: 'bodhran', s: 'snare', h: 'shaker', t: 'tom', x: 'crash', b: 'tamb' },
+    songs: {
+      title: { label: 'Titre', bpm: 96, loop: true, ch: [
+        { i: 'fiddle', role: 'mel', v: 0.75, rev: 0.25, n: 'A4:2 D5:2 D5:2 E5:2 F5:4 E5:2 D5:2 | C5:4 A4:4 C5:4 E5:4 | D5:2 F5:2 A5:2 G5:2 F5:4 E5:2 D5:2 | E5:8 A4:8 | A4:2 D5:2 D5:2 E5:2 F5:4 G5:2 A5:2 | C6:4 A5:4 G5:4 E5:4 | F5:2 E5:2 D5:2 C5:2 E5:4 C5:4 | D5:12 r:4' },
+        { i: 'guitar', role: 'harm', v: 0.5, rev: 0.2, n: 'D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:4 D3+A3+D4+F4:4 | C3+G3+C4+E4:4 C3+G3+C4+E4:2 C3+G3+C4+E4:2 C3+G3+C4+E4:4 C3+G3+C4+E4:4 | D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:4 D3+A3+D4+F4:4 | A2+E3+A3+C4:4 A2+E3+A3+C4:2 A2+E3+A3+C4:2 A2+E3+A3+C4:4 A2+E3+A3+C4:4 | D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:4 D3+A3+D4+F4:4 | C3+G3+C4+E4:4 C3+G3+C4+E4:2 C3+G3+C4+E4:2 C3+G3+C4+E4:4 C3+G3+C4+E4:4 | C3+G3+C4+E4:4 C3+G3+C4+E4:2 C3+G3+C4+E4:2 C3+G3+C4+E4:4 C3+G3+C4+E4:4 | D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:8' },
+        { i: 'bass', role: 'bass', v: 0.65, n: 'D2:4 A2:4 D2:4 A2:4 | C2:4 G2:4 C2:4 G2:4 | D2:4 A2:4 D2:4 A2:4 | A1:4 E2:4 A1:4 E2:4 | D2:4 A2:4 D2:4 A2:4 | C2:4 G2:4 C2:4 G2:4 | C2:4 G2:4 C2:4 G2:4 | D2:4 A2:4 D2:8' },
+        { i: 'drums', role: 'drum', v: 0.55, n: 'x...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s.s.k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.s.s.s.' },
+      ] },
+      port: { label: 'Au port (gigue)', bpm: 116, beat: 3, loop: true, ch: [
+        { i: 'fiddle', role: 'mel', v: 0.7, rev: 0.2, n: 'G4:1 B4:1 D5:1 G5:2 D5:1 | E5:1 D5:1 B4:1 D5:3 | C5:1 E5:1 G5:1 E5:2 C5:1 | B4:1 D5:1 G4:1 B4:3 | A4:1 B4:1 C5:1 D5:2 B4:1 | C5:1 A4:1 F#4:1 A4:3 | G4:1 B4:1 D5:1 E5:1 D5:1 B4:1 | A4:3 D4:3 | G5:1 F#5:1 E5:1 D5:2 B4:1 | C5:1 E5:1 G5:1 E5:3 | D5:1 B4:1 G4:1 B4:2 D5:1 | E5:1 D5:1 C5:1 B4:3 | C5:1 B4:1 A4:1 B4:2 G4:1 | A4:1 B4:1 C5:1 D5:3 | E5:1 D5:1 B4:1 A4:1 B4:1 A4:1 | G4:6' },
+        { i: 'guitar', role: 'harm', v: 0.4, rev: 0.15, n: 'r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 C4+E4+G4:2 r:1 C4+E4+G4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 C4+E4+G4:2 r:1 C4+E4+G4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 C4+E4+G4:2 r:1 C4+E4+G4:2 | r:1 A3+C4+E4:2 r:1 A3+C4+E4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2' },
+        { i: 'bass', role: 'bass', v: 0.6, n: 'G2:3 D3:3 | G2:3 D3:3 | C3:3 G2:3 | G2:3 D3:3 | D3:3 A2:3 | D3:3 A2:3 | G2:3 D3:3 | D3:3 A2:3 | G2:3 D3:3 | C3:3 G2:3 | G2:3 D3:3 | C3:3 G2:3 | A2:3 E3:3 | D3:3 A2:3 | D3:3 A2:3 | G2:3 G2:3' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'k.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hsbhk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.sbsb' },
+      ] },
+      sea: { label: 'En mer (valse de marins)', bpm: 84, beat: 2, loop: true, ch: [
+        { i: 'whistle', role: 'mel', v: 0.65, rev: 0.4, n: 'E5:2 G5:2 A5:2 | B5:4 A5:2 | G5:2 E5:2 D5:2 | E5:6 | G5:2 A5:2 B5:2 | D6:4 B5:2 | A5:2 G5:2 F#5:2 | E5:6 | B4:2 E5:2 F#5:2 | G5:4 F#5:2 | E5:2 D5:2 B4:2 | A4:6 | B4:2 D5:2 E5:2 | G5:4 F#5:2 | E5:2 D5:2 F#5:2 | E5:6' },
+        { i: 'guitar', role: 'harm', v: 0.4, rev: 0.3, n: 'E2:2 B3+E4+G4:2 B3+E4+G4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | D3:2 A3+D4+F#4:2 A3+D4+F#4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | C3:2 C4+E4+G4:2 C4+E4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | D3:2 A3+D4+F#4:2 A3+D4+F#4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | C3:2 C4+E4+G4:2 C4+E4+G4:2 | D3:2 A3+D4+F#4:2 A3+D4+F#4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2' },
+        { i: 'drums', role: 'drum', v: 0.3, n: 'k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....' },
+      ] },
+      battle: { label: 'Combat', bpm: 152, loop: true, ch: [
+        { i: 'fiddle', role: 'mel', v: 0.75, rev: 0.15, n: 'E5:2 B4:2 E5:2 F#5:2 G5:2 F#5:2 E5:2 D5:2 | B4:2 A4:2 B4:2 D5:2 E5:4 B4:4 | E5:2 B4:2 E5:2 G5:2 A5:2 G5:2 F#5:2 E5:2 | D5:2 B4:2 A4:2 F#4:2 E4:8 | G5:2 F#5:2 G5:2 A5:2 B5:4 A5:2 G5:2 | F#5:2 E5:2 D5:2 F#5:2 A5:4 F#5:4 | G5:2 E5:2 B4:2 E5:2 F#5:2 D5:2 A4:2 D5:2 | E5:4 B4:2 G4:2 E4:8' },
+        { i: 'guitar', role: 'harm', v: 0.4, rev: 0.1, n: 'r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 | r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 | r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 | r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 | r:2 G3+B3+D4+G4:2 r:2 G3+B3+D4+G4:2 r:2 G3+B3+D4+G4:2 r:2 G3+B3+D4+G4:2 | r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 | r:2 C3+G3+C4+E4:2 r:2 C3+G3+C4+E4:2 r:2 C3+G3+C4+E4:2 r:2 C3+G3+C4+E4:2 | r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2' },
+        { i: 'bass', role: 'bass', v: 0.7, n: 'E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | C2:2 C3:2 C2:2 C3:2 C2:2 C3:2 C2:2 C3:2 | E2:2 E3:2 E2:2 E3:2 E2:8' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.k.ssk.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.k.s.s.k.k.ssss' },
+      ] },
+      boss: { label: 'Boss : Sans-Visage / l\'Almirante', bpm: 132, loop: true, ch: [
+        { i: 'cello', role: 'mel', v: 0.8, rev: 0.25, n: 'D4:4 A4:4 F4:4 D4:4 | C#4:4 E4:4 A3:8 | D4:2 E4:2 F4:2 G4:2 A4:4 Bb4:4 | A4:8 C#4:8 | D5:4 C#5:2 Bb4:2 A4:4 F4:4 | G4:4 F4:2 E4:2 F4:4 D4:4 | Bb3:4 C#4:4 E4:4 G4:4 | D4:16' },
+        { i: 'fiddle', role: 'harm', v: 0.35, rev: 0.2, n: 'D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 | C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 | D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 | C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 | D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 | D5:1 Bb4:1 G4:1 Bb4:1 D5:1 Bb4:1 G4:1 Bb4:1 D5:1 Bb4:1 G4:1 Bb4:1 D5:1 Bb4:1 G4:1 Bb4:1 | C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 C#5:1 A4:1 E4:1 A4:1 | D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1 D5:1 A4:1 F4:1 A4:1' },
+        { i: 'bass', role: 'bass', v: 0.75, n: 'D2:4 D2:2 D2:2 D2:4 A1:4 | A1:4 A1:2 A1:2 A1:4 E2:4 | D2:4 D2:2 D2:2 D2:4 A1:4 | A1:4 A1:2 A1:2 A1:4 E2:4 | D2:4 D2:2 D2:2 D2:4 A1:4 | G1:4 G1:2 G1:2 G1:4 D2:4 | A1:4 A1:2 A1:2 A1:4 E2:4 | D2:4 D2:2 D2:2 D2:8' },
+        { i: 'drums', role: 'drum', v: 0.7, n: 'x..k..s.k..k..s.k..k..s.k..k..s.k..k..s.k..k..s.k..k..s.k.k.s.s.k..k..s.k..k..s.k..k..s.k..k..s.k..k..s.k..k..s.k.k.k.k.s.s.ssss' },
+      ] },
+      victory: { label: 'Victoire', bpm: 132, loop: false, ch: [
+        { i: 'fiddle', role: 'mel', v: 0.85, rev: 0.3, n: 'G4:2 B4:2 D5:2 G5:6 F#5:2 G5:10' },
+        { i: 'guitar', role: 'harm', v: 0.5, rev: 0.25, n: 'G3+B3+D4+G4:8 D3+A3+D4+F#4:4 G3+B3+D4+G4:12' },
+        { i: 'bass', role: 'bass', v: 0.7, n: 'G2:8 D2:4 G1:12' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.k.s.....k.s.x.......' },
+      ] },
+      defeat: { label: 'Défaite', bpm: 60, loop: false, ch: [
+        { i: 'whistle', role: 'mel', v: 0.65, rev: 0.45, n: 'E5:4 D5:4 B4:4 A4:4 G4:4 F#4:4 E4:16' },
+        { i: 'guitar', role: 'harm', v: 0.45, rev: 0.4, n: 'E3+B3+E4:8 C3+G3+C4:8 B2+F#3+B3:8 E2+B2+E3:16' },
+        { i: 'drums', role: 'drum', v: 0.45, n: 'k.......................................' },
+      ] },
+    },
+  },
+
+  // ════════════ Méditerranée, 1500 : Renaissance vénitienne ; luth, flûte à bec, vielle et bourdon, tambourin ════════════
+  mediterranee: {
+    name: 'Méditerranée', era: '1500',
+    kit: { k: 'tabor', b: 'tamb', s: 'snare', t: 'doum', h: 'shaker', x: 'crash' },
+    songs: {
+      title: { label: 'Titre (pavane)', bpm: 66, loop: true, ch: [
+        { i: 'recorder', role: 'mel', v: 0.75, rev: 0.45, n: 'D5:8 E5:4 F5:4 | G5:6 F5:2 E5:8 | D5:4 C5:4 D5:4 A4:4 | B4:4 C5:4 A4:8 | F5:8 G5:4 A5:4 | G5:6 F5:2 E5:4 D5:4 | C5:4 E5:4 D5:4 C#5:4 | D5:16' },
+        { i: 'lute', role: 'harm', v: 0.55, rev: 0.35, n: 'D3:2 A3:2 D4:2 F4:2 A4:2 F4:2 D4:2 A3:2 | C3:2 G3:2 C4:2 E4:2 G4:2 E4:2 C4:2 G3:2 | D3:2 A3:2 D4:2 F4:2 A4:2 F4:2 D4:2 A3:2 | G2:2 D3:2 G3:2 B3:2 D4:2 B3:2 G3:2 D3:2 | F2:2 C3:2 F3:2 A3:2 C4:2 A3:2 F3:2 C3:2 | C3:2 G3:2 C4:2 E4:2 G4:2 E4:2 C4:2 G3:2 | A2:2 E3:2 A3:2 C#4:2 E4:2 C#4:2 A3:2 E3:2 | D3:2 A3:2 D4:2 F4:2 A4:4 r:4' },
+        { i: 'drone', role: 'pad', v: 0.45, rev: 0.4, n: 'D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16' },
+        { i: 'drums', role: 'drum', v: 0.45, n: 'k...............k.......k...k...k.......k.......k.......k...k...k.......k...k...k.......k...k...k.......k...k...k.......k.......' },
+      ] },
+      port: { label: 'Au port (saltarello)', bpm: 120, beat: 3, loop: true, ch: [
+        { i: 'recorder', role: 'mel', v: 0.7, rev: 0.3, n: 'D5:2 E5:1 F5:2 E5:1 | D5:2 C5:1 A4:3 | C5:2 D5:1 E5:2 F5:1 | G5:3 E5:3 | F5:2 G5:1 A5:2 G5:1 | F5:2 E5:1 D5:3 | C5:2 A4:1 C5:2 E5:1 | D5:6 | A5:2 G5:1 F5:2 E5:1 | F5:2 G5:1 A5:3 | G5:2 F5:1 E5:2 D5:1 | C5:3 E5:3 | D5:2 F5:1 A5:2 F5:1 | G5:2 E5:1 C5:3 | D5:2 C5:1 A4:2 C#5:1 | D5:6' },
+        { i: 'lute', role: 'harm', v: 0.45, rev: 0.25, n: 'D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | F3+A3+C4:2 F3+A3+C4:1 F3+A3+C4:2 F3+A3+C4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | A3+C4+E4:2 A3+C4+E4:1 A3+C4+E4:2 A3+C4+E4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | F3+A3+C4:2 F3+A3+C4:1 F3+A3+C4:2 F3+A3+C4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | A3+C#4+E4:2 A3+C#4+E4:1 A3+C#4+E4:2 A3+C#4+E4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:3' },
+        { i: 'drone', role: 'pad', v: 0.35, rev: 0.3, n: 'D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'k.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bkbbk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bbbb' },
+      ] },
+      sea: { label: 'En mer', bpm: 60, loop: true, ch: [
+        { i: 'vielle', role: 'mel', v: 0.65, rev: 0.45, n: 'A4:8 D5:8 | C5:4 B4:4 A4:8 | G4:4 A4:4 B4:4 C5:4 | D5:16 | F5:8 E5:4 D5:4 | E5:8 C5:8 | D5:4 C5:4 B4:4 G4:4 | A4:16' },
+        { i: 'lute', role: 'harm', v: 0.4, rev: 0.4, n: 'D3:8 A3:8 | A2:8 E3:8 | G2:8 D3:8 | D3:8 A3:8 | F2:8 C3:8 | C3:8 G3:8 | G2:8 D3:8 | A2:8 E3:8' },
+        { i: 'drone', role: 'pad', v: 0.4, rev: 0.45, n: 'D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16' },
+        { i: 'drums', role: 'drum', v: 0.3, n: 'k...............................................................k...............................................................' },
+      ] },
+      battle: { label: 'Combat', bpm: 138, loop: true, ch: [
+        { i: 'vielle', role: 'mel', v: 0.75, rev: 0.2, n: 'A4:2 Bb4:2 A4:2 G4:2 A4:4 E4:4 | F4:2 G4:2 A4:2 Bb4:2 C5:4 A4:4 | D5:2 C5:2 Bb4:2 A4:2 G4:4 F4:4 | E4:4 F4:2 G4:2 A4:8 | A5:2 G5:2 F5:2 E5:2 F5:4 D5:4 | E5:2 D5:2 C5:2 Bb4:2 A4:4 G4:4 | F4:2 G4:2 A4:2 Bb4:2 C5:2 Bb4:2 A4:2 G4:2 | A4:8 A3:8' },
+        { i: 'lute', role: 'harm', v: 0.4, rev: 0.15, n: 'A3:2 E4:2 A4:2 E4:2 A3:2 E4:2 A4:2 E4:2 | F3:2 C4:2 F4:2 C4:2 F3:2 C4:2 F4:2 C4:2 | G3:2 D4:2 G4:2 D4:2 G3:2 D4:2 G4:2 D4:2 | A3:2 E4:2 A4:2 E4:2 A3:2 E4:2 A4:2 E4:2 | D3:2 A3:2 D4:2 A3:2 D3:2 A3:2 D4:2 A3:2 | C4:2 G4:2 C5:2 G4:2 C4:2 G4:2 C5:2 G4:2 | Bb3:2 F4:2 Bb4:2 F4:2 Bb3:2 F4:2 Bb4:2 F4:2 | A3:2 E4:2 A4:2 E4:2 A3:8' },
+        { i: 'drone', role: 'pad', v: 0.45, rev: 0.2, n: 'A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.ssssk.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.k.s.s.k.k.ssss' },
+      ] },
+      boss: { label: 'Boss : Barberousse', bpm: 144, loop: true, ch: [
+        { i: 'shawm', role: 'mel', v: 0.7, rev: 0.25, n: 'A4:2 Bb4:2 C#5:2 D5:2 E5:4 D5:2 C#5:2 | D5:2 C#5:2 Bb4:2 A4:2 Bb4:4 A4:4 | E5:2 F5:2 E5:2 D5:2 C#5:2 D5:2 Bb4:2 C#5:2 | A4:8 r:4 A4:2 A4:2 | A5:4 G5:2 F5:2 E5:4 F5:2 E5:2 | D5:2 E5:2 F5:2 E5:2 D5:4 C#5:4 | Bb4:2 C#5:2 D5:2 E5:2 F5:2 E5:2 D5:2 C#5:2 | A4:16' },
+        { i: 'lute', role: 'harm', v: 0.45, rev: 0.15, n: 'A3:2 A3:1 Bb3:1 A3:2 C#4:2 A3:2 A3:1 Bb3:1 A3:2 E3:2 | A3:2 A3:1 Bb3:1 A3:2 C#4:2 A3:2 A3:1 Bb3:1 A3:2 E3:2 | A3:2 A3:1 Bb3:1 A3:2 C#4:2 A3:2 A3:1 Bb3:1 A3:2 E3:2 | A3:2 A3:1 Bb3:1 A3:2 C#4:2 A3:2 A3:1 Bb3:1 A3:2 E3:2 | D4:2 D4:1 E4:1 D4:2 F4:2 D4:2 D4:1 E4:1 D4:2 A3:2 | D4:2 D4:1 E4:1 D4:2 F4:2 D4:2 D4:1 E4:1 D4:2 A3:2 | A3:2 A3:1 Bb3:1 A3:2 C#4:2 A3:2 A3:1 Bb3:1 A3:2 E3:2 | A3:2 A3:1 Bb3:1 A3:2 C#4:2 A3:8' },
+        { i: 'drone', role: 'pad', v: 0.5, rev: 0.25, n: 'A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | D3+A3:16 | D3+A3:16 | A2+E3:16 | A2+E3:16' },
+        { i: 'drums', role: 'drum', v: 0.7, kit: { s: 'tek' }, n: 'x.s.s.t.t.s.s...t.s.s.t.t.s.s.s.t.s.s.t.t.s.s...t.s.s.t.t.ssss..t.s.s.t.t.s.s...t.s.s.t.t.s.s.s.t.s.s.t.t.s.s...t.t.s.s.t.tssss.' },
+      ] },
+      victory: { label: 'Victoire', bpm: 120, loop: false, ch: [
+        { i: 'recorder', role: 'mel', v: 0.85, rev: 0.4, n: 'D5:2 F5:2 A5:2 D6:6 C#6:2 D6:10' },
+        { i: 'lute', role: 'harm', v: 0.5, rev: 0.3, n: 'D4+F4+A4:8 A3+C#4+E4:4 D4+F4+A4+D5:12' },
+        { i: 'drone', role: 'pad', v: 0.4, rev: 0.3, n: 'D3+A3:24' },
+        { i: 'drums', role: 'drum', v: 0.55, n: 'k.k.b.k.....k.b.k.......' },
+      ] },
+      defeat: { label: 'Défaite', bpm: 60, loop: false, ch: [
+        { i: 'vielle', role: 'mel', v: 0.65, rev: 0.5, n: 'A4:4 G4:4 F4:4 E4:4 D4:4 C#4:4 D4:16' },
+        { i: 'drone', role: 'pad', v: 0.4, rev: 0.45, n: 'D3+A3:40' },
+        { i: 'drums', role: 'drum', v: 0.4, n: 'k.......................................' },
+      ] },
+    },
+  },
+};
+
+// ════════════ Le moteur ════════════
+const NOTE_SEMI = { C: -9, D: -7, E: -5, F: -4, G: -2, A: 0, B: 2 };
+// fréquence d'une note écrite « C#5 », « Bb3 »…
+function noteHz(s) {
+  const m = /^([A-G])([#b]?)(-?\d)$/.exec(s);
+  if (!m) throw new Error('note illisible : ' + s);
+  const semi = NOTE_SEMI[m[1]] + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0) + (+m[3] - 4) * 12;
+  return 440 * Math.pow(2, semi / 12);
+}
+function parseVoice(s) {
+  return s.split(/\s+/).filter(x => x && x !== '|').map(tok => {
+    const [n, d] = tok.split(':');
+    if (!(+d > 0)) throw new Error('durée illisible : ' + tok);
+    return { f: n === 'r' ? [] : n.split('+').map(noteHz), d: +d };
+  });
+}
+
+// Instruments « moderne ». pluck : corde pincée (Karplus-Strong) ; blow : souffle ; bow : archet ; hold : nappe tenue.
+const INSTR = {
+  guzheng: { kind: 'pluck', decay: 0.9965, len: 2.4, soft: 0, lp: 5200, g: 0.55, bend: 1.012, strum: 0.014 },
+  lute: { kind: 'pluck', decay: 0.9955, len: 1.8, soft: 2, lp: 2600, g: 0.65, strum: 0.016 },
+  guitar: { kind: 'pluck', decay: 0.996, len: 2, soft: 1, lp: 3600, g: 0.5, strum: 0.012 },
+  gbass: { kind: 'pluck', decay: 0.998, len: 2.2, soft: 3, lp: 900, g: 0.9 },
+  bass: { kind: 'pluck', decay: 0.9975, len: 1.6, soft: 3, lp: 800, g: 0.9 },
+  dizi: { kind: 'blow', h2: 0.18, h3: 0.06, breath: 0.05, vib: 0.007, att: 0.04, rel: 0.12, bend: 0.965, g: 0.32 },
+  whistle: { kind: 'blow', h2: 0.12, h3: 0.02, breath: 0.04, vib: 0.009, att: 0.03, rel: 0.1, bend: 0.98, g: 0.3 },
+  recorder: { kind: 'blow', h2: 0.08, h3: 0.03, breath: 0.035, vib: 0.003, att: 0.05, rel: 0.12, bend: 1, g: 0.32 },
+  erhu: { kind: 'bow', lp: 2600, formant: 1500, fq: 2.2, vib: 0.009, att: 0.09, rel: 0.18, slide: 0.94, g: 0.18 },
+  fiddle: { kind: 'bow', lp: 4200, formant: 2400, fq: 1.2, vib: 0.006, att: 0.03, rel: 0.08, slide: 0.99, g: 0.16 },
+  cello: { kind: 'bow', lp: 1800, formant: 700, fq: 1.4, vib: 0.006, att: 0.08, rel: 0.2, slide: 0.99, g: 0.22 },
+  vielle: { kind: 'bow', lp: 2200, formant: 1100, fq: 1.8, vib: 0.004, att: 0.07, rel: 0.2, slide: 1, buzz: 0.12, g: 0.17 },
+  shawm: { kind: 'bow', lp: 3400, formant: 1700, fq: 2.6, vib: 0.005, att: 0.03, rel: 0.08, slide: 0.97, buzz: 0.3, g: 0.13 },
+  pad: { kind: 'hold', lp: 1000, att: 0.8, rel: 1.4, det: 0.004, voices: 3, g: 0.07 },
+  drone: { kind: 'hold', lp: 650, att: 0.5, rel: 0.9, det: 0.002, voices: 2, g: 0.1 },
+};
+// Style « rétro » : chaque rôle reçoit une voix de la puce
+const CHIP = {
+  mel: { wave: 'p25', g: 0.2, vib: 0.012 },
+  harm: { wave: 'p12', g: 0.09, vib: 0 },
+  bass: { wave: 'tri', g: 0.2, vib: 0 },
+  pad: { wave: 'p50', g: 0.06, vib: 0 },
+};
+
+const Music = {
+  ctx: null, out: null, revIn: null, style: 'moderne', song: null, timer: null, ks: new Map(),
+  init(ctx, dest) {
+    if (this.ctx) return;
+    const c = this.ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    this.out = c.createGain(); this.out.gain.value = 0.9;
+    const comp = c.createDynamicsCompressor();
+    comp.threshold.value = -16; comp.ratio.value = 4; comp.attack.value = 0.004; comp.release.value = 0.25;
+    this.out.connect(comp); comp.connect(dest || c.destination);
+    // réverbération : une réponse impulsionnelle tirée au hasard, qui s'éteint en ~2,5 s
+    const rev = c.createConvolver(), L = Math.floor(c.sampleRate * 2.6), ir = c.createBuffer(2, L, c.sampleRate);
+    for (let k = 0; k < 2; k++) { const d = ir.getChannelData(k); for (let i = 0; i < L; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / L, 3.2); }
+    rev.buffer = ir;
+    this.revIn = c.createGain(); this.revIn.gain.value = 0.55;
+    const damp = c.createBiquadFilter(); damp.type = 'lowpass'; damp.frequency.value = 4200;
+    this.revIn.connect(damp); damp.connect(rev); rev.connect(this.out);
+    const nb = c.createBuffer(1, c.sampleRate * 2, c.sampleRate), nd = nb.getChannelData(0);
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+    this.noiseBuf = nb;
+    const pulse = duty => { const n = 64, re = new Float32Array(n), im = new Float32Array(n); for (let k = 1; k < n; k++) im[k] = 2 / (k * Math.PI) * Math.sin(k * Math.PI * duty); return c.createPeriodicWave(re, im); };
+    this.waves = { p12: pulse(0.125), p25: pulse(0.25), p50: pulse(0.5) };
+  },
+
+  // ── Lecture ──
+  play(seaId, songId, style) {
+    this.init();
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    this.stop();
+    if (style) this.style = style;
+    const sea = MUSIC_SONGS[seaId], def = sea && sea.songs[songId];
+    if (!def) return;
+    const spb = 60 / def.bpm / (def.beat || 4), t0 = this.ctx.currentTime + 0.08;
+    // (la puce sonne plus maigre que les instruments : on la remonte un peu)
+    const bus = this.ctx.createGain(); bus.gain.value = this.style === 'retro' ? 1.5 : 0.8; bus.connect(this.out);
+    this.song = {
+      seaId, songId, def, spb, bus, t0,
+      chans: def.ch.map(ch => {
+        const g = this.ctx.createGain(); g.connect(bus);
+        const s = this.ctx.createGain(); s.gain.value = this.style === 'moderne' ? (ch.rev || 0) : 0.08; g.connect(s); s.connect(this.revIn);
+        return { ch, node: g, kit: Object.assign({}, sea.kit, ch.kit || {}), ev: ch.role === 'drum' ? ch.n.replace(/\s|\|/g, '') : parseVoice(ch.n), i: 0, t: t0, done: false };
+      }),
+    };
+    this.timer = setInterval(() => this.tick(), 25);
+    this.tick();
+  },
+  stop() {
+    if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    if (this.song) {
+      const b = this.song.bus, t = this.ctx.currentTime;
+      b.gain.setTargetAtTime(0, t, 0.08);
+      setTimeout(() => b.disconnect(), 800);
+      this.song = null;
+    }
+  },
+  tick() {
+    const S = this.song;
+    if (!S) return;
+    const ahead = this.ctx.currentTime + (this.lookahead || 0.15);   // (lookahead : rendu hors ligne de la planche)
+    for (const c of S.chans) {
+      while (!c.done && c.t < ahead) {
+        if (typeof c.ev === 'string') {
+          const k = c.ev[c.i];
+          if (k !== '.') this.drum(c.kit[k] || k, k, c.t, c.ch.v, c.node);
+          c.t += S.spb;
+        } else {
+          const e = c.ev[c.i], dur = e.d * S.spb;
+          e.f.forEach((f, j) => this.voice(c.ch, f, c.t, dur, e.f.length, j, c.node));
+          c.t += dur;
+        }
+        if (++c.i >= c.ev.length) { c.i = 0; if (!S.def.loop) c.done = true; }
+      }
+    }
+    if (!S.def.loop && S.chans.every(c => c.done) && this.ctx.currentTime > Math.max(...S.chans.map(c => c.t)) + 2) this.stop();
+  },
+  // longueur d'une voix en pas (pour vérifier que les voix d'un morceau bouclent ensemble)
+  steps(ch) { return ch.role === 'drum' ? ch.n.replace(/\s|\|/g, '').length : parseVoice(ch.n).reduce((a, e) => a + e.d, 0); },
+
+  // ── Voix mélodiques ──
+  voice(ch, f, t, dur, n, j, dst) {
+    if (this.style === 'retro') return this.chip(ch, f, t, dur, n, dst);
+    const p = INSTR[ch.i];
+    const v = ch.v * (n > 1 ? 1 / Math.sqrt(n) : 1);
+    if (p.kind === 'pluck') return this.pluck(p, f, t + j * (p.strum || 0), dur, v, dst);
+    if (p.kind === 'blow') return this.blow(p, f, t, dur, v, dst);
+    if (p.kind === 'bow') return this.bow(p, f, t, dur, v, dst);
+    if (p.kind === 'hold') return this.hold(p, f, t, dur, v, dst);
+  },
+  env(g, t, peak, att, end, rel) {
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(peak, t + att);
+    g.gain.setValueAtTime(peak, Math.max(t + att, end));
+    g.gain.linearRampToValueAtTime(0, Math.max(t + att, end) + rel);
+  },
+  vibrato(param, f, depth, t, delay, end) {
+    if (!depth) return;
+    const c = this.ctx, l = c.createOscillator(), lg = c.createGain();
+    l.frequency.value = 5.4 + Math.random() * 0.6;
+    lg.gain.setValueAtTime(0, t); lg.gain.linearRampToValueAtTime(f * depth, t + delay + 0.2);
+    l.connect(lg); lg.connect(param); l.start(t); l.stop(end);
+  },
+  // corde pincée : un tampon de bruit qui tourne en boucle en s'adoucissant (Karplus-Strong), mis en cache par note
+  ksBuf(f, p) {
+    const sr = this.ctx.sampleRate, N = Math.max(2, Math.floor(sr / f)), key = N + '|' + p.decay + '|' + p.len + '|' + p.soft;
+    let b = this.ks.get(key);
+    if (!b) {
+      const L = Math.floor(p.len * sr), ring = new Float32Array(N);
+      for (let i = 0; i < N; i++) ring[i] = Math.random() * 2 - 1;
+      for (let s = 0; s < p.soft; s++) for (let i = 0; i < N; i++) ring[i] = (ring[i] + ring[(i + 1) % N]) * 0.5;
+      let mx = 0; for (let i = 0; i < N; i++) mx = Math.max(mx, Math.abs(ring[i]));
+      for (let i = 0; i < N; i++) ring[i] /= mx || 1;
+      b = this.ctx.createBuffer(1, L, sr);
+      const d = b.getChannelData(0);
+      let q = 0;
+      for (let i = 0; i < L; i++) { const a = ring[q], nx = q + 1 === N ? 0 : q + 1; d[i] = a; ring[q] = p.decay * 0.5 * (a + ring[nx]); q = nx; }
+      this.ks.set(key, b);
+    }
+    return { b, rate: f / (sr / N) };
+  },
+  pluck(p, f, t, dur, v, dst) {
+    const c = this.ctx, { b, rate } = this.ksBuf(f, p), src = c.createBufferSource();
+    src.buffer = b;
+    if (p.bend) { src.playbackRate.setValueAtTime(rate * p.bend, t); src.playbackRate.exponentialRampToValueAtTime(rate, t + 0.07); }
+    else src.playbackRate.value = rate;
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = p.lp;
+    const g = c.createGain(), end = t + Math.max(dur, 0.1) + 0.5;
+    g.gain.setValueAtTime(v * p.g, t); g.gain.setValueAtTime(v * p.g, end - 0.3); g.gain.linearRampToValueAtTime(0, end);
+    src.connect(lp); lp.connect(g); g.connect(dst);
+    src.start(t); src.stop(Math.min(end, t + p.len));
+  },
+  blow(p, f, t, dur, v, dst) {
+    const c = this.ctx, end = t + dur - 0.02;
+    const g = c.createGain(); this.env(g, t, v * p.g, p.att, end, p.rel); g.connect(dst);
+    const oscs = [[1, 'sine', 1], [2, 'sine', p.h2], [3, 'sine', p.h3]].filter(o => o[2] > 0).map(([m, type, a]) => {
+      const o = c.createOscillator(), og = c.createGain(); o.type = type; og.gain.value = a;
+      o.frequency.setValueAtTime(f * m * p.bend, t); o.frequency.exponentialRampToValueAtTime(f * m, t + 0.06);
+      this.vibrato(o.frequency, f * m, p.vib, t, 0.18, end + p.rel);
+      o.connect(og); og.connect(g); o.start(t); o.stop(end + p.rel + 0.05); return o;
+    });
+    // souffle : du bruit filtré autour de la note, surtout à l'attaque
+    const nz = c.createBufferSource(); nz.buffer = this.noiseBuf; nz.loop = true;
+    const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = Math.min(9000, f * 2); bp.Q.value = 1.2;
+    const ng = c.createGain();
+    ng.gain.setValueAtTime(0, t); ng.gain.linearRampToValueAtTime(v * p.breath * 2.5, t + 0.02); ng.gain.exponentialRampToValueAtTime(v * p.breath * 0.4 + 0.0001, t + 0.18); ng.gain.linearRampToValueAtTime(0, end + p.rel);
+    nz.connect(bp); bp.connect(ng); ng.connect(dst); nz.start(t, Math.random()); nz.stop(end + p.rel + 0.05);
+    return oscs;
+  },
+  bow(p, f, t, dur, v, dst) {
+    const c = this.ctx, end = t + dur - 0.02;
+    const g = c.createGain(); this.env(g, t, v * p.g, p.att, end, p.rel);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = p.lp; lp.Q.value = 0.6;
+    const pk = c.createBiquadFilter(); pk.type = 'peaking'; pk.frequency.value = p.formant; pk.Q.value = p.fq; pk.gain.value = 7;
+    lp.connect(pk); pk.connect(g); g.connect(dst);
+    const mk = (type, det, a) => {
+      const o = c.createOscillator(), og = c.createGain(); o.type = type; og.gain.value = a;
+      o.frequency.setValueAtTime(f * det * p.slide, t); o.frequency.exponentialRampToValueAtTime(f * det, t + 0.08);
+      this.vibrato(o.frequency, f * det, p.vib, t, 0.15, end + p.rel);
+      o.connect(og); og.connect(lp); o.start(t); o.stop(end + p.rel + 0.05);
+    };
+    mk('sawtooth', 1, 1); mk('sawtooth', 1.003, 0.6);
+    if (p.buzz) mk('square', 1, p.buzz);
+  },
+  hold(p, f, t, dur, v, dst) {
+    const c = this.ctx, end = t + dur;
+    const g = c.createGain(); this.env(g, t, v * p.g, p.att, end, p.rel);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = p.lp;
+    lp.connect(g); g.connect(dst);
+    for (let k = 0; k < p.voices; k++) {
+      const o = c.createOscillator(); o.type = 'sawtooth';
+      o.frequency.value = f * (1 + (k - (p.voices - 1) / 2) * p.det);
+      o.connect(lp); o.start(t); o.stop(end + p.rel + 0.05);
+    }
+  },
+  // la puce : onde carrée à rapport cyclique (12,5 %, 25 %, 50 %) ou triangle, enveloppe sèche
+  chip(ch, f, t, dur, n, dst) {
+    const c = this.ctx, r = CHIP[ch.role] || CHIP.harm, o = c.createOscillator(), g = c.createGain();
+    if (r.wave === 'tri') o.type = 'triangle'; else o.setPeriodicWave(this.waves[r.wave]);
+    o.frequency.value = f;
+    const end = t + Math.max(0.04, dur - 0.015), peak = r.g * ch.v / (n > 1 ? n * 0.7 : 1);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + 0.004);
+    g.gain.linearRampToValueAtTime(peak * 0.7, t + Math.min(0.12, dur * 0.5)); g.gain.setValueAtTime(peak * 0.7, end); g.gain.linearRampToValueAtTime(0, end + 0.03);
+    if (r.vib && dur > 0.25) this.vibrato(o.frequency, f, r.vib, t, 0.12, end + 0.03);
+    o.connect(g); g.connect(dst); o.start(t); o.stop(end + 0.05);
+  },
+
+  // ── Percussions ──
+  noise(t, dur, type, freq, q, vol, dst, a) {
+    const c = this.ctx, s = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    s.buffer = this.noiseBuf; f.type = type; f.frequency.value = freq; f.Q.value = q || 0.7;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + (a || 0.002)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(dst); s.start(t, Math.random() * 1.5); s.stop(t + dur + 0.02);
+  },
+  thump(t, f0, f1, dur, vol, dst, type) {
+    const c = this.ctx, o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur * 0.6);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(dst); o.start(t); o.stop(t + dur + 0.02);
+  },
+  gong(t, v, dst) {
+    const c = this.ctx;
+    [[1, 1], [1.48, 0.6], [2.09, 0.45], [2.56, 0.3], [3.12, 0.22], [4.2, 0.12]].forEach(([m, a]) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.frequency.setValueAtTime(92 * m, t); o.frequency.exponentialRampToValueAtTime(92 * m * 0.985, t + 2.5);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v * a * 0.22, t + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + 3.2 / Math.sqrt(m));
+      o.connect(g); g.connect(dst); o.start(t); o.stop(t + 3.5);
+    });
+    this.noise(t, 0.4, 'bandpass', 900, 0.8, v * 0.08, dst);
+  },
+  drum(kind, letter, t, v, dst) {
+    if (this.style === 'retro') return this.chipDrum(letter, t, v, dst);
+    switch (kind) {
+      case 'taiko': this.thump(t, 150, 52, 0.75, v * 1.1, dst); this.noise(t, 0.09, 'lowpass', 500, 0.7, v * 0.35, dst); break;
+      case 'taikoS': this.thump(t, 230, 110, 0.28, v * 0.7, dst); this.noise(t, 0.05, 'bandpass', 1300, 1, v * 0.25, dst); break;
+      case 'wood': this.thump(t, 1150, 950, 0.07, v * 0.45, dst); this.noise(t, 0.03, 'bandpass', 2600, 3, v * 0.2, dst); break;
+      case 'rim': this.thump(t, 1750, 1650, 0.04, v * 0.3, dst); this.noise(t, 0.025, 'highpass', 4000, 0.7, v * 0.2, dst); break;
+      case 'gong': this.gong(t, v, dst); break;
+      case 'shaker': this.noise(t, 0.07, 'bandpass', 7000, 1, v * 0.18, dst, 0.012); break;
+      case 'bodhran': this.thump(t, 170, 78, 0.32, v * 0.85, dst); this.noise(t, 0.05, 'lowpass', 1500, 0.7, v * 0.2, dst); break;
+      case 'snare': this.noise(t, 0.17, 'bandpass', 2400, 0.8, v * 0.5, dst); this.thump(t, 220, 160, 0.07, v * 0.3, dst, 'triangle'); break;
+      case 'tom': this.thump(t, 140, 90, 0.32, v * 0.8, dst); break;
+      case 'crash': this.noise(t, 1.7, 'highpass', 5200, 0.7, v * 0.3, dst); break;
+      case 'tamb': this.noise(t, 0.16, 'highpass', 7200, 0.7, v * 0.28, dst); this.noise(t + 0.025, 0.12, 'highpass', 8200, 0.7, v * 0.16, dst); break;
+      case 'tabor': this.thump(t, 210, 120, 0.22, v * 0.6, dst); this.noise(t, 0.09, 'bandpass', 1900, 0.9, v * 0.25, dst); break;
+      case 'doum': this.thump(t, 105, 66, 0.42, v * 0.95, dst); break;
+      case 'tek': this.noise(t, 0.035, 'highpass', 3600, 0.7, v * 0.35, dst); this.thump(t, 950, 900, 0.025, v * 0.2, dst); break;
+      default: this.thump(t, 90, 42, 0.35, v * 0.8, dst);
+    }
+  },
+  chipDrum(k, t, v, dst) {
+    const sq = (f0, f1, d, vol) => { const c = this.ctx, o = c.createOscillator(), g = c.createGain(); o.setPeriodicWave(this.waves.p50); o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + d); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g); g.connect(dst); o.start(t); o.stop(t + d + 0.02); };
+    if (k === 'k') sq(160, 48, 0.13, v * 0.3);
+    else if (k === 't') this.thump(t, 150, 70, 0.16, v * 0.5, dst, 'triangle');
+    else if (k === 's' || k === 'b') this.noise(t, 0.12, 'highpass', 900, 0.5, v * 0.17, dst);
+    else if (k === 'h') this.noise(t, 0.035, 'highpass', 6000, 0.5, v * 0.18, dst);
+    else if (k === 'w') sq(820, 700, 0.03, v * 0.12);
+    else if (k === 'g' || k === 'x') { this.noise(t, 0.8, 'highpass', 1500, 0.5, v * 0.12, dst); sq(110, 80, 0.4, v * 0.1); }
+  },
 };
 
 </script>
@@ -91577,7 +92079,7 @@ const Game = {
   defaultGlobal() {
     return {
       v: 1, sea: 'chine', sail: 'creme', sails: ['creme'],
-      settings: { music: 0.5, sfx: 0.8, muted: false, touch: 'auto', hints: true },
+      settings: { music: 0.5, sfx: 0.8, muted: false, touch: 'auto', hints: true, musicStyle: 'moderne' },
     };
   },
   loadGlobal() {
@@ -94259,12 +94761,14 @@ const SeaScene = {
       return d < (s.fleeing ? 240 : 560);
     });
     if (hostiles.length) {
+      // (contre un pirate nommé ou le boss de la mer : le thème du boss, même s'il arrive en cours de combat)
+      const theme = hostiles.some(s => s.named) ? 'boss' : 'battle';
       if (!this.combat) {
         this.combat = true;
         if (this.auto) { this.auto = false; Bus.emit('toast', { t: T('mer.branleBas'), k: 'bad' }); }
         this.fast = false;
-        Sound.play('battle');
-      }
+        Sound.play(theme);
+      } else if (theme === 'boss' && Sound.songName === 'battle') Sound.play('boss');
       this.calmT = 0;
     } else if (this.combat) {
       this.calmT += dt;
@@ -94583,7 +95087,7 @@ const SeaScene = {
     }
     this.stormWasIn = inAny;
     this.rain = rainVol;
-    Sound.ambient('rain', rainVol * 0.35);
+    Sound.ambient('rain', rainVol * 0.2);
     Sound.ambient('wind', rainVol * 0.25);
     this.storms = this.storms.filter(s => Math.hypot(s.x - p.x, s.y - p.y) < 2200 && !(SEA.stormLife && s.r < 24));
   },
@@ -96247,6 +96751,8 @@ const UI = {
     }
     const hints = h('input', { type: 'checkbox', id: 'opt-hints' }); hints.checked = s.hints;
     hints.onchange = () => { s.hints = hints.checked; Game.saveGlobal(); this.showHud(this.mode); };
+    // style de la musique : moderne (instruments) ou rétro (la puce de l'Amstrad) ; la musique en cours change aussitôt
+    const styleSel = h('div', { class: 'tabs' }, ...['moderne', 'retro'].map(v => btn(T('options.style.' + v), () => { s.musicStyle = v; Game.saveGlobal(); Sound.restyle(); this.close(); this.options(); }, 'sm' + ((s.musicStyle || 'moderne') === v ? ' on' : ''))));
     const touchSel = h('div', { class: 'tabs' }, ...['auto', 'always', 'never'].map(v => [v, T('options.tactile.' + v)]).map(([v, l]) => btn(l, () => { s.touch = v; Game.saveGlobal(); this.close(); this.options(); this.showHud(this.mode); }, 'sm' + (s.touch === v ? ' on' : ''))));
     // langue (dès qu'il y en a deux) : chaque langue écrite dans sa propre langue ; elle se change depuis l'écran titre
     const langs = Lang.available();
@@ -96255,6 +96761,7 @@ const UI = {
       : h('p', { class: 'hint' }, T('options.langueTitre'))];
     const body = h('div', { class: 'stack' },
       slider(T('options.musique'), 'music'), slider(T('options.bruitages'), 'sfx'),
+      h('h4', null, T('options.styleMusique')), styleSel,
       h('label', { class: 'chk' }, mute, T('options.couper')),
       h('label', { class: 'chk' }, hints, T('options.objectifs')),
       h('h4', null, T('options.tactile')), touchSel,
@@ -108915,7 +109422,7 @@ const Main = {
     addEventListener('resize', () => this.resize());
     Bus.on('audio-unlock', () => Sound.unlock());
     Bus.on('audio-ready', () => {
-      if (this.sceneName === 'port') { Sound.ambient('sea', 0.05); if (PortScene.weather === 'rain') Sound.ambient('rain', 0.22); }
+      if (this.sceneName === 'port') { Sound.ambient('sea', 0.05); if (PortScene.weather === 'rain') Sound.ambient('rain', 0.11); }
       else if (this.sceneName === 'sea') Sound.ambient('sea', 0.16);
     });
     Bus.on('key', e => this.onKey(e));
@@ -108982,6 +109489,7 @@ const Main = {
     PortScene.W = 0; TitleScene.W = 0;
     ShipTop.cache.clear(); ShipSide.cache.clear();
     UI.title();
+    Sound.play('title');   // (le thème de l'écran titre de la mer choisie)
   },
 
   // ── Changer de langue (écran titre) : phrases, textes des mers (Seas.use), polices, page, puis la mer comme au changement de mer ──
@@ -109034,7 +109542,7 @@ const Main = {
     UI.showHud('port');
     Sound.play('port');
     Sound.ambient('sea', 0.05);
-    Sound.ambient('rain', PortScene.weather === 'rain' ? 0.22 : 0);
+    Sound.ambient('rain', PortScene.weather === 'rain' ? 0.11 : 0);
     Sound.ambient('wind', 0);
     Game.saveRun();
     if (SEA.rules && SEA.rules.onEnterPort) SEA.rules.onEnterPort(pid);   // (une captivité en cours…)
