@@ -355,6 +355,11 @@ kbd.pill { font-size: 11.5px; padding: 1px 7px; }
 .mk-foot { margin-top: 10px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; background: rgba(243, 235, 218, 0.045); border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; }
 .mk-foot.contract { background: rgba(232, 181, 74, 0.1); border-color: rgba(232, 181, 74, 0.35); }
 .mk-foot.jade-note { background: rgba(63, 174, 138, 0.1); border-color: rgba(63, 174, 138, 0.35); }
+/* démo : l'invitation au jeu complet sur l'écran de fin */
+.demo-end { margin: 12px 0; padding: 12px 14px; text-align: center; background: rgba(232, 181, 74, 0.08); border: 1px solid rgba(232, 181, 74, 0.35); border-radius: 12px; }
+.demo-end h4 { margin: 0 0 6px; }
+.demo-end p { margin: 0 0 10px; }
+.demo-end .row { justify-content: center; }
 
 /* ── Chantier ── */
 .ship-card { display: grid; grid-template-columns: 170px 1fr; gap: 14px; align-items: center; }
@@ -913,10 +918,13 @@ function accordCaisses(n, pp) { return pp + (TXT.crateMasc ? '' : 'e') + (Math.a
 function hourOf(day) { return ((day % 1) + 1) % 1 * 24; }
 
 // ── Stockage local (tolérant : navigation privée, bac à sable…) ──
+// (la démo range ses clés à part, « silkcannons.demo.meta »… : sur le site du studio, tous les jeux partagent le même
+//  stockage ; elle n'efface donc jamais que ses propres clés, une à une)
 const Store = {
-  get(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
-  del(k) { try { localStorage.removeItem(k); } catch (e) { /* rien */ } },
+  key(k) { return typeof DEMO !== 'undefined' && DEMO && DEMO.storePrefix ? k.replace(/^mdj\./, DEMO.storePrefix) : k; },
+  get(k, def) { try { const v = localStorage.getItem(this.key(k)); return v ? JSON.parse(v) : def; } catch (e) { return def; } },
+  set(k, v) { try { localStorage.setItem(this.key(k), JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(this.key(k)); } catch (e) { /* rien */ } },
 };
 
 // ── Bus d'événements ──
@@ -1042,6 +1050,9 @@ const Lang = {
   def(code, d) { this.defs[code] = Object.assign(this.defs[code] || {}, d); },
   ui(code, m) { this.msgs[code] = Object.assign(this.msgs[code] || {}, m); this.cache.msg = {}; this.early(); },
   sea(code, id, m) { const s = this.seaTexts[code] || (this.seaTexts[code] = {}); s[id] = Object.assign(s[id] || {}, m); this.cache.seas = {}; },
+  // textes propres à la démo (js/lang/<code>/demo.js, dans le seul build de la démo) : des phrases de l'interface
+  // et des textes de la mer de la démo, à chemins plats, qui remplacent ceux du jeu complet
+  demo(code, m) { if (m.ui) this.ui(code, m.ui); if (m.sea) this.sea(code, 'demo', m.sea); },
   // langues proposées au joueur (la langue de test seulement en mode développeur)
   available() { return Object.keys(this.defs).filter(c => c !== 'qps' || this.dev); },
 
@@ -1235,11 +1246,15 @@ const Lang = {
   // la définition d'une mer dans la langue en cours : la définition française, avec les textes traduits posés dessus
   seaDef(id) {
     const base = SEA_DEFS[id];
-    if (!base || this.code === 'fr') return base;
+    const demo = typeof DEMO !== 'undefined' && DEMO && id === DEMO.sea;
+    if (!base || (this.code === 'fr' && !demo)) return base;
     const c = this.cache.seas;
     if (c[id]) return c[id];
-    const flat = this.code === 'qps' ? this.pseudoSea(base) : (this.seaTexts[this.code] || {})[id];
-    return (c[id] = flat ? this.overlay(base, flat) : base);
+    const flat = this.code === 'fr' ? null : this.code === 'qps' ? this.pseudoSea(base) : (this.seaTexts[this.code] || {})[id];
+    let d = flat ? this.overlay(base, flat) : base;
+    // (la démo pose ses propres textes par-dessus, le français à défaut : js/lang/<code>/demo.js, Lang.demo)
+    if (demo) d = this.overlay(d, Object.assign({}, (this.seaTexts.fr || {}).demo, (this.seaTexts[this.code] || {}).demo));
+    return (c[id] = d);
   },
   // pose des textes à chemins plats sur une définition, sans toucher à l'original (copie des seuls objets traversés,
   // accesseurs compris). Chemin : clés d'objets, identifiants (« goods/riz/name ») ou rangs (« intro/0 ») dans les listes.
@@ -1715,7 +1730,7 @@ Lang.ui('fr', {
   'titre.hautsFaits': 'Hauts faits',
   'titre.records': 'Records',
   'titre.record': 'Record {record} {monnaie} · {titre}',
-  'titre.hommage': 'Hommage à Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
 
   // ── Nouvelle partie ──
   'nouvelle.nomCapitaine': 'Nom du capitaine',
@@ -1917,6 +1932,9 @@ Lang.ui('fr', {
 
   // ── Débuts et astuces ──
   'titre.merVerrouillee': 'Cette mer n\'est pas encore débloquée.',
+  'titre.merCondition': 'Pour l\'ouvrir : atteindre {somme} {monnaie} dans {mer}, ou y gagner {n} {jetons} au total (vous en avez {acquis}).',   // mer : « la mer de Chine » (seaName de la mer précédente), nom : son nom court ; acquis : jetons déjà gagnés là-bas
+  'titre.merApres': 'Ouvrez d\'abord {mer}.',   // mer : « la mer des Caraïbes », nom : « Caraïbes »
+  'fin.merOuverte': 'Nouvelle mer ouverte : {mer} !',   // mer : le nom court de la mer ouverte (« Caraïbes »)
   'tuto.tactile': 'Suivez l\'objectif en haut de l\'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.',
   'tuto.clavier': 'Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.',
   'tuto.paysage': 'Astuce : tournez votre téléphone en paysage pour mieux voir la mer.',
@@ -2554,7 +2572,7 @@ Lang.ui('en', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Best: {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'A tribute to Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Captain\'s name',
   // Nom du navire
@@ -2897,6 +2915,9 @@ Lang.ui('en', {
   'journal.tresorJade': 'Treasure dug up: {somme} {monnaie} and {n} {marchandise}.',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'This sea is not unlocked yet.',
+  'titre.merCondition': 'To unlock: reach {somme} {monnaie} in {mer}, or earn {n} {jetons} there in total (you have {acquis}).',
+  'titre.merApres': 'Unlock {mer} first.',
+  'fin.merOuverte': 'New sea unlocked: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Follow the objective at the top of the screen. Tap a building, or a shortcut at the bottom, to go there.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -10455,7 +10476,7 @@ Lang.ui('zh', {
   // Record {record} {monnaie} · {titre}
   'titre.record': '纪录{record}{monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': '向《Tai-Pan》（Ocean，1986）致敬。',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': '船长姓名',
   // Nom du navire
@@ -10798,6 +10819,9 @@ Lang.ui('zh', {
   'journal.tresorJade': '挖出宝藏：{somme}{monnaie}及{n}{unites}{marchandise}。',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': '此海域尚未解锁。',
+  'titre.merCondition': '解锁条件：在{mer}达到{somme}{monnaie}，或在该海域累计获得{n}{jetons}（已有{acquis}）。',
+  'titre.merApres': '请先解锁{mer}。',
+  'fin.merOuverte': '新海域已解锁：{mer}！',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '跟着屏幕上方的目标走。点按建筑或下方的快捷按钮即可前往。',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -18329,7 +18353,7 @@ Lang.ui('zht', {
   // Record {record} {monnaie} · {titre}
   'titre.record': '紀錄{record}{monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': '向《Tai-Pan》（Ocean，1986）致敬。',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': '船長姓名',
   // Nom du navire
@@ -18672,6 +18696,9 @@ Lang.ui('zht', {
   'journal.tresorJade': '挖出寶藏：{somme}{monnaie}及{n}{unites}{marchandise}。',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': '此海域尚未解鎖。',
+  'titre.merCondition': '解鎖條件：在{mer}達到{somme}{monnaie}，或在該海域累計獲得{n}{jetons}（已有{acquis}）。',
+  'titre.merApres': '請先解鎖{mer}。',
+  'fin.merOuverte': '新海域已解鎖：{mer}！',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '跟著螢幕上方的目標走。點選建築或下方的快捷按鈕即可前往。',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -26204,7 +26231,7 @@ Lang.ui('ja', {
   // Record {record} {monnaie} · {titre}
   'titre.record': '最高記録{record}{monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': '『Tai-Pan』（Ocean、1986年）へのオマージュ。',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': '船長の名',
   // Nom du navire
@@ -26547,6 +26574,9 @@ Lang.ui('ja', {
   'journal.tresorJade': '宝を掘り出した：{somme}{monnaie}と{marchandise}{n}{unites}。',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'この海はまだ解放されていません。',
+  'titre.merCondition': '解放条件：{mer}で{somme}{monnaie}に到達するか、そこで{jetons}を累計{n}枚獲得する（現在{acquis}枚）。',
+  'titre.merApres': 'まず{mer}を解放してください。',
+  'fin.merOuverte': '新たな海が解放されました：{mer}！',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '画面上部の目標に従いましょう。建物か、下のショートカットに触れると、そこへ向かいます。',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -34112,7 +34142,7 @@ Lang.ui('ko', {
   // Record {record} {monnaie} · {titre}
   'titre.record': '최고 {record}{monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': '《타이판》(Tai-Pan, Ocean, 1986)에 바치는 헌정작.',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': '선장 이름',
   // Nom du navire
@@ -34455,6 +34485,9 @@ Lang.ui('ko', {
   'journal.tresorJade': '보물 발굴: {somme}{monnaie}, {marchandise} {n}{unites}.',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': '아직 열리지 않은 바다입니다.',
+  'titre.merCondition': '{mer}에서 {somme}{monnaie}에 도달하거나, 그곳에서 {jetons}을(를) 모두 {n}개 모으면 열립니다(현재 {acquis}개).',
+  'titre.merApres': '먼저 {mer}을(를) 여십시오.',
+  'fin.merOuverte': '새 바다가 열렸습니다: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '화면 위쪽의 목표를 따르십시오. 건물이나 아래쪽 바로 가기를 누르면 그리로 갑니다.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -41985,7 +42018,7 @@ Lang.ui('ru', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Рекорд: {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'Дань памяти игре Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Имя капитана',
   // Nom du navire
@@ -42328,6 +42361,9 @@ Lang.ui('ru', {
   'journal.tresorJade': 'Выкопан клад: {somme} {monnaie} и {marchandise} ({n} {unites}).',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'Это море ещё не открыто.',
+  'titre.merCondition': 'Как открыть: рекорд {somme} {monnaie} или {n} {jetons}, заработанных всего. Море: {mer}. Сейчас: {acquis}.',
+  'titre.merApres': 'Сначала откройте: {mer}.',
+  'fin.merOuverte': 'Открыто новое море: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Следуйте цели вверху экрана. Коснитесь здания или ярлыка внизу, чтобы пройти туда.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -49998,7 +50034,7 @@ Lang.ui('es', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Récord: {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'Homenaje a Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Nombre del capitán',
   // Nom du navire
@@ -50341,6 +50377,9 @@ Lang.ui('es', {
   'journal.tresorJade': 'Tesoro desenterrado: {somme} {monnaie} y {n} {unites} de {marchandise}.',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'Este mar aún no está desbloqueado.',
+  'titre.merCondition': 'Para desbloquearlo: alcanza {somme} {monnaie} en {mer}, o gana allí {n} {jetons} en total (tienes {acquis}).',
+  'titre.merApres': 'Desbloquea primero {mer}.',
+  'fin.merOuverte': '¡Nuevo mar desbloqueado: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Sigue el objetivo de la parte superior de la pantalla. Toca un edificio, o un atajo de la parte inferior, para ir allí.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -57897,7 +57936,7 @@ Lang.ui('pt', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Recorde {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'Homenagem a Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Nome do capitão',
   // Nom du navire
@@ -58240,6 +58279,9 @@ Lang.ui('pt', {
   'journal.tresorJade': 'Tesouro desenterrado: {somme} {monnaie} e {n} {marchandise}.',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'Este mar ainda não foi desbloqueado.',
+  'titre.merCondition': 'Para desbloquear: alcance {somme} {monnaie} ou ganhe {n} {jetons} no total navegando {mer} (você tem {acquis}).',
+  'titre.merApres': 'Desbloqueie primeiro {mer}.',
+  'fin.merOuverte': 'Novo mar desbloqueado: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Siga o objetivo no alto da tela. Toque em um prédio, ou em um atalho embaixo, para ir até lá.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -65794,7 +65836,7 @@ Lang.ui('de', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Rekord {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'Eine Hommage an Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Name des Kapitäns',
   // Nom du navire
@@ -66137,6 +66179,9 @@ Lang.ui('de', {
   'journal.tresorJade': 'Schatz ausgegraben: {somme} {monnaie} und {n} {unites} {marchandise}.',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'Dieses Meer ist noch nicht freigeschaltet.',
+  'titre.merCondition': 'Freischaltung über {mer}: {somme} {monnaie} erreichen oder dort insgesamt {n} {jetons} verdienen (bisher {acquis}).',
+  'titre.merApres': 'Schalte zuerst {mer} frei.',
+  'fin.merOuverte': 'Neues Meer freigeschaltet: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Folge dem Ziel oben auf dem Bildschirm. Tippe auf ein Gebäude oder unten auf eine Abkürzung, um hinzugehen.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -73691,7 +73736,7 @@ Lang.ui('it', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Record {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'Omaggio a Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Nome del capitano',
   // Nom du navire
@@ -74034,6 +74079,9 @@ Lang.ui('it', {
   'journal.tresorJade': 'Tesoro dissotterrato: {somme} {monnaie} e {n} {unites} di {marchandise}.',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'Questo mare non è ancora sbloccato.',
+  'titre.merCondition': 'Per sbloccarlo, scegli {mer} e raggiungi {somme} {monnaie} o guadagna in tutto {n} {jetons} (ne hai {acquis}).',
+  'titre.merApres': 'Sblocca prima {mer}.',
+  'fin.merOuverte': 'Nuovo mare sbloccato: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Segui l\'obiettivo in cima allo schermo. Tocca un edificio, o una scorciatoia in basso, per andarci.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -81591,7 +81639,7 @@ Lang.ui('pl', {
   // Record {record} {monnaie} · {titre}
   'titre.record': 'Rekord: {record} {monnaie} · {titre}',
   // Hommage à Tai-Pan (Ocean, 1986).
-  'titre.hommage': 'Hołd dla gry Tai-Pan (Ocean, 1986).',
+  'titre.credit': '© 2026 Besenet Studio · besenetstudio.com',
   // Nom du capitaine
   'nouvelle.nomCapitaine': 'Imię kapitana',
   // Nom du navire
@@ -81934,6 +81982,9 @@ Lang.ui('pl', {
   'journal.tresorJade': 'Wykopany skarb: {somme} {monnaie} i {marchandise} ({n} {unites}).',
   // Cette mer n'est pas encore débloquée.
   'titre.merVerrouillee': 'To morze nie jest jeszcze odblokowane.',
+  'titre.merCondition': 'Odblokowanie: rekord {somme} {monnaie} lub łącznie {n} {jetons} zdobytych na akwenie: {mer} (masz {acquis}).',
+  'titre.merApres': 'Najpierw odblokuj: {mer}.',
+  'fin.merOuverte': 'Nowy akwen odblokowany: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Kieruj się celem u góry ekranu. Dotknij budynku lub skrótu na dole, by tam przejść.',
   // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
@@ -89036,8 +89087,8 @@ for (const c of SAIL_COLORS) Object.defineProperty(c, 'name', { get() { return T
 
 // ════════════ Registre des mers ════════════
 const SEA_DEFS = {};
-// ordre d'affichage du sélecteur de l'écran titre (la mer de Chine d'abord : c'est le jeu de base)
-const SEA_ORDER = ['chine', 'mediterranee', 'caraibes', 'indien', 'baltique', 'pacifique', 'phenicie'];
+// ordre d'affichage du sélecteur de l'écran titre : les trois mers du jeu de base dans l'ordre où elles s'ouvrent, puis les extensions
+const SEA_ORDER = ['chine', 'caraibes', 'mediterranee', 'indien', 'baltique', 'pacifique', 'phenicie'];
 
 const Seas = {
   current: null,
@@ -89089,12 +89140,45 @@ const Seas = {
 const PATH_KEYS = ['titles', 'boss', 'pirates', 'named', 'danger', 'pirateGroups', 'firstPirate', 'pirateSeason', 'worthAch', 'tavern', 'text'];
 
 // ════════════ Mers débloquées ════════════
-// Le seul endroit qui dit quelles mers le joueur possède. La mer de Chine est gratuite ;
-// les six extensions seront vendues sur Google Play (1,99 € l'une, 9,99 € le pack) :
-// c'est ici que se branchera Google Play Billing. Pour l'instant, tout est ouvert.
+// Le seul endroit qui dit quelles mers le joueur possède. Jeu de base : la mer de Chine, puis les Caraïbes et la Méditerranée,
+// qui s'ouvrent l'une après l'autre en jouant : le titre suprême (1 M) dans la mer précédente, ou 500 jetons gagnés
+// au total dans cette mer (gagnés, pas dépensés : débloquer ne coûte rien à l'héritage).
+// Les quatre autres mers sont des extensions (DLC Steam) : cachées tant qu'elles ne sont pas achetées ; les achats se brancheront sur dlc.
+const BASE_SEAS = ['chine', 'caraibes', 'mediterranee'];
+const UNLOCK = { worth: 1000000, tokens: 500 };
 const Unlocks = {
-  owned(id) { return true; },
+  dlc: {},
+  // FUSIBLE : la case « Tout débloquer » des Options (tests d'Adrien), à retirer avant la sortie
+  all() { return !DEMO && typeof Game !== 'undefined' && !!(Game.global && Game.global.allSeas); },
+  // la mer qu'il faut réussir pour ouvrir celle-ci (null : mer ouverte d'office, ou extension)
+  prev(id) { const i = BASE_SEAS.indexOf(id); return i > 0 ? BASE_SEAS[i - 1] : null; },
+  // où en est le joueur dans la mer précédente : son record et les jetons qu'il y a gagnés
+  progress(id) {
+    const p = this.prev(id);
+    const m = p ? Store.get(metaKey(p), null) || {} : {};
+    return { prev: p, best: m.best || 0, tokens: m.jadeTotal || 0 };
+  },
+  earned(id) {
+    const p = this.prev(id);
+    if (!p) return BASE_SEAS.includes(id);
+    const g = this.progress(id);
+    return this.earned(p) && (g.best >= UNLOCK.worth || g.tokens >= UNLOCK.tokens);
+  },
+  owned(id) {
+    if (DEMO) return id === 'chine';
+    if (this.all()) return true;
+    return BASE_SEAS.includes(id) ? this.earned(id) : !!this.dlc[id];
+  },
+  // ce que montre l'écran titre : les mers du jeu de base (cadenas compris) et les extensions possédées
+  visible(id) { return DEMO ? id === 'chine' : BASE_SEAS.includes(id) || this.owned(id); },
+  // la mer que la mer en cours peut ouvrir
+  next(id) { const i = BASE_SEAS.indexOf(id); return i >= 0 && i < BASE_SEAS.length - 1 ? BASE_SEAS[i + 1] : null; },
 };
+
+// ════════════ Démo « La Saison du thé » ════════════
+// null dans le jeu complet. node tools/build.js --demo remplace cette ligne par la configuration de tools/demo.js
+// (mer de Chine seule, fin au 30 juin, liens de l'écran final) et laisse de côté tout ce que la démo ne montre pas.
+const DEMO = null;
 
 </script>
 <script>
@@ -91581,7 +91665,7 @@ const Game = {
     const run = {
       v: RUN_VERSION, sea: Seas.current, seed, mode: o.mode || 'career', dailyKey: o.dailyKey || null,
       captain: o.captain || T('nouvelle.capitaineDefaut'), shipName: o.shipName || T('nouvelle.navireDefaut'),
-      day: 0.33, endDay: SEA.days, port: SEA.start.port, lastPort: SEA.start.port,
+      day: 0.33, endDay: (DEMO && DEMO.endDay) || SEA.days, port: SEA.start.port, lastPort: SEA.start.port,
       cash: SEA.start.cash + SEA.start.capitalStep * this.her('capital'), bank: 0, debt: 0, debtSince: null, debtPeak: 0,
       ship: null, cargo: zeros(), cost: zeros(),
       ware: {}, stock: {}, known: {}, contracts: [], offers: {}, hunts: {},
@@ -92364,6 +92448,8 @@ const Game = {
     }
     const worth = this.worth();
     const ti = titleIndex(worth);
+    // la mer suivante du jeu de base : fermée avant cette partie ? (pour l'annoncer si la partie l'ouvre)
+    const nextSea = Unlocks.next(Seas.current), wasOpen = !nextSea || Unlocks.owned(nextSea);
     const jadeEarned = Math.max(1, Math.floor(Math.sqrt(Math.max(0, worth)) / 8)) + (reason === 'end' ? 5 : 0);
     this.meta.jade += jadeEarned; this.meta.jadeTotal += jadeEarned; this.meta.runs++;
     const rec = { worth, title: TITLES[ti].name, captain: r.captain, ship: r.shipName, when: Date.now(), mode: r.mode, reason, day: Math.floor(r.day) };
@@ -92380,7 +92466,8 @@ const Game = {
     this.meta.tutorialDone = true;
     this.saveMeta();
     Store.del(runKey(Seas.current));
-    return { worth, ti, jadeEarned, isBest: worth > prevBest, prevBest, dailyBest, reason, rec, run: r };
+    const unlocked = !wasOpen && Unlocks.owned(nextSea) ? nextSea : null;
+    return { worth, ti, jadeEarned, isBest: worth > prevBest, prevBest, dailyBest, reason, rec, run: r, unlocked };
   },
 
   // ════════════ Objectifs ════════════
@@ -93470,10 +93557,25 @@ const PortScene = {
         sx.fillStyle = Gfx.lin(sx, 0, l.wy + oy, 0, l.wy + oy + l.h, [[0, l.warm ? '#ffd27a' : '#ffe3a0'], [1, l.warm ? '#f0a040' : '#e8b060']]);
         Gfx.rr(sx, l.wx - cam, l.wy + oy, l.w, l.h, 0.4); sx.fill();
       }
-      for (const m of this.midLights) {
-        const mxp = m.x - cam * 0.5, myp = gy - 6 - this.mid.lh + m.y;
-        if (mxp < -10 || mxp > W + 10) continue;
-        Gfx.glow(sx, mxp, myp, 2.2, '#ffc978', la * 0.8);
+      // fenêtres des maisons du plan du milieu : sur un calque à part, d'où l'on efface ce que cachent les maisons de la rue
+      // (dessinées ici, après la teinte, pour garder leur éclat ; sinon elles passaient par-dessus les façades du premier plan)
+      if (this.midLights.length) {
+        const cv = sx.canvas, lc = this.midLightCv || (this.midLightCv = document.createElement('canvas'));
+        if (lc.width !== cv.width || lc.height !== cv.height) { lc.width = cv.width; lc.height = cv.height; }
+        const lx = lc.getContext('2d');
+        lx.setTransform(1, 0, 0, 1, 0, 0); lx.clearRect(0, 0, lc.width, lc.height);
+        lx.setTransform(sx.getTransform());
+        for (const m of this.midLights) {
+          const mxp = m.x - cam * 0.5, myp = gy - 6 - this.mid.lh + m.y;
+          if (mxp < -10 || mxp > W + 10) continue;
+          Gfx.glow(lx, mxp, myp, 2.2, '#ffc978', la * 0.8);
+        }
+        if (vw > 0) {
+          lx.globalCompositeOperation = 'destination-out';
+          lx.drawImage(this.street, cam * ks, 0, vw * ks, SH * ks, 0, gy - GY, vw, SH);
+          lx.globalCompositeOperation = 'source-over';
+        }
+        sx.save(); sx.setTransform(1, 0, 0, 1, 0, 0); sx.drawImage(lc, 0, 0); sx.restore();
       }
       for (const l of st.lights) {
         const lx = l.x - cam;
@@ -96132,6 +96234,17 @@ const UI = {
     };
     const mute = h('input', { type: 'checkbox', id: 'opt-mute' }); mute.checked = s.muted;
     mute.onchange = () => { s.muted = mute.checked; Sound.applySettings(); Game.saveGlobal(); };
+    // FUSIBLE : « Tout débloquer », pour les tests d'Adrien (français seul, absent de la démo), à retirer avant la sortie.
+    // La progression de chaque mer n'est jamais touchée : décocher rend les mers réellement débloquées.
+    const all = DEMO || Main.sceneName !== 'title' ? null : h('input', { type: 'checkbox', id: 'opt-all' });
+    if (all) {
+      all.checked = !!Game.global.allSeas;
+      all.onchange = () => {
+        Game.global.allSeas = all.checked; Game.saveGlobal();
+        if (!Unlocks.owned(Seas.current)) Main.setSea('chine');
+        if (Main.sceneName === 'title') { this.close(); this.title(); this.options(); }
+      };
+    }
     const hints = h('input', { type: 'checkbox', id: 'opt-hints' }); hints.checked = s.hints;
     hints.onchange = () => { s.hints = hints.checked; Game.saveGlobal(); this.showHud(this.mode); };
     const touchSel = h('div', { class: 'tabs' }, ...['auto', 'always', 'never'].map(v => [v, T('options.tactile.' + v)]).map(([v, l]) => btn(l, () => { s.touch = v; Game.saveGlobal(); this.close(); this.options(); this.showHud(this.mode); }, 'sm' + (s.touch === v ? ' on' : ''))));
@@ -96146,6 +96259,7 @@ const UI = {
       h('label', { class: 'chk' }, hints, T('options.objectifs')),
       h('h4', null, T('options.tactile')), touchSel,
       langSel,
+      all ? h('label', { class: 'chk' }, all, 'Tout débloquer (test)') : null,
       h('h4', null, T('options.donnees')),
       btn(T('options.effacer'), async () => {
         const ok = await this.confirm(T('options.effacerTitre'), T('options.effacerTexte', { mer: TXT.seaName }), T('options.effacerBt'), T('commun.annuler'), true);
@@ -96178,12 +96292,13 @@ const UI = {
     const has = Game.hasSave();
     const dk = dailyKey();
     const dailyBest = m.daily[dk];
-    // sélecteur de mer : affiché dès qu'une extension est installée
-    const seas = Seas.list();
+    // sélecteur de mer : les mers du jeu de base (cadenas et condition sur celles qui restent fermées) et les extensions
+    // possédées ; caché s'il n'y a qu'une mer à montrer (la démo)
+    const seas = Seas.list().filter(id => Unlocks.visible(id));
     const pick = seas.length < 2 ? null : h('div', { class: 'sea-pick', role: 'group', 'aria-label': T('titre.choisirMer') },
       seas.map(id => {
         const d = Lang.seaDef(id), on = id === Seas.current, own = Unlocks.owned(id);
-        return btn([h('b', null, d.name), h('small', null, own ? d.yearLabel : T('titre.aDebloquer'))], () => Main.setSea(id), 'sm' + (on ? ' on' : '') + (own ? '' : ' locked'), { 'aria-pressed': on ? 'true' : 'false' });
+        return btn([h('b', null, own ? d.name : ['🔒 ', d.name]), h('small', null, own ? d.yearLabel : T('titre.aDebloquer'))], () => Main.setSea(id), 'sm' + (on ? ' on' : '') + (own ? '' : ' locked'), { 'aria-pressed': on ? 'true' : 'false', title: own ? null : this.unlockHint(id) });
       }));
     // le logo : un dessin vectoriel (js/logo.js, généré par tools/logo.js), le même dans toutes les langues
     const logo = h('h1', { class: 'logo' });
@@ -96203,9 +96318,20 @@ const UI = {
       h('div', { class: 'row t-stats' },
         h('div', { class: 'jade-count' }, ico('jade'), T('commun.qteJetons', { n: m.jade, mot: motJetons(m.jade) })),
         m.best > 0 ? h('div', { class: 'jade-count gold' }, ico('coin'), T('titre.record', { record: fmtShort(m.best), monnaie: motMonnaie(m.best), titre: TITLES[titleIndex(m.best)].name })) : null),
-      h('div', { class: 'foot-note' }, T('titre.hommage')));
+      h('div', { class: 'foot-note' }, T('titre.credit')));
     this.titleRoot = root;
     this.el.modal.append(root);
+  },
+  // la condition qui ouvre une mer fermée, avec la progression du joueur dans la mer précédente (mots de cette mer-là)
+  unlockHint(id) {
+    const g = Unlocks.progress(id);
+    if (!g.prev) return T('titre.merVerrouillee');
+    const t = Lang.seaDef(g.prev).text;
+    if (!Unlocks.earned(g.prev)) return T('titre.merApres', { mer: t.seaName, nom: Lang.seaDef(g.prev).name });
+    return T('titre.merCondition', {
+      somme: fmt(UNLOCK.worth), monnaie: motNb(UNLOCK.worth, t, 'money', 'moneyOne'), mer: t.seaName, nom: Lang.seaDef(g.prev).name,
+      n: UNLOCK.tokens, jetons: motNb(UNLOCK.tokens, t, 'tokens', 'tokensOne'), acquis: Math.min(g.tokens, UNLOCK.tokens),
+    });
   },
   hideTitle() { if (this.titleRoot) { this.titleRoot.remove(); this.titleRoot = null; } },
   newGame(mode) {
@@ -96271,7 +96397,10 @@ const UI = {
           g.sail === s.id ? h('span', { class: 'pill jade' }, T('heritage.hissees')) : btn(own ? T('heritage.hisser') : [ico('jade', 'sm'), ' ' + s.cost], () => { if (Game.buySail(s.id)) { ShipTop.cache.clear(); ShipSide.cache.clear(); Sound.sfxPlay('coin'); render(); } }, 'sm', !own && m.jade < s.cost ? { disabled: true } : null)));
       }
       put(body, h('div', { class: 'row', style: { marginBottom: '10px' } }, h('span', { class: 'jade-count' }, ico('jade'), T('commun.qteJetons', { n: m.jade, mot: motJetons(m.jade) })), h('span', { class: 'hint' }, T('heritage.gagnes'))),
-        cards, h('h4', { style: { marginTop: '14px' } }, T('heritage.voiles')), sails);
+        cards,
+        // (la démo dit qu'il y a d'autres bonus dans le jeu complet, sans les montrer)
+        DEMO ? h('div', { class: 'mk-foot jade-note' }, ico('jade'), h('span', null, T('demo.heritage.plus'))) : null,
+        h('h4', { style: { marginTop: '14px' } }, T('heritage.voiles')), sails);
     };
     render();
     return entry;
@@ -96292,6 +96421,23 @@ const UI = {
       : h('p', { class: 'hint' }, T('records.aucun'));
     this.open({ title: T('titre.records'), icon: 'coin', cls: 'wide', body });
   },
+  // démo : l'invitation au jeu complet, sur l'écran de fin (la liste de souhaits d'abord, puis le site du studio)
+  demoEnd() {
+    const L = DEMO.links || {};
+    const studio = L.studio && (L.studio[Lang.code] || L.studio.other);
+    return h('div', { class: 'demo-end' },
+      h('h4', null, T('demo.fin.titre')),
+      h('p', null, T('demo.fin.texte')),
+      h('div', { class: 'row' },
+        btn(T('demo.fin.souhaits'), () => this.openLink(L.steam), 'gold'),
+        btn(T('demo.fin.studio'), () => this.openLink(studio), '')));
+  },
+  // un lien vers l'extérieur : un nouvel onglet (version web) ; l'overlay Steam se branchera ici avec l'emballage Steam.
+  // Sans adresse (la page Steam n'existe pas encore), le bouton ne fait rien.
+  openLink(url) {
+    if (!url) return;
+    try { window.open(url, '_blank', 'noopener'); } catch (e) { /* navigateur sans onglets */ }
+  },
   endScreen(res) {
     this.closeAll();
     this.showHud('title');
@@ -96301,9 +96447,11 @@ const UI = {
     const line = (a, b, cls) => h('tr', null, h('td', null, a), h('td', { class: 'r ' + (cls || '') }, fmt(b)));
     let wares = 0; for (const k in r.ware) wares += Game.cargoValue(r.ware[k]);
     const body = h('div', null,
-      h('div', { class: 'seal' }, TXT.supremeSeal && res.ti >= TITLES.findIndex(t => t.supreme) ? h('span', { class: 'seal-zh' }, TXT.supremeSeal) : null, TITLES[res.ti].name),
+      h('div', { class: 'seal' }, TXT.supremeSeal && TITLES.some(t => t.supreme) && res.ti >= TITLES.findIndex(t => t.supreme) ? h('span', { class: 'seal-zh' }, TXT.supremeSeal) : null, TITLES[res.ti].name),
       worthEl,
       h('p', { style: { textAlign: 'center' } }, `${r.captain} · ${r.shipName} · ${fmtDate(Math.min(r.day, r.endDay - 0.01))}`),
+      DEMO ? this.demoEnd() : null,
+      res.unlocked ? h('p', { class: 'pill jade', style: { display: 'flex', justifyContent: 'center' } }, '🔓 ' + T('fin.merOuverte', { mer: Lang.seaDef(res.unlocked).name })) : null,
       res.isBest ? h('p', { class: 'pill gold', style: { display: 'flex', justifyContent: 'center' } }, T('fin.nouveauRecord')) : h('p', { class: 'hint', style: { textAlign: 'center' } }, T('fin.record', { somme: monnaie(Game.meta.best) })),
       res.dailyBest ? h('p', { class: 'pill jade', style: { display: 'flex', justifyContent: 'center' } }, T('fin.meilleurDefi')) : null,
       h('table', { class: 'ledger' }, h('tbody', null,
@@ -96323,7 +96471,9 @@ const UI = {
         }
         return h('div', { class: 'mk-foot jade-note' }, ico('jade'), h('span', { style: { flex: 1 } }, T('fin.avec', { n: m.jade, jetons: motJetons(m.jade), liste: listJoin(can.slice(0, 3).map(x => x.name)) + (can.length > 3 ? '…' : '') })), btn(T('titre.heritage'), () => this.heritage(), 'jade sm'));
       })(),
-      h('p', { class: 'hint', style: { marginTop: '8px' } }, T('fin.stats', { escales: r.stats.voyages, pirates: r.stats.sunk, benefices: monnaie(r.stats.profit), contrats: r.stats.contracts })));
+      h('p', { class: 'hint', style: { marginTop: '8px' } }, DEMO
+        ? T('demo.fin.stats', { escales: r.stats.voyages, pirates: r.stats.sunk, vente: monnaie(r.stats.bestSale), benefices: monnaie(r.stats.profit) })
+        : T('fin.stats', { escales: r.stats.voyages, pirates: r.stats.sunk, benefices: monnaie(r.stats.profit), contrats: r.stats.contracts })));
     this.open({
       title: titles[res.reason] || T('fin.titre'), sub: res.reason === 'naufrage' ? T('fin.naufrageSous') : TXT.endSub, icon: 'scroll', closable: false, sticky: true, body,
       foot: [btn(T('titre.heritage'), () => this.heritage(), ''), btn(T('hud.menu'), () => { this.closeAll(); this.title(); }, ''), btn(T('titre.nouvelle'), () => { this.closeAll(); this.title(); this.newGame('career'); }, 'jade')],
@@ -108822,7 +108972,7 @@ const Main = {
   // ── Changer de mer (écran titre) : tables, monde, shader, progression et décor de la mer choisie ──
   setSea(id) {
     if (!SEA_DEFS[id] || id === Seas.current) return;
-    if (!Unlocks.owned(id)) { UI.toast(T('titre.merVerrouillee'), 'bad'); return; }
+    if (!Unlocks.owned(id)) { UI.toast(UI.unlockHint(id), 'bad'); return; }
     Seas.use(id);
     Icons.build();
     Game.global.sea = id; Game.saveGlobal();
