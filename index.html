@@ -91333,7 +91333,9 @@ const Sfx = {
   noise(t, dur, type, f, q, vol, dst, o) {
     o = o || {};
     const c = this.ctx, s = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
-    s.buffer = o.pink ? this.pinkBuf : this.noiseBuf; fl.type = type; fl.frequency.setValueAtTime(f, t); fl.Q.value = q || 0.7;
+    s.buffer = o.pink ? this.pinkBuf : this.noiseBuf; fl.type = type; fl.Q.value = q || 0.7;
+    // (le filtre est réglé dès sa création : s'il changeait de fréquence au moment où le son démarre, il claquait)
+    fl.frequency.value = f; fl.frequency.setValueAtTime(f, t);
     if (o.f2) fl.frequency.exponentialRampToValueAtTime(o.f2, t + dur);
     const a = o.a || 0.002;
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
@@ -91471,9 +91473,9 @@ const Sfx = {
       case 'seagull':
         for (let i = 0; i < 2; i++) {
           const c = this.ctx, tt = t + i * 0.28, ob = c.createOscillator(), g = c.createGain(), l = c.createOscillator(), lg = c.createGain();
-          ob.type = 'triangle'; ob.frequency.setValueAtTime(1700, tt); ob.frequency.exponentialRampToValueAtTime(1050, tt + 0.22);
+          ob.type = 'triangle'; ob.frequency.value = 1700; ob.frequency.setValueAtTime(1700, tt); ob.frequency.exponentialRampToValueAtTime(1050, tt + 0.22);
           l.frequency.value = 38; lg.gain.value = 90; l.connect(lg); lg.connect(ob.frequency);
-          g.gain.setValueAtTime(0, tt); g.gain.linearRampToValueAtTime(0.05, tt + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.25);
+          g.gain.setValueAtTime(0, tt); g.gain.linearRampToValueAtTime(0.12, tt + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.25);
           ob.connect(g); g.connect(d); ob.start(tt); ob.stop(tt + 0.3); l.start(tt); l.stop(tt + 0.3);
         }
         break;
@@ -91529,7 +91531,7 @@ const Sfx = {
       a.swell = add(this.loop('lowpass', 220, 0.7, true, d), l => 0.2 + l * 0.7);
     } else if (name === 'port') {
       // place du marché : ni vent ni foule ; une mer très douce contre le quai, et des bruits ponctuels (ambTick)
-      a.swell = add(this.loop('lowpass', 360, 0.6, true, d), l => l * 0.16);
+      a.swell = add(this.loop('lowpass', 560, 0.6, true, d), l => l * 0.32);
     }
     return a;
   },
@@ -91570,10 +91572,14 @@ const Sfx = {
       if (k === 'port') {
         // (pas de foule : les voix de synthèse sonnaient faux ; Adrien préfère les seuls bruits de la place)
         if (due('lap', 3, 6)) { const sw = a.swell.g.gain; sw.cancelScheduledValues(t); sw.setTargetAtTime(a.swell.vol(l) * 1.4, t, 0.8); sw.setTargetAtTime(a.swell.vol(l), t + 1.8, 1); }
-        if (due('coin', 2.5, 7)) this.coinAt(t, 2400 + R() * 900, 0.03 * l, d);
-        if (due('wood', 3, 9)) { this.tone(t, 'sine', 220 + R() * 120, 120, 0.09, 0.08 * l, d); this.noise(t, 0.05, 'bandpass', 900, 1.2, 0.04 * l, d); }
-        if (due('bell', 16, 34)) this.bellAt(t, 640, 0.05 * l, d, 1.6);
-        if (due('gull', 12, 30)) this.play('seagull', { vol: 0.35 * l, pan: R() * 1.4 - 0.7 });
+        // clapotis contre le quai, entre deux vagues
+        if (due('splash', 1.5, 4)) this.noise(t, 0.35 + R() * 0.3, 'bandpass', 700 + R() * 500, 1.2, 0.7 * l, d, { a: 0.06, pink: true });
+        if (due('coin', 3, 8)) { const f = this.COIN.chine * (0.9 + R() * 0.2); this.coinAt(t, f, 0.1 * l, d); if (R() < 0.6) this.coinAt(t + 0.08, f * 1.05, 0.07 * l, d); }
+        // une caisse qu'on pose, un tonneau qu'on roule
+        if (due('wood', 3, 8)) { this.tone(t, 'sine', 150 + R() * 60, 90, 0.16, 0.3 * l, d); this.noise(t, 0.07, 'bandpass', 650, 2.5, 0.18 * l, d); }
+        if (due('rope', 6, 14)) this.creakAt(t, 95 + R() * 40, 0.6 + R() * 0.5, 0.35 * l, d);   // amarres et coques qui grincent
+        if (due('bell', 16, 34)) this.bellAt(t, 640, 0.12 * l, d, 1.6);
+        if (due('gull', 10, 24)) this.play('seagull', { vol: 0.7 * l, pan: R() * 1.4 - 0.7 });
       }
     }
   },
