@@ -708,6 +708,9 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .jr-prices tr.fresh td:first-child b { color: var(--good); }
 .jr-prices tr.mid td:first-child b { color: var(--gold); }
 .jr-prices tr.old td { opacity: 0.55; }
+.jr-prices tr.here td { background: rgba(232, 181, 74, 0.09); }   /* le port où l'on est */
+.jr-prices tr.here td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
+.jr-prices tr.here td:first-child small { color: var(--gold-hi); }
 .jr-prices td.lo { color: var(--good); font-weight: 800; }
 .jr-prices td.hi { color: var(--gold); font-weight: 800; }
 .jr-legend { font-size: 12.5px; }
@@ -898,6 +901,30 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .her-step .btn:disabled { opacity: 0.28; }
 .btn .her-nv { opacity: 0.72; font-weight: 700; margin-right: 2px; }
 @media (max-width: 860px) { .her-split { grid-template-columns: 1fr; } }
+
+/* ── Hauts faits : liste numérotée, du plus facile au titre suprême ── */
+.ach-bar { gap: 10px 20px; flex-wrap: wrap; margin-bottom: 10px; }
+.ach-stat { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ach-stat .track { width: 130px; height: 7px; border-radius: 4px; background: rgba(243, 235, 218, 0.1); overflow: hidden; }
+.ach-stat .track b { display: block; height: 100%; background: linear-gradient(90deg, var(--gold-lo), var(--gold-hi)); }
+.ach-list { display: grid; border: 1px solid var(--line); border-radius: 13px; overflow: hidden; }
+.ach-row { display: grid; grid-template-columns: 26px 32px minmax(0, 1fr) auto 52px 86px; align-items: center; gap: 10px; padding: 7px 12px; border-top: 1px solid var(--line); }
+.ach-row:first-child { border-top: 0; }
+.ach-row.got { background: rgba(232, 181, 74, 0.05); }
+.ach-row.aim { background: rgba(232, 181, 74, 0.09); box-shadow: inset 3px 0 0 var(--gold); }
+.ach-row.legend { background: linear-gradient(90deg, rgba(180, 50, 31, 0.14), transparent 70%); }
+.ach-row.last { background: linear-gradient(90deg, rgba(180, 50, 31, 0.26), transparent 80%); }
+.ach-n { color: var(--text-3); font: 800 12px var(--font-ui); font-variant-numeric: tabular-nums; text-align: right; }
+.ach-txt h5 { margin: 0; font: 800 14px/1.25 var(--font-ui); }
+.ach-txt .d { color: var(--text-2); font-size: 12.5px; line-height: 1.35; }
+.ach-med { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 800 15px/1 var(--font-title); }
+.ach-med.got { background: radial-gradient(circle at 35% 30%, #f7d58a, #c9902f); color: #3a2405; box-shadow: 0 0 0 2px rgba(247, 213, 138, 0.3); }
+.ach-med.aim { border: 2px solid var(--gold); color: var(--gold-hi); background: rgba(232, 181, 74, 0.08); }
+.ach-med.lock { border: 1.5px solid var(--line-2); color: var(--text-3); background: rgba(0, 0, 0, 0.2); }
+.ach-med svg { width: 14px; height: 14px; }
+.ach-rew { display: inline-flex; align-items: center; justify-content: flex-end; gap: 3px; font: 800 12.5px var(--font-ui); color: var(--jade-hi); font-variant-numeric: tabular-nums; }
+.ach-date { color: var(--text-3); font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 640px) { .ach-row { grid-template-columns: 22px 30px minmax(0, 1fr) 46px; } .ach-tag, .ach-date { display: none; } }
 
 </style>
 </head>
@@ -2024,6 +2051,8 @@ Lang.ui('fr', {
 
   // ── Hauts faits, records ──
   'hautsfaits.accomplis': '{n} / {total} accomplis',
+  'hautsfaits.aViser': 'à viser',
+  'hautsfaits.recompenses': 'Récompenses gagnées : {n} / {total}',
   'records.defi': 'Défi',
   'records.carriere': 'Carrière',
   'records.fortune': 'FORTUNE',
@@ -3237,6 +3266,10 @@ Lang.ui('en', {
   'heritage.voiles': 'SAIL COLORS',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n} / {total} earned',
+  // à viser
+  'hautsfaits.aViser': 'next up',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Rewards earned: {n} / {total}',
   // Défi
   'records.defi': 'Daily',
   // Carrière
@@ -12446,6 +12479,10 @@ Lang.ui('zh', {
   'heritage.voiles': '帆色',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '已达成{n}/{total}',
+  // à viser
+  'hautsfaits.aViser': '下一目标',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': '已获奖励：{n} / {total}',
   // Défi
   'records.defi': '挑战',
   // Carrière
@@ -21626,6 +21663,10 @@ Lang.ui('zht', {
   'heritage.voiles': '帆色',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '已達成{n}/{total}',
+  // à viser
+  'hautsfaits.aViser': '下一目標',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': '已獲獎勵：{n} / {total}',
   // Défi
   'records.defi': '挑戰',
   // Carrière
@@ -30807,6 +30848,10 @@ Lang.ui('ja', {
   'heritage.voiles': '帆の色',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n}/{total}達成',
+  // à viser
+  'hautsfaits.aViser': '次の目標',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': '獲得した報酬：{n} / {total}',
   // Défi
   'records.defi': '日替わり',
   // Carrière
@@ -40021,6 +40066,10 @@ Lang.ui('ko', {
   'heritage.voiles': '돛 색',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n} / {total} 달성',
+  // à viser
+  'hautsfaits.aViser': '다음 목표',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': '받은 보상: {n} / {total}',
   // Défi
   'records.defi': '도전',
   // Carrière
@@ -49200,6 +49249,10 @@ Lang.ui('ru', {
   'heritage.voiles': 'ЦВЕТА ПАРУСОВ',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': 'Получено: {n} / {total}',
+  // à viser
+  'hautsfaits.aViser': 'следующая цель',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Получено наград: {n} / {total}',
   // Défi
   'records.defi': 'Испытание',
   // Carrière
@@ -58519,6 +58572,10 @@ Lang.ui('es', {
   'heritage.voiles': 'COLORES DE LAS VELAS',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n} / {total} logradas',
+  // à viser
+  'hautsfaits.aViser': 'a por él',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Recompensas ganadas: {n} / {total}',
   // Défi
   'records.defi': 'Reto',
   // Carrière
@@ -67724,6 +67781,10 @@ Lang.ui('pt', {
   'heritage.voiles': 'CORES DAS VELAS',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n} / {total} obtidas',
+  // à viser
+  'hautsfaits.aViser': 'próximo',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Recompensas ganhas: {n} / {total}',
   // Défi
   'records.defi': 'Desafio',
   // Carrière
@@ -76927,6 +76988,10 @@ Lang.ui('de', {
   'heritage.voiles': 'SEGELFARBEN',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n} / {total} errungen',
+  // à viser
+  'hautsfaits.aViser': 'als Nächstes',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Erhaltene Belohnungen: {n} / {total}',
   // Défi
   'records.defi': 'Täglich',
   // Carrière
@@ -86130,6 +86195,10 @@ Lang.ui('it', {
   'heritage.voiles': 'COLORI DELLE VELE',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': '{n} / {total} compiute',
+  // à viser
+  'hautsfaits.aViser': 'prossimo',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Ricompense ottenute: {n} / {total}',
   // Défi
   'records.defi': 'Sfida',
   // Carrière
@@ -95336,6 +95405,10 @@ Lang.ui('pl', {
   'heritage.voiles': 'KOLORY ŻAGLI',
   // {n} / {total} accomplis
   'hautsfaits.accomplis': 'Zdobyte: {n} / {total}',
+  // à viser
+  'hautsfaits.aViser': 'następny cel',
+  // Récompenses gagnées : {n} / {total}
+  'hautsfaits.recompenses': 'Zdobyte nagrody: {n} / {total}',
   // Défi
   'records.defi': 'Wyzwanie',
   // Carrière
@@ -112171,7 +112244,7 @@ const UI = {
     const table = h('table', { class: 'ledger jr-prices' },
       // (en-têtes : l'icône de la marchandise, comme au marché ; son nom au survol et pour les lecteurs d'écran)
       h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id))))),
-      h('tbody', null, rows.map(x => h('tr', { class: ageCls(x.k) },
+      h('tbody', null, rows.map(x => h('tr', { class: ageCls(x.k) + (x.k.here ? ' here' : '') },   // (le port où l'on est : légèrement doré)
         h('td', null, h('b', null, x.p.name), h('small', { class: 'hint' }, ' · ' + age(x.k))),
         ...GOODS.map((g, i) => { const v = x.k.p[i], cls = 'r' + (rows.length > 1 && v === lo[i] ? ' lo' : rows.length > 1 && v === hi[i] ? ' hi' : ''); return h('td', { class: cls }, fmt(v)); })))));
     return [h('div', { class: 'jr-scroll', 'data-g': 'jr-table' }, table), h('p', { class: 'hint jr-legend', 'data-g': 'jr-legend' }, T('journal.prix.legende'))];
@@ -112471,14 +112544,41 @@ const UI = {
     render();
     return entry;
   },
+  // ── Hauts faits : une liste numérotée, du plus facile au plus dur (ordre mesuré sur des carrières simulées, mer de Chine),
+  //    le haut fait du titre suprême en dernier ; les trois prochains à obtenir sont signalés ──
+  ACH_RANK: ['voyage', 'profit', 'dixmille', 'dette', 'contrats', 'mazu', 'sang', 'eperon', 'abordage', 'contrebande', 'coup', 'fuite', 'clipper', 'centmille', 'shanghai', 'typhon', 'prime', 'flotte', 'tresor', 'flambeur', 'tour'],
+  // le rang d'un haut fait : celui que la mer lui donne (rank), sinon celui du socle commun, sinon d'après sa récompense ;
+  // les 60 jetons (boss, titres) ferment la liste, le titre suprême tout au bout
+  achSorted() {
+    const top = new Set(Unlocks.topAch(Seas.current));
+    const key = (a, i) => {
+      if (top.has(a.id)) return 1e6 + i;
+      if (a.rank != null) return a.rank * 100 + i / 100;
+      const r = this.ACH_RANK.indexOf(a.id);
+      if (r >= 0 && a.jade < 60) return r * 100;
+      return (a.jade >= 60 ? 5000 : a.jade * 100 + 50) + i / 100;
+    };
+    return ACHIEVEMENTS.map((a, i) => ({ a, k: key(a, i) })).sort((x, y) => x.k - y.k).map(x => x.a);
+  },
   achievements() {
-    const m = Game.meta;
-    const n = Object.keys(m.ach).length;
-    const cards = h('div', { class: 'cards' }, ...ACHIEVEMENTS.map(a => {
-      const got = m.ach[a.id];
-      return h('div', { class: 'card' + (got ? ' sel' : ' locked') }, h('h5', null, ico(got ? 'star' : 'skull', 'sm'), ' ', a.name), h('div', { class: 'd' }, a.desc), h('div', { class: 'row sb' }, h('span', { class: 'pill jade' }, ico('jade', 'sm'), ' ' + a.jade), got ? h('span', { class: 'hint' }, new Date(got).toLocaleDateString(LOC.dateLocale)) : null));
+    const m = Game.meta, list = this.achSorted(), top = new Set(Unlocks.topAch(Seas.current));
+    const got = list.filter(a => m.ach[a.id]), aim = new Set(list.filter(a => !m.ach[a.id]).slice(0, 3).map(a => a.id));
+    const sum = xs => xs.reduce((s, a) => s + a.jade, 0);
+    const LOCK = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor"/><path d="M5 7V5a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+    const med = a => { const s = m.ach[a.id] ? 'got' : aim.has(a.id) ? 'aim' : 'lock'; const e = h('span', { class: 'ach-med ' + s }, s === 'got' ? '★' : s === 'aim' ? '◇' : ''); if (s === 'lock') e.innerHTML = LOCK; return e; };
+    const rows = h('div', { class: 'ach-list' }, ...list.map((a, i) => {
+      const when = m.ach[a.id];
+      return h('div', { class: 'ach-row' + (when ? ' got' : aim.has(a.id) ? ' aim' : '') + (a.jade >= 60 ? ' legend' : '') + (top.has(a.id) ? ' last' : '') },
+        h('span', { class: 'ach-n' }, String(i + 1)), med(a),
+        h('div', { class: 'ach-txt' }, h('h5', null, a.name), h('div', { class: 'd' }, a.desc)),
+        h('span', { class: 'ach-tag' }, aim.has(a.id) ? h('span', { class: 'pill gold' }, T('hautsfaits.aViser')) : null),
+        h('span', { class: 'ach-rew' }, ico('jade', 'sm'), ' ' + a.jade),
+        h('span', { class: 'ach-date' }, when ? new Date(when).toLocaleDateString(LOC.dateLocale) : '—'));
     }));
-    this.open({ title: T('titre.hautsFaits'), sub: T('hautsfaits.accomplis', { n, total: ACHIEVEMENTS.length }), icon: 'star', cls: 'wide', body: cards });
+    const bar = h('div', { class: 'row ach-bar' },
+      h('span', { class: 'ach-stat' }, h('span', { class: 'track' }, h('b', { style: { width: Math.round(100 * got.length / list.length) + '%' } })), T('hautsfaits.accomplis', { n: got.length, total: list.length })),
+      h('span', { class: 'ach-stat' }, ico('jade', 'sm'), T('hautsfaits.recompenses', { n: sum(got), total: sum(list) })));
+    this.open({ title: T('titre.hautsFaits'), sub: T('hautsfaits.accomplis', { n: got.length, total: list.length }), icon: 'star', cls: 'wide', body: h('div', null, bar, rows) });
   },
   records() {
     const m = Game.meta;
@@ -126711,7 +126811,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 04/10/2026 à 22:01</div>
+<div id="maj">Mise à jour : 04/10/2026 à 22:20</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
