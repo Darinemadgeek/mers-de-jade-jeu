@@ -106130,6 +106130,8 @@ const Game = {
   },
   saveRun() { if (this.run && !this.run.over) Store.set(runKey(Seas.current), this.run); },
   hasSave() { const r = Store.get(runKey(Seas.current), null); return !!(r && r.v === RUN_VERSION && !r.over); },
+  // le mode de la partie sauvegardée (career, daily, prologue), ou null
+  savedMode() { const r = Store.get(runKey(Seas.current), null); return r && r.v === RUN_VERSION && !r.over ? r.mode : null; },
   loadRun() {
     const r = Store.get(runKey(Seas.current), null);
     if (r && r.v === RUN_VERSION && !r.over) { this.run = r; Seas.path(r.path); return r; }
@@ -111011,6 +111013,8 @@ const UI = {
     this.showHud('title');
     const m = Game.meta;
     const has = Game.hasSave();
+    // (une partie d'essai interrompue : le bouton dit qu'on reprend le prologue, pour qu'on ne la prenne pas pour sa carrière)
+    const pro = has && Game.savedMode() === 'prologue';
     const dk = dailyKey();
     const dailyBest = m.daily[dk];
     // sélecteur de mer : les mers du jeu de base (cadenas et condition sur celles qui restent fermées) et les extensions
@@ -111037,7 +111041,7 @@ const UI = {
         h('p', { class: 'tagline' }, TXT.tagline)),
       pick,
       h('div', { class: 'menu' },
-        has ? btn(T('commun.continuer'), () => { root.remove(); Main.continueRun(); }, 'jade big') : null,
+        has ? btn(pro ? T('prologue.continuer') : T('commun.continuer'), () => { root.remove(); Main.continueRun(); }, 'jade big') : null,
         btn(T('titre.nouvelle'), () => this.newGame('career'), has ? 'big' : 'jade big'),
         btn(T('titre.defi') + (dailyBest != null ? T('titre.defiRecord', { record: fmtShort(dailyBest) }) : ''), () => this.newGame('daily'), 'gold-line'),
         h('div', { class: 'row menu-sub' },
@@ -111270,7 +111274,7 @@ const UI = {
 //  • les conseils du mentor (Hints) : une bulle, la première fois qu'un danger se présente.
 // Le calque (#guide) passe au-dessus des fenêtres. Il voile l'écran sauf les éléments montrés (des trous dans le voile,
 // suivis à chaque image : une fenêtre peut se redessiner ou défiler) et peut bloquer tout clic ou toute touche hors des
-// éléments permis (pendant une étape du prologue, un seul bouton répond).
+// éléments permis (pendant une étape du prologue, seul ce qu'elle demande répond).
 // Les éléments sont désignés par des sélecteurs CSS, le plus souvent leur attribut data-g (posé par js/ui.js).
 
 // sélecteur d'un élément : « hud-debt » → [data-g="hud-debt"] ; un sélecteur CSS (#, ., [) reste tel quel
@@ -111704,8 +111708,9 @@ const SeaIntro = {
           bubble: this.bub([this.X(st.k)], { list: z.map((_, i) => this.X(st.k + (i + 1))), cls: 'narrow', next: T('guide.compris'), fn: () => { UI.closeAll(); this.next(); } }) };
       }
       if (UI.isOpen()) return this.closeV();
+      // (comme dans le prologue : le bouton de la barre, ou le bâtiment touché sur le port)
       const sel = 'bar-' + st.go;
-      return { key: 'accueil:aller:' + st.k, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel)], bubble: this.bub([this.X(st.k + 'Aller', { bouton: Prologue.label(st.go) })], { anchor: sel, next: false }) };
+      return { key: 'accueil:aller:' + st.k, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel), '#screen'], bubble: this.bub([this.X(st.k + 'Aller', { bouton: Prologue.label(st.go) })], { anchor: sel, next: false }) };
     }
     if (UI.isOpen()) return this.closeV();
     const text = [this.X(st.k)];
@@ -111788,6 +111793,9 @@ const Prologue = {
     if (Main.sceneName === 'sea') SeaScene.over = true;
     Guide.hide();
     UI.closeAll();
+    // (la destination, le côté du marché et l'onglet du journal choisis par le guide ne suivent pas le joueur dans sa
+    //  carrière : la carte n'y montrerait que Hong Kong)
+    UI.marketMode = null; UI.journalTab = 'prix'; UI.lastDest = null;
     Main.transition(() => { Game.run = null; Main.toTitle(true); });
   },
   endPost(career) {
@@ -111846,12 +111854,14 @@ const Prologue = {
   },
   // le libellé d'un bâtiment dans la barre du port
   label(type) { return type === 'quai' ? T('port.appareiller') : (PortScene.P && PortScene.P.verbs && PortScene.P.verbs[type]) || BUILDINGS[type].verb; },
-  // aller à un bâtiment : la flèche sur son bouton dans la barre du port, seul bouton actif ; une fenêtre ouverte se ferme d'abord
+  // aller à un bâtiment : la flèche sur son bouton dans la barre du port ; seuls ce bouton et le port lui-même répondent
+  // (on peut aussi toucher le bâtiment : si c'en est un autre, le guide fait refermer sa fenêtre) ; une fenêtre ouverte
+  // se ferme d'abord
   goTo(type, k, p) {
     if (UI.isOpen()) return this.closeV('fermer');
     if (Main.sceneName !== 'port') return null;
     const sel = 'bar-' + type;
-    return { key: 'go:' + type + ':' + k, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel)], bubble: this.bub([this.X(k, Object.assign({ bouton: this.label(type) }, p))], { anchor: sel }) };
+    return { key: 'go:' + type + ':' + k, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel), '#screen'], bubble: this.bub([this.X(k, Object.assign({ bouton: this.label(type) }, p))], { anchor: sel }) };
   },
   // fermer la fenêtre du dessus : la croix, seul bouton actif (une question du jeu, sans croix ni écran connu, comme un
   // événement d'arrivée : le guide s'efface et laisse répondre)
@@ -125377,7 +125387,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 04/10/2026 à 02:13</div>
+<div id="maj">Mise à jour : 04/10/2026 à 11:06</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
