@@ -313,6 +313,7 @@ b { font-weight: 800; }
 .lvl { display: inline-flex; gap: 3px; }
 .lvl i { width: 14px; height: 6px; border-radius: 3px; background: rgba(243, 235, 218, 0.16); display: block; }
 .lvl i.on { background: var(--jade-hi); box-shadow: 0 0 8px rgba(127, 217, 182, 0.45); }
+.lvl i.own { background: transparent; box-shadow: inset 0 0 0 1px rgba(127, 217, 182, 0.7); }   /* acquis mais bridé */
 input[type=range] { accent-color: var(--jade); width: 100%; min-width: 80px; }
 input[type=checkbox] { accent-color: var(--jade); width: 17px; height: 17px; }
 input[type=text], input[type=number] {
@@ -856,6 +857,47 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .pad .pad-focus { outline: 2px solid var(--gold-hi) !important; outline-offset: 3px; box-shadow: 0 0 0 6px rgba(232, 181, 74, 0.2); }
 .pad .chart-cv.pad-focus { outline-offset: -2px; box-shadow: none; }
 .pad-help { line-height: 2; }
+
+/* ── Héritage : tuiles par famille à gauche, fiche de l'amélioration choisie à droite ── */
+.her-bar { gap: 10px 14px; flex-wrap: wrap; }
+.her-prog { display: inline-flex; align-items: center; gap: 8px; color: var(--text-3); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.her-prog .track { width: 110px; height: 6px; border-radius: 3px; background: rgba(243, 235, 218, 0.1); overflow: hidden; }
+.her-prog .track b { display: block; height: 100%; background: linear-gradient(90deg, var(--jade-lo), var(--jade-hi)); }
+.her-tabs { margin: 0 0 0 auto; }
+.her-split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(250px, 1fr); gap: 14px; margin-top: 10px; align-items: start; }
+.her-fam { display: flex; align-items: center; gap: 10px; margin: 2px 0 7px; font: 800 11.5px/1 var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-hi); }
+.her-fam::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.her-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
+.her-tile { border: 1px solid var(--line); background: rgba(243, 235, 218, 0.045); border-radius: 12px; padding: 9px 6px 8px; display: grid; justify-items: center; align-content: start; gap: 6px; cursor: pointer; text-align: center; color: var(--text); font: inherit; }
+.her-tile:hover { background: rgba(243, 235, 218, 0.08); }
+.her-tile.has { border-color: rgba(63, 174, 138, 0.55); }
+.her-tile.cur { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), 0 8px 20px rgba(232, 181, 74, 0.14); }
+.her-tile:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.her-tile .nm { font: 800 12px/1.2 var(--font-ui); }
+.her-tile .lvl i { width: 9px; height: 5px; }
+.her-seal { width: 30px; height: 30px; flex: none; border-radius: 6px; display: grid; place-items: center; background: #b4321f; color: #fbe9d6; font: 800 17px/1 var(--font-title); box-shadow: inset 0 0 0 2px rgba(251, 233, 214, 0.25); }
+.her-seal.lg { width: 50px; height: 50px; font-size: 28px; border-radius: 8px; }
+.her-sheet { border: 1px solid var(--line-2); border-radius: 14px; background: rgba(243, 235, 218, 0.05); padding: 14px; display: grid; gap: 11px; align-content: start; }
+.her-sheet-hd { display: flex; gap: 12px; align-items: center; }
+.her-sheet h5 { margin: 0; font: 800 17px/1.2 var(--font-ui); }
+.her-fam-sm { color: var(--gold-hi); font: 800 11px/1.2 var(--font-ui); letter-spacing: 0.1em; text-transform: uppercase; }
+.her-lvtxt { font-size: 12px; color: var(--text-3); }
+.her-lvtxt.cut { color: var(--gold-hi); }
+.her-sheet .d { margin: 0; color: var(--text-2); font-size: 13px; line-height: 1.45; }
+.her-levels { display: grid; gap: 6px; }
+.her-lv { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--line); font-size: 13px; line-height: 1.35; color: var(--text-2); }
+.her-lv b { color: var(--text); font-weight: 800; font-size: 12.5px; white-space: nowrap; }
+.her-lv.on { border-color: rgba(63, 174, 138, 0.55); background: rgba(63, 174, 138, 0.1); color: var(--text); }
+.her-lv.own { border-color: rgba(127, 217, 182, 0.45); border-style: dashed; }
+.her-lv.next { border-color: rgba(232, 181, 74, 0.5); }
+.her-cost { display: inline-flex; align-items: center; gap: 3px; color: var(--text-3); font-size: 12.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.her-acts { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.her-use { display: inline-flex; align-items: center; gap: 8px; }
+.her-step { display: inline-flex; align-items: center; gap: 6px; }
+.her-step .btn { width: 26px; height: 26px; padding: 0; justify-content: center; font-size: 15px; line-height: 1; border-color: rgba(127, 217, 182, 0.55); background: rgba(127, 217, 182, 0.1); color: var(--jade-hi); }
+.her-step .btn:disabled { opacity: 0.28; }
+.btn .her-nv { opacity: 0.72; font-weight: 700; margin-right: 2px; }
+@media (max-width: 860px) { .her-split { grid-template-columns: 1fr; } }
 
 </style>
 </head>
@@ -1456,7 +1498,7 @@ const Lang = {
   seaPaths(def) {
     const out = {};
     const SKIP = new Set(['palette', 'world', 'titleScene', 'facades', 'rules', 'cultures', 'towns', 'schemes', 'portScene', 'base', 'playerSail', 'fog', 'ice', 'id', 'supremeSeal', 'zh']);
-    const KEYS = new Set(['name', 'desc', 'bulk', 'de', 'verb', 'region', 'alert', 'defeatTitle', 'announce', 'rumor', 'yearLabel', 'era', 't']);
+    const KEYS = new Set(['name', 'desc', 'bulk', 'de', 'verb', 'region', 'alert', 'defeatTitle', 'announce', 'rumor', 'yearLabel', 'era', 't', 'lv']);
     const ALL = new Set(['text', 'intro', 'tavern', 'captainNames', 'shipNames', 'signs', 'titles', 'verbs', 'labels']);
     const walk = (v, path, all, key) => {
       if (typeof v === 'string') { if (all || KEYS.has(key) || /^unit(One|Two|Few|Many|Zero)?$/.test(key)) out[path] = v; return; }
@@ -1960,6 +2002,24 @@ Lang.ui('fr', {
   'heritage.hissees': 'Hissées',   // les voiles de cette couleur sont celles du navire
   'heritage.hisser': 'Hisser',
   'heritage.gagnes': 'Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.',
+  'heritage.bridage': '− et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.',
+  'heritage.fam.million': 'Pour le million',
+  'heritage.fam.depart': 'Le départ',
+  'heritage.fam.savoir': 'Savoir et sûreté',
+  'heritage.fam.mer': 'Propres à cette mer',
+  'heritage.ongletAmeliorations': 'Améliorations',
+  'heritage.ongletVoiles': 'Voiles',
+  'heritage.investis': '{n} / {total} investis',
+  'heritage.niv': 'Niv. {n}',
+  'heritage.nivSur': 'niv. {n} / {max}',
+  'heritage.nivBride': 'niv. {n} utilisé sur {own} acquis',
+  'heritage.pasAcquis': 'pas encore acquise',
+  'heritage.utilise': 'utilisé',
+  'heritage.reserve': 'en réserve',
+  'heritage.nivUtilise': 'Niveau utilisé',
+  'heritage.acheterPour': 'Un niveau acheté sert dès la partie suivante.',
+  'heritage.moins': 'Utiliser un niveau de moins aux prochaines parties',
+  'heritage.plus': 'Utiliser un niveau de plus, jusqu\'au niveau acquis',
   'heritage.voiles': 'COULEURS DES VOILES',
 
   // ── Hauts faits, records ──
@@ -2335,6 +2395,8 @@ Lang.ui('fr', {
   'aides.heritage.jetons.d': 'Gagnés à la fin de chaque partie selon la fortune bâtie pendant celle-ci, et avec les hauts faits.',
   'aides.heritage.ameliorations.t': 'Les améliorations',
   'aides.heritage.ameliorations.d': 'Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.',
+  'aides.heritage.fiche.t': 'La fiche',
+  'aides.heritage.fiche.d': 'Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.',
   'aides.heritage.voiles.t': 'Les voiles',
   'aides.heritage.voiles.d': 'Des couleurs pour votre toile, valables dans toutes les mers.',
   // (l'hôtel du gouverneur, dans les Caraïbes : quatre nations, Angleterre, France, Espagne et Hollande)
@@ -3135,6 +3197,42 @@ Lang.ui('en', {
   'heritage.hisser': 'Hoist',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Earned at the end of each career from the fortune you built during it, and through achievements.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− and + set the level used in your next games without losing anything you\'ve earned: a way to attempt a feat.',
+  // Pour le million
+  'heritage.fam.million': 'Toward the million',
+  // Le départ
+  'heritage.fam.depart': 'The start',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Knowledge and safety',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Special to this sea',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Upgrades',
+  // Voiles
+  'heritage.ongletVoiles': 'Sails',
+  // {n} / {total} investis
+  'heritage.investis': '{n} / {total} invested',
+  // Niv. {n}
+  'heritage.niv': 'Lv. {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'lv. {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'lv. {n} used of {own} owned',
+  // pas encore acquise
+  'heritage.pasAcquis': 'not owned yet',
+  // utilisé
+  'heritage.utilise': 'in use',
+  // en réserve
+  'heritage.reserve': 'in reserve',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Level in use',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'A level you buy works from your next game.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'Use one level less in your next games',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Use one level more, up to the level you own',
   // COULEURS DES VOILES
   'heritage.voiles': 'SAIL COLORS',
   // {n} / {total} accomplis
@@ -3799,6 +3897,10 @@ Lang.ui('en', {
   'aides.heritage.ameliorations.t': 'Upgrades',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Paid for in {jetons}, they help all your future careers in this sea.',
+  // La fiche
+  'aides.heritage.fiche.t': 'The details',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'What each level gives and what it costs. − and + choose the level used in your next games, without losing anything.',
   // Les voiles
   'aides.heritage.voiles.t': 'Sail colors',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -4167,46 +4269,110 @@ Lang.sea('en', 'chine', {
   'heritage/capital/name': 'Nest egg',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 starting taels per level',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 starting taels',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 starting taels',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1,200 starting taels',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1,600 starting taels',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2,000 starting taels',
   // Navire de famille
   'heritage/navire/name': 'Family ship',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Start with a ship: a junk, then a lorcha, then a brig',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Start with a junk',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Start with a lorcha',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Start with a brig',
   // Sens des affaires
   'heritage/commerce/name': 'Head for business',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2% when selling, -2% when buying, per level',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2% when selling, -2% when buying',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4% when selling, -4% when buying',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6% when selling, -6% when buying',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8% when selling, -8% when buying',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10% when selling, -10% when buying',
   // Crédit chez Wang
   'heritage/wang/name': 'Credit with Wang',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Level 1: no interest on your first loan for 60 days. Level 2: +3,000 taels of credit. Level 3: 300 days to repay instead of 150',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'No interest on your first loan for 60 days',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3,000 taels of credit',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 days to repay instead of 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Veteran gunners',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '-10% reload time and +10% damage per level',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10% reload time, +10% damage',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20% reload time, +20% damage',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30% reload time, +30% damage',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Peerless navigator',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5% speed per level',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5% speed',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10% speed',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15% speed',
   // Équipage fidèle
   'heritage/equipage/name': 'Loyal crew',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 sailors at the start, -20% hiring cost, per level',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 sailors at the start, -20% hiring cost',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 sailors at the start, -40% hiring cost',
   // Arrimage expert
   'heritage/cale/name': 'Expert stowage',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10% hold capacity per level',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10% hold capacity',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20% hold capacity',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30% hold capacity',
   // Faveur de Mazu
   'heritage/mazu/name': 'Mazu\'s favor',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Level 1: storms push you off course half as much and no longer stop sped-up time. Level 2: no more drift at all. Plus -25% storm damage per level',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'Storms push you off course half as much and no longer stop sped-up time; -25% damage',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'No more drift at all; -50% damage',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Network of informants',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Level 1: reliable, cheaper rumors. Level 2: live prices for every port on the chart',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Reliable, cheaper rumors',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Live prices for every port on the chart',
   // Assurance maritime
   'heritage/assurance/name': 'Marine insurance',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Once per game, a shipwreck won\'t end your career',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Once per game, a shipwreck won\'t end your career',
   // Premier voyage
   'achievements/voyage/name': 'First voyage',
   // Atteindre un autre port.
@@ -12240,6 +12406,42 @@ Lang.ui('zh', {
   'heritage.hisser': '升帆',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': '每段生涯结束时按其间挣下的身家获得，达成成就亦可获得。',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '用 − 和 + 调整之后几局使用的等级，已获得的不会失去：可以挑战壮举。',
+  // Pour le million
+  'heritage.fam.million': '迈向百万',
+  // Le départ
+  'heritage.fam.depart': '起步',
+  // Savoir et sûreté
+  'heritage.fam.savoir': '见识与安全',
+  // Propres à cette mer
+  'heritage.fam.mer': '此海独有',
+  // Améliorations
+  'heritage.ongletAmeliorations': '强化',
+  // Voiles
+  'heritage.ongletVoiles': '船帆',
+  // {n} / {total} investis
+  'heritage.investis': '已投入 {n} / {total}',
+  // Niv. {n}
+  'heritage.niv': '{n}级',
+  // niv. {n} / {max}
+  'heritage.nivSur': '{n} / {max}级',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': '已获{own}级，使用{n}级',
+  // pas encore acquise
+  'heritage.pasAcquis': '尚未获得',
+  // utilisé
+  'heritage.utilise': '使用中',
+  // en réserve
+  'heritage.reserve': '保留',
+  // Niveau utilisé
+  'heritage.nivUtilise': '使用等级',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': '买下的等级从下一局起生效。',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': '之后几局少用一级',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': '多用一级，最多到已获得的等级',
   // COULEURS DES VOILES
   'heritage.voiles': '帆色',
   // {n} / {total} accomplis
@@ -12904,6 +13106,10 @@ Lang.ui('zh', {
   'aides.heritage.ameliorations.t': '各项传承',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': '以{jetons}购买，惠及你在这片海域往后的每一段生涯。',
+  // La fiche
+  'aides.heritage.fiche.t': '详情',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': '每一级的效果与价格。用 − 和 + 选择之后几局使用的等级，不会失去任何东西。',
   // Les voiles
   'aides.heritage.voiles.t': '帆色',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -13272,46 +13478,110 @@ Lang.sea('zh', 'chine', {
   'heritage/capital/name': '压箱底',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '每级开局多带400两',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '出航时+400两',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '出航时+800两',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '出航时+1,200两',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '出航时+1,600两',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '出航时+2,000两',
   // Navire de famille
   'heritage/navire/name': '家传之船',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': '开局自带一船：随等级依次为沿海帆船、老闸船、双桅商船',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': '驾沿海帆船出航',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': '驾老闸船出航',
+  // Départ avec un brick
+  'heritage/navire/lv/2': '驾双桅商船出航',
   // Sens des affaires
   'heritage/commerce/name': '生意头脑',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '每级卖价+2%，买价-2%',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '卖价+2%，买价-2%',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '卖价+4%，买价-4%',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '卖价+6%，买价-6%',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '卖价+8%，买价-8%',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '卖价+10%，买价-10%',
   // Crédit chez Wang
   'heritage/wang/name': '王记信用',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': '1级：首笔借款60天免息。2级：借款上限+3,000两。3级：还款期限由150天延长至300天',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': '首笔借款60天免息',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '借款上限+3,000两',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '还款期限由150天延长至300天',
   // Canonniers vétérans
   'heritage/canonniers/name': '老练炮手',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '每级装填时间-10%，伤害+10%',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '装填时间-10%，伤害+10%',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '装填时间-20%，伤害+20%',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '装填时间-30%，伤害+30%',
   // Navigateur hors pair
   'heritage/navigateur/name': '航海奇才',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '每级航速+5%',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '航速+5%',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '航速+10%',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '航速+15%',
   // Équipage fidèle
   'heritage/equipage/name': '忠心船员',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '每级开局多4名水手，雇金-20%',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '出航时水手+4名，雇佣费-20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '出航时水手+8名，雇佣费-40%',
   // Arrimage expert
   'heritage/cale/name': '装舱好手',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '每级货舱容量+10%',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '货舱+10%',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '货舱+20%',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '货舱+30%',
   // Faveur de Mazu
   'heritage/mazu/name': '妈祖眷顾',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': '1级：风暴的漂移减半，且不再打断加速时间。2级：完全不再漂移。另每级风暴伤害-25%',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': '风暴的漂移减半，且不再打断加速时间；伤害-25%',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': '完全不再漂移；伤害-50%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '耳目遍布',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': '1级：传闻更可靠，也更便宜。2级：海图上实时显示各港价格',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': '传闻更可靠，也更便宜',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': '海图上实时显示各港价格',
   // Assurance maritime
   'heritage/assurance/name': '海上保险',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': '每局一次，遭遇海难也不会终结你的生涯',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': '每局一次，遭遇海难也不会终结你的生涯',
   // Premier voyage
   'achievements/voyage/name': '首航',
   // Atteindre un autre port.
@@ -21316,6 +21586,42 @@ Lang.ui('zht', {
   'heritage.hisser': '升帆',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': '每段生涯結束時按其間掙下的家業獲得，達成成就亦可獲得。',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '用 − 和 + 調整之後幾局使用的等級，已獲得的不會失去：可以挑戰壯舉。',
+  // Pour le million
+  'heritage.fam.million': '邁向百萬',
+  // Le départ
+  'heritage.fam.depart': '起步',
+  // Savoir et sûreté
+  'heritage.fam.savoir': '見識與安全',
+  // Propres à cette mer
+  'heritage.fam.mer': '此海獨有',
+  // Améliorations
+  'heritage.ongletAmeliorations': '強化',
+  // Voiles
+  'heritage.ongletVoiles': '船帆',
+  // {n} / {total} investis
+  'heritage.investis': '已投入 {n} / {total}',
+  // Niv. {n}
+  'heritage.niv': '{n}級',
+  // niv. {n} / {max}
+  'heritage.nivSur': '{n} / {max}級',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': '已獲{own}級，使用{n}級',
+  // pas encore acquise
+  'heritage.pasAcquis': '尚未獲得',
+  // utilisé
+  'heritage.utilise': '使用中',
+  // en réserve
+  'heritage.reserve': '保留',
+  // Niveau utilisé
+  'heritage.nivUtilise': '使用等級',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': '買下的等級從下一局起生效。',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': '之後幾局少用一級',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': '多用一級，最多到已獲得的等級',
   // COULEURS DES VOILES
   'heritage.voiles': '帆色',
   // {n} / {total} accomplis
@@ -21980,6 +22286,10 @@ Lang.ui('zht', {
   'aides.heritage.ameliorations.t': '傳承升級',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': '以{jetons}購買，此後你在這片海域的每一局都能受益。',
+  // La fiche
+  'aides.heritage.fiche.t': '詳情',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': '每一級的效果與價格。用 − 和 + 選擇之後幾局使用的等級，不會失去任何東西。',
   // Les voiles
   'aides.heritage.voiles.t': '帆色',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -22348,46 +22658,110 @@ Lang.sea('zht', 'chine', {
   'heritage/capital/name': '壓箱底',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '每級開局多帶400兩',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '出航時+400兩',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '出航時+800兩',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '出航時+1,200兩',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '出航時+1,600兩',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '出航時+2,000兩',
   // Navire de famille
   'heritage/navire/name': '家傳之船',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': '開局自帶一船：隨等級依次為沿海帆船、老閘船、雙桅商船',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': '駕沿海帆船出航',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': '駕老閘船出航',
+  // Départ avec un brick
+  'heritage/navire/lv/2': '駕雙桅商船出航',
   // Sens des affaires
   'heritage/commerce/name': '生意頭腦',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '每級賣價+2%，買價-2%',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '賣價+2%，買價-2%',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '賣價+4%，買價-4%',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '賣價+6%，買價-6%',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '賣價+8%，買價-8%',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '賣價+10%，買價-10%',
   // Crédit chez Wang
   'heritage/wang/name': '王記信用',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': '1級：首筆借款60天免息。2級：借款上限+3,000兩。3級：還款期限由150天延長至300天',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': '首筆借款60天免息',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '借款上限+3,000兩',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '還款期限由150天延長至300天',
   // Canonniers vétérans
   'heritage/canonniers/name': '老練砲手',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '每級裝填時間-10%，傷害+10%',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '裝填時間-10%，傷害+10%',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '裝填時間-20%，傷害+20%',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '裝填時間-30%，傷害+30%',
   // Navigateur hors pair
   'heritage/navigateur/name': '航海奇才',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '每級航速+5%',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '航速+5%',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '航速+10%',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '航速+15%',
   // Équipage fidèle
   'heritage/equipage/name': '忠心船員',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '每級開局多4名水手，僱金-20%',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '出航時水手+4名，僱傭費-20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '出航時水手+8名，僱傭費-40%',
   // Arrimage expert
   'heritage/cale/name': '裝艙好手',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '每級貨艙容量+10%',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '貨艙+10%',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '貨艙+20%',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '貨艙+30%',
   // Faveur de Mazu
   'heritage/mazu/name': '媽祖眷顧',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': '1級：風暴的漂移減半，且不再打斷加速時間。2級：完全不再漂移。另每級風暴傷害-25%',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': '風暴的漂移減半，且不再打斷加速時間；傷害-25%',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': '完全不再漂移；傷害-50%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '耳目遍佈',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': '1級：傳聞更可靠，也更便宜。2級：海圖上即時顯示各港價格',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': '傳聞更可靠，也更便宜',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': '海圖上即時顯示各港價格',
   // Assurance maritime
   'heritage/assurance/name': '海上保險',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': '每局一次，遭遇海難也不會終結你的生涯',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': '每局一次，遭遇海難也不會終結你的生涯',
   // Premier voyage
   'achievements/voyage/name': '首航',
   // Atteindre un autre port.
@@ -30393,6 +30767,42 @@ Lang.ui('ja', {
   'heritage.hisser': '掲げる',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': '航海を終えるたびに、その航海で築いた財に応じて得られ、実績でも手に入る。',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '−と＋で次のプレイから使う段階を調整できます。獲得したものは失われません。偉業に挑むときにどうぞ。',
+  // Pour le million
+  'heritage.fam.million': '百万への道',
+  // Le départ
+  'heritage.fam.depart': '出航の備え',
+  // Savoir et sûreté
+  'heritage.fam.savoir': '知恵と備え',
+  // Propres à cette mer
+  'heritage.fam.mer': 'この海ならでは',
+  // Améliorations
+  'heritage.ongletAmeliorations': '強化',
+  // Voiles
+  'heritage.ongletVoiles': '帆',
+  // {n} / {total} investis
+  'heritage.investis': '投資 {n} / {total}',
+  // Niv. {n}
+  'heritage.niv': 'Lv.{n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'Lv.{n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'Lv.{own}のうちLv.{n}を使用',
+  // pas encore acquise
+  'heritage.pasAcquis': '未獲得',
+  // utilisé
+  'heritage.utilise': '使用中',
+  // en réserve
+  'heritage.reserve': '温存中',
+  // Niveau utilisé
+  'heritage.nivUtilise': '使う段階',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': '買った段階は次のプレイから効きます。',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': '次のプレイから1段階下げて使う',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': '1段階上げて使う（獲得した段階まで）',
   // COULEURS DES VOILES
   'heritage.voiles': '帆の色',
   // {n} / {total} accomplis
@@ -31057,6 +31467,10 @@ Lang.ui('ja', {
   'aides.heritage.ameliorations.t': '遺産の強化',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': '{jetons}で手に入れる強化。この海での以後の航海すべてに効く。',
+  // La fiche
+  'aides.heritage.fiche.t': '詳細',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': '各段階の効果と値段。−と＋で次のプレイから使う段階を選べます。何も失いません。',
   // Les voiles
   'aides.heritage.voiles.t': '帆の色',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -31425,46 +31839,110 @@ Lang.sea('ja', 'chine', {
   'heritage/capital/name': 'へそくり',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '1段階ごとに初期資金+400両',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '出航時に+400両',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '出航時に+800両',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '出航時に+1,200両',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '出航時に+1,600両',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '出航時に+2,000両',
   // Navire de famille
   'heritage/navire/name': '一族の船',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': '船を持って始める：ジャンク、次にロルシャ、さらにブリッグ',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'ジャンクで出航',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'ロルシャで出航',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'ブリッグで出航',
   // Sens des affaires
   'heritage/commerce/name': '商才',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '1段階ごとに売値+2%、買値-2%',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '売値+2%、買値-2%',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '売値+4%、買値-4%',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '売値+6%、買値-6%',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '売値+8%、買値-8%',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '売値+10%、買値-10%',
   // Crédit chez Wang
   'heritage/wang/name': '王大人の信用',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Lv.1：最初の借金は60日間無利子。Lv.2：借入枠+3,000両。Lv.3：返済期限が150日から300日に',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': '最初の借金は60日間無利子',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '借入枠+3,000両',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '返済期限が150日から300日に',
   // Canonniers vétérans
   'heritage/canonniers/name': '歴戦の砲手',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '1段階ごとに装填時間-10%、威力+10%',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '装填時間-10%、ダメージ+10%',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '装填時間-20%、ダメージ+20%',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '装填時間-30%、ダメージ+30%',
   // Navigateur hors pair
   'heritage/navigateur/name': '比類なき航海士',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '1段階ごとに速度+5%',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '速度+5%',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '速度+10%',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '速度+15%',
   // Équipage fidèle
   'heritage/equipage/name': '忠実な船員',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '1段階ごとに初期の水夫+4人、支度金-20%',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '出航時に水夫+4人、雇用費-20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '出航時に水夫+8人、雇用費-40%',
   // Arrimage expert
   'heritage/cale/name': '熟練の積み付け',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '1段階ごとに船倉の容量+10%',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '船倉+10%',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '船倉+20%',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '船倉+30%',
   // Faveur de Mazu
   'heritage/mazu/name': '媽祖の恵み',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Lv.1：嵐に流される距離が半分になり、時間を早めたままでいられる。Lv.2：まったく流されない。さらに1段階ごとに嵐の被害-25%',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': '嵐に流される距離が半分になり、時間を早めたままでいられる。被害-25%',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'まったく流されない。被害-50%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '情報網',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Lv.1：噂が確かで安くなる。Lv.2：全港の相場が海図に常に表示される',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': '噂が確かで安くなる',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': '全港の相場が海図に常に表示される',
   // Assurance maritime
   'heritage/assurance/name': '海上保険',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': '1回のプレイで一度だけ、難破しても身の破滅を免れる',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': '1回のプレイで一度だけ、難破しても身の破滅を免れる',
   // Premier voyage
   'achievements/voyage/name': '初航海',
   // Atteindre un autre port.
@@ -39503,6 +39981,42 @@ Lang.ui('ko', {
   'heritage.hisser': '게양',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': '항해를 마칠 때마다 그 항해에서 일군 재산에 따라 얻고, 업적으로도 얻습니다.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '−와 +로 다음 게임부터 쓸 단계를 정합니다. 얻은 것은 잃지 않습니다. 위업에 도전해 보세요.',
+  // Pour le million
+  'heritage.fam.million': '백만을 향해',
+  // Le départ
+  'heritage.fam.depart': '출항 준비',
+  // Savoir et sûreté
+  'heritage.fam.savoir': '지식과 안전',
+  // Propres à cette mer
+  'heritage.fam.mer': '이 바다만의 것',
+  // Améliorations
+  'heritage.ongletAmeliorations': '강화',
+  // Voiles
+  'heritage.ongletVoiles': '돛',
+  // {n} / {total} investis
+  'heritage.investis': '투자 {n} / {total}',
+  // Niv. {n}
+  'heritage.niv': '{n}단계',
+  // niv. {n} / {max}
+  'heritage.nivSur': '{n} / {max}단계',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': '{own}단계 중 {n}단계 사용',
+  // pas encore acquise
+  'heritage.pasAcquis': '아직 얻지 못함',
+  // utilisé
+  'heritage.utilise': '사용 중',
+  // en réserve
+  'heritage.reserve': '보류',
+  // Niveau utilisé
+  'heritage.nivUtilise': '사용 단계',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': '산 단계는 다음 게임부터 적용됩니다.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': '다음 게임부터 한 단계 낮춰 사용',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': '한 단계 높여 사용 (얻은 단계까지)',
   // COULEURS DES VOILES
   'heritage.voiles': '돛 색',
   // {n} / {total} accomplis
@@ -40167,6 +40681,10 @@ Lang.ui('ko', {
   'aides.heritage.ameliorations.t': '강화',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': '{jetons}(으)로 사며, 이 바다에서 하는 다음 항해 모두에 도움이 됩니다.',
+  // La fiche
+  'aides.heritage.fiche.t': '상세',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': '단계마다 주는 효과와 가격. −와 +로 다음 게임부터 쓸 단계를 고릅니다. 잃는 것은 없습니다.',
   // Les voiles
   'aides.heritage.voiles.t': '돛 색',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -40535,46 +41053,110 @@ Lang.sea('ko', 'chine', {
   'heritage/capital/name': '비상금',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '단계마다 출발 자금 +400냥',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '출항 시 +400냥',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '출항 시 +800냥',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '출항 시 +1,200냥',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '출항 시 +1,600냥',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '출항 시 +2,000냥',
   // Navire de famille
   'heritage/navire/name': '가문의 배',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': '배를 가지고 시작합니다. 단계에 따라 정크, 로르차, 브리그',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': '정크로 출항',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': '로르차로 출항',
+  // Départ avec un brick
+  'heritage/navire/lv/2': '브리그로 출항',
   // Sens des affaires
   'heritage/commerce/name': '장사 수완',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '단계마다 판매가 +2%, 구매가 -2%',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '판매가 +2%, 구매가 -2%',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '판매가 +4%, 구매가 -4%',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '판매가 +6%, 구매가 -6%',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '판매가 +8%, 구매가 -8%',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '판매가 +10%, 구매가 -10%',
   // Crédit chez Wang
   'heritage/wang/name': '왕 대인의 신용',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': '1단계: 첫 대출 60일간 무이자. 2단계: 대출 한도 +3,000냥. 3단계: 상환 기한 150일 → 300일',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': '첫 대출 60일간 무이자',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '대출 한도 +3,000냥',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '상환 기한 150일 → 300일',
   // Canonniers vétérans
   'heritage/canonniers/name': '노련한 포수들',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '단계마다 재장전 시간 -10%, 피해 +10%',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '재장전 -10%, 피해 +10%',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '재장전 -20%, 피해 +20%',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '재장전 -30%, 피해 +30%',
   // Navigateur hors pair
   'heritage/navigateur/name': '뛰어난 항해사',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '단계마다 속도 +5%',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '속도 +5%',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '속도 +10%',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '속도 +15%',
   // Équipage fidèle
   'heritage/equipage/name': '충직한 선원들',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '단계마다 출발 선원 +4명, 계약금 -20%',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '출항 시 선원 +4명, 고용비 -20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '출항 시 선원 +8명, 고용비 -40%',
   // Arrimage expert
   'heritage/cale/name': '적재의 달인',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '단계마다 화물칸 적재량 +10%',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '화물칸 +10%',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '화물칸 +20%',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '화물칸 +30%',
   // Faveur de Mazu
   'heritage/mazu/name': '마조의 은총',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': '1단계: 폭풍에 밀리는 거리가 절반으로 줄고, 시간 가속이 더는 멈추지 않습니다. 2단계: 전혀 밀리지 않습니다. 그리고 단계마다 폭풍 피해 -25%',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': '폭풍에 밀리는 거리가 절반으로 줄고 시간 가속이 더는 멈추지 않습니다. 피해 -25%',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': '전혀 밀리지 않습니다. 피해 -50%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '정보원 조직',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': '1단계: 믿을 만한 소문을 더 싸게. 2단계: 해도에서 모든 항구의 시세를 바로 확인',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': '믿을 만한 소문을 더 싸게',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': '해도에서 모든 항구의 시세를 바로 확인',
   // Assurance maritime
   'heritage/assurance/name': '해상 보험',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': '한 게임에 한 번, 난파해도 항해가 끝나지 않습니다',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': '한 게임에 한 번, 난파해도 항해가 끝나지 않습니다',
   // Premier voyage
   'achievements/voyage/name': '첫 항해',
   // Atteindre un autre port.
@@ -48578,6 +49160,42 @@ Lang.ui('ru', {
   'heritage.hisser': 'Поднять',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Даются в конце каждой карьеры за нажитое в ней состояние, а также за достижения.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− и + задают уровень на следующие партии, ничего не отнимая из приобретённого: можно попробовать совершить подвиг.',
+  // Pour le million
+  'heritage.fam.million': 'На пути к миллиону',
+  // Le départ
+  'heritage.fam.depart': 'Старт',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Знания и безопасность',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Особые для этого моря',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Улучшения',
+  // Voiles
+  'heritage.ongletVoiles': 'Паруса',
+  // {n} / {total} investis
+  'heritage.investis': 'Вложено: {n} / {total}',
+  // Niv. {n}
+  'heritage.niv': 'Ур. {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'ур. {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'используется ур. {n} из {own}',
+  // pas encore acquise
+  'heritage.pasAcquis': 'ещё не приобретено',
+  // utilisé
+  'heritage.utilise': 'в деле',
+  // en réserve
+  'heritage.reserve': 'в запасе',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Используемый уровень',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'Купленный уровень действует со следующей партии.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'В следующих партиях использовать на уровень меньше',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Использовать на уровень больше, вплоть до приобретённого',
   // COULEURS DES VOILES
   'heritage.voiles': 'ЦВЕТА ПАРУСОВ',
   // {n} / {total} accomplis
@@ -49242,6 +49860,10 @@ Lang.ui('ru', {
   'aides.heritage.ameliorations.t': 'Улучшения',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Покупаются за {jetons} и помогают во всех ваших следующих карьерах в этом море.',
+  // La fiche
+  'aides.heritage.fiche.t': 'Карточка',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'Что даёт каждый уровень и сколько он стоит. − и + выбирают уровень на следующие партии, ничего не отнимая.',
   // Les voiles
   'aides.heritage.voiles.t': 'Паруса',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -49610,46 +50232,110 @@ Lang.sea('ru', 'chine', {
   'heritage/capital/name': 'Кубышка',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 таэлей на старте за уровень',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 таэлей на старте',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 таэлей на старте',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1 200 таэлей на старте',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1 600 таэлей на старте',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2 000 таэлей на старте',
   // Navire de famille
   'heritage/navire/name': 'Семейный корабль',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Начать игру со своим кораблём: сперва джонка, потом лорча, потом бриг',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Старт на джонке',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Старт на лорче',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Старт на бриге',
   // Sens des affaires
   'heritage/commerce/name': 'Деловая хватка',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2 % при продаже, -2 % при покупке за уровень',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2 % при продаже, -2 % при покупке',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4 % при продаже, -4 % при покупке',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6 % при продаже, -6 % при покупке',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8 % при продаже, -8 % при покупке',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10 % при продаже, -10 % при покупке',
   // Crédit chez Wang
   'heritage/wang/name': 'Кредит в доме Вана',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Ур. 1: первый заём без процентов на 60 дней. Ур. 2: +3 000 таэлей займа. Ур. 3: 300 дней на возврат вместо 150',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'Первый заём без процентов на 60 дней',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3 000 таэлей займа',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 дней на возврат вместо 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Бывалые канониры',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '-10 % к перезарядке и +10 % к урону за уровень',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10 % к перезарядке, +10 % к урону',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20 % к перезарядке, +20 % к урону',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30 % к перезарядке, +30 % к урону',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Несравненный штурман',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5 % к скорости за уровень',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5 % к скорости',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10 % к скорости',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15 % к скорости',
   // Équipage fidèle
   'heritage/equipage/name': 'Верная команда',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 моряка на старте, задаток -20 % за уровень',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 матроса на старте, найм -20 %',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 матросов на старте, найм -40 %',
   // Arrimage expert
   'heritage/cale/name': 'Искусная укладка',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10 % вместимости трюма за уровень',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10 % к трюму',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20 % к трюму',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30 % к трюму',
   // Faveur de Mazu
   'heritage/mazu/name': 'Милость Мацзу',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Ур. 1: буря сносит вас вдвое слабее и больше не останавливает ускорение времени. Ур. 2: никакого сноса. И -25 % урона от бурь за уровень',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'Буря сносит вас вдвое слабее и больше не останавливает ускорение времени; -25 % урона',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'Никакого сноса; -50 % урона',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Сеть осведомителей',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Ур. 1: надёжные и более дешёвые слухи. Ур. 2: свежие цены всех портов прямо на карте',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Надёжные и более дешёвые слухи',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Свежие цены всех портов прямо на карте',
   // Assurance maritime
   'heritage/assurance/name': 'Морское страхование',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Один раз за партию кораблекрушение не оборвёт вашу карьеру',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Один раз за партию кораблекрушение не оборвёт вашу карьеру',
   // Premier voyage
   'achievements/voyage/name': 'Первое плавание',
   // Atteindre un autre port.
@@ -57793,6 +58479,42 @@ Lang.ui('es', {
   'heritage.hisser': 'Izar',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Se ganan al final de cada carrera según la fortuna amasada en ella, y con las hazañas.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− y + ajustan el nivel que usarás en las próximas partidas sin perder nada de lo conseguido: ideal para intentar una hazaña.',
+  // Pour le million
+  'heritage.fam.million': 'Hacia el millón',
+  // Le départ
+  'heritage.fam.depart': 'El comienzo',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Saber y seguridad',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Propias de este mar',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Mejoras',
+  // Voiles
+  'heritage.ongletVoiles': 'Velas',
+  // {n} / {total} investis
+  'heritage.investis': '{n} / {total} invertidas',
+  // Niv. {n}
+  'heritage.niv': 'Niv. {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'niv. {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'niv. {n} en uso de {own} conseguidos',
+  // pas encore acquise
+  'heritage.pasAcquis': 'aún no conseguida',
+  // utilisé
+  'heritage.utilise': 'en uso',
+  // en réserve
+  'heritage.reserve': 'en reserva',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Nivel en uso',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'Un nivel comprado sirve desde la siguiente partida.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'Usar un nivel menos en las próximas partidas',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Usar un nivel más, hasta el nivel conseguido',
   // COULEURS DES VOILES
   'heritage.voiles': 'COLORES DE LAS VELAS',
   // {n} / {total} accomplis
@@ -58457,6 +59179,10 @@ Lang.ui('es', {
   'aides.heritage.ameliorations.t': 'Las mejoras',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Se pagan con {jetons} y ayudan en todas tus partidas siguientes en este mar.',
+  // La fiche
+  'aides.heritage.fiche.t': 'La ficha',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'Lo que da cada nivel y su precio. − y + eligen el nivel que se usará en las próximas partidas, sin perder nada.',
   // Les voiles
   'aides.heritage.voiles.t': 'Las velas',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -58825,46 +59551,110 @@ Lang.sea('es', 'chine', {
   'heritage/capital/name': 'Ahorros',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 taeles iniciales por nivel',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 taeles al empezar',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 taeles al empezar',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1.200 taeles al empezar',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1.600 taeles al empezar',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2.000 taeles al empezar',
   // Navire de famille
   'heritage/navire/name': 'Barco de familia',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Empieza con un barco: un junco, luego una lorcha, luego un bergantín',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Empiezas con un junco',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Empiezas con una lorcha',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Empiezas con un bergantín',
   // Sens des affaires
   'heritage/commerce/name': 'Olfato para los negocios',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2% al vender, -2% al comprar, por nivel',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2% al vender, -2% al comprar',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4% al vender, -4% al comprar',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6% al vender, -6% al comprar',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8% al vender, -8% al comprar',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10% al vender, -10% al comprar',
   // Crédit chez Wang
   'heritage/wang/name': 'Crédito con Wang',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Nivel 1: primer préstamo sin intereses durante 60 días. Nivel 2: +3.000 taeles de préstamo. Nivel 3: 300 días para devolverlo en vez de 150',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'Primer préstamo sin intereses durante 60 días',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3.000 taeles de préstamo',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 días para devolverlo en vez de 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Artilleros veteranos',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '-10% de recarga y +10% de daño por nivel',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10% de recarga, +10% de daño',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20% de recarga, +20% de daño',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30% de recarga, +30% de daño',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Navegante sin par',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5% de velocidad por nivel',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5% de velocidad',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10% de velocidad',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15% de velocidad',
   // Équipage fidèle
   'heritage/equipage/name': 'Tripulación leal',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 marineros al empezar, enganche -20% por nivel',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 marineros al empezar, enrolar cuesta un 20% menos',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 marineros al empezar, enrolar cuesta un 40% menos',
   // Arrimage expert
   'heritage/cale/name': 'Estiba experta',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10% de capacidad de bodega por nivel',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10% de bodega',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20% de bodega',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30% de bodega',
   // Faveur de Mazu
   'heritage/mazu/name': 'Favor de Mazu',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Nivel 1: la tempestad te desvía la mitad y ya no detiene el tiempo acelerado. Nivel 2: ninguna deriva. Además, -25% de daños por tempestad por nivel',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'La tempestad te desvía la mitad y ya no detiene el tiempo acelerado; -25% de daños',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'Ninguna deriva; -50% de daños',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Red de informantes',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Nivel 1: rumores fiables y más baratos. Nivel 2: precios de todos los puertos al día en la carta',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Rumores fiables y más baratos',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Precios de todos los puertos al día en la carta',
   // Assurance maritime
   'heritage/assurance/name': 'Seguro marítimo',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Una vez por partida, un naufragio no acaba con tu carrera',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Una vez por partida, un naufragio no acaba con tu carrera',
   // Premier voyage
   'achievements/voyage/name': 'Primer viaje',
   // Atteindre un autre port.
@@ -66894,6 +67684,42 @@ Lang.ui('pt', {
   'heritage.hisser': 'Içar',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Você ganha mais ao fim de cada carreira, conforme o patrimônio construído nela, e com as conquistas.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− e + ajustam o nível usado nas próximas partidas sem perder nada do que você conquistou: para tentar uma façanha.',
+  // Pour le million
+  'heritage.fam.million': 'Rumo ao milhão',
+  // Le départ
+  'heritage.fam.depart': 'A partida',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Saber e segurança',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Próprias deste mar',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Melhorias',
+  // Voiles
+  'heritage.ongletVoiles': 'Velas',
+  // {n} / {total} investis
+  'heritage.investis': '{n} / {total} investidos',
+  // Niv. {n}
+  'heritage.niv': 'Nív. {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'nív. {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'nív. {n} em uso de {own} conquistados',
+  // pas encore acquise
+  'heritage.pasAcquis': 'ainda não conquistada',
+  // utilisé
+  'heritage.utilise': 'em uso',
+  // en réserve
+  'heritage.reserve': 'na reserva',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Nível em uso',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'Um nível comprado vale a partir da próxima partida.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'Usar um nível a menos nas próximas partidas',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Usar um nível a mais, até o nível conquistado',
   // COULEURS DES VOILES
   'heritage.voiles': 'CORES DAS VELAS',
   // {n} / {total} accomplis
@@ -67558,6 +68384,10 @@ Lang.ui('pt', {
   'aides.heritage.ameliorations.t': 'As melhorias',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Pagas em {jetons}, elas ajudam todas as suas partidas seguintes neste mar.',
+  // La fiche
+  'aides.heritage.fiche.t': 'A ficha',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'O que cada nível dá e quanto custa. − e + escolhem o nível usado nas próximas partidas, sem perder nada.',
   // Les voiles
   'aides.heritage.voiles.t': 'As velas',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -67926,46 +68756,110 @@ Lang.sea('pt', 'chine', {
   'heritage/capital/name': 'Pé de meia',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 taéis iniciais por nível',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 taéis na partida',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 taéis na partida',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1.200 taéis na partida',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1.600 taéis na partida',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2.000 taéis na partida',
   // Navire de famille
   'heritage/navire/name': 'Navio de família',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Comece com um navio: junco, depois lorcha, depois brigue',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Começa com um junco',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Começa com uma lorcha',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Começa com um brigue',
   // Sens des affaires
   'heritage/commerce/name': 'Tino comercial',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2% na venda, -2% na compra, por nível',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2% na venda, -2% na compra',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4% na venda, -4% na compra',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6% na venda, -6% na compra',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8% na venda, -8% na compra',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10% na venda, -10% na compra',
   // Crédit chez Wang
   'heritage/wang/name': 'Crédito com Wang',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Nív. 1: primeiro empréstimo sem juros por 60 dias. Nív. 2: +3.000 taéis de crédito. Nív. 3: 300 dias para pagar em vez de 150',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'Primeiro empréstimo sem juros por 60 dias',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3.000 taéis de crédito',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 dias para pagar em vez de 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Artilheiros veteranos',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '-10% de recarga e +10% de dano por nível',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10% de recarga, +10% de dano',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20% de recarga, +20% de dano',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30% de recarga, +30% de dano',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Navegador sem igual',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5% de velocidade por nível',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5% de velocidade',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10% de velocidade',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15% de velocidade',
   // Équipage fidèle
   'heritage/equipage/name': 'Tripulação fiel',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 marinheiros no início, engajamento -20%, por nível',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 marinheiros na partida, contratação -20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 marinheiros na partida, contratação -40%',
   // Arrimage expert
   'heritage/cale/name': 'Mestre da estiva',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10% de capacidade do porão por nível',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10% de porão',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20% de porão',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30% de porão',
   // Faveur de Mazu
   'heritage/mazu/name': 'Favor de Mazu',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Nív. 1: a tempestade desvia você pela metade e não interrompe mais o tempo acelerado. Nív. 2: nenhuma deriva. E -25% de dano das tempestades por nível',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'A tempestade desvia você pela metade e não interrompe mais o tempo acelerado; -25% de dano',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'Nenhuma deriva; -50% de dano',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Rede de informantes',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Nív. 1: rumores confiáveis e mais baratos. Nív. 2: preços de todos os portos sempre em dia no mapa',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Rumores confiáveis e mais baratos',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Preços de todos os portos sempre em dia no mapa',
   // Assurance maritime
   'heritage/assurance/name': 'Seguro marítimo',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Uma vez por partida, um naufrágio não encerra sua carreira',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Uma vez por partida, um naufrágio não encerra sua carreira',
   // Premier voyage
   'achievements/voyage/name': 'Primeira viagem',
   // Atteindre un autre port.
@@ -75993,6 +76887,42 @@ Lang.ui('de', {
   'heritage.hisser': 'Hissen',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Verdient am Ende jeder Laufbahn, je nach dem dabei aufgebauten Vermögen, und durch Ruhmestaten.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− und + legen die Stufe für die nächsten Partien fest, ohne dass du Erworbenes verlierst: So kannst du dich an einer Meisterleistung versuchen.',
+  // Pour le million
+  'heritage.fam.million': 'Auf dem Weg zur Million',
+  // Le départ
+  'heritage.fam.depart': 'Der Start',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Wissen und Sicherheit',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Eigen in diesem Meer',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Verbesserungen',
+  // Voiles
+  'heritage.ongletVoiles': 'Segel',
+  // {n} / {total} investis
+  'heritage.investis': '{n} / {total} investiert',
+  // Niv. {n}
+  'heritage.niv': 'Stufe {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'Stufe {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'Stufe {n} genutzt, {own} erworben',
+  // pas encore acquise
+  'heritage.pasAcquis': 'noch nicht erworben',
+  // utilisé
+  'heritage.utilise': 'genutzt',
+  // en réserve
+  'heritage.reserve': 'in Reserve',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Genutzte Stufe',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'Eine gekaufte Stufe wirkt ab der nächsten Partie.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'In den nächsten Partien eine Stufe weniger nutzen',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Eine Stufe mehr nutzen, bis zur erworbenen Stufe',
   // COULEURS DES VOILES
   'heritage.voiles': 'SEGELFARBEN',
   // {n} / {total} accomplis
@@ -76657,6 +77587,10 @@ Lang.ui('de', {
   'aides.heritage.ameliorations.t': 'Verbesserungen',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Mit {jetons} bezahlt, helfen sie all deinen folgenden Partien in diesem Meer.',
+  // La fiche
+  'aides.heritage.fiche.t': 'Die Übersicht',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'Was jede Stufe bringt und was sie kostet. − und + wählen die Stufe für die nächsten Partien, ohne dass du etwas verlierst.',
   // Les voiles
   'aides.heritage.voiles.t': 'Segelfarben',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -77025,46 +77959,110 @@ Lang.sea('de', 'chine', {
   'heritage/capital/name': 'Notgroschen',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 Tael Startkapital pro Stufe',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 Tael Startkapital',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 Tael Startkapital',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1.200 Tael Startkapital',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1.600 Tael Startkapital',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2.000 Tael Startkapital',
   // Navire de famille
   'heritage/navire/name': 'Familienschiff',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Beginne mit einem Schiff: Dschunke, dann Lorcha, dann Brigg',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Start mit einer Dschunke',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Start mit einer Lorcha',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Start mit einer Brigg',
   // Sens des affaires
   'heritage/commerce/name': 'Geschäftssinn',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2 % beim Verkauf, -2 % beim Kauf pro Stufe',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2 % beim Verkauf, -2 % beim Kauf',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4 % beim Verkauf, -4 % beim Kauf',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6 % beim Verkauf, -6 % beim Kauf',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8 % beim Verkauf, -8 % beim Kauf',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10 % beim Verkauf, -10 % beim Kauf',
   // Crédit chez Wang
   'heritage/wang/name': 'Kredit bei Wang',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Stufe 1: erster Kredit 60 Tage zinsfrei. Stufe 2: +3.000 Tael Kreditrahmen. Stufe 3: 300 statt 150 Tage zum Zurückzahlen',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'Erster Kredit 60 Tage zinsfrei',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3.000 Tael Kreditrahmen',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 statt 150 Tage zum Zurückzahlen',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Erfahrene Kanoniere',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '-10 % Nachladezeit und +10 % Schaden pro Stufe',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10 % Nachladezeit, +10 % Schaden',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20 % Nachladezeit, +20 % Schaden',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30 % Nachladezeit, +30 % Schaden',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Navigator ohnegleichen',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5 % Geschwindigkeit pro Stufe',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5 % Geschwindigkeit',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10 % Geschwindigkeit',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15 % Geschwindigkeit',
   // Équipage fidèle
   'heritage/equipage/name': 'Treue Besatzung',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 Mann zu Beginn, Handgeld -20 % pro Stufe',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 Mann zu Beginn, Handgeld -20 %',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 Mann zu Beginn, Handgeld -40 %',
   // Arrimage expert
   'heritage/cale/name': 'Geschicktes Stauen',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10 % Laderaum pro Stufe',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10 % Laderaum',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20 % Laderaum',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30 % Laderaum',
   // Faveur de Mazu
   'heritage/mazu/name': 'Mazus Gunst',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Stufe 1: Stürme treiben dich nur halb so weit ab und halten den Zeitraffer nicht mehr an. Stufe 2: gar keine Abdrift mehr. Dazu -25 % Sturmschaden pro Stufe',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'Stürme treiben dich nur halb so weit ab und halten den Zeitraffer nicht mehr an; -25 % Schaden',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'Gar keine Abdrift mehr; -50 % Schaden',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Netz von Zuträgern',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Stufe 1: verlässlichere, billigere Gerüchte. Stufe 2: aktuelle Preise aller Häfen auf der Karte',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Verlässlichere, billigere Gerüchte',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Aktuelle Preise aller Häfen auf der Karte',
   // Assurance maritime
   'heritage/assurance/name': 'Seeversicherung',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Einmal pro Partie beendet ein Schiffbruch nicht deine Laufbahn',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Einmal pro Partie beendet ein Schiffbruch nicht deine Laufbahn',
   // Premier voyage
   'achievements/voyage/name': 'Erste Fahrt',
   // Atteindre un autre port.
@@ -85092,6 +86090,42 @@ Lang.ui('it', {
   'heritage.hisser': 'Issa',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Si guadagnano a ogni fine carriera, in base a quanto ti sei arricchito, e con le imprese.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− e + regolano il livello usato nelle prossime partite senza perdere nulla di ciò che hai ottenuto: per tentare un\'impresa.',
+  // Pour le million
+  'heritage.fam.million': 'Verso il milione',
+  // Le départ
+  'heritage.fam.depart': 'La partenza',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Sapere e sicurezza',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Proprie di questo mare',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Migliorie',
+  // Voiles
+  'heritage.ongletVoiles': 'Vele',
+  // {n} / {total} investis
+  'heritage.investis': '{n} / {total} investiti',
+  // Niv. {n}
+  'heritage.niv': 'Liv. {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'liv. {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'liv. {n} in uso su {own} ottenuti',
+  // pas encore acquise
+  'heritage.pasAcquis': 'non ancora ottenuta',
+  // utilisé
+  'heritage.utilise': 'in uso',
+  // en réserve
+  'heritage.reserve': 'in riserva',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Livello in uso',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'Un livello acquistato vale dalla partita successiva.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'Usa un livello in meno nelle prossime partite',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Usa un livello in più, fino al livello ottenuto',
   // COULEURS DES VOILES
   'heritage.voiles': 'COLORI DELLE VELE',
   // {n} / {total} accomplis
@@ -85756,6 +86790,10 @@ Lang.ui('it', {
   'aides.heritage.ameliorations.t': 'Le migliorie',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Si pagano in {jetons} e aiutano tutte le tue partite successive in questo mare.',
+  // La fiche
+  'aides.heritage.fiche.t': 'La scheda',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'Cosa dà ogni livello e quanto costa. − e + scelgono il livello usato nelle prossime partite, senza perdere nulla.',
   // Les voiles
   'aides.heritage.voiles.t': 'Le vele',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -86124,46 +87162,110 @@ Lang.sea('it', 'chine', {
   'heritage/capital/name': 'Gruzzolo',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 tael alla partenza per livello',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 tael alla partenza',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 tael alla partenza',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1.200 tael alla partenza',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1.600 tael alla partenza',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2.000 tael alla partenza',
   // Navire de famille
   'heritage/navire/name': 'Nave di famiglia',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Parti con una nave: giunca, poi lorcha, poi brigantino',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Si parte con una giunca',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Si parte con una lorcha',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Si parte con un brigantino',
   // Sens des affaires
   'heritage/commerce/name': 'Fiuto per gli affari',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2% sulle vendite, -2% sugli acquisti per livello',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2% in vendita, -2% in acquisto',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4% in vendita, -4% in acquisto',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6% in vendita, -6% in acquisto',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8% in vendita, -8% in acquisto',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10% in vendita, -10% in acquisto',
   // Crédit chez Wang
   'heritage/wang/name': 'Credito presso Wang',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Livello 1: primo prestito senza interessi per 60 giorni. Livello 2: +3.000 tael di prestito. Livello 3: 300 giorni per restituire invece di 150',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'Primo prestito senza interessi per 60 giorni',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3.000 tael di prestito',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 giorni per restituire invece di 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Cannonieri veterani',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': 'Ricarica -10% e danni +10% per livello',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10% di ricarica, +10% di danni',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20% di ricarica, +20% di danni',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30% di ricarica, +30% di danni',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Navigatore senza pari',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5% di velocità per livello',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5% di velocità',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10% di velocità',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15% di velocità',
   // Équipage fidèle
   'heritage/equipage/name': 'Equipaggio fedele',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 marinai alla partenza, ingaggio -20% per livello',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 marinai alla partenza, ingaggio -20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 marinai alla partenza, ingaggio -40%',
   // Arrimage expert
   'heritage/cale/name': 'Stivaggio esperto',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10% di capacità della stiva per livello',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10% di stiva',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20% di stiva',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30% di stiva',
   // Faveur de Mazu
   'heritage/mazu/name': 'Favore di Mazu',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Livello 1: la tempesta ti fa deviare la metà e non ferma più il tempo accelerato. Livello 2: nessuna deriva. In più -25% di danni da tempesta per livello',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'La tempesta ti fa deviare la metà e non ferma più il tempo accelerato; -25% di danni',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'Nessuna deriva; -50% di danni',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Rete di informatori',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Livello 1: voci affidabili e meno care. Livello 2: prezzi di tutti i porti in tempo reale sulla mappa',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Voci affidabili e meno care',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Prezzi di tutti i porti in tempo reale sulla mappa',
   // Assurance maritime
   'heritage/assurance/name': 'Assicurazione marittima',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Una volta per partita, un naufragio non mette fine alla tua carriera',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Una volta per partita, un naufragio non mette fine alla tua carriera',
   // Premier voyage
   'achievements/voyage/name': 'Primo viaggio',
   // Atteindre un autre port.
@@ -94194,6 +95296,42 @@ Lang.ui('pl', {
   'heritage.hisser': 'Wciągnij',
   // Gagnés à chaque fin de carrière selon la fortune bâtie pendant celle-ci, et avec les hauts faits.
   'heritage.gagnes': 'Zdobywasz je na koniec każdej kariery, zależnie od majątku zbudowanego w jej trakcie, a także za osiągnięcia.',
+  // − et + règlent le niveau utilisé aux prochaines parties, sans rien perdre de ce qui est acquis : de quoi tenter un exploit.
+  'heritage.bridage': '− i + ustawiają poziom używany w kolejnych rozgrywkach, bez utraty tego, co zdobyłeś: sposób, by spróbować wyczynu.',
+  // Pour le million
+  'heritage.fam.million': 'Ku milionowi',
+  // Le départ
+  'heritage.fam.depart': 'Start',
+  // Savoir et sûreté
+  'heritage.fam.savoir': 'Wiedza i bezpieczeństwo',
+  // Propres à cette mer
+  'heritage.fam.mer': 'Właściwe dla tego morza',
+  // Améliorations
+  'heritage.ongletAmeliorations': 'Ulepszenia',
+  // Voiles
+  'heritage.ongletVoiles': 'Żagle',
+  // {n} / {total} investis
+  'heritage.investis': '{n} / {total} zainwestowane',
+  // Niv. {n}
+  'heritage.niv': 'Poz. {n}',
+  // niv. {n} / {max}
+  'heritage.nivSur': 'poz. {n} / {max}',
+  // niv. {n} utilisé sur {own} acquis
+  'heritage.nivBride': 'używany poz. {n} z {own} zdobytych',
+  // pas encore acquise
+  'heritage.pasAcquis': 'jeszcze niezdobyte',
+  // utilisé
+  'heritage.utilise': 'używany',
+  // en réserve
+  'heritage.reserve': 'w rezerwie',
+  // Niveau utilisé
+  'heritage.nivUtilise': 'Używany poziom',
+  // Un niveau acheté sert dès la partie suivante.
+  'heritage.acheterPour': 'Kupiony poziom działa od następnej rozgrywki.',
+  // Utiliser un niveau de moins aux prochaines parties
+  'heritage.moins': 'Używaj o jeden poziom mniej w kolejnych rozgrywkach',
+  // Utiliser un niveau de plus, jusqu'au niveau acquis
+  'heritage.plus': 'Używaj o jeden poziom więcej, aż do zdobytego',
   // COULEURS DES VOILES
   'heritage.voiles': 'KOLORY ŻAGLI',
   // {n} / {total} accomplis
@@ -94858,6 +95996,10 @@ Lang.ui('pl', {
   'aides.heritage.ameliorations.t': 'Ulepszenia',
   // Payées en {jetons}, elles aident toutes vos parties suivantes dans cette mer.
   'aides.heritage.ameliorations.d': 'Kupujesz je za {jetons}; pomagają we wszystkich twoich kolejnych rozgrywkach na tym morzu.',
+  // La fiche
+  'aides.heritage.fiche.t': 'Karta',
+  // Ce que donne chaque niveau et son prix. − et + choisissent le niveau utilisé aux prochaines parties, sans rien perdre.
+  'aides.heritage.fiche.d': 'Co daje każdy poziom i ile kosztuje. − i + wybierają poziom używany w kolejnych rozgrywkach, bez żadnej straty.',
   // Les voiles
   'aides.heritage.voiles.t': 'Żagle',
   // Des couleurs pour votre toile, valables dans toutes les mers.
@@ -95226,46 +96368,110 @@ Lang.sea('pl', 'chine', {
   'heritage/capital/name': 'Odłożony grosz',
   // +400 taels au départ par niveau
   'heritage/capital/desc': '+400 taeli na start za poziom',
+  // +400 taels au départ
+  'heritage/capital/lv/0': '+400 taeli na start',
+  // +800 taels au départ
+  'heritage/capital/lv/1': '+800 taeli na start',
+  // +1 200 taels au départ
+  'heritage/capital/lv/2': '+1 200 taeli na start',
+  // +1 600 taels au départ
+  'heritage/capital/lv/3': '+1 600 taeli na start',
+  // +2 000 taels au départ
+  'heritage/capital/lv/4': '+2 000 taeli na start',
   // Navire de famille
   'heritage/navire/name': 'Rodzinny statek',
   // Commencez avec un navire : jonque, puis lorcha, puis brick
   'heritage/navire/desc': 'Zacznij z własnym statkiem: najpierw dżonka, potem lorcha, potem bryg',
+  // Départ avec une jonque
+  'heritage/navire/lv/0': 'Start z dżonką',
+  // Départ avec une lorcha
+  'heritage/navire/lv/1': 'Start z lorchą',
+  // Départ avec un brick
+  'heritage/navire/lv/2': 'Start z brygiem',
   // Sens des affaires
   'heritage/commerce/name': 'Żyłka do interesów',
   // +2 % à la vente, -2 % à l'achat par niveau
   'heritage/commerce/desc': '+2% przy sprzedaży, -2% przy zakupie za poziom',
+  // +2 % à la vente, -2 % à l'achat
+  'heritage/commerce/lv/0': '+2% przy sprzedaży, -2% przy zakupie',
+  // +4 % à la vente, -4 % à l'achat
+  'heritage/commerce/lv/1': '+4% przy sprzedaży, -4% przy zakupie',
+  // +6 % à la vente, -6 % à l'achat
+  'heritage/commerce/lv/2': '+6% przy sprzedaży, -6% przy zakupie',
+  // +8 % à la vente, -8 % à l'achat
+  'heritage/commerce/lv/3': '+8% przy sprzedaży, -8% przy zakupie',
+  // +10 % à la vente, -10 % à l'achat
+  'heritage/commerce/lv/4': '+10% przy sprzedaży, -10% przy zakupie',
   // Crédit chez Wang
   'heritage/wang/name': 'Kredyt u Wanga',
   // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
   'heritage/wang/desc': 'Poziom 1: pierwsza pożyczka bez odsetek przez 60 dni. Poziom 2: +3 000 taeli pożyczki. Poziom 3: 300 dni na spłatę zamiast 150',
+  // Premier emprunt sans intérêts pendant 60 jours
+  'heritage/wang/lv/0': 'Pierwsza pożyczka bez odsetek przez 60 dni',
+  // +3 000 taels d'emprunt
+  'heritage/wang/lv/1': '+3 000 taeli pożyczki',
+  // 300 jours pour rembourser au lieu de 150
+  'heritage/wang/lv/2': '300 dni na spłatę zamiast 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Doświadczeni kanonierzy',
   // -10 % de rechargement et +10 % de dégâts par niveau
   'heritage/canonniers/desc': '-10% czasu ładowania i +10% obrażeń za poziom',
+  // -10 % de rechargement, +10 % de dégâts
+  'heritage/canonniers/lv/0': '-10% czasu przeładowania, +10% obrażeń',
+  // -20 % de rechargement, +20 % de dégâts
+  'heritage/canonniers/lv/1': '-20% czasu przeładowania, +20% obrażeń',
+  // -30 % de rechargement, +30 % de dégâts
+  'heritage/canonniers/lv/2': '-30% czasu przeładowania, +30% obrażeń',
   // Navigateur hors pair
   'heritage/navigateur/name': 'Niezrównany nawigator',
   // +5 % de vitesse par niveau
   'heritage/navigateur/desc': '+5% szybkości za poziom',
+  // +5 % de vitesse
+  'heritage/navigateur/lv/0': '+5% prędkości',
+  // +10 % de vitesse
+  'heritage/navigateur/lv/1': '+10% prędkości',
+  // +15 % de vitesse
+  'heritage/navigateur/lv/2': '+15% prędkości',
   // Équipage fidèle
   'heritage/equipage/name': 'Wierna załoga',
   // +4 marins au départ, engagement -20 % par niveau
   'heritage/equipage/desc': '+4 marynarzy na start, zadatek -20% za poziom',
+  // +4 marins au départ, engagement -20 %
+  'heritage/equipage/lv/0': '+4 marynarzy na start, werbunek -20%',
+  // +8 marins au départ, engagement -40 %
+  'heritage/equipage/lv/1': '+8 marynarzy na start, werbunek -40%',
   // Arrimage expert
   'heritage/cale/name': 'Fachowe sztauowanie',
   // +10 % de capacité de cale par niveau
   'heritage/cale/desc': '+10% pojemności ładowni za poziom',
+  // +10 % de capacité de cale
+  'heritage/cale/lv/0': '+10% ładowni',
+  // +20 % de capacité de cale
+  'heritage/cale/lv/1': '+20% ładowni',
+  // +30 % de capacité de cale
+  'heritage/cale/lv/2': '+30% ładowni',
   // Faveur de Mazu
   'heritage/mazu/name': 'Łaska Mazu',
   // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
   'heritage/mazu/desc': 'Poziom 1: sztorm znosi cię o połowę słabiej i nie zatrzymuje już przyspieszonego czasu. Poziom 2: żadnego znoszenia. Do tego -25% szkód od sztormów za poziom',
+  // La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts
+  'heritage/mazu/lv/0': 'Sztorm znosi cię o połowę słabiej i nie zatrzymuje już przyspieszonego czasu; -25% szkód',
+  // Plus aucune dérive ; -50 % de dégâts
+  'heritage/mazu/lv/1': 'Żadnego znoszenia; -50% szkód',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Sieć informatorów',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
   'heritage/informateurs/desc': 'Poziom 1: pewne i tańsze plotki. Poziom 2: bieżące ceny wszystkich portów na mapie',
+  // Rumeurs fiables et moins chères
+  'heritage/informateurs/lv/0': 'Pewne i tańsze plotki',
+  // Prix de tous les ports en direct sur la carte
+  'heritage/informateurs/lv/1': 'Bieżące ceny wszystkich portów na mapie',
   // Assurance maritime
   'heritage/assurance/name': 'Ubezpieczenie morskie',
   // Une fois par partie, un naufrage ne met pas fin à votre carrière
   'heritage/assurance/desc': 'Raz na rozgrywkę rozbicie statku nie kończy twojej kariery',
+  // Une fois par partie, un naufrage ne met pas fin à votre carrière
+  'heritage/assurance/lv/0': 'Raz na rozgrywkę rozbicie statku nie kończy twojej kariery',
   // Premier voyage
   'achievements/voyage/name': 'Pierwszy rejs',
   // Atteindre un autre port.
@@ -106046,7 +107252,7 @@ const Game = {
   // ════════════ Méta-progression (propre à chaque mer) ════════════
   defaultMeta() {
     return {
-      v: 1, jade: 0, jadeTotal: 0, her: {}, ach: {}, records: [], daily: {}, runs: 0,
+      v: 1, jade: 0, jadeTotal: 0, her: {}, herUse: {}, ach: {}, records: [], daily: {}, runs: 0,
       best: 0, tutorialDone: false,
       prologueDone: false, prologueNever: false,   // le premier voyage guidé (js/prologue.js) : fait, ou à ne plus proposer
     };
@@ -106056,7 +107262,20 @@ const Game = {
     this.meta = Object.assign(this.defaultMeta(), m);
   },
   saveMeta() { Store.set(metaKey(Seas.current), this.meta); },
-  her(id) { return (this.meta && this.meta.her[id]) || 0; },
+  // niveau acheté, et niveau utilisé : le joueur peut brider une amélioration acquise (boutons − et + de l'Héritage)
+  herOwned(id) { return (this.meta && this.meta.her[id]) || 0; },
+  her(id) {
+    const n = this.herOwned(id), u = this.meta && this.meta.herUse && this.meta.herUse[id];
+    return u != null ? Math.min(n, u) : n;
+  },
+  setHerUse(id, v) {
+    const n = this.herOwned(id);
+    v = Math.max(0, Math.min(n, v));
+    if (!this.meta.herUse) this.meta.herUse = {};
+    if (v >= n) delete this.meta.herUse[id]; else this.meta.herUse[id] = v;
+    this.saveMeta();
+    return v;
+  },
   // couleurs des voiles du joueur ; la toile d'origine prend celles de la mer si elle en propose
   sailScheme() {
     const s = SAIL_COLORS.find(c => c.id === this.global.sail) || SAIL_COLORS[0];
@@ -106067,11 +107286,12 @@ const Game = {
   // graine du défi du jour : la même pour tout le monde, propre à chaque mer
   dailySeed(key) { return strHash((Seas.current === 'chine' ? 'mdj-' : 'mdj-' + Seas.current + '-') + key); },
   buyHeritage(id) {
-    const h = HERITAGE_BY_ID[id], lvl = this.her(id);
+    const h = HERITAGE_BY_ID[id], lvl = this.herOwned(id);
     if (!h || lvl >= h.costs.length) return false;
     const c = h.costs[lvl];
     if (this.meta.jade < c) return false;
     this.meta.jade -= c; this.meta.her[id] = lvl + 1;
+    if (this.meta.herUse) delete this.meta.herUse[id];   // (un niveau acheté sert tout de suite, bridage levé)
     this.saveMeta();
     return true;
   },
@@ -111164,35 +112384,89 @@ const UI = {
       this.confirm(T('nouvelle.partieTitre'), T('nouvelle.partieTexte'), T('nouvelle.recommencer'), T('commun.annuler'), true).then(ok => { if (ok) first(); });
     } else first();
   },
-  heritage() {
+  // ── L'Héritage : à gauche les améliorations en tuiles, rangées par famille ; à droite la fiche de celle qu'on a choisie
+  //    (niveau par niveau, prix du suivant, cadran − / + du niveau utilisé aux prochaines parties) ; les voiles dans leur
+  //    onglet. o.sel : l'amélioration à montrer (le conseil du prologue) ──
+  HER_FAMS: ['million', 'depart', 'savoir', 'mer'],
+  // la famille d'une amélioration : celle que la mer lui donne (fam), sinon celle du socle commun, sinon « propre à la mer »
+  herFam(x) {
+    if (x.fam) return x.fam;
+    const F = { commerce: 'million', navigateur: 'million', canonniers: 'million', navire: 'depart', capital: 'depart', equipage: 'depart', wang: 'depart', informateurs: 'savoir', cale: 'savoir', assurance: 'savoir' };
+    return x.id === 'mazu' ? (x.drift ? 'million' : 'mer') : F[x.id] || 'mer';
+  },
+  // son sceau : le signe que la mer lui donne (seal), sinon l'initiale de son nom
+  herSeal(x, cls) { return h('span', { class: 'her-seal' + (cls ? ' ' + cls : ''), 'aria-hidden': 'true' }, x.seal || [...x.name][0].toUpperCase()); },
+  herPips(x) { const own = Game.herOwned(x.id), use = Game.her(x.id); return h('span', { class: 'lvl' }, ...x.costs.map((_, i) => h('i', { class: i < use ? 'on' : i < own ? 'own' : '' }))); },
+  heritage(o) {
+    o = o || {};
+    if (o.sel) this.herSel = o.sel;
     const body = h('div');
     const entry = this.open({ id: 'heritage', title: T('titre.heritage'), sub: T('heritage.sousTitre'), icon: 'jade', cls: 'wide', body });
     const render = () => {
-      const m = Game.meta;
-      const cards = h('div', { class: 'cards', 'data-g': 'hr-cards' });
-      for (const x of HERITAGE) {
-        const lvl = Game.her(x.id), cost = x.costs[lvl];
-        cards.append(h('div', { class: 'card' + (lvl ? ' sel' : ''), 'data-g': 'hr-h-' + x.id },
-          h('h5', null, x.name), h('div', { class: 'd' }, x.desc),
-          h('div', { class: 'row sb' }, h('span', { class: 'lvl' }, ...x.costs.map((_, i) => h('i', { class: i < lvl ? 'on' : '' }))),
-            cost == null ? h('span', { class: 'pill jade' }, T('heritage.complet')) : btn([ico('jade', 'sm'), ' ' + cost], () => { if (Game.buyHeritage(x.id)) { Sound.sfxPlay('levelup'); render(); } }, 'sm jade', m.jade < cost ? { disabled: true } : null))));
+      const m = Game.meta, tab = this.herTab === 'voiles' ? 'voiles' : 'ameliorations';
+      const list = this.HER_FAMS.flatMap(f => HERITAGE.filter(x => this.herFam(x) === f));
+      if (!HERITAGE_BY_ID[this.herSel]) this.herSel = list[0].id;
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const spent = sum(HERITAGE.map(x => sum(x.costs.slice(0, Game.herOwned(x.id))))), total = sum(HERITAGE.map(x => sum(x.costs)));
+      const tabBt = (id, label) => btn(label, () => { this.herTab = id; render(); }, 'sm' + (tab === id ? ' on' : ''), { role: 'tab', 'aria-selected': String(tab === id) });
+      const head = h('div', { class: 'row her-bar' },
+        h('span', { class: 'jade-count', 'data-g': 'hr-count', title: T('heritage.gagnes') }, ico('jade'), T('commun.qteJetons', { n: m.jade, mot: motJetons(m.jade) })),
+        h('span', { class: 'her-prog' }, h('span', { class: 'track' }, h('b', { style: { width: Math.round(100 * spent / total) + '%' } })), T('heritage.investis', { n: fmt(spent), total: fmt(total) })),
+        h('div', { class: 'tabs her-tabs', role: 'tablist', 'data-g': 'hr-tabs' }, tabBt('ameliorations', T('heritage.ongletAmeliorations')), tabBt('voiles', T('heritage.ongletVoiles'))));
+      if (tab === 'voiles') {
+        const sails = h('div', { class: 'cards', 'data-g': 'hr-sails' });
+        const g = Game.global;
+        for (const s of SAIL_COLORS) {
+          const own = g.sails.includes(s.id);
+          // (la toile d'origine prend les couleurs de la mer, comme en mer ; chaque mer peut renommer les couleurs : TXT.sails)
+          const c = s.id === 'creme' && SEA.playerSail ? SEA.playerSail : s;
+          sails.append(h('div', { class: 'card' + (g.sail === s.id ? ' sel' : '') },
+            h('div', { class: 'swatch', style: { background: `linear-gradient(90deg, ${c.sail} 72%, ${c.trim} 72%)` } }),
+            h('h5', null, (TXT.sails && TXT.sails[s.id]) || s.name),
+            g.sail === s.id ? h('span', { class: 'pill jade' }, T('heritage.hissees')) : btn(own ? T('heritage.hisser') : [ico('jade', 'sm'), ' ' + s.cost], () => { if (Game.buySail(s.id)) { ShipTop.cache.clear(); ShipSide.cache.clear(); Sound.sfxPlay('coin'); render(); } }, 'sm', !own && m.jade < s.cost ? { disabled: true } : null)));
+        }
+        put(body, head, h('h4', { style: { marginTop: '12px' } }, T('heritage.voiles')), sails);
+        return;
       }
-      const sails = h('div', { class: 'cards', 'data-g': 'hr-sails' });
-      const g = Game.global;
-      for (const s of SAIL_COLORS) {
-        const own = g.sails.includes(s.id);
-        // (la toile d'origine prend les couleurs de la mer, comme en mer ; chaque mer peut renommer les couleurs : TXT.sails)
-        const c = s.id === 'creme' && SEA.playerSail ? SEA.playerSail : s;
-        sails.append(h('div', { class: 'card' + (g.sail === s.id ? ' sel' : '') },
-          h('div', { class: 'swatch', style: { background: `linear-gradient(90deg, ${c.sail} 72%, ${c.trim} 72%)` } }),
-          h('h5', null, (TXT.sails && TXT.sails[s.id]) || s.name),
-          g.sail === s.id ? h('span', { class: 'pill jade' }, T('heritage.hissees')) : btn(own ? T('heritage.hisser') : [ico('jade', 'sm'), ' ' + s.cost], () => { if (Game.buySail(s.id)) { ShipTop.cache.clear(); ShipSide.cache.clear(); Sound.sfxPlay('coin'); render(); } }, 'sm', !own && m.jade < s.cost ? { disabled: true } : null)));
+      // les tuiles, par famille
+      const tiles = h('div', { class: 'her-tiles', 'data-g': 'hr-cards' });
+      for (const f of this.HER_FAMS) {
+        const xs = HERITAGE.filter(x => this.herFam(x) === f);
+        if (!xs.length) continue;
+        tiles.append(h('div', { class: 'her-fam' }, T('heritage.fam.' + f)),
+          h('div', { class: 'her-grid' }, ...xs.map(x => h('button', {
+            type: 'button', class: 'her-tile' + (Game.herOwned(x.id) ? ' has' : '') + (x.id === this.herSel ? ' cur' : ''), 'data-g': 'hr-h-' + x.id,
+            onclick: () => { if (this.herSel === x.id) return; this.herSel = x.id; Sound.sfxPlay('click'); render(); },
+          }, this.herSeal(x), h('span', { class: 'nm' }, x.name), this.herPips(x)))));
       }
-      put(body, h('div', { class: 'row', style: { marginBottom: '10px' }, 'data-g': 'hr-count' }, h('span', { class: 'jade-count' }, ico('jade'), T('commun.qteJetons', { n: m.jade, mot: motJetons(m.jade) })), h('span', { class: 'hint' }, T('heritage.gagnes'))),
-        cards,
-        // (la démo dit qu'il y a d'autres bonus dans le jeu complet, sans les montrer)
-        DEMO ? h('div', { class: 'mk-foot jade-note' }, ico('jade'), h('span', null, T('demo.heritage.plus'))) : null,
-        h('h4', { style: { marginTop: '14px' } }, T('heritage.voiles')), sails);
+      // la fiche
+      const x = HERITAGE_BY_ID[this.herSel], own = Game.herOwned(x.id), use = Game.her(x.id), cost = x.costs[own];
+      const lvTxt = own ? (use < own ? T('heritage.nivBride', { n: use, own }) : T('heritage.nivSur', { n: own, max: x.costs.length })) : T('heritage.pasAcquis');
+      const tip = k => ({ 'aria-label': T(k), title: T(k) });
+      const step = own ? h('span', { class: 'her-step' },
+        btn('−', () => { Game.setHerUse(x.id, use - 1); render(); }, 'sm', Object.assign(tip('heritage.moins'), use <= 0 ? { disabled: true } : {})),
+        this.herPips(x),
+        btn('+', () => { Game.setHerUse(x.id, use + 1); render(); }, 'sm', Object.assign(tip('heritage.plus'), use >= own ? { disabled: true } : {}))) : null;
+      const buy = cost == null ? h('span', { class: 'pill jade' }, T('heritage.complet'))
+        : btn([h('span', { class: 'her-nv' }, T('heritage.niv', { n: own + 1 })), ico('jade', 'sm'), ' ' + cost], () => { if (Game.buyHeritage(x.id)) { Sound.sfxPlay('levelup'); render(); } }, 'sm jade', Object.assign({ 'data-g': 'hr-buy' }, m.jade < cost ? { disabled: true } : {}));
+      const sheet = h('div', { class: 'her-sheet', 'data-g': 'hr-fiche' },
+        h('div', { class: 'her-sheet-hd' }, this.herSeal(x, 'lg'), h('div', null,
+          h('div', { class: 'her-fam-sm' }, T('heritage.fam.' + this.herFam(x))), h('h5', null, x.name),
+          h('div', { class: 'her-lvtxt' + (use < own ? ' cut' : '') }, lvTxt))),
+        // (sans textes niveau par niveau, la description dit tout ; avec, chaque ligne dit ce que donne ce niveau)
+        x.lv ? null : h('p', { class: 'd' }, x.desc),
+        h('div', { class: 'her-levels' }, ...x.costs.map((c, i) => h('div', { class: 'her-lv' + (i < use ? ' on' : i < own ? ' own' : i === own ? ' next' : '') },
+          h('b', null, T('heritage.niv', { n: i + 1 })), h('span', null, (x.lv && x.lv[i]) || ''),
+          i < own ? h('span', { class: 'pill' + (i < use ? ' jade' : ' gold') }, T(i < use ? 'heritage.utilise' : 'heritage.reserve'))
+            : h('span', { class: 'her-cost' }, ico('jade', 'sm'), ' ' + c)))),
+        h('div', { class: 'her-acts' },
+          own ? h('span', { class: 'her-use' }, h('span', { class: 'hint' }, T('heritage.nivUtilise')), step) : h('span', { class: 'hint' }, T('heritage.acheterPour')),
+          buy));
+      put(body, head,
+        HERITAGE.some(y => Game.herOwned(y.id) > 0) ? h('p', { class: 'hint', style: { margin: '6px 0 0' } }, T('heritage.bridage')) : null,
+        h('div', { class: 'her-split' }, h('div', null, tiles,
+          // (la démo dit qu'il y a d'autres bonus dans le jeu complet, sans les montrer)
+          DEMO ? h('div', { class: 'mk-foot jade-note' }, ico('jade'), h('span', null, T('demo.heritage.plus'))) : null), sheet));
     };
     render();
     return entry;
@@ -111256,9 +112530,9 @@ const UI = {
       h('div', { class: 'row' }, h('span', { class: 'pill jade' }, ico('jade', 'sm'), ' +' + T('commun.qteJetons', { n: res.jadeEarned, mot: motJetons(res.jadeEarned) })), ...r.achRun.map(id => h('span', { class: 'pill gold' }, ico('star', 'sm'), ' ' + ACH_BY_ID[id].name))),
       (() => {
         const m = Game.meta;
-        const can = HERITAGE.filter(x => { const c = x.costs[Game.her(x.id)]; return c != null && c <= m.jade; });
+        const can = HERITAGE.filter(x => { const c = x.costs[Game.herOwned(x.id)]; return c != null && c <= m.jade; });
         if (!can.length) {
-          const next = HERITAGE.map(x => ({ x, c: x.costs[Game.her(x.id)] })).filter(o => o.c != null).sort((a, b) => a.c - b.c)[0];
+          const next = HERITAGE.map(x => ({ x, c: x.costs[Game.herOwned(x.id)] })).filter(o => o.c != null).sort((a, b) => a.c - b.c)[0];
           return next ? h('p', { class: 'hint', style: { marginTop: '8px' } }, T('fin.encore', { n: next.c - m.jade, jetons: motJetons(next.c - m.jade), nom: next.x.name })) : null;
         }
         return h('div', { class: 'mk-foot jade-note' }, ico('jade'), h('span', { style: { flex: 1 } }, T('fin.avec', { n: m.jade, jetons: motJetons(m.jade), liste: listJoin(can.slice(0, 3).map(x => x.name)) + (can.length > 3 ? '…' : '') })), btn(T('titre.heritage'), () => this.heritage(), 'jade sm'));
@@ -111587,7 +112861,7 @@ const Help = {
     jeu: [['ft-pick', 'pari'], ['ft-mise', 'mise']],
     carte: [['ch-map', 'carte'], ['ch-card', 'voyage'], ['ch-prices', 'prix'], ['ch-go', 'partir']],
     journal: [['jr-tabs', 'onglets'], ['jr-table', 'prix'], ['jr-legend', 'age']],
-    heritage: [['hr-count', 'jetons'], ['hr-cards', 'ameliorations'], ['hr-sails', 'voiles']],
+    heritage: [['hr-count', 'jetons'], ['hr-cards', 'ameliorations'], ['hr-fiche', 'fiche'], ['hr-tabs', 'voiles']],
     gouverneur: [['gv-rep', 'reputation'], ['gv-lettre', 'lettre'], ['gv-graces', 'graces']],
   },
   // les mots de la mer glissés dans les textes
@@ -112057,14 +113331,14 @@ const Prologue = {
   crewGoal() { const st = Game.stats(); return st ? Math.min(st.crewMax, st.crewMin + 3) : 8; },
   // après la partie d'essai : l'Héritage, le conseil du mentor, et les deux sorties
   postView() {
-    if (!this.postOpened && !UI.isOpen()) { this.postOpened = true; UI.heritage(); return null; }
+    if (!this.postOpened && !UI.isOpen()) { this.postOpened = true; UI.heritage({ sel: SEA.prologue.heritage }); return null; }   // (la fiche ouverte sur le conseil)
     const x = HERITAGE_BY_ID[SEA.prologue.heritage];
     const b = {
       mentor: this.mentor(), who: T('guide.qui', { nom: TXT.mentorName, role: TXT.mentorRole }),
       text: [x ? this.X('heritage', { nom: x.name }) : '', this.X('pret')].filter(Boolean), step: { i: 12, n: this.N },
       buttons: [{ label: T('prologue.ecranTitre'), cls: 'ghost sm', fn: () => this.endPost(false) }, { label: T('prologue.carriere'), cls: 'jade', fn: () => this.endPost(true) }],
     };
-    if (UI.top() === 'heritage' && x) return { key: 'heritage', spot: ['hr-h-' + x.id], veil: false, bubble: Object.assign(b, { anchor: 'hr-h-' + x.id }) };
+    if (UI.top() === 'heritage' && x) return { key: 'heritage', spot: ['hr-h-' + x.id, 'hr-fiche'], veil: false, bubble: Object.assign(b, { anchor: 'hr-h-' + x.id }) };
     return { key: 'heritage:seul', veil: false, bubble: Object.assign(b, { dock: 'center', anchor: null }) };
   },
 };
@@ -112612,17 +113886,17 @@ Seas.register({
   // de l'argent, chaque niveau ouvre une faveur du début de partie. Mazu : dans une tempête, ce qui coûte, c'est la dérive et le
   // temps accéléré coupé, pas les dégâts.)
   heritage: [
-    { id: 'capital', name: 'Bas de laine', desc: '+400 taels au départ par niveau', costs: [10, 10, 15, 15, 20] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : jonque, puis lorcha, puis brick', costs: [40, 70, 130] },
-    { id: 'commerce', name: 'Sens des affaires', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [35, 75, 125, 180, 250] },
-    { id: 'wang', name: 'Crédit chez Wang', desc: 'Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d\'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150', costs: [10, 10, 15], freeDays: 60, extraLoan: 3000, dueDays: 300 },
-    { id: 'canonniers', name: 'Canonniers vétérans', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 70] },
-    { id: 'navigateur', name: 'Navigateur hors pair', desc: '+5 % de vitesse par niveau', costs: [35, 70, 110] },
-    { id: 'equipage', name: 'Équipage fidèle', desc: '+4 marins au départ, engagement -20 % par niveau', costs: [10, 15] },
-    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [10, 15, 20] },
-    { id: 'mazu', name: 'Faveur de Mazu', desc: 'Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau', costs: [55, 115], drift: 0.5, stormFast: 1 },
-    { id: 'informateurs', name: 'Réseau d\'informateurs', desc: 'Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte', costs: [20, 60] },
-    { id: 'assurance', name: 'Assurance maritime', desc: 'Une fois par partie, un naufrage ne met pas fin à votre carrière', costs: [50] },
+    { id: 'capital', name: 'Bas de laine', desc: '+400 taels au départ par niveau', costs: [10, 10, 15, 15, 20], seal: '銀', lv: ['+400 taels au départ', '+800 taels au départ', '+1 200 taels au départ', '+1 600 taels au départ', '+2 000 taels au départ'] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : jonque, puis lorcha, puis brick', costs: [40, 70, 130], seal: '船', lv: ['Départ avec une jonque', 'Départ avec une lorcha', 'Départ avec un brick'] },
+    { id: 'commerce', name: 'Sens des affaires', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [35, 75, 125, 180, 250], seal: '商', lv: ['+2 % à la vente, -2 % à l\'achat', '+4 % à la vente, -4 % à l\'achat', '+6 % à la vente, -6 % à l\'achat', '+8 % à la vente, -8 % à l\'achat', '+10 % à la vente, -10 % à l\'achat'] },
+    { id: 'wang', name: 'Crédit chez Wang', desc: 'Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d\'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150', costs: [10, 10, 15], freeDays: 60, extraLoan: 3000, dueDays: 300, seal: '借', lv: ['Premier emprunt sans intérêts pendant 60 jours', '+3 000 taels d\'emprunt', '300 jours pour rembourser au lieu de 150'] },
+    { id: 'canonniers', name: 'Canonniers vétérans', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 70], seal: '炮', lv: ['-10 % de rechargement, +10 % de dégâts', '-20 % de rechargement, +20 % de dégâts', '-30 % de rechargement, +30 % de dégâts'] },
+    { id: 'navigateur', name: 'Navigateur hors pair', desc: '+5 % de vitesse par niveau', costs: [35, 70, 110], seal: '航', lv: ['+5 % de vitesse', '+10 % de vitesse', '+15 % de vitesse'] },
+    { id: 'equipage', name: 'Équipage fidèle', desc: '+4 marins au départ, engagement -20 % par niveau', costs: [10, 15], seal: '員', lv: ['+4 marins au départ, engagement -20 %', '+8 marins au départ, engagement -40 %'] },
+    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [10, 15, 20], seal: '艙', lv: ['+10 % de capacité de cale', '+20 % de capacité de cale', '+30 % de capacité de cale'] },
+    { id: 'mazu', name: 'Faveur de Mazu', desc: 'Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau', costs: [55, 115], drift: 0.5, stormFast: 1, seal: '媽', lv: ['La tempête vous déporte deux fois moins et ne coupe plus le temps accéléré ; -25 % de dégâts', 'Plus aucune dérive ; -50 % de dégâts'] },
+    { id: 'informateurs', name: 'Réseau d\'informateurs', desc: 'Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte', costs: [20, 60], seal: '耳', lv: ['Rumeurs fiables et moins chères', 'Prix de tous les ports en direct sur la carte'] },
+    { id: 'assurance', name: 'Assurance maritime', desc: 'Une fois par partie, un naufrage ne met pas fin à votre carrière', costs: [50], seal: '保', lv: ['Une fois par partie, un naufrage ne met pas fin à votre carrière'] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -125437,7 +126711,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 04/10/2026 à 21:36</div>
+<div id="maj">Mise à jour : 04/10/2026 à 22:01</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
