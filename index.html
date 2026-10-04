@@ -1739,6 +1739,7 @@ Lang.ui('fr', {
   'usurier.dette': 'Dette',
   'usurier.interets': 'Intérêts',
   'usurier.taux': '{taux} % par mois (composés)',
+  'usurier.tauxOffert': '0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois',
   'usurier.credit': 'Crédit disponible',
   'usurier.emprunter': 'EMPRUNTER',
   'usurier.rembourser': 'REMBOURSER',
@@ -2744,6 +2745,8 @@ Lang.ui('en', {
   'usurier.interets': 'Interest',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux}% a month (compounded)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0% for {jours, plural, one {# day} other {# days}}, then {taux}% a month',
   // Crédit disponible
   'usurier.credit': 'Credit available',
   // EMPRUNTER
@@ -4174,8 +4177,8 @@ Lang.sea('en', 'chine', {
   'heritage/commerce/desc': '+2% when selling, -2% when buying, per level',
   // Crédit chez Wang
   'heritage/wang/name': 'Credit with Wang',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Interest -1%/month and +1,500 taels of credit per level',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Level 1: no interest on your first loan for 60 days. Level 2: +3,000 taels of credit. Level 3: 300 days to repay instead of 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Veteran gunners',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -4194,8 +4197,8 @@ Lang.sea('en', 'chine', {
   'heritage/cale/desc': '+10% hold capacity per level',
   // Faveur de Mazu
   'heritage/mazu/name': 'Mazu\'s favor',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25% storm damage per level',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Level 1: storms push you off course half as much and no longer stop sped-up time. Level 2: no more drift at all. Plus -25% storm damage per level',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Network of informants',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -11847,6 +11850,8 @@ Lang.ui('zh', {
   'usurier.interets': '利息',
   // {taux} % par mois (composés)
   'usurier.taux': '月息{taux}%（利滚利）',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '{jours, plural, other {#天}}内0%，之后每月{taux}%',
   // Crédit disponible
   'usurier.credit': '可借额度',
   // EMPRUNTER
@@ -13277,8 +13282,8 @@ Lang.sea('zh', 'chine', {
   'heritage/commerce/desc': '每级卖价+2%，买价-2%',
   // Crédit chez Wang
   'heritage/wang/name': '王记信用',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': '每级月息-1%，借款上限+1,500两',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': '1级：首笔借款60天免息。2级：借款上限+3,000两。3级：还款期限由150天延长至300天',
   // Canonniers vétérans
   'heritage/canonniers/name': '老练炮手',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -13297,8 +13302,8 @@ Lang.sea('zh', 'chine', {
   'heritage/cale/desc': '每级货舱容量+10%',
   // Faveur de Mazu
   'heritage/mazu/name': '妈祖眷顾',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '每级风暴伤害-25%',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': '1级：风暴的漂移减半，且不再打断加速时间。2级：完全不再漂移。另每级风暴伤害-25%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '耳目遍布',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -20921,6 +20926,8 @@ Lang.ui('zht', {
   'usurier.interets': '利息',
   // {taux} % par mois (composés)
   'usurier.taux': '月息{taux}%（利滾利）',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '{jours, plural, other {#天}}內0%，之後每月{taux}%',
   // Crédit disponible
   'usurier.credit': '可借額度',
   // EMPRUNTER
@@ -22351,8 +22358,8 @@ Lang.sea('zht', 'chine', {
   'heritage/commerce/desc': '每級賣價+2%，買價-2%',
   // Crédit chez Wang
   'heritage/wang/name': '王記信用',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': '每級月息-1%，借款上限+1,500兩',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': '1級：首筆借款60天免息。2級：借款上限+3,000兩。3級：還款期限由150天延長至300天',
   // Canonniers vétérans
   'heritage/canonniers/name': '老練砲手',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -22371,8 +22378,8 @@ Lang.sea('zht', 'chine', {
   'heritage/cale/desc': '每級貨艙容量+10%',
   // Faveur de Mazu
   'heritage/mazu/name': '媽祖眷顧',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '每級風暴傷害-25%',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': '1級：風暴的漂移減半，且不再打斷加速時間。2級：完全不再漂移。另每級風暴傷害-25%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '耳目遍佈',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -29996,6 +30003,8 @@ Lang.ui('ja', {
   'usurier.interets': '利息',
   // {taux} % par mois (composés)
   'usurier.taux': '月{taux}%（複利）',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '{jours, plural, other {#日}}間は0%、その後は月{taux}%',
   // Crédit disponible
   'usurier.credit': '借入可能額',
   // EMPRUNTER
@@ -31426,8 +31435,8 @@ Lang.sea('ja', 'chine', {
   'heritage/commerce/desc': '1段階ごとに売値+2%、買値-2%',
   // Crédit chez Wang
   'heritage/wang/name': '王大人の信用',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': '1段階ごとに利息-1%／月、借入枠+1,500両',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Lv.1：最初の借金は60日間無利子。Lv.2：借入枠+3,000両。Lv.3：返済期限が150日から300日に',
   // Canonniers vétérans
   'heritage/canonniers/name': '歴戦の砲手',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -31446,8 +31455,8 @@ Lang.sea('ja', 'chine', {
   'heritage/cale/desc': '1段階ごとに船倉の容量+10%',
   // Faveur de Mazu
   'heritage/mazu/name': '媽祖の恵み',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '1段階ごとに台風の被害-25%',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Lv.1：嵐に流される距離が半分になり、時間を早めたままでいられる。Lv.2：まったく流されない。さらに1段階ごとに嵐の被害-25%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '情報網',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -39104,6 +39113,8 @@ Lang.ui('ko', {
   'usurier.interets': '이자',
   // {taux} % par mois (composés)
   'usurier.taux': '월 {taux}% (복리)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '{jours, plural, other {#일}} 동안 0%, 이후 월 {taux}%',
   // Crédit disponible
   'usurier.credit': '대출 한도',
   // EMPRUNTER
@@ -40534,8 +40545,8 @@ Lang.sea('ko', 'chine', {
   'heritage/commerce/desc': '단계마다 판매가 +2%, 구매가 -2%',
   // Crédit chez Wang
   'heritage/wang/name': '왕 대인의 신용',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': '단계마다 이자 월 -1%, 대출 한도 +1,500냥',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': '1단계: 첫 대출 60일간 무이자. 2단계: 대출 한도 +3,000냥. 3단계: 상환 기한 150일 → 300일',
   // Canonniers vétérans
   'heritage/canonniers/name': '노련한 포수들',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -40554,8 +40565,8 @@ Lang.sea('ko', 'chine', {
   'heritage/cale/desc': '단계마다 화물칸 적재량 +10%',
   // Faveur de Mazu
   'heritage/mazu/name': '마조의 은총',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '단계마다 태풍 피해 -25%',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': '1단계: 폭풍에 밀리는 거리가 절반으로 줄고, 시간 가속이 더는 멈추지 않습니다. 2단계: 전혀 밀리지 않습니다. 그리고 단계마다 폭풍 피해 -25%',
   // Réseau d'informateurs
   'heritage/informateurs/name': '정보원 조직',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -48177,6 +48188,8 @@ Lang.ui('ru', {
   'usurier.interets': 'Проценты',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux} % в месяц (сложные)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0 % ещё {jours, plural, one {# день} few {# дня} many {# дней} other {# дня}}, затем {taux} % в месяц',
   // Crédit disponible
   'usurier.credit': 'Можно занять',
   // EMPRUNTER
@@ -49607,8 +49620,8 @@ Lang.sea('ru', 'chine', {
   'heritage/commerce/desc': '+2 % при продаже, -2 % при покупке за уровень',
   // Crédit chez Wang
   'heritage/wang/name': 'Кредит в доме Вана',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Проценты -1 % в месяц и +1 500 таэлей займа за уровень',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Ур. 1: первый заём без процентов на 60 дней. Ур. 2: +3 000 таэлей займа. Ур. 3: 300 дней на возврат вместо 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Бывалые канониры',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -49627,8 +49640,8 @@ Lang.sea('ru', 'chine', {
   'heritage/cale/desc': '+10 % вместимости трюма за уровень',
   // Faveur de Mazu
   'heritage/mazu/name': 'Милость Мацзу',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25 % урона от бурь за уровень',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Ур. 1: буря сносит вас вдвое слабее и больше не останавливает ускорение времени. Ур. 2: никакого сноса. И -25 % урона от бурь за уровень',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Сеть осведомителей',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -57390,6 +57403,8 @@ Lang.ui('es', {
   'usurier.interets': 'Intereses',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux}% al mes (interés compuesto)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0% durante {jours, plural, one {# día} other {# días}}, luego {taux}% al mes',
   // Crédit disponible
   'usurier.credit': 'Crédito disponible',
   // EMPRUNTER
@@ -58820,8 +58835,8 @@ Lang.sea('es', 'chine', {
   'heritage/commerce/desc': '+2% al vender, -2% al comprar, por nivel',
   // Crédit chez Wang
   'heritage/wang/name': 'Crédito con Wang',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Intereses -1%/mes y +1.500 taeles de préstamo por nivel',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Nivel 1: primer préstamo sin intereses durante 60 días. Nivel 2: +3.000 taeles de préstamo. Nivel 3: 300 días para devolverlo en vez de 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Artilleros veteranos',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -58840,8 +58855,8 @@ Lang.sea('es', 'chine', {
   'heritage/cale/desc': '+10% de capacidad de bodega por nivel',
   // Faveur de Mazu
   'heritage/mazu/name': 'Favor de Mazu',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25% de daños por tempestad por nivel',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Nivel 1: la tempestad te desvía la mitad y ya no detiene el tiempo acelerado. Nivel 2: ninguna deriva. Además, -25% de daños por tempestad por nivel',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Red de informantes',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -66489,6 +66504,8 @@ Lang.ui('pt', {
   'usurier.interets': 'Juros',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux}% ao mês (compostos)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0% por {jours, plural, one {# dia} other {# dias}}, depois {taux}% ao mês',
   // Crédit disponible
   'usurier.credit': 'Crédito disponível',
   // EMPRUNTER
@@ -67919,8 +67936,8 @@ Lang.sea('pt', 'chine', {
   'heritage/commerce/desc': '+2% na venda, -2% na compra, por nível',
   // Crédit chez Wang
   'heritage/wang/name': 'Crédito com Wang',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Juros -1%/mês e +1.500 taéis de crédito por nível',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Nív. 1: primeiro empréstimo sem juros por 60 dias. Nív. 2: +3.000 taéis de crédito. Nív. 3: 300 dias para pagar em vez de 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Artilheiros veteranos',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -67939,8 +67956,8 @@ Lang.sea('pt', 'chine', {
   'heritage/cale/desc': '+10% de capacidade do porão por nível',
   // Faveur de Mazu
   'heritage/mazu/name': 'Favor de Mazu',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25% de dano das tempestades por nível',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Nív. 1: a tempestade desvia você pela metade e não interrompe mais o tempo acelerado. Nív. 2: nenhuma deriva. E -25% de dano das tempestades por nível',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Rede de informantes',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -75586,6 +75603,8 @@ Lang.ui('de', {
   'usurier.interets': 'Zinsen',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux} % pro Monat (mit Zinseszins)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0 % für {jours, plural, one {# Tag} other {# Tage}}, danach {taux} % pro Monat',
   // Crédit disponible
   'usurier.credit': 'Verfügbarer Kredit',
   // EMPRUNTER
@@ -77016,8 +77035,8 @@ Lang.sea('de', 'chine', {
   'heritage/commerce/desc': '+2 % beim Verkauf, -2 % beim Kauf pro Stufe',
   // Crédit chez Wang
   'heritage/wang/name': 'Kredit bei Wang',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Zinsen -1 %/Monat und +1.500 Tael Kreditrahmen pro Stufe',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Stufe 1: erster Kredit 60 Tage zinsfrei. Stufe 2: +3.000 Tael Kreditrahmen. Stufe 3: 300 statt 150 Tage zum Zurückzahlen',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Erfahrene Kanoniere',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -77036,8 +77055,8 @@ Lang.sea('de', 'chine', {
   'heritage/cale/desc': '+10 % Laderaum pro Stufe',
   // Faveur de Mazu
   'heritage/mazu/name': 'Mazus Gunst',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25 % Sturmschaden pro Stufe',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Stufe 1: Stürme treiben dich nur halb so weit ab und halten den Zeitraffer nicht mehr an. Stufe 2: gar keine Abdrift mehr. Dazu -25 % Sturmschaden pro Stufe',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Netz von Zuträgern',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -84683,6 +84702,8 @@ Lang.ui('it', {
   'usurier.interets': 'Interessi',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux}% al mese (composti)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0% per {jours, plural, one {# giorno} other {# giorni}}, poi {taux}% al mese',
   // Crédit disponible
   'usurier.credit': 'Credito disponibile',
   // EMPRUNTER
@@ -86113,8 +86134,8 @@ Lang.sea('it', 'chine', {
   'heritage/commerce/desc': '+2% sulle vendite, -2% sugli acquisti per livello',
   // Crédit chez Wang
   'heritage/wang/name': 'Credito presso Wang',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Interessi -1%/mese e +1.500 tael di prestito per livello',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Livello 1: primo prestito senza interessi per 60 giorni. Livello 2: +3.000 tael di prestito. Livello 3: 300 giorni per restituire invece di 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Cannonieri veterani',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -86133,8 +86154,8 @@ Lang.sea('it', 'chine', {
   'heritage/cale/desc': '+10% di capacità della stiva per livello',
   // Faveur de Mazu
   'heritage/mazu/name': 'Favore di Mazu',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25% di danni da tempesta per livello',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Livello 1: la tempesta ti fa deviare la metà e non ferma più il tempo accelerato. Livello 2: nessuna deriva. In più -25% di danni da tempesta per livello',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Rete di informatori',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -93783,6 +93804,8 @@ Lang.ui('pl', {
   'usurier.interets': 'Odsetki',
   // {taux} % par mois (composés)
   'usurier.taux': '{taux}% miesięcznie (procent składany)',
+  // 0 % pendant {jours, plural, one {# jour} other {# jours}}, puis {taux} % par mois
+  'usurier.tauxOffert': '0% przez {jours, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}, potem {taux}% miesięcznie',
   // Crédit disponible
   'usurier.credit': 'Dostępny kredyt',
   // EMPRUNTER
@@ -95213,8 +95236,8 @@ Lang.sea('pl', 'chine', {
   'heritage/commerce/desc': '+2% przy sprzedaży, -2% przy zakupie za poziom',
   // Crédit chez Wang
   'heritage/wang/name': 'Kredyt u Wanga',
-  // Intérêts -1 %/mois et +1 500 taels d'emprunt par niveau
-  'heritage/wang/desc': 'Odsetki -1%/miesiąc i +1 500 taeli pożyczki za poziom',
+  // Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150
+  'heritage/wang/desc': 'Poziom 1: pierwsza pożyczka bez odsetek przez 60 dni. Poziom 2: +3 000 taeli pożyczki. Poziom 3: 300 dni na spłatę zamiast 150',
   // Canonniers vétérans
   'heritage/canonniers/name': 'Doświadczeni kanonierzy',
   // -10 % de rechargement et +10 % de dégâts par niveau
@@ -95233,8 +95256,8 @@ Lang.sea('pl', 'chine', {
   'heritage/cale/desc': '+10% pojemności ładowni za poziom',
   // Faveur de Mazu
   'heritage/mazu/name': 'Łaska Mazu',
-  // -25 % de dégâts de tempête par niveau
-  'heritage/mazu/desc': '-25% szkód od sztormów za poziom',
+  // Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau
+  'heritage/mazu/desc': 'Poziom 1: sztorm znosi cię o połowę słabiej i nie zatrzymuje już przyspieszonego czasu. Poziom 2: żadnego znoszenia. Do tego -25% szkód od sztormów za poziom',
   // Réseau d'informateurs
   'heritage/informateurs/name': 'Sieć informatorów',
   // Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte
@@ -106394,7 +106417,12 @@ const Game = {
     if (!r || dd <= 0 || r.over) return;
     const d0 = r.day;
     r.day += dd;
-    if (r.debt > 0) { r.debt *= Math.pow(1 + this.debtRate(), dd / 30); r.debtPeak = Math.max(r.debtPeak, r.debt); }
+    if (r.debt > 0) {
+      // (les jours offerts par Wang sur le premier emprunt ne portent pas d'intérêts)
+      const paid = r.freeUntil != null ? Math.max(0, r.day - Math.max(d0, r.freeUntil)) : dd;
+      if (paid > 0) r.debt *= Math.pow(1 + this.debtRate(), paid / 30);
+      r.debtPeak = Math.max(r.debtPeak, r.debt);
+    }
     if (r.bank > 0) r.bank *= Math.pow(1.005, dd / 30);
     for (let d = Math.floor(d0) + 1; d <= Math.floor(r.day); d++) this.onNewDay(d);
   },
@@ -106456,10 +106484,21 @@ const Game = {
   },
 
   // ════════════ L'usurier (en mer de Chine : Wang) ════════════
-  debtRate() { return Math.max(0.02, 0.05 - 0.01 * this.her('wang')); },
+  // l'amélioration « wang » de la mer : à l'ancienne (intérêts -1 %/mois et +1 500 d'emprunt par niveau) ou refaite
+  // (la mer de Chine : chaque niveau ouvre une faveur, freeDays puis extraLoan puis dueDays)
+  wangNew() { const h = HERITAGE_BY_ID.wang; return h && h.freeDays ? h : null; },
+  debtRate() { return this.wangNew() ? 0.05 : Math.max(0.02, 0.05 - 0.01 * this.her('wang')); },
+  debtTerm() { const w = this.wangNew(); return w && this.her('wang') >= 3 ? w.dueDays : 150; },
+  // jours sans intérêts qui restent (ou qu'offrirait un premier emprunt fait maintenant)
+  freeDaysLeft() {
+    const r = this.run, w = this.wangNew();
+    if (!w || this.her('wang') < 1) return 0;
+    return r.freeUntil == null ? w.freeDays : Math.max(0, Math.ceil(r.freeUntil - r.day));
+  },
   loanMax() {
-    const r = this.run;
-    const cap = Math.round((4000 + 1500 * this.her('wang') + Math.max(0, this.worth() + r.debt) * 0.6) / 100) * 100;
+    const r = this.run, w = this.wangNew(), lvl = this.her('wang');
+    const extra = w ? (lvl >= 2 ? w.extraLoan : 0) : 1500 * lvl;
+    const cap = Math.round((4000 + extra + Math.max(0, this.worth() + r.debt) * 0.6) / 100) * 100;
     return Math.max(0, cap - Math.round(r.debt));
   },
   borrow(n) {
@@ -106467,6 +106506,7 @@ const Game = {
     if (n <= 0) return 0;
     r.debt += n; r.cash += n;
     if (r.debtSince == null) r.debtSince = r.day;
+    if (r.freeUntil == null && this.wangNew() && this.her('wang') >= 1) r.freeUntil = r.day + this.wangNew().freeDays;
     r.debtPeak = Math.max(r.debtPeak, r.debt);
     this.log(T('journal.emprunt', { somme: fmt(n), monnaie: motMonnaie(n), maison: TXT.house }), 'trade');
     return n;
@@ -106482,8 +106522,8 @@ const Game = {
     }
     return n;
   },
-  debtOverdue() { const r = this.run; return r.debt > 0 && r.debtSince != null && r.day - r.debtSince > 150; },
-  debtDueIn() { const r = this.run; return r.debtSince == null ? null : Math.round(r.debtSince + 150 - r.day); },
+  debtOverdue() { const r = this.run; return r.debt > 0 && r.debtSince != null && r.day - r.debtSince > this.debtTerm(); },
+  debtDueIn() { const r = this.run; return r.debtSince == null ? null : Math.round(r.debtSince + this.debtTerm() - r.day); },
 
   // ════════════ Banque ════════════
   deposit(n) { const r = this.run; n = Math.min(Math.floor(n), r.cash); if (n <= 0) return 0; r.cash -= n; r.bank += n; return n; },
@@ -106883,7 +106923,7 @@ const Game = {
     r.cash -= take; r.debt = Math.max(0, r.debt - take);
     let hurt = 0;
     if (r.ship && r.ship.crew > 2) { hurt = Math.min(r.ship.crew - 1, R.int(1, 3)); r.ship.crew -= hurt; }
-    if (r.debt < 1) { r.debt = 0; r.debtSince = null; } else r.debtSince = r.day - 110;
+    if (r.debt < 1) { r.debt = 0; r.debtSince = null; } else r.debtSince = r.day - (this.debtTerm() - 40);
     this.log(T('journal.hommesPreleve', { hommes: capFirst(TXT.men), somme: fmt(take), monnaie: motMonnaie(take) }), 'trade');
     return { take, hurt };
   },
@@ -108639,7 +108679,7 @@ const SeaScene = {
   update(dt) {
     if (this.over) { this.updateFx(dt); return; }
     this.handleInput();
-    const steps = this.fast && !this.combat && !this.inStorm() ? 3 : 1;
+    const steps = this.fast && !this.combat && (!this.inStorm() || this.stormWard().fast) ? 3 : 1;
     for (let i = 0; i < steps && !this.over; i++) this.sim(dt);
     this.updateFx(dt);
   },
@@ -108670,6 +108710,13 @@ const SeaScene = {
     else if (Input.hit('dock') && this.prompt && this.prompt.kind === 'sea') this.prompt.act();
   },
   inStorm() { const p = this.player; return this.storms.some(s => Math.hypot(s.x - p.x, s.y - p.y) < s.r + 40); },
+  // l'amélioration « mazu » de la mer, si elle protège de la tempête elle-même (la mer de Chine) : la part de dérive
+  // gardée, et le temps accéléré qui n'est plus coupé dans la tempête
+  stormWard() {
+    const h = HERITAGE_BY_ID.mazu, lvl = Game.her('mazu');
+    if (!h || !lvl) return { drift: 1, fast: false };
+    return { drift: 1 - Math.min(1, (h.drift || 0) * lvl), fast: !!h.stormFast && lvl >= h.stormFast };
+  },
   updateFx(dt) {
     this.fx.update(dt);
     for (const tx of this.texts) tx.age += dt;
@@ -109111,9 +109158,9 @@ const SeaScene = {
         const eye = d < s.r * 0.16;
         if (eye && s.big) this.inEye = true;
         if (!eye) {
-          const tang = Math.atan2(s.y - p.y, s.x - p.x) + Math.PI / 2;
-          p.ex += Math.cos(tang) * 30 * s.str * k * dt * 3;
-          p.ey += Math.sin(tang) * 30 * s.str * k * dt * 3;
+          const tang = Math.atan2(s.y - p.y, s.x - p.x) + Math.PI / 2, keep = this.stormWard().drift;
+          p.ex += Math.cos(tang) * 30 * s.str * k * dt * 3 * keep;
+          p.ey += Math.sin(tang) * 30 * s.str * k * dt * 3 * keep;
           this.stormHit += dt;
           if (this.stormHit > 1.2) {
             this.stormHit = 0;
@@ -110377,7 +110424,7 @@ const UI = {
       put(body, 
         h('p', { class: 'flavor' }, line),
         h('div', { class: 'stat', 'data-g': 'us-dette' }, h('span', null, T('usurier.dette')), money(r.debt, r.debt > 0 ? 'neg' : '')),
-        h('div', { class: 'stat', 'data-g': 'us-dette' }, h('span', null, T('usurier.interets')), h('b', null, T('usurier.taux', { taux: Math.round(Game.debtRate() * 100) }))),
+        h('div', { class: 'stat', 'data-g': 'us-dette' }, h('span', null, T('usurier.interets')), h('b', null, Game.freeDaysLeft() > 0 ? T('usurier.tauxOffert', { jours: Game.freeDaysLeft(), taux: Math.round(Game.debtRate() * 100) }) : T('usurier.taux', { taux: Math.round(Game.debtRate() * 100) }))),
         h('div', { class: 'stat', 'data-g': 'us-credit' }, h('span', null, T('usurier.credit')), money(max)),
         h('h4', null, T('usurier.emprunter')),
         h('div', { class: 'row', 'data-g': 'us-emprunt' }, bor, out, bb),
@@ -112561,18 +112608,21 @@ Seas.register({
     { min: 1000000, name: 'Taï-pan', supreme: true },
     { min: 5000000, name: 'Taï-pan légendaire' },
   ],
+  // (04/10/2026 : prix refaits d'après le bilan de l'Héritage, Wang et Mazu refaits. Wang : emprunter au-delà du départ fait perdre
+  // de l'argent, chaque niveau ouvre une faveur du début de partie. Mazu : dans une tempête, ce qui coûte, c'est la dérive et le
+  // temps accéléré coupé, pas les dégâts.)
   heritage: [
-    { id: 'capital', name: 'Bas de laine', desc: '+400 taels au départ par niveau', costs: [10, 20, 35, 50, 80] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : jonque, puis lorcha, puis brick', costs: [25, 85, 190] },
-    { id: 'commerce', name: 'Sens des affaires', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
-    { id: 'wang', name: 'Crédit chez Wang', desc: 'Intérêts -1 %/mois et +1 500 taels d\'emprunt par niveau', costs: [10, 25, 55] },
-    { id: 'canonniers', name: 'Canonniers vétérans', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
-    { id: 'navigateur', name: 'Navigateur hors pair', desc: '+5 % de vitesse par niveau', costs: [20, 40, 85] },
-    { id: 'equipage', name: 'Équipage fidèle', desc: '+4 marins au départ, engagement -20 % par niveau', costs: [15, 35] },
-    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
-    { id: 'mazu', name: 'Faveur de Mazu', desc: '-25 % de dégâts de tempête par niveau', costs: [20, 55] },
-    { id: 'informateurs', name: 'Réseau d\'informateurs', desc: 'Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte', costs: [35, 100] },
-    { id: 'assurance', name: 'Assurance maritime', desc: 'Une fois par partie, un naufrage ne met pas fin à votre carrière', costs: [90] },
+    { id: 'capital', name: 'Bas de laine', desc: '+400 taels au départ par niveau', costs: [10, 10, 15, 15, 20] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : jonque, puis lorcha, puis brick', costs: [40, 70, 130] },
+    { id: 'commerce', name: 'Sens des affaires', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [35, 75, 125, 180, 250] },
+    { id: 'wang', name: 'Crédit chez Wang', desc: 'Niv. 1 : premier emprunt sans intérêts pendant 60 jours. Niv. 2 : +3 000 taels d\'emprunt. Niv. 3 : 300 jours pour rembourser au lieu de 150', costs: [10, 10, 15], freeDays: 60, extraLoan: 3000, dueDays: 300 },
+    { id: 'canonniers', name: 'Canonniers vétérans', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 70] },
+    { id: 'navigateur', name: 'Navigateur hors pair', desc: '+5 % de vitesse par niveau', costs: [35, 70, 110] },
+    { id: 'equipage', name: 'Équipage fidèle', desc: '+4 marins au départ, engagement -20 % par niveau', costs: [10, 15] },
+    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [10, 15, 20] },
+    { id: 'mazu', name: 'Faveur de Mazu', desc: 'Niv. 1 : la tempête vous déporte deux fois moins et ne coupe plus le temps accéléré. Niv. 2 : plus aucune dérive. Et -25 % de dégâts de tempête par niveau', costs: [55, 115], drift: 0.5, stormFast: 1 },
+    { id: 'informateurs', name: 'Réseau d\'informateurs', desc: 'Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte', costs: [20, 60] },
+    { id: 'assurance', name: 'Assurance maritime', desc: 'Une fois par partie, un naufrage ne met pas fin à votre carrière', costs: [50] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -125387,7 +125437,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 04/10/2026 à 11:06</div>
+<div id="maj">Mise à jour : 04/10/2026 à 21:36</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
