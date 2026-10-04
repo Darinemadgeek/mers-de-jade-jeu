@@ -102657,7 +102657,9 @@ Lang.sea('pl', 'phenicie', {
 // calendrier, son héritage, ses cultures et ses textes. Seas.use(id) recâble ici les tables
 // que lit tout le moteur (GOODS, PORTS, SHIPS…) : le reste du code ne change pas de mer à mer.
 
-const DAYS_PER_SEC = 0.75;      // jours de calendrier par seconde de navigation
+const DAYS_PER_SEC = 0.6;       // jours de calendrier par seconde de navigation (0,75 jusqu'au 04/10/2026 : le titre suprême hors de portée)
+const CONTRACT_BONUS = 1.2;     // primes des contrats de la taverne (livraisons, colis, chasses ; pas les primes des pirates recherchés)
+const PIRATE_LOOT = 2;          // or et cargaison à bord des navires ennemis
 const CANNON_SPACE = 3;         // piculs occupés par un canon
 const CANNON_PRICE = 420;
 const CREW_HIRE = 30;           // prime d'engagement par marin
@@ -106644,15 +106646,16 @@ const Game = {
         const qty = Math.max(10, Math.round(st.hold * rng.range(0.2, 0.55) / 5) * 5);
         const est = this.basePrice(to.id, gi) * qty;
         const days = this.travelDaysEst(pid, to.id);
-        list.push({ id, type: 'livraison', from: pid, to: to.id, g: gi, qty, reward: Math.round(est * rng.range(1.18, 1.5) / 10) * 10, deadline: Math.round(r.day + days * 1.8 + 8) });
+        list.push({ id, type: 'livraison', from: pid, to: to.id, g: gi, qty, reward: Math.round(est * rng.range(1.18, 1.5) * CONTRACT_BONUS / 10) * 10, deadline: Math.round(r.day + days * 1.8 + 8) });
       } else if (kind === 'colis') {
         const to = rng.pick(dest('colis')), days = this.travelDaysEst(pid, to.id);
         used.add('colis' + to.id);
         const space = rng.int(6, 14);
-        list.push({ id, type: 'colis', from: pid, to: to.id, space, reward: Math.round((250 + days * 70) * tierMul * rng.range(0.9, 1.3) / 10) * 10, deadline: Math.round(r.day + days * 1.6 + 5), what: rng.pick(TXT.parcels) });
+        // (la prime suit la distance, et non le calendrier : days * 0.75 / DAYS_PER_SEC)
+        list.push({ id, type: 'colis', from: pid, to: to.id, space, reward: Math.round((250 + days * 0.75 / DAYS_PER_SEC * 70) * tierMul * rng.range(0.9, 1.3) * CONTRACT_BONUS / 10) * 10, deadline: Math.round(r.day + days * 1.6 + 5), what: rng.pick(TXT.parcels) });
       } else if (kind === 'chasse') {
         const n = rng.int(2, 4);
-        list.push({ id, type: 'chasse', from: pid, n, done: 0, reward: Math.round(n * (500 + r.day * 6) * tierMul / 10) * 10, deadline: Math.round(r.day + 55) });
+        list.push({ id, type: 'chasse', from: pid, n, done: 0, reward: Math.round(n * (500 + r.day * 6) * tierMul * CONTRACT_BONUS / 10) * 10, deadline: Math.round(r.day + 55) });
       } else {
         // une cible distincte par liste
         const t = targets.splice(rng.int(0, targets.length - 1), 1)[0];
@@ -108245,10 +108248,11 @@ const SeaScene = {
     this.ships.push(this.player);
     this.camX = this.player.x - this.W / 2; this.camY = this.player.y - this.H / 2;
     this.setDest(dest);
-    // (une mer aux ports encaissés, SEA.departAim : on quitte le quai cap sur la route — le point situé à une quarantaine
-    // d'unités le long du chemin, s'il est en vue —, et non face au large ; à Moka, les grands navires viraient trop large
-    // pour s'engager dans Bab-el-Mandeb et s'échouaient)
-    if (SEA.departAim && this.path && this.path.length > 1) {
+    // on quitte le quai cap sur la route — le point situé à une quarantaine d'unités le long du chemin, s'il est en vue —, et
+    // non face au large : le demi-tour qui suivait coûtait des jours dans les estuaires (Hong Kong → Canton : le trois-mâts
+    // restait échoué dans la rivière des Perles ; Curaçao → Carthagène : 38 jours au lieu de 10 pour le galion ; à Moka, les
+    // grands navires viraient trop large pour s'engager dans Bab-el-Mandeb). Une mer peut s'en passer : SEA.departAim = false.
+    if (SEA.departAim !== false && this.path && this.path.length > 1) {
       const p = this.player;
       let left = 40, t = null;
       for (let i = 1; i < this.path.length && !t; i++) {
@@ -108302,13 +108306,13 @@ const SeaScene = {
     const grow = 1 + r.day / 365 * 0.55;
     const hull = Math.round(PT.hull * grow * ((o && o.hullMul) || 1));
     const cargo = zeros();
-    for (let k = 0; k < 3; k++) cargo[R.int(0, GOODS.length - 1)] += Math.round(PT.cargo / 3 * R.range(0.5, 1.2));
+    for (let k = 0; k < 3; k++) cargo[R.int(0, GOODS.length - 1)] += Math.round(PT.cargo / 3 * R.range(0.5, 1.2) * PIRATE_LOOT);
     const v = new Vessel(Object.assign({
       kind: 'pirate', style: PT.style, len: PT.len, scheme: PT.sail, name: PT.name,
       x, y, a: R.range(-Math.PI, Math.PI), v: PT.speed * 0.5, sail: 2,
       hull, hullMax: hull, guns: Math.round(PT.guns * ((o && o.gunsMul) || 1)), crew: Math.round(PT.crew * R.range(0.85, 1.15) * ((o && o.hullMul) ? 1.3 : 1)),
       speedMax: PT.speed * R.range(0.94, 1.02), turn: PT.turn, boarder: !!PT.boarder, reload: 3.5 - PT.tier * 0.12, dmg: 4.5 + PT.tier * 0.8, range: 135 + PT.tier * 6, spread: 0.075,
-      gold: Math.round(R.int(PT.gold[0], PT.gold[1]) * (1 + r.day / 220)), cargo, hostile: true, tier: PT.tier, oars: PT.oars || 0,
+      gold: Math.round(R.int(PT.gold[0], PT.gold[1]) * (1 + r.day / 220) * PIRATE_LOOT), cargo, hostile: true, tier: PT.tier, oars: PT.oars || 0,
     }, o || {}));
     return v;
   },
@@ -108523,10 +108527,14 @@ const SeaScene = {
   },
   dropLoot(s, k) {
     const add = (type, extra) => this.loot.push(Object.assign({ x: s.x + R.range(-12, 12), y: s.y + R.range(-12, 12), type, t: 0, ph: R.range(0, TAU) }, extra));
-    if (s.gold > 0) add('gold', { v: Math.round(s.gold * k) });
+    // (le butin repris à un pillard, s.plunder, flotte en entier ; le reste de sa cale, en partie)
+    const pl = s.plunder, part = (n, mine) => Math.round((n - mine) * k + mine);
+    if (s.gold > 0) add('gold', { v: part(s.gold, pl ? pl.gold : 0) });
     if (s.cargo) {
-      const idx = s.cargo.map((n, i) => [n, i]).filter(x => x[0] > 0).sort((a, b) => b[0] - a[0]).slice(0, 3);
-      for (const [n, gi] of idx) add('cargo', { g: gi, n: Math.max(1, Math.round(n * k)) });
+      // (les marchandises reprises au pillard flottent toutes ; du reste de sa cale, les trois plus gros lots)
+      const lots = s.cargo.map((n, i) => [n, i]).filter(x => x[0] > 0), mine = x => pl && pl.cargo[x[1]] > 0;
+      const idx = lots.filter(mine).concat(lots.filter(x => !mine(x)).sort((a, b) => b[0] - a[0]).slice(0, 3));
+      for (const [n, gi] of idx) add('cargo', { g: gi, n: Math.max(1, part(n, pl ? pl.cargo[gi] : 0)) });
     }
     if (s.kind === 'pirate' && (s.tier || 1) >= 2 && R.chance(0.07) && !Game.run.treasures.some(t => !t.found)) add('map');
     if (R.chance(0.05)) add('bottle');
@@ -108549,12 +108557,21 @@ const SeaScene = {
       if (SEA.rules && SEA.rules.captured && SEA.rules.captured(e, P, E)) return;   // corsaires : capture et rançon
       const stolen = Math.round(r.cash * R.range(0.3, 0.5));
       r.cash -= stolen;
+      // le pillard garde le butin à son bord, alourdi (15 % plus lent) : qui le rattrape en reprend 60 %, à l'abordage
+      // comme au naufrage (e.plunder : la part rendue en entier par dropLoot)
+      const back = e.plunder || (e.plunder = { gold: 0, cargo: zeros() });
+      back.gold += Math.round(stolen * 0.6); e.gold = (e.gold || 0) + Math.round(stolen * 0.6);
+      if (!e.cargo) e.cargo = zeros();
+      if (!e.laden) { e.laden = true; e.speedMax *= 0.85; }
       let space = Math.round(e.len * 1.5), taken = [];
       const order = r.cargo.map((n, i) => [GOODS[i].base, i]).sort((a, b) => b[0] - a[0]);
       for (const [, gi] of order) {
         if (space <= 0) break;
         const n = Math.min(r.cargo[gi], space);
-        if (n > 0) { r.cargo[gi] -= n; space -= n; taken.push(T('abordage.lot', { n, marchandise: lower(GOODS[gi].name), unites: motUnites(n, GOODS[gi]) })); }
+        if (n > 0) {
+          r.cargo[gi] -= n; space -= n; taken.push(T('abordage.lot', { n, marchandise: lower(GOODS[gi].name), unites: motUnites(n, GOODS[gi]) }));
+          const k = Math.round(n * 0.6); back.cargo[gi] += k; e.cargo[gi] += k;
+        }
       }
       // (jamais moins de zéro : un navire sans équipage, après une désertion, est pillé sans qu'un marin ne ressuscite)
       const lost = Math.max(0, Math.min(p.crew - 1, Math.max(1, Math.round(p.crew * R.range(0.25, 0.4)))));
@@ -112535,17 +112552,17 @@ Seas.register({
     { min: 5000000, name: 'Taï-pan légendaire' },
   ],
   heritage: [
-    { id: 'capital', name: 'Bas de laine', desc: '+400 taels au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : jonque, puis lorcha, puis brick', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Sens des affaires', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez Wang', desc: 'Intérêts -1 %/mois et +1 500 taels d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Canonniers vétérans', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [30, 70, 140] },
-    { id: 'navigateur', name: 'Navigateur hors pair', desc: '+5 % de vitesse par niveau', costs: [30, 70, 140] },
-    { id: 'equipage', name: 'Équipage fidèle', desc: '+4 marins au départ, engagement -20 % par niveau', costs: [25, 60] },
-    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'mazu', name: 'Faveur de Mazu', desc: '-25 % de dégâts de tempête par niveau', costs: [35, 90] },
-    { id: 'informateurs', name: 'Réseau d\'informateurs', desc: 'Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte', costs: [60, 170] },
-    { id: 'assurance', name: 'Assurance maritime', desc: 'Une fois par partie, un naufrage ne met pas fin à votre carrière', costs: [150] },
+    { id: 'capital', name: 'Bas de laine', desc: '+400 taels au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : jonque, puis lorcha, puis brick', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Sens des affaires', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez Wang', desc: 'Intérêts -1 %/mois et +1 500 taels d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Canonniers vétérans', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
+    { id: 'navigateur', name: 'Navigateur hors pair', desc: '+5 % de vitesse par niveau', costs: [20, 40, 85] },
+    { id: 'equipage', name: 'Équipage fidèle', desc: '+4 marins au départ, engagement -20 % par niveau', costs: [15, 35] },
+    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'mazu', name: 'Faveur de Mazu', desc: '-25 % de dégâts de tempête par niveau', costs: [20, 55] },
+    { id: 'informateurs', name: 'Réseau d\'informateurs', desc: 'Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct sur la carte', costs: [35, 100] },
+    { id: 'assurance', name: 'Assurance maritime', desc: 'Une fois par partie, un naufrage ne met pas fin à votre carrière', costs: [90] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -114718,17 +114735,17 @@ Seas.register({
   ],
   // socle commun (rebaptisé) + bonus « signature » qui adoucissent les mécaniques de la mer
   heritage: [
-    { id: 'capital', name: 'Coffre de famille', desc: '+400 ducats au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : tartane, puis fuste, puis nef', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Partie double', desc: 'La comptabilité de Pacioli : +2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez Zorzi', desc: 'Intérêts -1 %/mois et +1 500 ducats d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Bombardiers de l\'Arsenal', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [30, 70, 140] },
-    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'arsenal', name: 'Galère de l\'Arsenal', desc: 'Vos galères sortent de l\'Arsenal : +15 % de coque et +8 % de vitesse à la rame par niveau', costs: [60, 150] },
-    { id: 'informateurs', name: 'Espions du Conseil des Dix', desc: 'Niv. 1 : rumeurs fiables et moins chères, la peste annoncée avant qu\'elle frappe. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
-    { id: 'patente', name: 'Patente sanitaire', desc: 'Quarantaine réduite : 20 jours au lieu de 40, puis 10', costs: [45, 110] },
-    { id: 'rameurs', name: 'Rameurs libres', desc: 'Des rameurs payés plutôt que des forçats : -15 % de vivres et +6 % de vitesse à la rame par niveau', costs: [35, 80] },
-    { id: 'rachat', name: 'Confrérie du rachat des captifs', desc: 'Rançon -30 % par niveau ; sans rançon, la confrérie vous libère plus vite', costs: [50, 120] },
+    { id: 'capital', name: 'Coffre de famille', desc: '+400 ducats au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : tartane, puis fuste, puis nef', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Partie double', desc: 'La comptabilité de Pacioli : +2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez Zorzi', desc: 'Intérêts -1 %/mois et +1 500 ducats d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Bombardiers de l\'Arsenal', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
+    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'arsenal', name: 'Galère de l\'Arsenal', desc: 'Vos galères sortent de l\'Arsenal : +15 % de coque et +8 % de vitesse à la rame par niveau', costs: [35, 90] },
+    { id: 'informateurs', name: 'Espions du Conseil des Dix', desc: 'Niv. 1 : rumeurs fiables et moins chères, la peste annoncée avant qu\'elle frappe. Niv. 2 : prix de tous les ports en direct', costs: [35, 100] },
+    { id: 'patente', name: 'Patente sanitaire', desc: 'Quarantaine réduite : 20 jours au lieu de 40, puis 10', costs: [25, 65] },
+    { id: 'rameurs', name: 'Rameurs libres', desc: 'Des rameurs payés plutôt que des forçats : -15 % de vivres et +6 % de vitesse à la rame par niveau', costs: [20, 50] },
+    { id: 'rachat', name: 'Confrérie du rachat des captifs', desc: 'Rançon -30 % par niveau ; sans rançon, la confrérie vous libère plus vite', costs: [30, 70] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -116353,17 +116370,17 @@ Seas.register({
   // ── Titres, héritage, hauts faits ──
   titles: TITLES_MARCHAND,
   heritage: [
-    { id: 'capital', name: 'Coffre de boucanier', desc: '+400 pièces de huit au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : sloop, puis brigantin, puis flûte hollandaise', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Compère des planteurs', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez la Veuve Hardy', desc: 'Intérêts -1 %/mois et +1 500 pièces d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Canonniers de Port-Royal', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [30, 70, 140] },
-    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'informateurs', name: 'Réseau de la Tortue', desc: 'Niv. 1 : rumeurs fiables et moins chères, fièvre et Flotte du Trésor annoncées. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
-    { id: 'code', name: 'Code de la flibuste', desc: 'L\'équipage patiente 50 % plus longtemps avant de se mutiner, et réclame moins, par niveau', costs: [35, 80] },
-    { id: 'doublefond', name: 'Cale à double fond', desc: 'Les douaniers trouvent 35 % moins souvent la contrebande, par niveau', costs: [40, 100] },
-    { id: 'creole', name: 'Pilote créole', desc: 'Échouages moins coûteux et fièvre jaune moins meurtrière (-30 % et -35 % par niveau)', costs: [50, 120] },
-    { id: 'lettre', name: 'Lettre de marque permanente', desc: 'Commencez chaque carrière avec une lettre de marque valable toute l\'année (anglaise pour un marchand, française pour un flibustier)', costs: [130] },
+    { id: 'capital', name: 'Coffre de boucanier', desc: '+400 pièces de huit au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : sloop, puis brigantin, puis flûte hollandaise', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Compère des planteurs', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez la Veuve Hardy', desc: 'Intérêts -1 %/mois et +1 500 pièces d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Canonniers de Port-Royal', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
+    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'informateurs', name: 'Réseau de la Tortue', desc: 'Niv. 1 : rumeurs fiables et moins chères, fièvre et Flotte du Trésor annoncées. Niv. 2 : prix de tous les ports en direct', costs: [35, 100] },
+    { id: 'code', name: 'Code de la flibuste', desc: 'L\'équipage patiente 50 % plus longtemps avant de se mutiner, et réclame moins, par niveau', costs: [20, 50] },
+    { id: 'doublefond', name: 'Cale à double fond', desc: 'Les douaniers trouvent 35 % moins souvent la contrebande, par niveau', costs: [25, 60] },
+    { id: 'creole', name: 'Pilote créole', desc: 'Échouages moins coûteux et fièvre jaune moins meurtrière (-30 % et -35 % par niveau)', costs: [30, 70] },
+    { id: 'lettre', name: 'Lettre de marque permanente', desc: 'Commencez chaque carrière avec une lettre de marque valable toute l\'année (anglaise pour un marchand, française pour un flibustier)', costs: [80] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -118054,17 +118071,17 @@ Seas.register({
     { min: 5000000, name: 'Malik al-Tujjar des Sept Mers' },
   ],
   heritage: [
-    { id: 'capital', name: 'Bourse de famille', desc: '+400 larins au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Boutre de famille', desc: 'Commencez avec un meilleur navire : sambouk, puis kotia du Kutch, puis ghanja', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Sens du bazar', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez Bhimji', desc: 'Intérêts -1 %/mois et +1 500 larins d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Canonniers roumis', desc: 'Des artilleurs ottomans à bord : -10 % de rechargement et +10 % de dégâts par niveau', costs: [30, 70, 140] },
-    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'informateurs', name: 'Réseau hawala', desc: 'Vos correspondants vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères, dates exactes. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
-    { id: 'cartaz', name: 'Cartaz permanent', desc: 'Commencez chaque carrière avec un cartaz valable toute l\'année (les droits restent dus)', costs: [130] },
-    { id: 'routier', name: 'Routier d\'Ibn Majid', desc: 'Niv. 1 : la carte annonce les renversements de la mousson et la fermeture de la barre au jour près. Niv. 2 : vos pilotes connaissent vents et courants : +6 % de vitesse', costs: [50, 120] },
-    { id: 'surate', name: 'Maison de commerce à Surate', desc: 'Votre facteur à Surate : -6 % à l\'achat et +6 % à la vente à Surate, par niveau', costs: [60, 150] },
-    { id: 'palefreniers', name: 'Palefreniers', desc: 'Des palefreniers à bord : chevaux 35 % moins fragiles et 20 % moins gourmands, par niveau', costs: [40, 100] },
+    { id: 'capital', name: 'Bourse de famille', desc: '+400 larins au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Boutre de famille', desc: 'Commencez avec un meilleur navire : sambouk, puis kotia du Kutch, puis ghanja', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Sens du bazar', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez Bhimji', desc: 'Intérêts -1 %/mois et +1 500 larins d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Canonniers roumis', desc: 'Des artilleurs ottomans à bord : -10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
+    { id: 'cale', name: 'Arrimage expert', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'informateurs', name: 'Réseau hawala', desc: 'Vos correspondants vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères, dates exactes. Niv. 2 : prix de tous les ports en direct', costs: [35, 100] },
+    { id: 'cartaz', name: 'Cartaz permanent', desc: 'Commencez chaque carrière avec un cartaz valable toute l\'année (les droits restent dus)', costs: [80] },
+    { id: 'routier', name: 'Routier d\'Ibn Majid', desc: 'Niv. 1 : la carte annonce les renversements de la mousson et la fermeture de la barre au jour près. Niv. 2 : vos pilotes connaissent vents et courants : +6 % de vitesse', costs: [30, 70] },
+    { id: 'surate', name: 'Maison de commerce à Surate', desc: 'Votre facteur à Surate : -6 % à l\'achat et +6 % à la vente à Surate, par niveau', costs: [35, 90] },
+    { id: 'palefreniers', name: 'Palefreniers', desc: 'Des palefreniers à bord : chevaux 35 % moins fragiles et 20 % moins gourmands, par niveau', costs: [25, 60] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -119772,18 +119789,18 @@ Seas.register({
     { min: 5000000, name: 'Bourgmestre et chef de la Hanse' },
   ],
   heritage: [
-    { id: 'capital', name: 'Coffre de famille', desc: '+400 marks au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Cogue de famille', desc: 'Commencez avec un meilleur navire : kraier, puis ewer de l\'Elbe, puis cogue', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Livre de comptes', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez le Lombard', desc: 'Intérêts -1 %/mois et +1 500 marks d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Bombardiers de Lübeck', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [30, 70, 140] },
-    { id: 'cale', name: 'Arrimeurs du port', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'informateurs', name: 'Lettres des comptoirs', desc: 'Vos facteurs vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères, dates des glaces exactes. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
-    { id: 'bourgeoisie', name: 'Droit de bourgeoisie', desc: 'Commencez chaque carrière en bourgeois de Lübeck : les prix des comptoirs de la Hanse, et le Sund à moitié prix', costs: [120] },
-    { id: 'briseglace', name: 'Coque brise-glace', desc: 'Niv. 1 : la banquise vous ralentit et vous use deux fois moins, et le chenal se scie en deux jours. Niv. 2 : vous entrez dans un port et en sortez dix jours avant et après ses glaces', costs: [50, 120] },
-    { id: 'sund', name: 'Exemption du Sund', desc: 'La reine Marguerite vous dispense de son péage', costs: [90] },
-    { id: 'tonneliers', name: 'Maîtres tonneliers', desc: 'Un tonneau de sel garde un tonneau de hareng de plus, et le hareng mal salé pourrit 30 % moins vite, par niveau', costs: [40, 90] },
-    { id: 'bergen', name: 'Maison au comptoir de Bergen', desc: 'Votre facteur à Bryggen : -6 % à l\'achat et +6 % à la vente à Bergen, par niveau', costs: [60, 150] },
+    { id: 'capital', name: 'Coffre de famille', desc: '+400 marks au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Cogue de famille', desc: 'Commencez avec un meilleur navire : kraier, puis ewer de l\'Elbe, puis cogue', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Livre de comptes', desc: '+2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez le Lombard', desc: 'Intérêts -1 %/mois et +1 500 marks d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Bombardiers de Lübeck', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
+    { id: 'cale', name: 'Arrimeurs du port', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'informateurs', name: 'Lettres des comptoirs', desc: 'Vos facteurs vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères, dates des glaces exactes. Niv. 2 : prix de tous les ports en direct', costs: [35, 100] },
+    { id: 'bourgeoisie', name: 'Droit de bourgeoisie', desc: 'Commencez chaque carrière en bourgeois de Lübeck : les prix des comptoirs de la Hanse, et le Sund à moitié prix', costs: [70] },
+    { id: 'briseglace', name: 'Coque brise-glace', desc: 'Niv. 1 : la banquise vous ralentit et vous use deux fois moins, et le chenal se scie en deux jours. Niv. 2 : vous entrez dans un port et en sortez dix jours avant et après ses glaces', costs: [30, 70] },
+    { id: 'sund', name: 'Exemption du Sund', desc: 'La reine Marguerite vous dispense de son péage', costs: [55] },
+    { id: 'tonneliers', name: 'Maîtres tonneliers', desc: 'Un tonneau de sel garde un tonneau de hareng de plus, et le hareng mal salé pourrit 30 % moins vite, par niveau', costs: [25, 55] },
+    { id: 'bergen', name: 'Maison au comptoir de Bergen', desc: 'Votre facteur à Bryggen : -6 % à l\'achat et +6 % à la vente à Bergen, par niveau', costs: [35, 90] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -122039,18 +122056,18 @@ Seas.register({
     { min: 5000000, name: 'Seigneur du Grand Océan' },
   ],
   heritage: [
-    { id: 'capital', name: 'Coffre de piastres', desc: '+400 dollars au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un meilleur navire : brick, puis brick-goélette, puis trois-mâts', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Sens du négoce', desc: '+2 % à la vente, -2 % à l\'achat (et au troc) par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez Isaac Moss', desc: 'Intérêts -1 %/mois et +1 500 dollars d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Canonniers de la Royal Navy', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [30, 70, 140] },
-    { id: 'cale', name: 'Arrimeurs de Port Jackson', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'informateurs', name: 'Lettres des missions', desc: 'Les missionnaires vous écrivent d\'île en île. Niv. 1 : rumeurs fiables et moins chères, dates des tapu exactes. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
-    { id: 'navigateur', name: 'Navigateur polynésien', desc: 'Un navigateur des îles vous guide (+5 % de vitesse par niveau). Niv. 1 : toutes les îles et tous les mouillages figurent sur votre carte. Niv. 2 : tous les récifs aussi', costs: [50, 130] },
-    { id: 'pirogue', name: 'Pirogue double', desc: 'Une pirogue double à votre bord : au mouillage, plongées et coupes 35 % plus rapides, et les villages vous proposent 20 % de plus au troc, par niveau', costs: [40, 90] },
-    { id: 'pomare', name: 'Amitié de la reine Pomare', desc: 'Papeete vous reçoit en ami (+30 de relation par niveau), et les gens de la reine ramènent vos déserteurs : la moitié, puis tous', costs: [45, 100] },
-    { id: 'doublage', name: 'Doublage de cuivre', desc: 'Vos carènes doublées de cuivre : les récifs font 35 % de dégâts en moins, et +3 % de vitesse, par niveau', costs: [35, 80] },
-    { id: 'charpentier', name: 'Charpentier de bord', desc: 'Votre charpentier répare la coque en mer : jusqu\'à 60 % (niv. 1), puis jusqu\'à 85 %, deux fois plus vite (niv. 2)', costs: [40, 90] },
+    { id: 'capital', name: 'Coffre de piastres', desc: '+400 dollars au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un meilleur navire : brick, puis brick-goélette, puis trois-mâts', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Sens du négoce', desc: '+2 % à la vente, -2 % à l\'achat (et au troc) par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez Isaac Moss', desc: 'Intérêts -1 %/mois et +1 500 dollars d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Canonniers de la Royal Navy', desc: '-10 % de rechargement et +10 % de dégâts par niveau', costs: [20, 40, 85] },
+    { id: 'cale', name: 'Arrimeurs de Port Jackson', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'informateurs', name: 'Lettres des missions', desc: 'Les missionnaires vous écrivent d\'île en île. Niv. 1 : rumeurs fiables et moins chères, dates des tapu exactes. Niv. 2 : prix de tous les ports en direct', costs: [35, 100] },
+    { id: 'navigateur', name: 'Navigateur polynésien', desc: 'Un navigateur des îles vous guide (+5 % de vitesse par niveau). Niv. 1 : toutes les îles et tous les mouillages figurent sur votre carte. Niv. 2 : tous les récifs aussi', costs: [30, 80] },
+    { id: 'pirogue', name: 'Pirogue double', desc: 'Une pirogue double à votre bord : au mouillage, plongées et coupes 35 % plus rapides, et les villages vous proposent 20 % de plus au troc, par niveau', costs: [25, 55] },
+    { id: 'pomare', name: 'Amitié de la reine Pomare', desc: 'Papeete vous reçoit en ami (+30 de relation par niveau), et les gens de la reine ramènent vos déserteurs : la moitié, puis tous', costs: [25, 60] },
+    { id: 'doublage', name: 'Doublage de cuivre', desc: 'Vos carènes doublées de cuivre : les récifs font 35 % de dégâts en moins, et +3 % de vitesse, par niveau', costs: [20, 50] },
+    { id: 'charpentier', name: 'Charpentier de bord', desc: 'Votre charpentier répare la coque en mer : jusqu\'à 60 % (niv. 1), puis jusqu\'à 85 %, deux fois plus vite (niv. 2)', costs: [25, 55] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -124376,17 +124393,17 @@ Seas.register({
   ],
   // socle commun (rebaptisé) + bonus « signature » qui adoucissent les mécaniques de la mer
   heritage: [
-    { id: 'capital', name: 'Coffre de cèdre', desc: '+400 sicles au départ par niveau', costs: [15, 30, 55, 85, 130] },
-    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : hippos, puis triacontère, puis gaulos', costs: [40, 140, 320] },
-    { id: 'commerce', name: 'Poids justes', desc: 'Vos poids et votre balance sont réputés exacts : +2 % à la vente, -2 % à l\'achat par niveau', costs: [25, 50, 90, 140, 210] },
-    { id: 'wang', name: 'Crédit chez Ithobaal', desc: 'Intérêts -1 %/mois et +1 500 sicles d\'emprunt par niveau', costs: [20, 45, 90] },
-    { id: 'canonniers', name: 'Éperon de bronze', desc: 'Un éperon fondu à Tyr : +15 % de dégâts à l\'éperon et -10 % de rechargement des archers par niveau', costs: [30, 70, 140] },
-    { id: 'cale', name: 'Arrimeurs de Sidon', desc: '+10 % de capacité de cale par niveau', costs: [40, 90, 180] },
-    { id: 'teinturiers', name: 'Maîtres teinturiers', desc: 'La teinturerie familiale de Tyr : 3, puis 6 talents de pourpre chaque mois, à l\'entrepôt de Tyr', costs: [60, 150] },
-    { id: 'navigateur', name: 'Pilotes de l\'Étoile polaire', desc: 'Vos pilotes suivent la « phénicienne » : risques de la navigation de nuit -50 %, puis -85 %, et +5 % de vitesse par niveau', costs: [50, 130] },
-    { id: 'informateurs', name: 'Scribes de l\'alphabet', desc: 'Vos scribes vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct', costs: [60, 170] },
-    { id: 'mazu', name: 'Temple de Melqart', desc: 'Votre famille sert le dieu de Tyr : sa faveur s\'use 30 % moins vite et sa colère vous frappe moins, ses tempêtes font 25 % de dégâts en moins, par niveau', costs: [45, 110] },
-    { id: 'colons', name: 'Colons de Tyr', desc: 'Des familles prêtes à partir : fonder un comptoir coûte 15 % d\'argent, 25 % de cèdre et de colons en moins, par niveau', costs: [40, 100] },
+    { id: 'capital', name: 'Coffre de cèdre', desc: '+400 sicles au départ par niveau', costs: [10, 20, 35, 50, 80] },
+    { id: 'navire', name: 'Navire de famille', desc: 'Commencez avec un navire : hippos, puis triacontère, puis gaulos', costs: [25, 85, 190] },
+    { id: 'commerce', name: 'Poids justes', desc: 'Vos poids et votre balance sont réputés exacts : +2 % à la vente, -2 % à l\'achat par niveau', costs: [15, 30, 55, 85, 125] },
+    { id: 'wang', name: 'Crédit chez Ithobaal', desc: 'Intérêts -1 %/mois et +1 500 sicles d\'emprunt par niveau', costs: [10, 25, 55] },
+    { id: 'canonniers', name: 'Éperon de bronze', desc: 'Un éperon fondu à Tyr : +15 % de dégâts à l\'éperon et -10 % de rechargement des archers par niveau', costs: [20, 40, 85] },
+    { id: 'cale', name: 'Arrimeurs de Sidon', desc: '+10 % de capacité de cale par niveau', costs: [25, 55, 110] },
+    { id: 'teinturiers', name: 'Maîtres teinturiers', desc: 'La teinturerie familiale de Tyr : 3, puis 6 talents de pourpre chaque mois, à l\'entrepôt de Tyr', costs: [35, 90] },
+    { id: 'navigateur', name: 'Pilotes de l\'Étoile polaire', desc: 'Vos pilotes suivent la « phénicienne » : risques de la navigation de nuit -50 %, puis -85 %, et +5 % de vitesse par niveau', costs: [30, 80] },
+    { id: 'informateurs', name: 'Scribes de l\'alphabet', desc: 'Vos scribes vous écrivent d\'un port à l\'autre. Niv. 1 : rumeurs fiables et moins chères. Niv. 2 : prix de tous les ports en direct', costs: [35, 100] },
+    { id: 'mazu', name: 'Temple de Melqart', desc: 'Votre famille sert le dieu de Tyr : sa faveur s\'use 30 % moins vite et sa colère vous frappe moins, ses tempêtes font 25 % de dégâts en moins, par niveau', costs: [25, 65] },
+    { id: 'colons', name: 'Colons de Tyr', desc: 'Des familles prêtes à partir : fonder un comptoir coûte 15 % d\'argent, 25 % de cèdre et de colons en moins, par niveau', costs: [25, 60] },
   ],
   achievements: [
     { id: 'voyage', name: 'Premier voyage', desc: 'Atteindre un autre port.', jade: 5 },
@@ -125359,6 +125376,8 @@ const Main = {
 })();
 
 </script>
+<style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
+<div id="maj">Mise à jour : 04/10/2026 à 02:13</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
