@@ -2,7 +2,6 @@ Silk & Cannons · Crédits
 
 LE JEU
 Silk & Cannons, un jeu de Besenet Studio (https://besenetstudio.com).
-Réalisé avec l'aide d'outils d'intelligence artificielle.
 
 GRAPHISMES
 Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
@@ -29,7 +28,6 @@ Silk & Cannons · Credits
 
 THE GAME
 Silk & Cannons, a game by Besenet Studio (https://besenetstudio.com).
-Made with the help of artificial intelligence tools.
 
 GRAPHICS
 Seas, coasts, ports, ships and prints: everything is drawn by the game's code.
