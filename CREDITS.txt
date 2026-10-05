@@ -1,0 +1,51 @@
+Silk & Cannons · Crédits
+
+LE JEU
+Silk & Cannons, un jeu de Besenet Studio (https://besenetstudio.com).
+Réalisé avec l'aide d'outils d'intelligence artificielle.
+
+GRAPHISMES
+Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+
+MUSIQUE ET BRUITAGES
+Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+
+CARTES
+Côtes et îles d'après Natural Earth (https://www.naturalearthdata.com), données du domaine public.
+
+POLICES
+Manrope · The Manrope Project Authors
+Shippori Mincho B1 · The Shippori Mincho Project Authors
+Noto Serif · Noto Sans Symbols 2 · Noto Sans Math · The Noto Project Authors
+Noto Sans SC, TC, JP, KR · Noto Serif SC, TC, KR · Adobe · The Noto Project Authors
+Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+
+REMERCIEMENTS
+Merci à nos testeurs : Mazazou et Yersinia.
+
+────────────────────────────────────────
+
+Silk & Cannons · Credits
+
+THE GAME
+Silk & Cannons, a game by Besenet Studio (https://besenetstudio.com).
+Made with the help of artificial intelligence tools.
+
+GRAPHICS
+Seas, coasts, ports, ships and prints: everything is drawn by the game's code.
+
+MUSIC AND SOUND EFFECTS
+Composed for the game and played live by its code, with no recordings at all.
+
+MAPS
+Coasts and islands based on Natural Earth (https://www.naturalearthdata.com), public domain data.
+
+FONTS
+Manrope · The Manrope Project Authors
+Shippori Mincho B1 · The Shippori Mincho Project Authors
+Noto Serif · Noto Sans Symbols 2 · Noto Sans Math · The Noto Project Authors
+Noto Sans SC, TC, JP, KR · Noto Serif SC, TC, KR · Adobe · The Noto Project Authors
+Licensed under the SIL Open Font License 1.1; the license text comes with the game (LICENSES-fonts.txt).
+
+THANKS
+Thanks to our testers: Mazazou and Yersinia.

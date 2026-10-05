@@ -12,9 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Silk &amp; Cannons</title>
 <meta name="description" content="Un an pour faire fortune : commerce, pirates et typhons en mer de Chine, 1840.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Shippori+Mincho+B1:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* ─── Mers de Jade · interface « estampe contemporaine » : verre d'encre, jade, vermillon et or ─── */
 :root {
@@ -42,8 +40,8 @@
   --prussian: #1f4e79;
   --good: #6fd6a8;
   --bad: #ff8a70;
-  --font-ui: "Manrope", "Segoe UI", system-ui, sans-serif;
-  --font-title: "Shippori Mincho B1", "Noto Serif JP", Georgia, serif;
+  --font-ui: "Manrope", "Segoe UI", system-ui, "Silk Secours", sans-serif;
+  --font-title: "Shippori Mincho B1", "Noto Serif JP", Georgia, "Silk Secours", serif;
   --blur: blur(14px) saturate(1.2);
   --shadow: 0 20px 56px rgba(0, 0, 0, 0.48), 0 2px 8px rgba(0, 0, 0, 0.3);
   color-scheme: dark;
@@ -94,6 +92,8 @@ b { font-weight: 800; }
 .btn:active:not(:disabled) { transform: translateY(1px) scale(0.985); }
 .btn:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
 .btn:disabled { opacity: 0.4; cursor: var(--cur); }
+/* les noms des langues (Options), chacun dans son écriture, quelle que soit la langue du jeu (fonts/fonts.css : Silk Langues) */
+.btn[lang] { font-family: "Silk Langues", var(--font-ui); }
 .btn.jade { background: linear-gradient(180deg, #56c7a0, #33a07b); color: var(--jade-ink); border-color: rgba(127, 217, 182, 0.65); box-shadow: 0 4px 16px rgba(63, 174, 138, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
 .btn.jade:hover:not(:disabled) { background: linear-gradient(180deg, #66d4ad, #3aad86); }
 .btn.gold { background: linear-gradient(180deg, #f3c865, #d8a038); color: var(--gold-ink); border-color: rgba(247, 213, 138, 0.65); box-shadow: 0 4px 16px rgba(232, 181, 74, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
@@ -405,6 +405,15 @@ kbd.pill { font-size: 11.5px; padding: 1px 7px; }
 .jade-count { display: inline-flex; align-items: center; gap: 7px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid rgba(63, 174, 138, 0.42); border-radius: 999px; padding: 6px 14px; font: 700 14px var(--font-ui); color: var(--jade-hi); }
 .jade-count.gold { color: var(--gold-hi); border-color: rgba(232, 181, 74, 0.42); }
 .foot-note { position: absolute; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); left: 16px; right: 16px; text-align: center; font: 500 12px var(--font-ui); color: rgba(243, 235, 218, 0.55); pointer-events: none; }
+/* (la mention du studio ouvre les crédits : chapitre de l'Aide) */
+.foot-link { pointer-events: auto; background: none; border: 0; padding: 4px 8px; font: inherit; color: inherit; cursor: var(--cur-hover); border-radius: 6px; }
+.foot-link:hover { color: var(--gold-hi); }
+/* (avec le choix de la mer, l'écran titre remplit la hauteur : la mention passe dans le flux, sous les jetons, au lieu de les
+   chevaucher en bas de l'écran ; espacements resserrés pour qu'elle tienne, au Steam Deck 1280 × 800 compris) */
+.title-screen.multi { gap: 14px; }
+.title-screen.multi .foot-note { position: static; margin-top: -8px; }
+@media (max-height: 760px) { .title-screen.multi { gap: 10px; } }
+.mobile .foot-link { padding: 0 6px; }
 
 /* ── Fin de partie ── */
 .seal { width: 128px; min-height: 128px; margin: 6px auto 12px; background: var(--red); color: #fff3ea; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font: 800 15px/1.25 var(--font-title); text-align: center; padding: 12px; border-radius: 10px; box-shadow: inset 0 0 0 3px var(--red), inset 0 0 0 4.5px rgba(255, 243, 234, 0.75), 0 12px 30px rgba(160, 30, 10, 0.35); transform: rotate(-5deg); animation: stamp 0.55s cubic-bezier(.2, 1.6, .4, 1) both; animation-delay: 0.3s; }
@@ -833,6 +842,12 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .notice-page h3 { margin: 0 0 10px; font: 700 21px var(--font-title); color: var(--paper); }
 .notice-page p { color: var(--text-2); }
 .notice-page p b { color: var(--gold-hi); }
+/* crédits : rubriques, noms des polices, liens (le studio, Natural Earth) */
+.notice-page h4 { margin: 16px 0 4px; font: 700 15px var(--font-title); color: var(--gold-hi); letter-spacing: 0.02em; }
+.notice-page .credit-line { margin: 2px 0; }
+.notice-page .credit-line b { color: var(--paper); }
+.notice-page button.link { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; cursor: var(--cur-hover); }
+.notice-page button.link:focus-visible, .foot-link:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; border-radius: 4px; }
 .notice-key { align-items: flex-start; background: rgba(232, 181, 74, 0.1); border-color: rgba(232, 181, 74, 0.45); margin: 0 0 12px; }
 .notice-key p { margin: 0; flex: 1; }
 .mobile .notice { grid-template-columns: 1fr; gap: 10px; min-height: 0; }
@@ -1226,8 +1241,8 @@ function noise1(t, s) {
 }
 
 // polices de l'interface et des titres (aussi dans les canevas) ; une langue d'un autre alphabet les change (Lang.set)
-let FONT_UI = '"Manrope", "Segoe UI", system-ui, sans-serif';
-let FONT_TITLE = '"Shippori Mincho B1", "Noto Serif JP", Georgia, serif';
+let FONT_UI = '"Manrope", "Segoe UI", system-ui, "Silk Secours", sans-serif';
+let FONT_TITLE = '"Shippori Mincho B1", "Noto Serif JP", Georgia, "Silk Secours", serif';
 
 // ── Formats ──
 // conventions d'écriture de la langue en cours (le français par défaut ; Lang.set, js/lang.js, les remplace)
@@ -1495,9 +1510,12 @@ const Lang = {
     }
   },
 
-  // les polices d'une langue d'un autre alphabet (chinois, cyrillique) : sa feuille de style (Lang.def css), puis les fontes
-  // elles-mêmes pour les caractères que dessinent les canevas (noms de ports, enseignes, titres : un canevas dessiné avant
-  // leur arrivée garderait une police de secours) ; jamais plus de 3 s d'attente
+  // les polices d'une langue d'un autre alphabet (chinois, japonais, coréen) : sa feuille de style (Lang.def css), puis les
+  // fontes elles-mêmes pour les caractères que dessinent les canevas (noms de ports, enseignes, titres : un canevas dessiné
+  // avant leur arrivée garderait une police de secours) ; jamais plus de 3 s d'attente.
+  // Feuille livrée avec le jeu (fonts/<code>.css, node tools/fonts.js) : toutes les fontes de ses familles, réduites aux
+  // caractères du jeu, se chargent (un caractère d'un paquet pas encore arrivé serait dessiné pour de bon dans une autre
+  // police). Feuille de Google (artefact claude.ai) : ses dizaines de tranches ne se chargent que pour un échantillon.
   loadFonts(code) {
     const d = this.defs[code];
     if (!d || !d.fonts || typeof document === 'undefined' || !document.fonts) return Promise.resolve();
@@ -1517,7 +1535,12 @@ const Lang = {
     for (const k of ['page.titre', 'page.chargement']) add((this.msgs[code] || {})[k] || '');
     const sample = [...seen].join('');
     const fams = [d.fonts.ui, d.fonts.title].filter(Boolean);
-    const load = () => Promise.all(fams.flatMap(f => ['500', '700', '800'].map(w => document.fonts.load(`${w} 16px ${f}`, sample))));
+    const names = new Set(fams.flatMap(f => f.split(',').map(x => x.trim().replace(/^["']|["']$/g, ''))));
+    names.delete('Silk Secours');   // (le secours de Steam : ses tranches ne viennent qu'au besoin, pour un nom tapé)
+    const local = d.css && !/^https?:/.test(d.css);
+    const load = () => local
+      ? Promise.all([...document.fonts].filter(f => f.status === 'unloaded' && names.has(f.family.replace(/^["']|["']$/g, ''))).map(f => f.load().catch(() => {})))
+      : Promise.all(fams.flatMap(f => ['500', '700', '800'].map(w => document.fonts.load(`${w} 16px ${f}`, sample))));
     return Promise.race([css.then(load), new Promise(r => setTimeout(r, 3000))]).catch(() => {});
   },
 
@@ -2657,6 +2680,24 @@ Lang.ui('fr', {
   'notice.heritage.1': 'À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ (navire de famille, coffre) ne compte pas. Les hauts faits en donnent aussi.',
   'notice.heritage.2': 'Dépensez-les dans l\'<b>Héritage</b>, depuis l\'écran titre : chaque amélioration aide toutes vos parties suivantes dans cette mer. Les jetons servent aussi aux couleurs des voiles.',
   'notice.touches.titre': 'Les commandes',
+  // ── Crédits (chapitre de l'Aide, et CREDITS.txt des versions livrées ; liste dans js/credits.js) ──
+  'notice.credits.titre': 'Crédits',
+  'credits.jeu': 'Le jeu',
+  'credits.jeu.texte': '{jeu}, un jeu de {studio}.',
+  'credits.jeu.ia': 'Réalisé avec l\'aide d\'outils d\'intelligence artificielle.',
+  'credits.graphismes': 'Graphismes',
+  'credits.graphismes.texte': 'Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.',
+  'credits.musique': 'Musique et bruitages',
+  'credits.musique.texte': 'Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.',
+  'credits.cartes': 'Cartes',
+  'credits.cartes.texte': 'Côtes et îles d\'après {source}, données du domaine public.',
+  'credits.polices': 'Polices',
+  'credits.polices.licence': 'Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).',
+  'credits.steam': 'Version Steam',
+  'credits.steam.mit': 'licence MIT',
+  'credits.steam.chromium': 'licences libres (LICENSES.chromium.html)',
+  'credits.merci': 'Remerciements',
+  'credits.merci.texte': 'Merci à nos testeurs : {noms}.',
 });
 
 </script>
@@ -4234,6 +4275,40 @@ Lang.ui('en', {
   'notice.heritage.2': 'Spend them under <b>Legacy</b>, on the title screen: each upgrade helps all your future careers in this sea. Tokens also buy sail colors.',
   // Les commandes
   'notice.touches.titre': 'Controls',
+  // Crédits
+  'notice.credits.titre': 'Credits',
+  // Le jeu
+  'credits.jeu': 'The game',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, a game by {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Made with the help of artificial intelligence tools.',
+  // Graphismes
+  'credits.graphismes': 'Graphics',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Seas, coasts, ports, ships and prints: everything is drawn by the game\'s code.',
+  // Musique et bruitages
+  'credits.musique': 'Music and sound effects',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Composed for the game and played live by its code, with no recordings at all.',
+  // Cartes
+  'credits.cartes': 'Maps',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Coasts and islands based on {source}, public domain data.',
+  // Polices
+  'credits.polices': 'Fonts',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'Licensed under the SIL Open Font License 1.1; the license text comes with the game (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Steam version',
+  // licence MIT
+  'credits.steam.mit': 'MIT license',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'open-source licenses (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Thanks',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Thanks to our testers: {noms}.',
 });
 
 </script>
@@ -12321,9 +12396,10 @@ Lang.def('zh', {
   name: '简体中文',
   html: 'zh-Hans',
   // Manrope et Shippori Mincho n'ont pas les caractères simplifiés : Noto Sans SC (interface, après Manrope pour les chiffres
-  // et les lettres latines) et Noto Serif SC (titres), chargées à la demande (Lang.loadFonts)
-  css: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&family=Noto+Serif+SC:wght@500;600;700;800&display=swap',
-  fonts: { ui: '"Manrope", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif', title: '"Noto Serif SC", "Songti SC", "SimSun", serif' },
+  // et les lettres latines) et Noto Serif SC (titres), réduites aux caractères du jeu (fonts/zh.css, node tools/fonts.js),
+  // chargées à la demande (Lang.loadFonts) ; « Silk Secours » : les noms tapés par le joueur, dans la version Steam
+  css: 'fonts/zh.css',
+  fonts: { ui: '"Manrope", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Silk Secours", sans-serif', title: '"Noto Serif SC", "Songti SC", "SimSun", "Silk Secours", serif' },
   loc: {
     group: ',', decimal: '.', pct: '%', mega: 'M', kilo: 'k', and: '和', sep: '、', stop: '。',
     dateLocale: 'zh-CN',
@@ -13883,6 +13959,40 @@ Lang.ui('zh', {
   'notice.heritage.2': '在标题画面进入<b>传承</b>花掉它们：每一项都惠及你在这片海域往后的每段生涯。帆色同样用它们购买。',
   // Les commandes
   'notice.touches.titre': '操作',
+  // Crédits
+  'notice.credits.titre': '制作人员',
+  // Le jeu
+  'credits.jeu': '游戏',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}，由 {studio} 制作。',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': '借助人工智能工具制作。',
+  // Graphismes
+  'credits.graphismes': '美术',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': '海洋、海岸、港口、船只与版画：一切皆由游戏代码绘制。',
+  // Musique et bruitages
+  'credits.musique': '音乐与音效',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': '为本游戏创作，由其代码实时演奏，不含任何录音。',
+  // Cartes
+  'credits.cartes': '地图',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': '海岸与岛屿依据 {source} 绘制，数据属于公有领域。',
+  // Polices
+  'credits.polices': '字体',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': '采用 SIL 开放字体许可证 1.1；许可证全文随游戏附送（LICENSES-fonts.txt）。',
+  // Version Steam
+  'credits.steam': 'Steam 版本',
+  // licence MIT
+  'credits.steam.mit': 'MIT 许可证',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': '开源许可证（LICENSES.chromium.html）',
+  // Remerciements
+  'credits.merci': '致谢',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': '感谢我们的测试者：{noms}。',
 });
 
 </script>
@@ -21943,8 +22053,8 @@ Lang.def('zht', {
   html: 'zh-Hant',
   // les navigateurs réglés en chinois de Taïwan, de Hong Kong, de Macao ou en caractères traditionnels (avant « zh »)
   match: /^zh-(tw|hk|mo|hant)/,
-  css: 'https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;800&family=Noto+Serif+TC:wght@500;600;700;800&display=swap',
-  fonts: { ui: '"Manrope", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif', title: '"Noto Serif TC", "Songti TC", "PMingLiU", serif' },
+  css: 'fonts/zht.css',
+  fonts: { ui: '"Manrope", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Silk Secours", sans-serif', title: '"Noto Serif TC", "Songti TC", "PMingLiU", "Silk Secours", serif' },
   loc: {
     group: ',', decimal: '.', pct: '%', mega: 'M', kilo: 'k', and: '和', sep: '、', stop: '。',
     dateLocale: 'zh-TW',
@@ -23503,6 +23613,40 @@ Lang.ui('zht', {
   'notice.heritage.2': '它們可在標題畫面的<b>傳承</b>中花用：每項升級，都會惠及你此後在這片海域的每一局。這些信物也能用來換帆色。',
   // Les commandes
   'notice.touches.titre': '操作',
+  // Crédits
+  'notice.credits.titre': '製作人員',
+  // Le jeu
+  'credits.jeu': '遊戲',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}，由 {studio} 製作。',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': '借助人工智慧工具製作。',
+  // Graphismes
+  'credits.graphismes': '美術',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': '海洋、海岸、港口、船隻與版畫：一切皆由遊戲程式碼繪製。',
+  // Musique et bruitages
+  'credits.musique': '音樂與音效',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': '為本遊戲創作，由其程式碼即時演奏，不含任何錄音。',
+  // Cartes
+  'credits.cartes': '地圖',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': '海岸與島嶼依據 {source} 繪製，資料屬於公有領域。',
+  // Polices
+  'credits.polices': '字型',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': '採用 SIL 開放字型授權 1.1；授權全文隨遊戲附送（LICENSES-fonts.txt）。',
+  // Version Steam
+  'credits.steam': 'Steam 版本',
+  // licence MIT
+  'credits.steam.mit': 'MIT 授權',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': '開放原始碼授權（LICENSES.chromium.html）',
+  // Remerciements
+  'credits.merci': '致謝',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': '感謝我們的測試者：{noms}。',
 });
 
 </script>
@@ -31562,9 +31706,10 @@ Lang.def('ja', {
   name: '日本語',
   html: 'ja',
   // Manrope n'a pas le japonais : Noto Sans JP (interface, après Manrope pour les chiffres et les lettres latines) ;
-  // Shippori Mincho B1 (titres) est une police japonaise, déjà chargée par la page
-  css: 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap',
-  fonts: { ui: '"Manrope", "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif', title: '"Shippori Mincho B1", "Noto Serif JP", "Yu Mincho", serif' },
+  // Shippori Mincho B1 (titres) est une police japonaise : la page n'en charge que le latin, fonts/ja.css ajoute les caractères
+  // japonais du jeu en 500, 700 et 800 (node tools/fonts.js) ; « Silk Secours » : les noms tapés, dans la version Steam
+  css: 'fonts/ja.css',
+  fonts: { ui: '"Manrope", "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", "Silk Secours", sans-serif', title: '"Shippori Mincho B1", "Noto Serif JP", "Yu Mincho", "Silk Secours", serif' },
   loc: {
     group: ',', decimal: '.', pct: '%', mega: 'M', kilo: 'k', and: 'と', sep: '、', stop: '。',
     dateLocale: 'ja-JP',
@@ -33124,6 +33269,40 @@ Lang.ui('ja', {
   'notice.heritage.2': 'タイトル画面の<b>遺産</b>で使おう。どの強化も、この海での以後の航海すべてに効く。帆の色にも使える。',
   // Les commandes
   'notice.touches.titre': '操作',
+  // Crédits
+  'notice.credits.titre': 'クレジット',
+  // Le jeu
+  'credits.jeu': 'ゲーム',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}：{studio} 制作のゲーム。',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': '人工知能ツールの助けを借りて制作しました。',
+  // Graphismes
+  'credits.graphismes': 'グラフィック',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': '海、海岸、港、船、版画：すべてゲームのコードで描いています。',
+  // Musique et bruitages
+  'credits.musique': '音楽と効果音',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': '本作のために作曲し、コードがリアルタイムで演奏します。録音は一切使っていません。',
+  // Cartes
+  'credits.cartes': '地図',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': '海岸と島々は {source}（パブリックドメインのデータ）に基づいています。',
+  // Polices
+  'credits.polices': 'フォント',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'SIL Open Font License 1.1 に基づき使用しています。ライセンス全文はゲームに同梱しています（LICENSES-fonts.txt）。',
+  // Version Steam
+  'credits.steam': 'Steam版',
+  // licence MIT
+  'credits.steam.mit': 'MITライセンス',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'オープンソースライセンス（LICENSES.chromium.html）',
+  // Remerciements
+  'credits.merci': '謝辞',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'テスターの皆さんに感謝します：{noms}。',
 });
 
 </script>
@@ -41182,8 +41361,8 @@ Lang.sea('ja', 'phenicie', {
 Lang.def('ko', {
   name: '한국어',
   html: 'ko',
-  css: 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Noto+Serif+KR:wght@500;600;700;800&display=swap',
-  fonts: { ui: '"Manrope", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif', title: '"Noto Serif KR", "AppleMyungjo", "Batang", serif' },
+  css: 'fonts/ko.css',
+  fonts: { ui: '"Manrope", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Silk Secours", sans-serif', title: '"Noto Serif KR", "AppleMyungjo", "Batang", "Silk Secours", serif' },
   loc: {
     group: ',', decimal: '.', pct: '%', mega: 'M', kilo: 'k', and: ' 및 ',
     dateLocale: 'ko-KR',
@@ -42778,6 +42957,40 @@ Lang.ui('ko', {
   'notice.heritage.2': '받은 증표는 타이틀 화면의 <b>유산</b>에서 씁니다. 강화 하나하나가 이 바다에서 하는 다음 항해 모두에 도움이 됩니다. 돛 색을 사는 데도 쓸 수 있습니다.',
   // Les commandes
   'notice.touches.titre': '조작법',
+  // Crédits
+  'notice.credits.titre': '크레딧',
+  // Le jeu
+  'credits.jeu': '게임',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}: {studio} 제작 게임.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': '인공지능 도구의 도움을 받아 만들었습니다.',
+  // Graphismes
+  'credits.graphismes': '그래픽',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': '바다, 해안, 항구, 배, 판화: 모두 게임 코드로 그렸습니다.',
+  // Musique et bruitages
+  'credits.musique': '음악과 효과음',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': '이 게임을 위해 작곡했으며, 녹음 없이 게임 코드가 실시간으로 연주합니다.',
+  // Cartes
+  'credits.cartes': '지도',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': '해안과 섬은 {source}의 퍼블릭 도메인 데이터를 바탕으로 했습니다.',
+  // Polices
+  'credits.polices': '글꼴',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'SIL 오픈 폰트 라이선스 1.1에 따라 사용합니다. 라이선스 전문은 게임과 함께 제공됩니다(LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Steam 버전',
+  // licence MIT
+  'credits.steam.mit': 'MIT 라이선스',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': '오픈 소스 라이선스(LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': '감사의 말',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': '테스터 여러분께 감사드립니다: {noms}.',
 });
 
 </script>
@@ -50836,9 +51049,9 @@ Lang.sea('ko', 'phenicie', {
 Lang.def('ru', {
   name: 'Русский',
   html: 'ru',
-  // Manrope a le cyrillique ; Shippori Mincho (titres) ne l'a pas : Noto Serif, chargée à la demande (Lang.loadFonts)
-  css: 'https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500;600;700;800&display=swap',
-  fonts: { title: '"Noto Serif", Georgia, serif' },
+  // Manrope a le cyrillique ; Shippori Mincho (titres) ne l'a pas : Noto Serif (fonts/fonts.css), puis Shippori pour les
+  // caractères chinois de toutes les langues (noms chinois des ports, sceaux)
+  fonts: { title: '"Noto Serif", "Shippori Mincho B1", Georgia, "Silk Secours", serif' },
   loc: {
     group: ' ', decimal: ',', pct: ' %', mega: ' млн', kilo: ' тыс.', and: ' и ',
     dateLocale: 'ru-RU',
@@ -52397,6 +52610,40 @@ Lang.ui('ru', {
   'notice.heritage.2': 'Тратьте их в разделе <b>«Наследие»</b> на титульном экране: каждое улучшение помогает во всех ваших следующих карьерах в этом море. Жетоны идут и на цвета парусов.',
   // Les commandes
   'notice.touches.titre': 'Управление',
+  // Crédits
+  'notice.credits.titre': 'Титры',
+  // Le jeu
+  'credits.jeu': 'Игра',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, игра студии {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Создано с помощью инструментов искусственного интеллекта.',
+  // Graphismes
+  'credits.graphismes': 'Графика',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Моря, берега, порты, корабли и гравюры: всё нарисовано кодом игры.',
+  // Musique et bruitages
+  'credits.musique': 'Музыка и звуки',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Написаны для игры и исполняются её кодом в реальном времени, без каких-либо записей.',
+  // Cartes
+  'credits.cartes': 'Карты',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Берега и острова по данным {source}, общественное достояние.',
+  // Polices
+  'credits.polices': 'Шрифты',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'По лицензии SIL Open Font License 1.1; текст лицензии прилагается к игре (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Версия для Steam',
+  // licence MIT
+  'credits.steam.mit': 'лицензия MIT',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'свободные лицензии (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Благодарности',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Спасибо нашим тестировщикам: {noms}.',
 });
 
 </script>
@@ -62156,6 +62403,40 @@ Lang.ui('es', {
   'notice.heritage.2': 'Se gastan en el <b>Legado</b>, desde la pantalla de título: cada mejora ayuda en todas tus partidas siguientes en este mar. También sirven para los colores de las velas.',
   // Les commandes
   'notice.touches.titre': 'Los controles',
+  // Crédits
+  'notice.credits.titre': 'Créditos',
+  // Le jeu
+  'credits.jeu': 'El juego',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, un juego de {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Hecho con la ayuda de herramientas de inteligencia artificial.',
+  // Graphismes
+  'credits.graphismes': 'Gráficos',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Mares, costas, puertos, barcos y estampas: todo lo dibuja el código del juego.',
+  // Musique et bruitages
+  'credits.musique': 'Música y efectos de sonido',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Compuestos para el juego y tocados en directo por su código, sin ninguna grabación.',
+  // Cartes
+  'credits.cartes': 'Mapas',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Costas e islas según {source}, datos de dominio público.',
+  // Polices
+  'credits.polices': 'Fuentes',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'Bajo licencia SIL Open Font License 1.1; el texto de la licencia acompaña al juego (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Versión de Steam',
+  // licence MIT
+  'credits.steam.mit': 'licencia MIT',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'licencias libres (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Agradecimientos',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Gracias a nuestros probadores: {noms}.',
 });
 
 </script>
@@ -71801,6 +72082,40 @@ Lang.ui('pt', {
   'notice.heritage.2': 'Gaste suas fichas na <b>Herança</b>, a partir da tela inicial: cada melhoria ajuda todas as suas partidas seguintes neste mar. As fichas também pagam as cores das velas.',
   // Les commandes
   'notice.touches.titre': 'Os comandos',
+  // Crédits
+  'notice.credits.titre': 'Créditos',
+  // Le jeu
+  'credits.jeu': 'O jogo',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, um jogo da {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Feito com a ajuda de ferramentas de inteligência artificial.',
+  // Graphismes
+  'credits.graphismes': 'Gráficos',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Mares, costas, portos, navios e gravuras: tudo é desenhado pelo código do jogo.',
+  // Musique et bruitages
+  'credits.musique': 'Música e efeitos sonoros',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Compostos para o jogo e tocados ao vivo pelo seu código, sem nenhuma gravação.',
+  // Cartes
+  'credits.cartes': 'Mapas',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Costas e ilhas segundo {source}, dados de domínio público.',
+  // Polices
+  'credits.polices': 'Fontes',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'Sob a licença SIL Open Font License 1.1; o texto da licença acompanha o jogo (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Versão Steam',
+  // licence MIT
+  'credits.steam.mit': 'licença MIT',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'licenças livres (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Agradecimentos',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Obrigado aos nossos testadores: {noms}.',
 });
 
 </script>
@@ -81444,6 +81759,40 @@ Lang.ui('de', {
   'notice.heritage.2': 'Gib sie im <b>Erbe</b> aus, über den Titelbildschirm: Jede Verbesserung hilft all deinen folgenden Partien in diesem Meer. Auch Segelfarben bezahlst du damit.',
   // Les commandes
   'notice.touches.titre': 'Steuerung',
+  // Crédits
+  'notice.credits.titre': 'Mitwirkende',
+  // Le jeu
+  'credits.jeu': 'Das Spiel',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, ein Spiel von {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Mit Unterstützung von Werkzeugen der künstlichen Intelligenz entstanden.',
+  // Graphismes
+  'credits.graphismes': 'Grafik',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Meere, Küsten, Häfen, Schiffe und Holzschnitte: Alles zeichnet der Code des Spiels.',
+  // Musique et bruitages
+  'credits.musique': 'Musik und Geräusche',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Für das Spiel komponiert und live von seinem Code gespielt, ganz ohne Aufnahmen.',
+  // Cartes
+  'credits.cartes': 'Karten',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Küsten und Inseln nach {source}, gemeinfreie Daten.',
+  // Polices
+  'credits.polices': 'Schriftarten',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'Unter der SIL Open Font License 1.1; der Lizenztext liegt dem Spiel bei (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Steam-Version',
+  // licence MIT
+  'credits.steam.mit': 'MIT-Lizenz',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'freie Lizenzen (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Danksagung',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Danke an unsere Tester: {noms}.',
 });
 
 </script>
@@ -91087,6 +91436,40 @@ Lang.ui('it', {
   'notice.heritage.2': 'Spendili nell\'<b>Eredità</b>, dalla schermata iniziale: ogni miglioria aiuta tutte le tue partite successive in questo mare. I gettoni servono anche per i colori delle vele.',
   // Les commandes
   'notice.touches.titre': 'I comandi',
+  // Crédits
+  'notice.credits.titre': 'Riconoscimenti',
+  // Le jeu
+  'credits.jeu': 'Il gioco',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, un gioco di {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Realizzato con l\'aiuto di strumenti di intelligenza artificiale.',
+  // Graphismes
+  'credits.graphismes': 'Grafica',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Mari, coste, porti, navi e stampe: tutto è disegnato dal codice del gioco.',
+  // Musique et bruitages
+  'credits.musique': 'Musica ed effetti sonori',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Composti per il gioco e suonati dal vivo dal suo codice, senza alcuna registrazione.',
+  // Cartes
+  'credits.cartes': 'Mappe',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Coste e isole secondo {source}, dati di pubblico dominio.',
+  // Polices
+  'credits.polices': 'Caratteri',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'Con licenza SIL Open Font License 1.1; il testo della licenza accompagna il gioco (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Versione Steam',
+  // licence MIT
+  'credits.steam.mit': 'licenza MIT',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'licenze libere (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Ringraziamenti',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Grazie ai nostri tester: {noms}.',
 });
 
 </script>
@@ -100733,6 +101116,40 @@ Lang.ui('pl', {
   'notice.heritage.2': 'Wydawaj je w <b>Dziedzictwie</b>, na ekranie tytułowym: każde ulepszenie pomaga we wszystkich twoich kolejnych rozgrywkach na tym morzu. Za żetony kupisz też kolory żagli.',
   // Les commandes
   'notice.touches.titre': 'Sterowanie',
+  // Crédits
+  'notice.credits.titre': 'Twórcy',
+  // Le jeu
+  'credits.jeu': 'Gra',
+  // {jeu}, un jeu de {studio}.
+  'credits.jeu.texte': '{jeu}, gra studia {studio}.',
+  // Réalisé avec l'aide d'outils d'intelligence artificielle.
+  'credits.jeu.ia': 'Gra powstała z pomocą narzędzi sztucznej inteligencji.',
+  // Graphismes
+  'credits.graphismes': 'Grafika',
+  // Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+  'credits.graphismes.texte': 'Morza, wybrzeża, porty, statki i ryciny: wszystko rysuje kod gry.',
+  // Musique et bruitages
+  'credits.musique': 'Muzyka i efekty dźwiękowe',
+  // Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+  'credits.musique.texte': 'Skomponowane dla gry i grane na żywo przez jej kod, bez żadnych nagrań.',
+  // Cartes
+  'credits.cartes': 'Mapy',
+  // Côtes et îles d'après {source}, données du domaine public.
+  'credits.cartes.texte': 'Wybrzeża i wyspy według {source}, dane z domeny publicznej.',
+  // Polices
+  'credits.polices': 'Czcionki',
+  // Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
+  'credits.polices.licence': 'Na licencji SIL Open Font License 1.1; tekst licencji dołączono do gry (LICENSES-fonts.txt).',
+  // Version Steam
+  'credits.steam': 'Wersja Steam',
+  // licence MIT
+  'credits.steam.mit': 'licencja MIT',
+  // licences libres (LICENSES.chromium.html)
+  'credits.steam.chromium': 'wolne licencje (LICENSES.chromium.html)',
+  // Remerciements
+  'credits.merci': 'Podziękowania',
+  // Merci à nos testeurs : {noms}.
+  'credits.merci.texte': 'Dziękujemy naszym testerom: {noms}.',
 });
 
 </script>
@@ -116025,6 +116442,37 @@ const LOGO_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"44 40 1152
 </script>
 <script>
 'use strict';
+// ─── Silk & Cannons · les crédits : le chapitre « Crédits » de l'Aide du capitaine (UI.credits) et le fichier CREDITS.txt
+// des versions livrées (tools/credits.js), d'une seule liste. Les titres des rubriques et les phrases sont des textes
+// (credits.* de js/lang/<code>/ui.js, 12 langues) ; les noms propres, les adresses et les licences restent tels quels.
+// Rien n'y nomme le développeur : tout est au nom de Besenet Studio.
+const CREDITS = {
+  game: 'Silk & Cannons',
+  studio: { name: 'Besenet Studio', url: 'https://besenetstudio.com' },
+  // les rubriques, dans l'ordre : titre credits.<k> ; une ligne est un texte (t : clé credits.<k>.<t>, avec {jeu}, {studio},
+  // {source} : un lien), ou un nom et ses auteurs (by), ou un nom et un texte
+  sections: [
+    { k: 'jeu', lines: [{ t: 'texte' }, { t: 'ia' }] },   // (l'aide de l'IA, en une ligne sobre : choix d'Adrien, 05/10/2026)
+    { k: 'graphismes', lines: [{ t: 'texte' }] },
+    { k: 'musique', lines: [{ t: 'texte' }] },
+    { k: 'cartes', lines: [{ t: 'texte', source: { name: 'Natural Earth', url: 'https://www.naturalearthdata.com' } }] },
+    { k: 'polices', lines: [
+      { name: 'Manrope', by: 'The Manrope Project Authors' },
+      { name: 'Shippori Mincho B1', by: 'The Shippori Mincho Project Authors' },
+      { name: 'Noto Serif · Noto Sans Symbols 2 · Noto Sans Math', by: 'The Noto Project Authors' },
+      { name: 'Noto Sans SC, TC, JP, KR · Noto Serif SC, TC, KR', by: 'Adobe · The Noto Project Authors' },
+      { t: 'licence' },
+    ] },
+    // (la version Steam seulement : Electron et Chromium, dont elle livre les licences)
+    { k: 'steam', steam: true, lines: [{ name: 'Electron', t: 'mit' }, { name: 'Chromium', t: 'chromium' }] },
+    // testeurs nommés, seulement avec leur accord (la rubrique se cache si la liste est vide)
+    { k: 'merci', names: ['Mazazou', 'Yersinia'] },
+  ],
+};
+
+</script>
+<script>
+'use strict';
 // ─── Mers de Jade · interface : HUD, panneaux, menus ───
 
 function h(tag, props, ...kids) {
@@ -117523,7 +117971,7 @@ const UI = {
   // notice.<chapitre>.titre et notice.<chapitre>.1, .2… (le premier paragraphe du marché, les vivres, mis en avant) ;
   // le chapitre des commandes reprend les phrases aide.* ; « Rejouer le prologue » depuis l'écran titre ; une mer qui a ses
   // propres règles ajoute son chapitre après le premier (« regles » : TXT.notice, titre et paragraphes)
-  NOTICE: { but: 3, port: 2, marche: 5, dette: 3, mer: 3, combat: 4, journal: 1, heritage: 2, touches: 0 },
+  NOTICE: { but: 3, port: 2, marche: 5, dette: 3, mer: 3, combat: 4, journal: 1, heritage: 2, touches: 0, credits: 0 },
   help(ch) {
     const r = Game.run, end = r ? r.endDay : (DEMO && DEMO.endDay) || SEA.days;
     const P = Object.assign(Help.params(), { fin: fmtDate(end - 0.5), unite: TXT.unitOne });
@@ -117556,11 +118004,30 @@ const UI = {
         h('p', null, T('aide.boussole')),
         h('h4', null, T('aide.aLaManette')),
         ...['manettePort', 'manetteMer', 'manetteMenus'].map(c => h('p', { class: 'pad-help' }, ...Tn('aide.' + c, PAD_GLYPHS()))));
+      if (cur === 'credits') kids.push(...this.credits());
       if (SEA.prologue && TXT.prologue && !Prologue.available() && cur === 'but') kids.push(h('p', { class: 'hint' }, T('notice.rejouerTitre')));
       put(page, kids);
     };
     render();
     this.open({ id: 'aide', title: T('notice.titre'), sub: T('notice.sousTitre'), icon: 'scroll', cls: 'wide notice-p', body: h('div', { class: 'notice' }, nav, page) });
+  },
+
+  // le chapitre « Crédits » de l'Aide (js/credits.js ; le même contenu que CREDITS.txt) : rubriques, noms et licences ;
+  // le studio et Natural Earth en liens (navigateur, ou overlay de Steam) ; la rubrique de la version Steam, sous Electron
+  credits() {
+    const steam = typeof navigator !== 'undefined' && /Electron/.test(navigator.userAgent);
+    const link = (label, url) => h('button', { class: 'link', type: 'button', onclick: () => this.openLink(url) }, label);
+    const out = [];
+    for (const s of CREDITS.sections) {
+      if ((s.steam && !steam) || (s.names && !s.names.length)) continue;
+      out.push(h('h4', null, T('credits.' + s.k)));
+      if (s.names) { out.push(h('p', null, T('credits.' + s.k + '.texte', { noms: andList(s.names) }))); continue; }
+      for (const l of s.lines) {
+        if (!l.name) out.push(h('p', null, ...Tn('credits.' + s.k + '.' + l.t, { jeu: h('b', null, CREDITS.game), studio: link(CREDITS.studio.name, CREDITS.studio.url), source: l.source ? link(l.source.name, l.source.url) : '' })));
+        else out.push(h('p', { class: 'credit-line' }, h('b', null, l.name), ' · ', l.by || T('credits.' + s.k + '.' + l.t)));
+      }
+    }
+    return out;
   },
 
   // ════════════ Écran titre & méta ════════════
@@ -117634,7 +118101,7 @@ const UI = {
       h('div', { class: 'row t-stats' },
         h('div', { class: 'jade-count' }, ico('jade'), T('commun.qteJetons', { n: m.jade, mot: motJetons(m.jade) })),
         m.best > 0 ? h('div', { class: 'jade-count gold' }, ico('coin'), T('titre.record', { record: fmtShort(m.best), monnaie: motMonnaie(m.best), titre: TITLES[titleIndex(m.best)].name })) : null),
-      h('div', { class: 'foot-note' }, T('titre.credit')));
+      h('div', { class: 'foot-note' }, h('button', { class: 'foot-link', type: 'button', onclick: () => this.help('credits') }, T('titre.credit'), ' · ', T('notice.credits.titre'))));
     this.titleRoot = root;
     this.el.modal.append(root);
   },
@@ -132300,7 +132767,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 05/10/2026 à 22:33</div>
+<div id="maj">Mise à jour : 05/10/2026 à 23:03</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>

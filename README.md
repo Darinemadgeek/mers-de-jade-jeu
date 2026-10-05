@@ -1,6 +1,6 @@
 # Silk & Cannons
 
-Un an pour devenir Taï-pan : commerce, pirates et typhons en mer de Chine, 1840.
+Un an pour faire fortune : commerce, pirates et typhons en mer de Chine, 1840.
 
 Jouer : https://darinemadgeek.github.io/mers-de-jade-jeu/
 
