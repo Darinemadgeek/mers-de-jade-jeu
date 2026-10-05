@@ -114212,7 +114212,9 @@ const PortScene = {
       x += bw + rng.int(3, 7);
     }
     house(); house();
-    const quai = { type: 'quai', x: x + 6, w: 230, door: x + 60 };
+    // (rive : le bassin commence derrière la dernière maison ; le ciel passait entre elle et le ponton)
+    const last = items[items.length - 1];
+    const quai = { type: 'quai', x: x + 6, w: 230, door: x + 60, rive: last.x + last.w - 2 };
     items.push(quai);
     const len = quai.x + quai.w;
     this.st = { items, len, quai, lights: [], signs: [] };
@@ -114335,6 +114337,8 @@ const PortScene = {
     mx.fillStyle = Gfx.lin(mx, 0, midH - 22, 0, midH, [[0, rgba(tod.bot, 0)], [1, rgba(tod.bot, 0.35)]]);
     mx.fillRect(0, midH - 22, midW, 22);
     this.mid = mc;
+    // la rive d'en face, au pied des montagnes : la ville s'y pose (le ciel passait entre ses maisons, et entre celles de la rue)
+    this.shore = mixHex(mixHex(sil, haze2, 0.5), tod.bot, 0.3);
     // ciel, étoiles, astres
     const [kc, kx] = makeLayer(W, H, S);
     drawSky(kx, W, H, tod.top, tod.bot, this.groundY - 20);
@@ -114630,21 +114634,24 @@ const PortScene = {
     // la scène (sans le ciel) sur un calque, puis teinte selon l'heure
     sx.clearRect(0, 0, W, H);
     sx.drawImage(this.far, -cam * 0.2, gy - 18 - this.far.lh, this.far.lw, this.far.lh);
+    sx.fillStyle = this.shore; sx.fillRect(0, gy - 19, W, 19);
     sx.drawImage(this.mid, -cam * 0.5, gy - 6 - this.mid.lh, this.mid.lw, this.mid.lh);
-    // eau du port derrière le quai
-    const qx = st.quai.x - cam;
-    if (qx < W) {
+    // eau du port derrière le quai : une bande basse, au pied de la ville d'en face (montée à 17 unités au-dessus du
+    // ponton, elle dépassait le seuil des maisons de la rue)
+    const qx = st.quai.x - cam, bx = st.quai.rive - cam, HZ = 7;
+    if (bx < W) {
       const HB = SEA.palette.harbor;
-      sx.fillStyle = Gfx.lin(sx, 0, gy - 17, 0, gy, [[0, mixHex(HB.sea4, tod.bot, 0.35)], [1, HB.sea2]]);
-      sx.fillRect(qx, gy - 17, W - qx + 1, 17);
+      sx.fillStyle = Gfx.lin(sx, 0, gy - HZ, 0, gy, [[0, mixHex(HB.sea4, tod.bot, 0.35)], [1, HB.sea2]]);
+      sx.fillRect(bx, gy - HZ, W - bx + 1, HZ);
       sx.strokeStyle = rgba('#dff3f4', 0.5); sx.lineWidth = 0.4;
       sx.beginPath();
-      for (let i = 0; i < 14; i++) { const wx = qx + ((i * 37 + t * 6) % Math.max(1, W - qx + 30)); const wyy = gy - 14 + (i % 4) * 3; sx.moveTo(wx, wyy); sx.lineTo(wx + 3.5, wyy); }
+      for (let i = 0; i < 14; i++) { const wx = bx + ((i * 37 + t * 6) % Math.max(1, W - bx + 30)); const wyy = gy - HZ + 1.2 + (i % 4) * 1.5; sx.moveTo(wx, wyy); sx.lineTo(wx + 3.5, wyy); }
       sx.stroke();
       const iced = this.winter ? this.winter.ice : 0;
-      if (iced) this.drawIce(sx, qx, gy - 17, W - qx + 1, 17, iced, 5);
-      // voiles au loin : jonques, ou voiles latines selon la mer
+      if (iced) this.drawIce(sx, bx, gy - HZ, W - bx + 1, HZ, iced, 5);
+      // voiles au loin : jonques, ou voiles latines selon la mer (dessinées pour un horizon à 17 unités : on les descend)
       const lateen = SEA.portScene && SEA.portScene.farBoats === 'lateen', square = SEA.portScene && SEA.portScene.farBoats === 'square';
+      sx.save(); sx.translate(0, 17 - HZ);
       for (let i = 0; i < (iced > 0.5 ? 0 : 3); i++) {
         const jx = qx + 150 + i * 70 - (t * 3 % 40);
         sx.fillStyle = mixHex('#3c5470', tod.bot, 0.3);
@@ -114655,13 +114662,14 @@ const PortScene = {
         else { sx.moveTo(jx + 5, gy - 18.5); sx.lineTo(jx + 5.4, gy - 27); sx.quadraticCurveTo(jx + 1.5, gy - 24, jx + 1.2, gy - 19); }
         sx.closePath(); sx.fill();
       }
-      // navire du joueur à quai
+      sx.restore();
+      // navire du joueur à quai : sa ligne de flottaison sous le bord du ponton, qui cache la carène (elle se posait dessus)
       const r = Game.run;
       if (r.ship) {
         const S = SHIPS[r.ship.type];
         const side = ShipSide.get(S.style, S.len * 3, Game.playerScheme(), Game.sailScheme(), Math.min(Main.S, 5));
         const bob = this.winter && this.winter.ice > 0.5 ? 0 : Math.sin(t * 1.4) * 0.8;   // (navire pris dans la glace : immobile)
-        sx.drawImage(side.c, st.quai.x + 70 - cam - side.x0, gy - 4 - side.wl + bob, side.W, side.H);
+        sx.drawImage(side.c, st.quai.x + 70 - cam - side.x0, gy + 0.8 - side.wl + bob, side.W, side.H);
       }
     }
     const vw = Math.min(W, st.len - cam);
@@ -114696,6 +114704,8 @@ const PortScene = {
     }
     sx.fillStyle = 'rgba(255,255,255,0.22)'; sx.fillRect(0, pv, W, 0.6);
     if (this.winter && this.winter.snow) this.drawSnowGround(sx, W, pv, pvH, cam, this.winter.snow);
+    const wy = pv + pvH + 6;   // (le haut de l'eau du premier plan)
+    const HB = SEA.palette.harbor, near = tod.dark > 0.4 ? HB.night : [mixHex(HB.sea3, tod.bot, 0.25), HB.sea1];
     // ponton
     if (qx < W) {
       const px0 = Math.max(0, qx);
@@ -114703,6 +114713,10 @@ const PortScene = {
       sx.fillRect(px0, pv, W - px0, pvH);
       sx.strokeStyle = 'rgba(58,40,24,0.55)'; sx.lineWidth = 0.35;
       sx.beginPath(); for (let x = qx + ((-qx) % 6 + 6) % 6; x < W; x += 6) { sx.moveTo(x, pv); sx.lineTo(x, pv + pvH); } sx.stroke();
+      // l'eau sous le ponton, dans son ombre (on voyait le ciel entre les pieux)
+      sx.fillStyle = Gfx.lin(sx, 0, pv + pvH, 0, wy, [[0, shade(near[0], 0.5)], [1, shade(near[0], 0.78)]]);
+      sx.fillRect(px0, pv + pvH, W - px0, wy - pv - pvH);
+      if (this.winter && this.winter.ice) this.drawIce(sx, px0, pv + pvH, W - px0, wy - pv - pvH, this.winter.ice * 0.8, 11);
       sx.fillStyle = '#4a3420'; for (let x = qx + 4; x < W; x += 18) sx.fillRect(x, pv + pvH, 2.4, 22);
       sx.fillStyle = '#34343a'; for (let x = qx + 10; x < W; x += 40) { Gfx.rr(sx, x, pv - 4, 3, 4.4, 1); sx.fill(); }
     }
@@ -114712,9 +114726,7 @@ const PortScene = {
     sx.strokeStyle = 'rgba(40,36,30,0.5)'; sx.lineWidth = 0.35;
     sx.beginPath(); for (let x = -(cam % 10); x < Math.min(W, qx); x += 10) { sx.moveTo(x, pv + pvH); sx.lineTo(x, pv + pvH + 6); } sx.stroke();
     // eau au premier plan : reflets de la rue ondulés
-    const wy = pv + pvH + 6;
-    const HB = SEA.palette.harbor;
-    sx.fillStyle = Gfx.lin(sx, 0, wy, 0, H, [[0, tod.dark > 0.4 ? HB.night[0] : mixHex(HB.sea3, tod.bot, 0.25)], [1, tod.dark > 0.4 ? HB.night[1] : HB.sea1]]);
+    sx.fillStyle = Gfx.lin(sx, 0, wy, 0, H, [[0, near[0]], [1, near[1]]]);
     sx.fillRect(0, wy, W, H - wy);
     sx.globalAlpha = 0.3;
     for (let i = 0; i < H - wy; i += 0.5) {
@@ -132744,7 +132756,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 05/10/2026 à 23:15</div>
+<div id="maj">Mise à jour : 06/10/2026 à 00:54</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
