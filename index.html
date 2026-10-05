@@ -114908,8 +114908,9 @@ const SeaScene = {
     const r = Game.run, p = this.player;
     this.t += dt; this.voyageT += dt;
     this.vt = (this.vt + dt * 24 / 150) % 24;
-    // temps de calendrier (ralenti pendant les combats ; une mer peut l'allonger : les nuits passées sur la grève)
-    let dd = dt * DAYS_PER_SEC * (this.combat ? 0.15 : 1);
+    // temps de calendrier (15 fois plus lent pendant les combats, jusqu'au retour du calme ; une mer peut l'allonger : les
+    // nuits passées sur la grève)
+    let dd = dt * DAYS_PER_SEC * (this.combat ? 1 / 15 : 1);
     if (SEA.rules && SEA.rules.dayMul) dd *= SEA.rules.dayMul(this);
     Game.advance(dd);
     // la solde impayée peut faire déserter des marins pendant le voyage
@@ -115027,7 +115028,8 @@ const SeaScene = {
       if (!s.hostile || s.dead || s.surrendered || s.sated) return false;
       if (this.fogs.length && !this.seen(s)) return false;   // (un poursuivant caché dans la brume n'engage pas le combat)
       const d = Math.hypot(s.x - p.x, s.y - p.y);
-      return d < (s.fleeing ? 240 : 560);
+      // (un fuyard ne retient le combat qu'à portée de nos canons : on peut l'achever, mais s'il s'éloigne, le calme revient)
+      return d < (s.fleeing ? p.range : 560);
     });
     if (hostiles.length) {
       // (contre un pirate nommé ou le boss de la mer : le thème du boss, même s'il arrive en cours de combat)
@@ -115043,7 +115045,7 @@ const SeaScene = {
       this.calmT = 0;
     } else if (this.combat) {
       this.calmT += dt;
-      if (this.calmT > 3.5) {
+      if (this.calmT > 2) {
         this.combat = false;
         Sound.play('sea');
         const fled = this.ships.some(s => s.hostile && s.kind !== 'merchant' && !s.dead && !s.surrendered);
@@ -115464,15 +115466,26 @@ const SeaScene = {
   },
 
   // ── Parades que les mers appellent chaque seconde depuis SEA.rules.seaSpawn (sans appel, rien ne change) ──
-  // un poursuivant immobilisé (plaqué contre une côte, au fond d'une baie) finit par renoncer : il n'entretient plus le combat,
-  // qui interdisait d'accoster. Lent depuis 8 s, ou presque immobile loin du joueur (un fuyard coincé dans un angle de côte
-  // file à 30 sans avancer, et retient le combat à moins de 240 px).
+  // un ennemi qui n'entretient plus qu'un combat sans issue finit par renoncer (le combat interdisait d'accoster) :
+  //  • immobilisé (plaqué contre une côte, au fond d'une baie) hors de portée de ses canons : lent depuis 3 s, ou presque
+  //    immobile (un fuyard coincé dans un angle de côte file à 30 sans avancer) ;
+  //  • distancé : hors de portée de ses canons, il ne gagne plus de terrain depuis 12 s (sinon la chasse traversait la mer
+  //    des jours durant). Un marchand, un navire passif ou un fuyard ne poursuit personne : seule la première parade compte.
   giveUpIfStuck(s) {
-    const p = this.player, moved = s.lastX == null ? Infinity : Math.hypot(s.x - s.lastX, s.y - s.lastY);
+    const p = this.player, d = Math.hypot(s.x - p.x, s.y - p.y);
+    const moved = s.lastX == null ? Infinity : Math.hypot(s.x - s.lastX, s.y - s.lastY);
     s.lastX = s.x; s.lastY = s.y;
-    const still = s.v < 5 || (moved < 4 && Math.hypot(s.x - p.x, s.y - p.y) > 120);
+    // (à portée de ses canons, il se bat : un ralenti de quelques secondes en plein duel n'est ni un blocage ni une poursuite)
+    const engaged = d <= Math.max(140, (s.range || 0) * 1.1);
+    const still = !engaged && (s.v < 5 || moved < 4);
     s.stuckT = still ? (s.stuckT || 0) + 1 : 0;
-    if (s.stuckT <= 8) return false;
+    let give = s.stuckT >= 3;
+    if (!give && s.kind !== 'merchant' && !s.passive && !s.fleeing) {
+      if (engaged) { s.chaseD = null; s.chaseT = 0; }
+      else if (s.chaseD == null || d < s.chaseD - 25) { s.chaseD = d; s.chaseT = 0; }
+      else give = (s.chaseT = (s.chaseT || 0) + 1) > 12;
+    }
+    if (!give) return false;
     s.ai = 'flee'; s.sated = true;
     return true;
   },
@@ -127938,15 +127951,12 @@ const rules = {
         if (made) S.alert(TS('pirogues.alerte'), TS('pirogues.chasse', { n: made }), 'red');
       }
     }
-    // les poursuivants immobilisés renoncent ; Sydney, Honolulu et Canton couvrent de leurs canons les navires qu'ils accueillent
+    // les poursuivants immobilisés ou distancés renoncent (S.giveUpIfStuck) ; Sydney, Honolulu et Canton couvrent de leurs
+    // canons les navires qu'ils accueillent
     for (const s of S.ships) {
       if (!s.hostile || s.dead || s.surrendered || s.sated) continue;
       if (S.giveUpIfStuck(s)) continue;
       if (s.kind === 'merchant') continue;
-      // en haute mer, pas de côte pour couper la route : un poursuivant qui ne gagne plus de terrain depuis douze
-      // secondes renonce (sinon la chasse traversait l'océan des jours durant)
-      const d = Math.hypot(s.x - p.x, s.y - p.y);
-      if (s.chaseD == null || d < s.chaseD - 25) { s.chaseD = d; s.chaseT = 0; } else if (d > 140 && (s.chaseT = (s.chaseT || 0) + 1) > 12) { s.ai = 'flee'; s.sated = true; continue; }
       const port = World.ports.find(q => ['sydney', 'honolulu', 'canton'].includes(q.id) && Math.hypot(q.x - p.x, q.y - p.y) < 220 && Math.hypot(q.x - s.x, q.y - s.y) < (Math.hypot(q.x - p.x, q.y - p.y) < 90 ? 600 : 140));
       if (!port) continue;
       s.ai = 'flee'; s.sated = true;
@@ -130449,14 +130459,12 @@ const rules = {
     const r = Game.run, P = r.phe, p = S.player;
     if (!P) return;
     S.unpinPlayer();
-    // les poursuivants immobilisés renoncent ; au large, une chasse qui ne gagne plus de terrain s'arrête ; les galères de
-    // guerre de Tyr, de Sidon et de Carthage couvrent les navires qu'elles accueillent
+    // les poursuivants immobilisés ou distancés renoncent (S.giveUpIfStuck) ; les galères de guerre de Tyr, de Sidon et de
+    // Carthage couvrent les navires qu'elles accueillent
     for (const s of S.ships) {
       if (!s.hostile || s.dead || s.surrendered || s.sated) continue;
       if (S.giveUpIfStuck(s)) continue;
       if (s.kind === 'merchant') continue;
-      const d = Math.hypot(s.x - p.x, s.y - p.y);
-      if (s.chaseD == null || d < s.chaseD - 25) { s.chaseD = d; s.chaseT = 0; } else if (d > 140 && (s.chaseT = (s.chaseT || 0) + 1) > 12) { s.ai = 'flee'; s.sated = true; continue; }
       const port = World.ports.find(q => (q.id === 'tyr' || q.id === 'sidon' || (q.id === 'carthage' && founded('carthage'))) && Math.hypot(q.x - p.x, q.y - p.y) < 220 && Math.hypot(q.x - s.x, q.y - s.y) < (Math.hypot(q.x - p.x, q.y - p.y) < 90 ? 600 : 140));
       if (!port) continue;
       s.ai = 'flee'; s.sated = true;
@@ -131993,7 +132001,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 05/10/2026 à 13:20</div>
+<div id="maj">Mise à jour : 05/10/2026 à 14:11</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
