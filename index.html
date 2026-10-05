@@ -302,6 +302,9 @@ b { font-weight: 800; }
 .path-pick .btn.card.on { border-color: rgba(63, 174, 138, 0.7); box-shadow: inset 0 0 0 1px rgba(63, 174, 138, 0.3), 0 8px 22px rgba(63, 174, 138, 0.1); background: rgba(63, 174, 138, 0.1); }
 .card h5 { margin: 0; font: 800 15.5px/1.3 var(--font-ui); }
 .card .d { font-size: 13.5px; color: var(--text-2); }
+.muda-order { display: flex; flex-direction: column; gap: 7px; }   /* (Méditerranée : la commande au facteur, au fondaco) */
+.muda-goods { gap: 5px; }
+.muda-goods .btn.on { background: linear-gradient(180deg, #56c7a0, #33a07b); color: var(--jade-ink); border-color: rgba(127, 217, 182, 0.65); }
 .ledger { width: 100%; border-collapse: collapse; font-size: 14.5px; }
 .ledger td, .ledger th { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; }
 .ledger th { font: 800 10.5px var(--font-ui); letter-spacing: 0.12em; color: var(--text-3); }
@@ -5977,8 +5980,8 @@ Lang.sea('en', 'mediterranee', {
   'text/accueil/peste3': 'With a foul bill, Christian ports send you to the <b>lazaretto</b>: <b>40 days</b> of quarantine. The map will warn you.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Next, <b>the muda</b>: the state galleys. They leave Venice on fixed dates for the Levant and the West, then sail home. No corsair dares tangle with them.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'Two months before each sailing, the <b>fondaco</b> auctions off space aboard: the fuller the galley, the dearer it gets. Your cargo waits for you in the fondaco at the other end. The first convoy sails around mid-March.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'At the <b>fondaco</b>, I buy you a cargo at the day\'s price and entrust it to the galley; when it arrives, our correspondents sell it and pay the money into the bank. Space aboard is auctioned off, and your money sleeps for a month or two: keep the muda for money your hold doesn\'t need. The first convoy sails around mid-March.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'The <b>Barbary corsairs</b>, now, don\'t sink their prizes: they carry them off.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -6003,8 +6006,8 @@ Lang.sea('en', 'mediterranee', {
   'text/hints/corsaires': '<b>Corsairs</b>! They don\'t sink ships, they take them: beaten, you end up a captive in Algiers. If they\'re too strong, run for a port: the fort\'s guns will drive them off.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'Captive, but alive. <b>A ransom</b> gets your ship back at once; the brotherhood buys your freedom in {jours} days, but not your ship. And next time, leave your money <b>in the bank</b>: they only take what\'s aboard.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'The muda kept its word: your cargo awaits you in {port}, at the <b>{entrepot}</b>. Load it aboard there, then sell it.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'The muda kept its word: in {port}, our correspondents sold your cargo for <b>{somme}</b> and paid the money into the bank.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'Your <b>oarsmen</b> bend to the oars the moment the wind drops or turns against you: the galley keeps going, but they eat half again as much. Watch your provisions.',
   // La Sérénissime
@@ -6014,7 +6017,7 @@ Lang.sea('en', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>Foul bill of health</b>: if plague breaks out in the port you have just left, your bill of health turns foul (the top bar and the map show it). Christian ports, which all have a lazaretto, then impose 40 days of quarantine; Clean bill of health (Legacy) cuts it to 20, then 10.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>The muda</b>: the state galleys sail from Venice on fixed dates for Candia, Constantinople, Alexandria, Barcelona and Marseille, then sail back. Two months before each sailing, the fondaco of the departure port auctions off space aboard: the fuller the galley, the dearer the space. The cargo travels safe from corsairs and waits for you in the fondaco at its destination. Plague cancels or delays some sailings.',
+  'text/notice/p/2': '<b>The muda</b>: the state galleys sail from Venice on fixed dates for Candia, Constantinople, Alexandria, Barcelona and Marseille, then sail back. Two months before each sailing, at the fondaco of the departure port, your factor buys the cargo of your choice for you, at the day\'s price and without driving the market up, and pays for its space, which is auctioned off: the fuller the galley, the dearer the space. On arrival, he sells it at the fondaco, without driving the market down, and pays the money into the bank. The cargo travels safe from corsairs, but your money stays tied up for one to two months. The state galleys don\'t carry Turkish alum. Plague cancels or delays some sailings.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>Barbary corsairs</b> do not sink their prizes. Crippled by their guns or overwhelmed by boarders, you are carried off to Algiers in chains: the cargo and the money aboard are lost, along with over half the crew. The ransom, which your bank and a loan from Zorzi can cover, gets your ship back; otherwise, after 60 days in the slave prisons (fewer with the Brotherhood of Redemption, in the Legacy), the brotherhood brings you home on an old tartane. They raid mostly from April to October. Near a port, the fort\'s guns drive off your pursuers, except at Algiers, their lair.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -6057,22 +6060,28 @@ Lang.sea('en', 'mediterranee', {
   'text/phrases/muda.depart': 'Sails {depart}, due around {arrivee} · {n, plural, one {# {unite} free} other {# {unites} free}} · {prix} per {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Full.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{n} {marchandise} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': '{n} {marchandise} loaded on the muda for {port}.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': '{n} {marchandise} entrusted to the muda for {port} ({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Buy here: {ici} · resale in {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Buy here: {ici} · no known price in {port}',
+  // Commander {n}
+  'text/phrases/muda.commander': 'Order {n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Your factor bought {n} {marchandise} to ship on the muda for {port}.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Your factor buys {n} {marchandise} to ship on the muda for {port} ({cout}, space included).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'En route: {n} {marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'around {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'The muda has reached {port}: your cargo ({n} {marchandise}) awaits you at the {entrepot}.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'The muda delivered {n} {marchandise} to the {entrepot} in {port}.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'Space is auctioned off: the closer the sailing date, the higher the price. Your goods travel safe from corsairs and wait for you in the fondaco at their destination.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'The muda has reached {port}: your factor sold {n} {marchandise} for {somme}, paid into the bank.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Muda for {port}: {n} {marchandise} sold for {somme} at the {entrepot}, paid into the bank.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'profit {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Your factor buys at the day\'s price and sells on arrival, at the fondaco, without moving the markets; the money goes to the bank. Space is auctioned off: the closer the sailing date, the higher the price. The cargo travels safe from corsairs, but your money sleeps for one to two months. No Turkish alum on the state galleys.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'A valuable cargo, and {n, plural, =0 {not a single gun} one {only # gun} other {only # guns}} where you could carry {max}: from April to October, the corsairs are on the prowl. Arm yourself at the shipyard.',
   // des corsaires barbaresques
@@ -15616,8 +15625,8 @@ Lang.sea('zh', 'mediterranee', {
   'text/accueil/peste3': '带着染疫证书去基督教港口，就会被送进<b>检疫站</b>，隔离<b>40天</b>。地图上会提醒你。',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': '再说<b>穆达船队</b>，也就是国营桨帆船。它们按期从威尼斯启航，东去黎凡特，西往西方诸港，然后返航。没有哪个海盗敢碰它们。',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': '每次启航前两个月，<b>商馆</b>就拍卖船上的舱位：船舱越满，价钱越贵。你的货会在目的港的商馆等你。头一班三月中旬前后启航。',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': '在<b>商馆</b>，我按当天的价钱替你买下一批货，交给桨帆船；船一到港，咱们的代理人就把货卖掉，把钱存进银行。舱位以拍卖出售，你的钱也要搁上一两个月：穆达只配用你货舱用不上的闲钱。头一班三月中旬前后启航。',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': '<b>巴巴里海盗</b>就不一样了：他们不击沉猎物，而是连人带船掳走。',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -15642,8 +15651,8 @@ Lang.sea('zh', 'mediterranee', {
   'text/hints/corsaires': '<b>海盗</b>来了！他们不击沉你，只俘获你：打输了，你就会被掳到阿尔及尔。打不过就往港口逃：要塞的大炮会把他们轰走。',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': '当了俘虏，好歹还活着。付了<b>赎金</b>，马上就能拿回你的船；等赎俘会，要{jours}天才赎得出去，船也没了。下回记着把钱存进<b>银行</b>：他们只抢船上的。',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': '穆达船队说话算话：你的货在{port}的<b>{entrepot}</b>等你。去那儿装上船，拿去卖吧。',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': '穆达船队说话算话：在{port}，咱们的代理人把你的货卖了<b>{somme}</b>，钱已存进银行。',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': '风一停，或是转成顶风，你的<b>桨手</b>就得拼命划：桨帆船照样能走，可他们要多吃一半口粮。留神粮水。',
   // La Sérénissime
@@ -15653,7 +15662,7 @@ Lang.sea('zh', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>染疫证书</b>：若你刚离开的港口爆发瘟疫，你的卫生证书便会变为染疫证书（顶栏和地图都会提示）。基督教港口都设有检疫站，届时会让你隔离检疫40天；有了传承中的“无疫证书”，可减为20天，再减为10天。',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>穆达船队</b>：国营桨帆船按期从威尼斯启航，驶往坎迪亚、君士坦丁堡、亚历山大港、巴塞罗那和马赛，再从那里返航。每次启航前两个月，出发港的商馆开始拍卖舱位：船舱越满，舱位越贵。货物一路不受海盗侵扰，并在目的港的商馆等你。瘟疫会使船期取消或推迟。',
+  'text/notice/p/2': '<b>穆达船队</b>：国营桨帆船按期从威尼斯启航，驶往坎迪亚、君士坦丁堡、亚历山大港、巴塞罗那和马赛，再从那里返航。每次启航前两个月，你的账房会在出发港的商馆按当天价格替你买下你选的货，不会抬高市价，并支付拍卖出售的舱位：船舱越满，舱位越贵。船一到港，他就在商馆卖货，不会压低市价，并把钱存进银行。货物一路不受海盗侵扰，但你的钱要被占用一到两个月。国营桨帆船不装土耳其明矾。瘟疫会使船期取消或推迟。',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>巴巴里海盗</b>不击沉猎物。若你的船被其炮火打得失去战力，或在接舷战中落败，你便会被掳往阿尔及尔：货物和船上的钱财尽失，船员也折损过半。赎金可用银行存款和向佐尔齐的借款支付，付清即可赎回你的船；否则，你要在奴隶营关押60天（有传承中的“赎俘会”可缩短），再由赎俘会用一艘旧塔坦船送你回去。他们多在四月至十月间出没。靠近港口时，要塞的大炮会赶走追兵，唯独阿尔及尔例外：那是他们的巢穴。',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -15696,22 +15705,28 @@ Lang.sea('zh', 'mediterranee', {
   'text/phrases/muda.depart': '{depart}启航，约{arrivee}抵达 · 余位{n, plural, other {#{unites}}} · 每{unite}{prix}',
   // Complet.
   'text/phrases/muda.complet': '已满。',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{n}{unites}{marchandise} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': '{n}{unites}{marchandise}已装上开往{port}的穆达。',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': '{n}{unites}{marchandise}已托付给开往{port}的穆达（{cout}）。',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': '此处买价：{ici} · {port}卖价：{prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': '此处买价：{ici} · 不知{port}的价格',
+  // Commander {n}
+  'text/phrases/muda.commander': '订购{n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': '你的账房已为开往{port}的穆达买下{n}{unites}{marchandise}。',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': '你的账房为开往{port}的穆达买下{n}{unites}{marchandise}（{cout}，含舱位）。',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': '在途：{n}{unites}{marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': '约{date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': '穆达已抵达{port}：你的{n}{unites}{marchandise}在{entrepot}等候。',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': '穆达已将{n}{unites}{marchandise}运到{port}的{entrepot}。',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': '舱位以拍卖出售：离启航越近，价格越高。你的货物一路不受海盗侵扰，并在目的港的商馆等你。',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': '穆达已抵达{port}：你的账房把{n}{unites}{marchandise}卖了{somme}，钱已存进银行。',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': '开往{port}的穆达：{n}{unites}{marchandise}在{entrepot}卖得{somme}，存入银行。',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': '利润{benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': '你的账房按当天价格买货，到港后在商馆卖出，都不影响市价；钱存进银行。舱位以拍卖出售：离启航越近，价格越高。货物一路不受海盗侵扰，但你的钱要搁上一到两个月。国营桨帆船不装土耳其明矾。',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': '货物贵重，船上却{n, plural, =0 {一门炮也没有} other {只有#门炮}}（可装{max}门）：4月至10月间，海盗四处出没。去船厂武装起来吧。',
   // des corsaires barbaresques
@@ -25230,8 +25245,8 @@ Lang.sea('zht', 'mediterranee', {
   'text/accueil/peste3': '拿著染疫證書進基督教港口，就會被送進<b>檢疫站</b>：隔離<b>40天</b>。地圖會事先提醒你。',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': '接著是<b>穆達船隊</b>，也就是國營槳帆船。它們按期從威尼斯啟航，東去黎凡特，西往西地中海，再駛回來。沒有哪個海盜敢招惹它們。',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': '每班啟航前兩個月，<b>商館</b>就拍賣艙位：船上裝得越滿，艙位越貴。你的貨會在目的港的商館等你。頭一班約在三月中旬出發。',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': '在<b>商館</b>，我照當天的價錢替你買下一批貨，交給槳帆船；船一到港，咱們的代理人就把貨賣掉，把錢存進銀行。艙位以拍賣出售，你的錢也得擱上一兩個月：穆達只用你貨艙用不上的閒錢。頭一班約在三月中旬出發。',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': '<b>巴巴里海盜</b>可就不一樣了，他們不擊沉獵物：連人帶船擄走。',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -25256,8 +25271,8 @@ Lang.sea('zht', 'mediterranee', {
   'text/hints/corsaires': '是<b>海盜</b>！他們不打沉船，只管擄人：打輸了，你就會被擄到阿爾及爾。要是打不過，就往港口逃：要塞的大砲會把他們轟走。',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': '成了俘虜，好歹人還活著。付<b>贖金</b>，馬上就能拿回船；贖俘會{jours}天後也會贖你出來，只是船就沒了。下回記得把錢留在<b>銀行</b>：他們只搶得走船上的。',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': '穆達船隊說到做到：你的貨在{port}的<b>{entrepot}</b>等著你。去那裡裝上船，再拿去賣吧。',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': '穆達船隊說到做到：在{port}，咱們的代理人把你的貨賣了<b>{somme}</b>，錢已存進銀行。',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': '風一停，或是轉成逆風，你的<b>槳手</b>就得賣力划槳：槳帆船照樣前進，可他們的飯量會多出一半。糧水可得盯緊了。',
   // La Sérénissime
@@ -25267,7 +25282,7 @@ Lang.sea('zht', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>染疫證書</b>：若你剛離開的港口爆發瘟疫，你的證書就會變成染疫證書（狀態列和地圖上都會標示）。基督教港口都設有檢疫站，屆時會要你隔離檢疫40天；有了傳承中的「無疫證書」，可減為20天，再減為10天。',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>穆達船隊</b>：國營槳帆船按期從威尼斯開往坎迪亞、君士坦丁堡、亞歷山卓、巴塞隆納和馬賽，再從那裡返航。每次啟航前兩個月，出發港的商館會拍賣艙位：船上越滿，艙位越貴。貨物一路不受海盜侵擾，並在目的港的商館等你。瘟疫可能使某些班次取消或延期。',
+  'text/notice/p/2': '<b>穆達船隊</b>：國營槳帆船按期從威尼斯開往坎迪亞、君士坦丁堡、亞歷山卓、巴塞隆納和馬賽，再從那裡返航。每次啟航前兩個月，你的帳房會在出發港的商館照當天價格替你買下你選的貨，不會抬高市價，並支付拍賣出售的艙位：船上越滿，艙位越貴。船一到港，他就在商館賣貨，不會壓低市價，並把錢存進銀行。貨物一路不受海盜侵擾，但你的錢會被占用一到兩個月。國營槳帆船不裝土耳其明礬。瘟疫可能使某些班次取消或延期。',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>巴巴里海盜</b>不擊沉獵物。若你的船被他們的砲火打得失去戰力，或在接舷戰中落敗，你就會被擄往阿爾及爾：貨物和船上的錢財盡失，船員也折損過半。贖金可動用銀行存款並向佐爾齊借款支付，付清即可拿回船；否則要在奴隸營關押60天（有傳承中的「贖俘會」則較短），之後由贖俘會用一艘舊塔坦船送你回來。他們多在4月至10月出沒。在港口附近，要塞的大砲會驅退追兵，唯獨阿爾及爾例外：那是他們的巢穴。',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -25310,22 +25325,28 @@ Lang.sea('zht', 'mediterranee', {
   'text/phrases/muda.depart': '{depart}啟航，約{arrivee}抵達 · 餘位{n, plural, other {#{unites}}} · 每{unite}{prix}',
   // Complet.
   'text/phrases/muda.complet': '已滿。',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{n}{unites}{marchandise} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': '{n}{unites}{marchandise}已裝上開往{port}的穆達。',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': '{n}{unites}{marchandise}已託付給開往{port}的穆達（{cout}）。',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': '此處買價：{ici} · {port}賣價：{prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': '此處買價：{ici} · 不知{port}的價格',
+  // Commander {n}
+  'text/phrases/muda.commander': '訂購{n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': '你的帳房已為開往{port}的穆達買下{n}{unites}{marchandise}。',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': '你的帳房為開往{port}的穆達買下{n}{unites}{marchandise}（{cout}，含艙位）。',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': '在途：{n}{unites}{marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': '約{date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': '穆達已抵達{port}：你的{n}{unites}{marchandise}在{entrepot}等候。',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': '穆達已將{n}{unites}{marchandise}運到{port}的{entrepot}。',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': '艙位以拍賣出售：離啟航越近，價格越高。你的貨物一路不受海盜侵擾，並在目的港的商館等你。',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': '穆達已抵達{port}：你的帳房把{n}{unites}{marchandise}賣了{somme}，錢已存進銀行。',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': '開往{port}的穆達：{n}{unites}{marchandise}在{entrepot}賣得{somme}，存入銀行。',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': '利潤{benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': '你的帳房照當天價格買貨，到港後在商館賣出，都不影響市價；錢存進銀行。艙位以拍賣出售：離啟航越近，價格越高。貨物一路不受海盜侵擾，但你的錢得擱上一到兩個月。國營槳帆船不裝土耳其明礬。',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': '貨物貴重，船上卻{n, plural, =0 {一門砲也沒有} other {只有#門砲}}（可裝{max}門）：4月至10月間，海盜四處出沒。去船廠武裝起來吧。',
   // des corsaires barbaresques
@@ -34845,8 +34866,8 @@ Lang.sea('ja', 'mediterranee', {
   'text/accueil/peste3': '疫病証明を持っておると、キリスト教国の港では<b>検疫所</b>送りだ。<b>40日</b>の検疫だぞ。地図が前もって教えてくれる。',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': '次は<b>ムーダ</b>。国営ガレー船団だ。決まった日にヴェネツィアを発って東へ西へと向かい、また戻ってくる。手を出す海賊はおらん。',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': '出港の二か月前から、<b>フォンダコ</b>（商館）がその船腹を競りにかける。船が埋まるほど高くなる。積荷は着いた港の商館で待っとる。最初の船団は三月半ばごろ出る。',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': '<b>フォンダコ</b>で、わしがその日の値で積荷を買って、ガレー船に託してやる。着いた港では、うちの取引相手が売りさばいて、代金を銀行に入れてくれる。船腹は競りで売られるし、金は一、二か月寝かせることになる。ムーダは船倉で使わん金のためにとっておけ。最初の船団は三月半ばごろ出る。',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'ところが<b>バルバリアの海賊</b>は、獲物を沈めん。連れていくんだ。',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -34871,8 +34892,8 @@ Lang.sea('ja', 'mediterranee', {
   'text/hints/corsaires': '<b>海賊</b>だ！　奴らは沈めずに、さらっていく。負ければアルジェで虜囚の身だ。手に負えんなら港へ逃げろ。砦の大砲が追い払ってくれる。',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': '捕まりはしたが、命はある。<b>身代金</b>を払えば、すぐに船ごと戻れる。買戻し会を待てば{jours}日で出られるが、船はなくなる。それと次からは、金は<b>銀行に</b>預けておけ。奴らが奪うのは船にあるものだけだ。',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'ムーダは約束を守ったぞ。積荷は{port}の<b>{entrepot}</b>で待っとる。取りに行って、売りさばけ。',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'ムーダは約束を守ったぞ。{port}で、うちの取引相手が積荷を<b>{somme}</b>で売って、代金を銀行に入れた。',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': '風が落ちるか向かい風になると、<b>漕ぎ手</b>が櫂を引く。それでもガレーは進むが、奴らは五割増しで食う。食糧から目を離すな。',
   // La Sérénissime
@@ -34882,7 +34903,7 @@ Lang.sea('ja', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>疫病証明。</b>出港したばかりの港で疫病が発生すると、健康証明は疫病証明に変わる（画面上部の帯と地図に表示される）。キリスト教国の港にはどこも検疫所があり、40日の検疫を課される。遺産の「健康証明」があれば、20日、さらに10日に縮む。',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>ムーダ。</b>国営ガレー船団が決まった日にヴェネツィアを出て、カンディア、コンスタンティノープル、アレクサンドリア、バルセロナ、マルセイユへ向かい、また戻ってくる。出港の二か月前から、出港地の商館が船腹を競りにかける。船が埋まるほど船腹は高くなる。積荷は海賊の心配なく運ばれ、到着港の商館で受け取れる。疫病で出港が取りやめになったり、遅れたりすることもある。',
+  'text/notice/p/2': '<b>ムーダ。</b>国営ガレー船団が決まった日にヴェネツィアを出て、カンディア、コンスタンティノープル、アレクサンドリア、バルセロナ、マルセイユへ向かい、また戻ってくる。出港の二か月前から、出港地の商館で番頭が好きな積荷をその日の値で買ってくれる。市場の値は上がらない。船腹は競りで売られ、船が埋まるほど高くなる。着いた港では番頭が商館で売りさばき、市場の値を下げずに、代金を銀行に入れる。積荷は海賊の心配なく運ばれるが、金は一、二か月寝かせることになる。国営ガレー船はトルコの明礬を積まない。疫病で出港が取りやめになったり、遅れたりすることもある。',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>バルバリアの海賊</b>は獲物を沈めない。砲撃で動けなくなるか、接舷戦で打ち負かされると、アルジェへ連れ去られる。積荷と船内の金は失われ、船員も半数以上を失う。身代金を払えば船は戻る。銀行の預金とゾルジからの借入で払うこともできる。払わなければ奴隷牢で60日を過ごし（遺産の「捕虜買戻し会」があれば短くなる）、そのあと買戻し会の手配で古いタルターヌに乗って帰る。海賊が暴れるのは主に四月から十月。港の近くでは砦の大砲が追っ手を追い払うが、海賊の根城であるアルジェだけは別だ。',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -34925,22 +34946,28 @@ Lang.sea('ja', 'mediterranee', {
   'text/phrases/muda.depart': '{depart}出港、{arrivee}頃到着 · 空き{n, plural, other {#{unites}}} · 1{unite}につき{prix}',
   // Complet.
   'text/phrases/muda.complet': '空きなし。',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{marchandise}{n}{unites} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': '{marchandise}{n}{unites}を{port}行きのムーダに積み込んだ。',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': '{marchandise}{n}{unites}を{port}行きのムーダに託した（{cout}）。',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'ここでの買値：{ici} · {port}での売値：{prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'ここでの買値：{ici} · {port}の値は不明',
+  // Commander {n}
+  'text/phrases/muda.commander': '注文（{n}）',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': '番頭が{port}行きのムーダのために{marchandise}{n}{unites}を買った。',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': '番頭が{port}行きのムーダのために{marchandise}{n}{unites}を買い付けた（{cout}、船腹代込み）。',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': '輸送中：{marchandise}{n}{unites} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': '{date}頃',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'ムーダが{port}に到着した。{marchandise}{n}{unites}が{entrepot}で待っている。',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'ムーダが{port}の{entrepot}に{marchandise}{n}{unites}を届けた。',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': '船腹は競りで売られ、出港が近いほど高くなる。商品は海賊の心配なく運ばれ、到着港の商館で受け取れる。',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'ムーダが{port}に到着した。番頭が{marchandise}{n}{unites}を{somme}で売り、銀行に入れた。',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': '{port}行きのムーダ：{marchandise}{n}{unites}を{entrepot}で{somme}で売却、銀行に入金。',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': '利益{benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': '番頭がその日の値で買い付け、着いた港の商館で売りさばく。どちらも市場の値は動かない。代金は銀行に入る。船腹は競りで売られ、出港が近いほど高くなる。積荷は海賊の心配なく運ばれるが、金は一、二か月寝かせることになる。国営ガレー船はトルコの明礬を積まない。',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': '高価な積荷なのに、{n, plural, =0 {大砲は一門もない} other {大砲はわずか#門}}（最大{max}門）。4月から10月は海賊がうろつく。造船所で武装しましょう。',
   // des corsaires barbaresques
@@ -44493,8 +44520,8 @@ Lang.sea('ko', 'mediterranee', {
   'text/accueil/peste3': '유병 검역증을 들고 가면 기독교 항구는 널 <b>검역소</b>로 보낸다. <b>40일</b> 동안 검역을 받아야 하지. 지도가 미리 알려 줄 거다.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': '다음은 <b>무다</b>, 국영 갤리선이다. 정해진 날에 베네치아를 떠나 동쪽 레반트로, 서쪽 바다로 갔다가 돌아온다. 감히 덤비는 해적이 없지.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': '떠나기 두 달 전부터 <b>상관</b>에서 자리를 경매로 판다. 갤리선이 찰수록 값이 뛰지. 화물은 도착지 상관에서 널 기다린다. 첫 선단은 3월 중순쯤 떠난다.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': '<b>상관</b>에서 내가 그날 시세로 화물을 사서 갤리선에 맡겨 주마. 도착하면 우리 거래처 사람들이 팔아서 돈을 은행에 넣어 준다. 자리는 경매로 팔리고, 돈은 한두 달 묶인다. 무다는 네 짐칸에 필요 없는 돈으로만 써라. 첫 선단은 3월 중순쯤 떠난다.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': '<b>바르바리 해적</b>은 잡은 배를 가라앉히지 않는다. 끌고 가지.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -44519,8 +44546,8 @@ Lang.sea('ko', 'mediterranee', {
   'text/hints/corsaires': '<b>바르바리 해적</b>이다! 놈들은 가라앉히지 않고 잡아간다. 지면 알제에서 포로 신세다. 너무 세다 싶으면 항구 쪽으로 달아나라. 요새 대포가 쫓아 줄 거다.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': '포로 신세지만 살아는 있구나. <b>몸값</b>을 내면 배를 곧장 돌려받는다. 속량회를 기다리면 {jours}일 뒤에 풀려나지만, 배는 잃는다. 그리고 다음부턴 돈을 <b>은행에</b> 맡겨 둬라. 놈들은 배에 있는 것만 털어 간다.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': '무다가 약속을 지켰다. 화물이 {port} <b>{entrepot}</b>에서 널 기다린다. 가서 실어다 팔아라.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': '무다가 약속을 지켰다. {port}에서 우리 거래처 사람들이 네 화물을 <b>{somme}</b>에 팔아 돈을 은행에 넣었다.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': '바람이 자거나 맞바람이 불면 <b>노잡이</b>들이 힘껏 노를 젓는다. 갤리선은 그래도 나아가지만, 녀석들이 평소의 한 배 반을 먹어 치운다. 식량을 잘 살펴라.',
   // La Sérénissime
@@ -44530,7 +44557,7 @@ Lang.sea('ko', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>유병 검역증</b>: 막 떠나온 항구에서 역병이 터지면 검역증이 유병 검역증으로 바뀝니다(위쪽 띠와 지도에 표시). 기독교 항구는 모두 검역소가 있어 40일 동안 검역을 받게 하며, 유산에서 “검역증”을 강화하면 20일, 다음 단계에서 10일로 줄어듭니다.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>무다</b>: 국영 갤리선이 정해진 날에 베네치아를 떠나 칸디아, 콘스탄티노플, 알렉산드리아, 바르셀로나, 마르세유로 갔다가 돌아옵니다. 출항 두 달 전부터 출항지 상관에서 자리를 경매로 파는데, 갤리선이 찰수록 자릿값이 비싸집니다. 화물은 해적 걱정 없이 운송되어 도착지 상관에서 기다립니다. 역병 때문에 출항이 취소되거나 늦어지기도 합니다.',
+  'text/notice/p/2': '<b>무다</b>: 국영 갤리선이 정해진 날에 베네치아를 떠나 칸디아, 콘스탄티노플, 알렉산드리아, 바르셀로나, 마르세유로 갔다가 돌아옵니다. 출항 두 달 전부터 출항지 상관에서 지배인이 원하는 화물을 그날 시세로 사 주는데, 시장 시세는 오르지 않습니다. 자리는 경매로 팔리며 갤리선이 찰수록 비싸집니다. 도착하면 지배인이 상관에서 화물을 팔아 시장 시세를 떨어뜨리지 않고 돈을 은행에 넣습니다. 화물은 해적 걱정 없이 운송되지만 돈은 한두 달 묶입니다. 국영 갤리선은 튀르크 명반을 싣지 않습니다. 역병 때문에 출항이 취소되거나 늦어지기도 합니다.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>바르바리 해적</b>은 잡은 배를 가라앉히지 않습니다. 포격에 배가 부서지거나 백병전에서 지면 알제로 끌려가 포로가 되며, 화물과 배에 있던 돈, 그리고 선원 절반 이상을 잃습니다. 은행 예금과 조르지 나리의 대출로 몸값을 치르면 배를 되찾습니다. 내지 않으면 노예 감옥에서 60일을 보낸 뒤(유산의 “포로 속량회”로 단축) 속량회가 낡은 타르탄에 태워 돌려보내 줍니다. 해적은 주로 4월부터 10월까지 바다를 누빕니다. 항구 근처에서는 요새의 대포가 추격자를 쫓아 주지만, 해적의 소굴인 알제에서는 그렇지 않습니다.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -44573,22 +44600,28 @@ Lang.sea('ko', 'mediterranee', {
   'text/phrases/muda.depart': '{depart} 출항, {arrivee}경 도착 · {n, plural, other {여유 #{unites}}} · {unite}당 {prix}',
   // Complet.
   'text/phrases/muda.complet': '만석.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{marchandise} {n}{unites} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': '{marchandise} {n}{unites}을(를) {port}행 무다에 실었다.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': '{marchandise} {n}{unites}을(를) {port}행 무다에 맡겼다({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': '이곳 매입가: {ici} · {port} 판매가: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': '이곳 매입가: {ici} · {port} 시세 모름',
+  // Commander {n}
+  'text/phrases/muda.commander': '{n} 주문',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': '지배인이 {port}행 무다에 실을 {marchandise} {n}{unites}을(를) 샀다.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': '지배인이 {port}행 무다에 실을 {marchandise} {n}{unites}을(를) 사들였다({cout}, 자릿값 포함).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': '운송 중: {marchandise} {n}{unites} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': '{date}경',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': '무다가 {port}에 도착했다. {marchandise} {n}{unites}이(가) {entrepot}에서 기다린다.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': '무다가 {port} {entrepot}에 {marchandise} {n}{unites}을(를) 내려놓았다.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': '자리는 경매로 팔립니다. 출항일이 다가올수록 비싸집니다. 교역품은 해적 걱정 없이 운송되어 도착지 상관에서 기다립니다.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': '무다가 {port}에 도착했다. 지배인이 {marchandise} {n}{unites}을(를) {somme}에 팔아 은행에 넣었다.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': '{port}행 무다: {marchandise} {n}{unites}을(를) {entrepot}에서 {somme}에 팔아 은행에 입금.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': '이익 {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': '지배인이 그날 시세로 사서 도착지 상관에서 팝니다. 어느 쪽도 시장 시세를 움직이지 않으며, 돈은 은행으로 들어갑니다. 자리는 경매로 팔리며 출항일이 다가올수록 비싸집니다. 화물은 해적 걱정 없이 운송되지만 돈은 한두 달 묶입니다. 국영 갤리선은 튀르크 명반을 싣지 않습니다.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': '값진 화물인데 대포가 {n, plural, =0 {한 문도 없습니다} other {#문뿐입니다}}(최대 {max}문). 4월부터 10월까지는 해적이 들끓습니다. 조선소에서 무장하십시오.',
   // des corsaires barbaresques
@@ -54126,8 +54159,8 @@ Lang.sea('ru', 'mediterranee', {
   'text/accueil/peste3': 'С нечистым патентом христианские порты отправят тебя в <b>лазарет</b>: <b>40 дней</b> карантина. Карта тебя предупредит.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Дальше — <b>муда</b>: государственные галеры. В назначенные дни они уходят из Венеции в Левант и на запад, а потом возвращаются. Ни один корсар к ним не сунется.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'За два месяца до каждого отплытия <b>фондако</b> продаёт места на галерах с торгов: чем полнее галера, тем дороже. Твой груз будет ждать тебя в фондако порта назначения. Первая муда уходит около середины марта.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'В <b>фондако</b> я куплю тебе груз по цене дня и доверю его галере; по прибытии наши корреспонденты продадут его и положат деньги в банк. Места продаются с торгов, а твои деньги месяц-другой лежат без дела: держи муду для денег, которые не нужны твоему трюму. Первая уходит около середины марта.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'А вот <b>берберийские корсары</b> добычу не топят: они её уводят.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -54152,8 +54185,8 @@ Lang.sea('ru', 'mediterranee', {
   'text/hints/corsaires': '<b>Корсары</b>! Они не топят, а забирают: проиграешь — окажешься в плену в Алжире. Если они тебе не по зубам, уходи к порту: пушки форта их отгонят.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'Плен — ещё не смерть. <b>Выкуп</b> сразу вернёт тебе корабль; братство вызволит тебя через {jours, plural, one {# день} few {# дня} many {# дней} other {# дня}}, но уже без корабля. И впредь держи деньги <b>в банке</b>: корсары берут только то, что на борту.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'Муда сдержала слово: твой груз ждёт тебя в порту {port}. Ступай в <b>{entrepot}</b>, погрузи его на борт и продай.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'Муда сдержала слово: в порту {port} наши корреспонденты продали твой груз за <b>{somme}</b> и положили деньги в банк.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'Твои <b>гребцы</b> налегают на вёсла, стоит ветру стихнуть или повернуть против тебя: галера всё равно идёт, но едят они в полтора раза больше. Следи за провиантом.',
   // La Sérénissime
@@ -54163,7 +54196,7 @@ Lang.sea('ru', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>Нечистый патент</b>: если в порту, который вы только что покинули, вспыхнет чума, ваш санитарный патент станет нечистым (об этом скажут верхняя панель и карта). Во всех христианских портах есть лазарет, и там вам назначат 40 дней карантина, а с Чистым патентом из «Наследия» — 20, затем 10.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>Муда</b>: государственные галеры в назначенные дни уходят из Венеции в Кандию, Константинополь, Александрию, Барселону и Марсель, а потом возвращаются. За два месяца до каждого отплытия фондако порта отправления продаёт места на них с торгов: чем полнее галера, тем дороже место. Груз плывёт, не боясь корсаров, и ждёт вас в фондако порта назначения. Чума отменяет или откладывает отплытия.',
+  'text/notice/p/2': '<b>Муда</b>: государственные галеры в назначенные дни уходят из Венеции в Кандию, Константинополь, Александрию, Барселону и Марсель, а потом возвращаются. За два месяца до каждого отплытия ваш фактор в фондако порта отправления покупает для вас груз на ваш выбор, по цене дня и не поднимая цен на рынке, и оплачивает место, которое продаётся с торгов: чем полнее галера, тем дороже место. По прибытии он продаёт груз в фондако, не сбивая цен на рынке, и кладёт деньги в банк. Груз плывёт, не боясь корсаров, но ваши деньги на месяц-два оказываются связаны. Государственные галеры не берут турецких квасцов. Чума отменяет или откладывает отплытия.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>Берберийские корсары</b> не топят свою добычу. Если их пушки изувечат ваш корабль или вас одолеют на абордаже, вас увезут в плен в Алжир: груз и деньги на борту пропадут, а с ними и больше половины команды. Выкуп (его можно оплатить из банка и займом у Дзордзи) вернёт вам корабль; иначе после 60 дней каторги (меньше с Братством выкупа пленных из «Наследия») братство отправит вас домой на старой тартане. Рыщут корсары в основном с апреля по октябрь. У порта пушки форта отгоняют ваших преследователей — кроме Алжира, их логова.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -54206,22 +54239,28 @@ Lang.sea('ru', 'mediterranee', {
   'text/phrases/muda.depart': 'Отплытие {depart}, прибытие около {arrivee} · {n, plural, one {свободна # {unite}} few {свободны # {unites}} many {свободно {qteUnites}} other {свободны # {unites}}} · {prix} / {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Мест нет.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{marchandise}: {n} {unites} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': 'Погружено на муду в порт {port}: {marchandise}, {n} {unites}.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': 'Муде в порт {port} доверен груз: {marchandise}, {n} {unites} ({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Покупка здесь: {ici} · продажа в порту {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Покупка здесь: {ici} · цены в порту {port} неизвестны',
+  // Commander {n}
+  'text/phrases/muda.commander': 'Заказать {n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Ваш фактор купил для муды в порт {port}: {marchandise}, {n} {unites}.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Ваш фактор покупает для муды в порт {port}: {marchandise}, {n} {unites} ({cout}, с местом).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'В пути: {marchandise}, {n} {unites} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'около {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'Муда пришла в порт {port}: ваш груз ({marchandise}, {n} {unites}) ждёт вас на складе ({entrepot}).',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'Муда доставила на склад ({entrepot}) в порту {port}: {marchandise}, {n} {unites}.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'Места продаются с торгов: чем ближе отплытие, тем дороже. Ваши товары плывут, не боясь корсаров, и ждут вас в фондако порта назначения.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'Муда пришла в порт {port}: ваш фактор продал груз ({marchandise}, {n} {unites}) за {somme}, деньги в банке.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Муда в порт {port}: {marchandise}, {n} {unites}, продано в {entrepot} за {somme}, деньги положены в банк.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'прибыль {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Ваш фактор покупает по цене дня и продаёт по прибытии, в фондако, не трогая рыночных цен; деньги идут в банк. Места продаются с торгов: чем ближе отплытие, тем дороже. Груз плывёт, не боясь корсаров, но ваши деньги месяц-два лежат без дела. Турецких квасцов государственные галеры не берут.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'Ценный груз — и {n, plural, =0 {ни одной пушки} one {всего # пушка} few {всего # пушки} many {всего # пушек} other {всего # пушки}} из {max}: с апреля по октябрь рыщут корсары. Вооружитесь на верфи.',
   // des corsaires barbaresques
@@ -63863,8 +63902,8 @@ Lang.sea('es', 'mediterranee', {
   'text/accueil/peste3': 'Con patente sucia, los puertos cristianos te mandan al <b>lazareto</b>: <b>40 días</b> de cuarentena. El mapa te avisa.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Después, <b>la muda</b>: las galeras del Estado. Zarpan de Venecia en fechas fijas hacia el Levante y el Poniente, y luego vuelven. Ningún corsario se atreve con ellas.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'Dos meses antes de cada salida, el <b>fondaco</b> subasta el espacio a bordo: cuanto más se llena la galera, más caro sale. Tu carga te espera en el fondaco de destino. La primera zarpa hacia mediados de marzo.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'En el <b>fondaco</b>, te compro una carga al precio del día y la confío a la galera; a la llegada, nuestros corresponsales la venden e ingresan el dinero en el banco. El espacio se subasta, y tu dinero duerme uno o dos meses: reserva la muda para el dinero que tu bodega no necesita. La primera zarpa hacia mediados de marzo.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'Los <b>corsarios berberiscos</b>, en cambio, no hunden sus presas: se las llevan.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -63889,8 +63928,8 @@ Lang.sea('es', 'mediterranee', {
   'text/hints/corsaires': '¡<b>Corsarios</b>! No hunden barcos, los apresan: si te vencen, acabas cautivo en Argel. Si son demasiado fuertes, huye hacia un puerto: los cañones del fuerte los ahuyentarán.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'Cautivo, pero vivo. <b>El rescate</b> te devuelve el barco en el acto; la cofradía te libera en {jours} días, pero sin barco. Y la próxima vez, deja tu dinero <b>en el banco</b>: solo se llevan lo que hay a bordo.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'La muda ha cumplido su palabra: tu carga te espera en {port}, en el <b>{entrepot}</b>. Ve a cargarla para venderla.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'La muda ha cumplido su palabra: en {port}, nuestros corresponsales han vendido tu carga por <b>{somme}</b> y han ingresado el dinero en el banco.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'Tus <b>remeros</b> bogan en cuanto el viento cae o se pone en contra: la galera avanza de todos modos, pero comen una vez y media lo normal. Vigila los víveres.',
   // La Sérénissime
@@ -63900,7 +63939,7 @@ Lang.sea('es', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>La patente sucia</b>: si la peste se declara en el puerto que acabas de dejar, tu patente de sanidad queda sucia (lo indican la barra superior y el mapa). Los puertos cristianos, todos con lazareto, te imponen entonces 40 días de cuarentena; 20 y luego 10 con la Patente de sanidad del Legado.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>La muda</b>: las galeras del Estado zarpan de Venecia en fechas fijas hacia Candía, Constantinopla, Alejandría, Barcelona y Marsella, y luego regresan. Dos meses antes de cada salida, el fondaco del puerto de origen subasta el espacio a bordo: cuanto más llena va la galera, más caro sale. La carga viaja a salvo de los corsarios y te espera en el fondaco de destino. La peste anula o retrasa algunas salidas.',
+  'text/notice/p/2': '<b>La muda</b>: las galeras del Estado zarpan de Venecia en fechas fijas hacia Candía, Constantinopla, Alejandría, Barcelona y Marsella, y luego regresan. Dos meses antes de cada salida, en el fondaco del puerto de origen, tu factor te compra la carga que elijas, al precio del día y sin encarecer el mercado, y paga su espacio, que se subasta: cuanto más llena va la galera, más caro sale. A la llegada, la vende en el fondaco, sin abaratar el mercado, e ingresa el dinero en el banco. La carga viaja a salvo de los corsarios, pero tu dinero queda inmovilizado de uno a dos meses. Las galeras del Estado no cargan alumbre turco. La peste anula o retrasa algunas salidas.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>Los corsarios berberiscos</b> no hunden sus presas. Si sus cañones dejan tu barco maltrecho o te arrollan al abordaje, te llevan cautivo a Argel: pierdes la carga, el dinero de a bordo y más de la mitad de la tripulación. El rescate, que puedes pagar con el banco y un préstamo de Zorzi, te devuelve el barco; si no, tras 60 días en los baños de Argel (menos con la Cofradía de redención de cautivos, en el Legado), la cofradía te repatría en una vieja tartana. Merodean sobre todo de abril a octubre. Cerca de un puerto, los cañones del fuerte ahuyentan a tus perseguidores, salvo en Argel, su guarida.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -63943,22 +63982,28 @@ Lang.sea('es', 'mediterranee', {
   'text/phrases/muda.depart': 'Salida el {depart}, llegada hacia el {arrivee} · {n, plural, one {# {unite} libre} other {# {unites} libres}} · {prix} el {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Completo.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{marchandise} ×{n} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': 'Embarcas {n} {unites} de {marchandise} en la muda de {port}.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': 'Confías {n} {unites} de {marchandise} a la muda de {port} ({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Compra aquí: {ici} · reventa en {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Compra aquí: {ici} · ningún precio conocido en {port}',
+  // Commander {n}
+  'text/phrases/muda.commander': 'Encargar {n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Tu factor ha comprado {n} {unites} de {marchandise} para la muda de {port}.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Tu factor compra {n} {unites} de {marchandise} para la muda de {port} ({cout}, espacio incluido).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'En camino: {n} {unites} de {marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'hacia el {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'La muda ha llegado a {port}: tu carga ({n} {unites} de {marchandise}) te espera en el {entrepot}.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'La muda ha entregado {n} {unites} de {marchandise} en el {entrepot} de {port}.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'El espacio a bordo se subasta: cuanto más cerca está la salida, más caro. Tus mercancías viajan a salvo de los corsarios y te esperan en el fondaco de destino.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'La muda ha llegado a {port}: tu factor ha vendido {n} {unites} de {marchandise} por {somme}, ingresados en el banco.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Muda de {port}: {n} {unites} de {marchandise} vendidos por {somme} en el {entrepot}, ingresados en el banco.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'beneficio {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Tu factor compra al precio del día y revende a la llegada, en el fondaco, sin mover los mercados; el dinero va al banco. El espacio se subasta: cuanto más cerca está la salida, más caro. La carga viaja a salvo de los corsarios, pero tu dinero duerme de uno a dos meses. Nada de alumbre turco en las galeras del Estado.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'Carga valiosa y {n, plural, =0 {ningún cañón} one {solo # cañón} other {solo # cañones}} de {max} posibles: de abril a octubre, los corsarios merodean. Ármate en el astillero.',
   // des corsaires barbaresques
@@ -73502,8 +73547,8 @@ Lang.sea('pt', 'mediterranee', {
   'text/accueil/peste3': 'Com a carta suja, os portos cristãos te mandam para o <b>lazareto</b>: <b>40 dias</b> de quarentena. O mapa te avisa.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Depois, <b>a muda</b>: as galés do Estado. Partem de Veneza em datas fixas rumo ao Levante e ao Poente, e depois voltam. Nenhum corsário se mete com elas.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'Dois meses antes de cada saída, o <b>fondaco</b> leiloa os lugares: quanto mais cheia a galé, mais caro. Sua carga te espera no fondaco de chegada. A primeira sai em meados de março.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'No <b>fondaco</b>, compro para você uma carga pelo preço do dia e a confio à galé; na chegada, nossos correspondentes a vendem e depositam o dinheiro no banco. O lugar é vendido em leilão, e seu dinheiro dorme um ou dois meses: guarde a muda para o dinheiro de que seu porão não precisa. A primeira sai em meados de março.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'Já os <b>corsários berberescos</b> não afundam suas presas: eles as levam.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -73528,8 +73573,8 @@ Lang.sea('pt', 'mediterranee', {
   'text/hints/corsaires': '<b>Corsários</b>! Eles não afundam ninguém, eles capturam: vencido, você acaba cativo em Argel. Se forem fortes demais, fuja para um porto: o canhão do forte vai afugentá-los.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'Cativo, mas vivo. <b>O resgate</b> te devolve o navio na hora; a confraria te liberta em {jours} dias, mas sem navio. E da próxima vez, deixe seu dinheiro <b>no banco</b>: eles só levam o que está a bordo.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'A muda cumpriu a palavra: sua carga te espera em {port}, no <b>{entrepot}</b>. Vá buscá-la para vender.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'A muda cumpriu a palavra: em {port}, nossos correspondentes venderam sua carga por <b>{somme}</b> e depositaram o dinheiro no banco.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'Seus <b>remadores</b> pegam no remo assim que o vento cai ou vira contra você: a galé avança mesmo assim, mas eles comem uma vez e meia o normal. Fique de olho nos víveres.',
   // La Sérénissime
@@ -73539,7 +73584,7 @@ Lang.sea('pt', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>A carta de saúde suja</b>: se a peste estourar no porto de onde você acabou de sair, sua carta de saúde fica suja (a barra do alto e o mapa avisam). Os portos cristãos, que têm todos um lazareto, lhe impõem então 40 dias de quarentena; 20, e depois 10, com a Carta de saúde limpa da Herança.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>A muda</b>: as galés do Estado partem de Veneza em datas fixas para Cândia, Constantinopla, Alexandria, Barcelona e Marselha, e de lá voltam. Dois meses antes de cada saída, o fondaco do porto de partida leiloa os lugares: quanto mais cheia a galé, mais caro o lugar. A carga viaja a salvo dos corsários e espera você no fondaco de chegada. A peste cancela ou atrasa algumas saídas.',
+  'text/notice/p/2': '<b>A muda</b>: as galés do Estado partem de Veneza em datas fixas para Cândia, Constantinopla, Alexandria, Barcelona e Marselha, e de lá voltam. Dois meses antes de cada saída, no fondaco do porto de partida, seu feitor compra para você a carga que escolher, pelo preço do dia e sem fazer o mercado subir, e paga o lugar dela, vendido em leilão: quanto mais cheia a galé, mais caro o lugar. Na chegada, ele a vende no fondaco, sem fazer o mercado cair, e deposita o dinheiro no banco. A carga viaja a salvo dos corsários, mas seu dinheiro fica imobilizado de um a dois meses. As galés do Estado não carregam alúmen turco. A peste cancela ou atrasa algumas saídas.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>Os corsários berberescos</b> não afundam suas presas. Com o navio desarvorado pelos canhões deles ou vencido na abordagem, você é levado cativo para Argel: a carga e o dinheiro a bordo se perdem, e mais da metade da tripulação também. O resgate, que você pode pagar com o banco e um empréstimo de Zorzi, devolve seu navio; senão, depois de 60 dias nos banhos de Argel (menos com a Confraria da redenção dos cativos, na Herança), a confraria leva você de volta numa velha tartana. Eles saem ao corso sobretudo de abril a outubro. Perto de um porto, os canhões do forte afugentam seus perseguidores, menos em Argel, o covil deles.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -73582,22 +73627,28 @@ Lang.sea('pt', 'mediterranee', {
   'text/phrases/muda.depart': 'Partida em {depart}, chegada por volta de {arrivee} · {n, plural, =1 {# {unite} livre} other {# {unites} livres}} · {prix} por {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Lotada.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{n} {marchandise} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': 'Embarcado na muda para {port}: {n} {marchandise}.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': 'Confiado à muda para {port}: {n} {marchandise} ({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Compra aqui: {ici} · revenda em {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Compra aqui: {ici} · nenhum preço conhecido em {port}',
+  // Commander {n}
+  'text/phrases/muda.commander': 'Encomendar {n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Seu feitor comprou {n} {marchandise} para embarcar na muda para {port}.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Seu feitor compra {n} {marchandise} para embarcar na muda para {port} ({cout}, lugar incluído).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'A caminho: {n} {marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'por volta de {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'A muda chegou a {port}: sua carga ({n} {marchandise}) espera você no {entrepot}.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'A muda entregou {n} {marchandise} no {entrepot} de {port}.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'O lugar é vendido em leilão: quanto mais perto a partida, mais caro. Suas mercadorias viajam a salvo dos corsários e esperam você no fondaco de chegada.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'A muda chegou a {port}: seu feitor vendeu {n} {marchandise} por {somme}, depositados no banco.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Muda para {port}: {n} {marchandise} vendidos por {somme} no {entrepot}, depositados no banco.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'lucro {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Seu feitor compra pelo preço do dia e revende na chegada, no fondaco, sem mexer nos mercados; o dinheiro vai para o banco. O lugar é vendido em leilão: quanto mais perto a partida, mais caro. A carga viaja a salvo dos corsários, mas seu dinheiro dorme de um a dois meses. Nada de alúmen turco nas galés do Estado.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'Carga valiosa e {n, plural, =0 {nenhum canhão} one {só # canhão} other {só # canhões}}, quando cabem {max}: de abril a outubro, os corsários rondam. Arme-se no estaleiro.',
   // des corsaires barbaresques
@@ -83139,8 +83190,8 @@ Lang.sea('de', 'mediterranee', {
   'text/accueil/peste3': 'Mit unreinem Pass schicken dich die christlichen Häfen ins <b>Lazarett</b>: <b>40 Tage</b> Quarantäne. Die Karte warnt dich.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Dann <b>die Muda</b>: die Staatsgaleeren. Sie laufen an festen Tagen von Venedig aus, in die Levante und gen Westen, und kehren wieder heim. Kein Korsar wagt sich an sie heran.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'Zwei Monate vor jeder Abfahrt versteigert der <b>Fondaco</b> die Plätze: Je voller die Galeere, desto teurer. Deine Ladung wartet im Fondaco des Zielhafens auf dich. Die erste läuft gegen Mitte März aus.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'Im <b>Fondaco</b> kaufe ich dir eine Ladung zum Tagespreis und vertraue sie der Galeere an; bei der Ankunft verkaufen unsere Korrespondenten sie und zahlen das Geld auf die Bank ein. Die Plätze werden versteigert, und dein Geld ruht ein, zwei Monate: Nimm die Muda für Geld, das dein Laderaum nicht braucht. Die erste läuft gegen Mitte März aus.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'Die <b>Barbareskenkorsaren</b> dagegen versenken ihre Prisen nicht: Sie verschleppen sie.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -83165,8 +83216,8 @@ Lang.sea('de', 'mediterranee', {
   'text/hints/corsaires': '<b>Korsaren</b>! Sie versenken nicht, sie kapern: Unterliegst du, bringen sie dich in Ketten nach Algier. Sind sie zu stark, flieh zu einem Hafen: Die Kanonen der Festung jagen sie davon.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'Gefangen, aber am Leben. <b>Das Lösegeld</b> gibt dir dein Schiff sofort zurück; die Bruderschaft kauft dich in {jours} Tagen frei, ohne Schiff. Und nächstes Mal lass dein Geld <b>auf der Bank</b>: Sie nehmen nur, was an Bord ist.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'Die Muda hat Wort gehalten: Deine Ladung wartet in {port} im <b>{entrepot}</b>. Hol sie dort ab und verkauf sie.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'Die Muda hat Wort gehalten: In {port} haben unsere Korrespondenten deine Ladung für <b>{somme}</b> verkauft und das Geld auf die Bank eingezahlt.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'Deine <b>Ruderer</b> legen sich in die Riemen, sobald der Wind einschläft oder gegen dich dreht: Die Galeere kommt trotzdem voran, aber sie essen anderthalbmal so viel. Achte auf den Proviant.',
   // La Sérénissime
@@ -83176,7 +83227,7 @@ Lang.sea('de', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>Der unreine Gesundheitspass</b>: Bricht die Pest in dem Hafen aus, den du gerade verlassen hast, wird dein Gesundheitspass unrein (die Leiste oben und die Karte zeigen es an). Die christlichen Häfen, die alle ein Lazarett haben, verhängen dann 40 Tage Quarantäne; mit dem Erbe „Reiner Gesundheitspass“ 20, dann 10.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>Die Muda</b>: Die Staatsgaleeren laufen an festen Tagen von Venedig nach Candia, Konstantinopel, Alexandria, Barcelona und Marseille aus und kehren von dort zurück. Zwei Monate vor jeder Abfahrt versteigert der Fondaco des Abfahrtshafens die Plätze: Je voller die Galeere, desto teurer der Platz. Die Ladung reist sicher vor Korsaren und wartet im Fondaco des Zielhafens auf dich. Die Pest lässt Abfahrten ausfallen oder verzögert sie.',
+  'text/notice/p/2': '<b>Die Muda</b>: Die Staatsgaleeren laufen an festen Tagen von Venedig nach Candia, Konstantinopel, Alexandria, Barcelona und Marseille aus und kehren von dort zurück. Zwei Monate vor jeder Abfahrt kauft dein Faktor im Fondaco des Abfahrtshafens die Ladung deiner Wahl für dich, zum Tagespreis und ohne den Markt zu verteuern, und bezahlt ihren Platz, der versteigert wird: Je voller die Galeere, desto teurer der Platz. Bei der Ankunft verkauft er sie im Fondaco, ohne den Markt zu drücken, und zahlt das Geld auf die Bank ein. Die Ladung reist sicher vor Korsaren, aber dein Geld ist ein bis zwei Monate gebunden. Die Staatsgaleeren laden keinen türkischen Alaun. Die Pest sagt Abfahrten ab oder verzögert sie.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>Die Barbareskenkorsaren</b> versenken ihre Prisen nicht. Ob von ihren Kanonen manövrierunfähig geschossen oder beim Entern überwältigt: Du wirst nach Algier verschleppt, Ladung und Geld an Bord sind verloren, dazu mehr als die Hälfte der Besatzung. Das Lösegeld, zahlbar aus deinem Bankguthaben und mit einem Darlehen von Zorzi, gibt dir dein Schiff zurück. Sonst bringt dich die Bruderschaft nach 60 Tagen in den Bagnos auf einer alten Tartane heim; mit dem Erbe „Bruderschaft vom Loskauf der Gefangenen“ geht es schneller. Die Korsaren kreuzen vor allem von April bis Oktober. Nahe einem Hafen vertreiben die Kanonen der Festung deine Verfolger, außer in Algier, ihrem Schlupfwinkel.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -83219,22 +83270,28 @@ Lang.sea('de', 'mediterranee', {
   'text/phrases/muda.depart': 'Abfahrt am {depart}, Ankunft etwa am {arrivee} · {n, plural, one {# {unite} frei} other {# {unites} frei}} · {prix} je {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Ausgebucht.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{n} {unites} {marchandise} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': '{n} {unites} {marchandise} auf die Muda nach {port} verladen.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': '{n} {unites} {marchandise} der Muda nach {port} anvertraut ({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Kauf hier: {ici} · Verkauf in {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Kauf hier: {ici} · kein Preis in {port} bekannt',
+  // Commander {n}
+  'text/phrases/muda.commander': '{n} bestellen',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Dein Faktor hat {n} {unites} {marchandise} für die Muda nach {port} gekauft.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Dein Faktor kauft {n} {unites} {marchandise} für die Muda nach {port} ({cout}, Platz inbegriffen).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'Unterwegs: {n} {unites} {marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'etwa am {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'Die Muda ist in {port} eingelaufen: Deine Ladung ({n} {unites} {marchandise}) wartet im {entrepot}.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'Die Muda hat {n} {unites} {marchandise} im {entrepot} von {port} abgeliefert.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'Die Plätze werden versteigert: Je näher die Abfahrt, desto teurer. Deine Waren reisen sicher vor Korsaren und warten im Fondaco des Zielhafens auf dich.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'Die Muda ist in {port} eingelaufen: Dein Faktor hat {n} {unites} {marchandise} für {somme} verkauft, auf die Bank eingezahlt.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Muda nach {port}: {n} {unites} {marchandise} im {entrepot} für {somme} verkauft, auf die Bank eingezahlt.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'Gewinn {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Dein Faktor kauft zum Tagespreis und verkauft bei der Ankunft, im Fondaco, ohne die Märkte zu bewegen; das Geld geht auf die Bank. Die Plätze werden versteigert: Je näher die Abfahrt, desto teurer. Die Ladung reist sicher vor Korsaren, aber dein Geld ruht ein bis zwei Monate. Kein türkischer Alaun auf den Staatsgaleeren.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'Wertvolle Ladung und {n, plural, =0 {keine einzige Kanone} one {nur # Kanone} other {nur # Kanonen}} von {max} möglichen: Von April bis Oktober lauern die Korsaren. Rüste dich in der Werft auf.',
   // des corsaires barbaresques
@@ -92776,8 +92833,8 @@ Lang.sea('it', 'mediterranee', {
   'text/accueil/peste3': 'Con la patente brutta, i porti cristiani ti mandano al <b>lazzaretto</b>: <b>40 giorni</b> di quarantena. La mappa ti avverte.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Poi c\'è <b>la muda</b>: le galee di Stato. Partono da Venezia a date fisse verso Levante e Ponente, poi tornano. Nessun corsaro osa toccarle.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'Due mesi prima di ogni partenza, il <b>fondaco</b> ne mette all\'asta i posti: più la galea si riempie, più costa. Il tuo carico ti aspetta al fondaco d\'arrivo. La prima salpa verso metà marzo.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'Al <b>fondaco</b> ti compro un carico al prezzo del giorno e lo affido alla galea; all\'arrivo, i nostri corrispondenti lo vendono e versano il denaro in banca. Il posto si vende all\'asta, e il tuo denaro dorme un mese o due: tieni la muda per il denaro che alla tua stiva non serve. La prima salpa verso metà marzo.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'I <b>corsari barbareschi</b>, invece, non affondano le loro prede: se le portano via.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -92802,8 +92859,8 @@ Lang.sea('it', 'mediterranee', {
   'text/hints/corsaires': '<b>Corsari</b>! Non ti affondano: ti prendono. Se perdi, finisci in catene ad Algeri. Se sono troppo forti, fuggi verso un porto: il cannone del forte li metterà in fuga.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'In catene, ma la pelle è salva. <b>Il riscatto</b> ti ridà subito la nave; la confraternita ti libera in {jours} giorni, ma senza nave. E la prossima volta lascia il denaro <b>in banca</b>: prendono solo quello che c\'è a bordo.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'La muda ha mantenuto la parola: il tuo carico ti aspetta a {port}, al <b>{entrepot}</b>. Va\' a ritirarlo per venderlo.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'La muda ha mantenuto la parola: a {port}, i nostri corrispondenti hanno venduto il tuo carico per <b>{somme}</b> e versato il denaro in banca.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'I tuoi <b>rematori</b> si mettono ai remi appena il vento cala o ti gira contro: la galea avanza lo stesso, ma loro mangiano la metà in più. Tieni d\'occhio i viveri.',
   // La Sérénissime
@@ -92813,7 +92870,7 @@ Lang.sea('it', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>La patente brutta</b>: se la peste scoppia nel porto che hai appena lasciato, la tua patente di sanità diventa brutta (lo segnalano la barra in alto e la mappa). I porti cristiani, che hanno tutti un lazzaretto, ti impongono allora 40 giorni di quarantena, 20 e poi 10 con la Patente di sanità dell\'Eredità.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>La muda</b>: le galee di Stato partono da Venezia a date fisse per Candia, Costantinopoli, Alessandria, Barcellona e Marsiglia, e poi ritornano. Due mesi prima di ogni partenza, il fondaco del porto di partenza ne mette all\'asta i posti: più la galea è piena, più il posto è caro. Il carico viaggia al riparo dai corsari e ti aspetta al fondaco d\'arrivo. La peste annulla o ritarda alcune partenze.',
+  'text/notice/p/2': '<b>La muda</b>: le galee di Stato partono da Venezia a date fisse per Candia, Costantinopoli, Alessandria, Barcellona e Marsiglia, e poi ritornano. Due mesi prima di ogni partenza, al fondaco del porto di partenza, il tuo fattore ti compra il carico che scegli, al prezzo del giorno e senza far salire il mercato, e ne paga il posto, venduto all\'asta: più la galea è piena, più il posto è caro. All\'arrivo lo vende al fondaco, senza far scendere il mercato, e versa il denaro in banca. Il carico viaggia al riparo dai corsari, ma il tuo denaro resta immobilizzato da uno a due mesi. Le galee di Stato non caricano allume turco. La peste annulla o ritarda alcune partenze.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>I corsari barbareschi</b> non affondano le loro prede. Se ti disalberano a cannonate o ti sopraffanno all\'arrembaggio, ti portano in catene ad Algeri: perdi il carico, il denaro a bordo e più di metà dell\'equipaggio. Il riscatto, che puoi pagare con la banca e un prestito di Zorzi, ti restituisce la nave; altrimenti, dopo 60 giorni nei bagni di Algeri (meno con la Confraternita del riscatto, nell\'Eredità), la confraternita ti rimpatria su una vecchia tartana. Corrono il mare soprattutto da aprile a ottobre. Vicino a un porto, i cannoni del forte mettono in fuga i tuoi inseguitori, tranne ad Algeri, il loro covo.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -92856,22 +92913,28 @@ Lang.sea('it', 'mediterranee', {
   'text/phrases/muda.depart': 'Partenza {depart}, arrivo previsto {arrivee} · {n, plural, one {# {unite} libera} other {# {unites} libere}} · {prix} per {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Al completo.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{n} {unites} di {marchandise} · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': 'Imbarco sulla muda per {port}: {n} {unites} di {marchandise}.',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': 'Carico affidato alla muda per {port}: {n} {unites} di {marchandise} ({cout}).',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Acquisto qui: {ici} · rivendita a {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Acquisto qui: {ici} · nessun prezzo noto a {port}',
+  // Commander {n}
+  'text/phrases/muda.commander': 'Ordina {n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Il tuo fattore ha comprato {n} {unites} di {marchandise} da imbarcare sulla muda per {port}.',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Il tuo fattore compra {n} {unites} di {marchandise} da imbarcare sulla muda per {port} ({cout}, posto compreso).',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'In viaggio: {n} {unites} di {marchandise} → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'arrivo {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'La muda è giunta a {port}: il tuo carico ({n} {unites} di {marchandise}) ti aspetta al {entrepot}.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'La muda ha consegnato {n} {unites} di {marchandise} al {entrepot} di {port}.',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'Il posto si vende all\'asta: più si avvicina la partenza, più costa. Le tue merci viaggiano al riparo dai corsari e ti aspettano al fondaco d\'arrivo.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'La muda è giunta a {port}: il tuo fattore ha venduto {n} {unites} di {marchandise} per {somme}, versati in banca.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Muda per {port}: {n} {unites} di {marchandise} venduti per {somme} al {entrepot}, versati in banca.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'utile {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Il tuo fattore compra al prezzo del giorno e rivende all\'arrivo, al fondaco, senza muovere i mercati; il denaro va in banca. Il posto si vende all\'asta: più si avvicina la partenza, più costa. Il carico viaggia al riparo dai corsari, ma il tuo denaro dorme da uno a due mesi. Niente allume turco sulle galee di Stato.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'Carico prezioso e {n, plural, =0 {nessun cannone} one {un solo cannone} other {solo # cannoni}} su {max}: da aprile a ottobre i corsari sono in agguato. Armati al cantiere navale.',
   // des corsaires barbaresques
@@ -102432,8 +102495,8 @@ Lang.sea('pl', 'mediterranee', {
   'text/accueil/peste3': 'Z nieczystym patentem porty chrześcijańskie odsyłają cię do <b>lazaretu</b>: <b>40 dni</b> kwarantanny. Mapa cię ostrzeże.',
   // Ensuite, <b>la muda</b> : les galères d'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s'y frotte.
   'text/accueil/muda': 'Po drugie, <b>muda</b>: galery państwowe. Wypływają z Wenecji w wyznaczone dni do Lewantu i na zachód, a potem wracają. Żaden korsarz nie waży się ich zaczepić.',
-  // Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c'est cher. Ta cargaison t'attend au fondaco 
-  'text/accueil/muda2': 'Dwa miesiące przed każdym wypłynięciem <b>fondaco</b> wystawia miejsca na licytację: im pełniejsza galera, tym drożej. Twój ładunek czeka potem w fondaco portu docelowego. Pierwsze galery wypływają koło połowy marca.',
+  // Au <b>fondaco</b>, je t'achète une cargaison au prix du jour et je la confie à la galère ; à l'arrivée, nos correspondants la vendent et versent l'argent à la b
+  'text/accueil/muda2': 'W <b>fondaco</b> kupię ci ładunek po dzisiejszej cenie i powierzę go galerze; po przybyciu nasi korespondenci go sprzedadzą i wpłacą pieniądze do banku. Miejsca idą na licytację, a twoje pieniądze śpią miesiąc lub dwa: trzymaj mudę na pieniądze, których twoja ładownia nie potrzebuje. Pierwsze galery wypływają koło połowy marca.',
   // Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.
   'text/accueil/corsaires': 'Za to <b>korsarze berberyjscy</b> nie zatapiają zdobyczy: uprowadzają je.',
   // Battu, tu finis <b>captif à Alger</b> : la cargaison et l'argent à bord sont perdus, et plus de la moitié de l'équipage.
@@ -102458,8 +102521,8 @@ Lang.sea('pl', 'mediterranee', {
   'text/hints/corsaires': '<b>Korsarze</b>! Nie zatapiają, tylko biorą: przegrana to niewola w Algierze. Jeśli są za silni, uciekaj w stronę portu: działa fortu ich przepędzą.',
   // Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton
   'text/hints/captif': 'W niewoli, ale przy życiu. Za <b>okup</b> od razu odzyskasz statek; bractwo wykupi cię za {jours, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}, ale bez statku. A następnym razem trzymaj pieniądze <b>w banku</b>: zabierają tylko to, co jest na pokładzie.',
-  // La muda a tenu parole : ta cargaison t'attend à {port}, au <b>{entrepot}</b>. Va l'y charger pour la vendre.
-  'text/hints/muda': 'Muda dotrzymała słowa: twój ładunek czeka w porcie {port}, w składzie <b>{entrepot}</b>. Załaduj go na pokład i sprzedaj.',
+  // La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l'argent à la banque.
+  'text/hints/muda': 'Muda dotrzymała słowa: w porcie {port} nasi korespondenci sprzedali twój ładunek za <b>{somme}</b> i wpłacili pieniądze do banku.',
   // Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les viv
   'text/hints/rame': 'Twoi <b>wioślarze</b> biorą się do wioseł, gdy tylko wiatr ucichnie albo zawieje w dziób: galera i tak płynie, ale oni jedzą półtora raza więcej. Pilnuj prowiantu.',
   // La Sérénissime
@@ -102469,7 +102532,7 @@ Lang.sea('pl', 'mediterranee', {
   // <b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent).
   'text/notice/p/1': '<b>Nieczysty patent</b>: jeśli zaraza wybuchnie w porcie, z którego płyniesz, twój patent zdrowia staje się nieczysty (ostrzegają o tym górny pasek i mapa). Wszystkie porty chrześcijańskie mają lazaret i nakładają wtedy 40 dni kwarantanny, a z Czystym patentem zdrowia (Dziedzictwo) — 20, potem 10.',
   // <b>La muda</b> : les galères d'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mo
-  'text/notice/p/2': '<b>Muda</b>: galery państwowe wypływają z Wenecji w wyznaczone dni do Kandii, Konstantynopola, Aleksandrii, Barcelony i Marsylii, a potem stamtąd wracają. Dwa miesiące przed każdym wypłynięciem fondaco w porcie wyjścia wystawia miejsca na licytację: im pełniejsza galera, tym droższe miejsce. Ładunek płynie bezpieczny od korsarzy i czeka na ciebie w fondaco portu docelowego. Zaraza odwołuje lub opóźnia niektóre rejsy.',
+  'text/notice/p/2': '<b>Muda</b>: galery państwowe wypływają z Wenecji w wyznaczone dni do Kandii, Konstantynopola, Aleksandrii, Barcelony i Marsylii, a potem stamtąd wracają. Dwa miesiące przed każdym wypłynięciem twój faktor w fondaco portu wyjścia kupuje dla ciebie wybrany ładunek, po dzisiejszej cenie i bez podbijania cen na rynku, oraz płaci za jego miejsce, sprzedawane na licytacji: im pełniejsza galera, tym droższe miejsce. Po przybyciu sprzedaje go w fondaco, nie zbijając cen na rynku, i wpłaca pieniądze do banku. Ładunek płynie bezpieczny od korsarzy, ale twoje pieniądze są zamrożone na miesiąc lub dwa. Galery państwowe nie biorą tureckiego ałunu. Zaraza odwołuje lub opóźnia niektóre wypłynięcia.',
   // <b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l'abordage, vous êtes emmené captif à Alger : la cargaison
   'text/notice/p/3': '<b>Korsarze berberyjscy</b> nie zatapiają zdobyczy. Gdy ich działa unieruchomią twój statek albo przegrasz abordaż, uprowadzają cię w niewolę do Algieru: przepadają ładunek, pieniądze z pokładu i ponad połowa załogi. Okup, płatny z banku i z pożyczki u Zorziego, zwraca ci statek; bez niego po 60 dniach w łaźniach niewolników (krócej z Bractwem wykupu jeńców z Dziedzictwa) bractwo sprowadza cię do domu na starej tartanie. Korsarze grasują głównie od kwietnia do października. W pobliżu portu działa fortu odpędzają pościg, z wyjątkiem Algieru, ich gniazda.',
   // <b>L'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de 
@@ -102512,22 +102575,28 @@ Lang.sea('pl', 'mediterranee', {
   'text/phrases/muda.depart': 'Wypłynięcie {depart}, przybycie ok. {arrivee} · wolne miejsce: {n, plural, one {# {unite}} few {# {unites}} many {{qteUnites}} other {{qteUnites}}} · {prix} / {unite}',
   // Complet.
   'text/phrases/muda.complet': 'Brak miejsc.',
-  // {n} {marchandise} · {cout}
-  'text/phrases/muda.embarquer': '{marchandise} ({n} {unites}) · {cout}',
-  // {n} {marchandise} embarqués sur la muda {dePort}.
-  'text/phrases/muda.embarques': 'Załadowano na mudę do portu {port}: {marchandise} ({n} {unites}).',
-  // {n} {marchandise} confiés à la muda {dePort} ({cout}).
-  'text/phrases/muda.confies': 'Powierzono mudzie do portu {port}: {marchandise} ({n} {unites}) za {cout}.',
+  // Achat ici : {ici} · revente à {port} : {prix}
+  'text/phrases/muda.prix': 'Zakup tutaj: {ici} · sprzedaż w porcie {port}: {prix}',
+  // Achat ici : {ici} · aucun prix connu à {port}
+  'text/phrases/muda.prixInconnu': 'Zakup tutaj: {ici} · brak znanej ceny w porcie {port}',
+  // Commander {n}
+  'text/phrases/muda.commander': 'Zamów {n}',
+  // Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.
+  'text/phrases/muda.embarques': 'Twój faktor kupił na mudę do portu {port}: {marchandise} ({n} {unites}).',
+  // Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).
+  'text/phrases/muda.confies': 'Twój faktor kupuje na mudę do portu {port}: {marchandise} ({n} {unites}) za {cout}, z miejscem.',
   // En route : {n} {marchandise} → {port}
   'text/phrases/muda.enRoute': 'W drodze: {marchandise} ({n} {unites}) → {port}',
   // vers le {date}
   'text/phrases/muda.vers': 'ok. {date}',
-  // La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.
-  'text/phrases/muda.arrivee': 'Muda dotarła do portu {port}: twój ładunek, {marchandise} ({n} {unites}), czeka w składzie {entrepot}.',
-  // La muda a livré {n} {marchandise} au {entrepot} {dePort}.
-  'text/phrases/muda.livre': 'Muda dostarczyła do składu {entrepot} w porcie {port}: {marchandise} ({n} {unites}).',
-  // La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l'abri des corsaires et vous attendent au fondaco d'ar
-  'text/phrases/muda.aide': 'Miejsca idą na licytację: im bliżej wypłynięcia, tym drożej. Twoje towary płyną bezpieczne od korsarzy i czekają na ciebie w fondaco portu docelowego.',
+  // La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.
+  'text/phrases/muda.arrivee': 'Muda dotarła do portu {port}: twój faktor sprzedał {marchandise} ({n} {unites}) za {somme}, wpłacone do banku.',
+  // Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.
+  'text/phrases/muda.livre': 'Muda do portu {port}: {marchandise} ({n} {unites}) sprzedane w składzie {entrepot} za {somme}, wpłacone do banku.',
+  // bénéfice {benefice}
+  'text/phrases/muda.benefice': 'zysk {benefice}',
+  // Votre facteur achète au prix du jour et revend à l'arrivée, au fondaco, sans faire bouger les marchés ; l'argent va à la banque. La place se vend aux enchères :
+  'text/phrases/muda.aide': 'Twój faktor kupuje po dzisiejszej cenie i sprzedaje po przybyciu, w fondaco, nie ruszając cen na rynkach; pieniądze idą do banku. Miejsca idą na licytację: im bliżej wypłynięcia, tym drożej. Ładunek płynie bezpieczny od korsarzy, ale twoje pieniądze śpią miesiąc lub dwa. Żadnego tureckiego ałunu na galerach państwowych.',
   // Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.
   'text/phrases/corsaires.alerte': 'Cenny ładunek, a na pokładzie {n, plural, =0 {ani jednego działa} one {tylko # działo} few {tylko # działa} many {tylko # dział} other {tylko # działa}}, choć zmieści się {max}: od kwietnia do października grasują korsarze. Uzbrój się w stoczni.',
   // des corsaires barbaresques
@@ -120738,15 +120807,89 @@ function makeConvoys(rng) {
 const rivalAt = (c, day) => c.rival * U.smooth((day - (c.dep - 30)) / 30);
 const convoySpace = (c, day) => Math.max(0, Math.floor(c.cap - rivalAt(c, day) - c.booked));
 const convoyPrice = (c, day) => { const fill = U.clamp((rivalAt(c, day) + c.booked) / c.cap, 0, 1); return Math.round(c.base * (0.8 + 1.6 * fill * fill)); };
-function bookConvoy(c, gi, n) {
-  const r = Game.run, d = r.day, price = convoyPrice(c, d);
-  n = Math.min(n, r.cargo[gi], convoySpace(c, d), Math.floor(r.cash / price));
+// la muda passe par le facteur de la famille : au fondaco du départ, il achète la cargaison au prix du jour, sans faire monter
+// le marché du port, et paie la place ; à l'arrivée, il la vend au fondaco, sans faire baisser le marché, et verse l'argent à la
+// banque. Les galères d'État ne chargent pas de contrebande.
+const orderCost = (pid, c, gi, n) => (n > 0 ? Game.buyTotal(pid, gi, n) + n * convoyPrice(c, Game.run.day) : 0);
+function orderMax(pid, c, gi) {
+  const r = Game.run;
+  if (GOODS[gi].contraband) return 0;
+  let lo = 0, hi = convoySpace(c, r.day);
+  while (lo < hi) { const m = Math.ceil((lo + hi) / 2); if (orderCost(pid, c, gi, m) <= r.cash) lo = m; else hi = m - 1; }
+  return lo;
+}
+function orderConvoy(c, gi, n) {
+  const r = Game.run, pid = r.port;
+  n = Math.min(Math.floor(n), orderMax(pid, c, gi));
   if (n <= 0) return 0;
-  r.cash -= n * price; r.cargo[gi] -= n; if (r.cargo[gi] === 0) r.cost[gi] = 0;
+  const cost = orderCost(pid, c, gi, n);
+  r.cash -= cost;
   c.booked += n;
-  med().freight.push({ to: c.to, g: gi, n, arr: c.arr, done: false });
-  Game.log(TS('muda.confies', { n, marchandise: lower(GOODS[gi].name), unites: motUnites(n, GOODS[gi]), port: PORT[c.to].name, dePort: deLieu(PORT[c.to].name), cout: monnaie(n * price) }));
+  med().freight.push({ to: c.to, g: gi, n, arr: c.arr, done: false, cost });
+  Game.log(TS('muda.confies', { n, marchandise: lower(GOODS[gi].name), unites: motUnites(n, GOODS[gi]), port: PORT[c.to].name, dePort: deLieu(PORT[c.to].name), cout: monnaie(cost) }));
   return n;
+}
+// ce que le facteur conseille, d'après les prix connus au port d'arrivée : la marchandise et la quantité au meilleur bénéfice
+// (aucune quand aucun prix n'y est connu ou que rien n'y gagne)
+function orderAdvice(pid, c, gi) {
+  const k = Game.knownPrices(c.to);
+  if (!k || GOODS[gi].contraband) return { n: 0, v: 0 };
+  const d = Game.depth(c.to, gi), p = k.p[gi] * Game.tradeMul(false);
+  const f = n => p * (1 - Math.exp(-n / d)) / (1 - Math.exp(-1 / d)) - orderCost(pid, c, gi, n);
+  let best = { n: 0, v: 0 };
+  for (let n = 10, max = orderMax(pid, c, gi); n <= max; n += 10) { const v = f(n); if (v > best.v) best = { n, v }; }
+  return best;
+}
+// la commande au facteur, au fondaco : la marchandise (son prix d'achat ici, le dernier prix connu au port d'arrivée), la
+// quantité (celle que conseille le facteur), le coût place comprise
+const mudaPick = {};   // (la marchandise choisie pour chaque galère, d'un affichage à l'autre)
+function mudaOrder(pid, c, render) {
+  const r = Game.run, key = c.to + '-' + c.dep;
+  const goods = GOODS.map((g, gi) => gi).filter(gi => !GOODS[gi].contraband);
+  if (!goods.includes(mudaPick[key])) {
+    let best = { gi: goods[0], v: 0 };
+    for (const gi of goods) { const a = orderAdvice(pid, c, gi); if (a.v > best.v) best = { gi, v: a.v }; }
+    mudaPick[key] = best.gi;
+  }
+  const gi = mudaPick[key], g = GOODS[gi], max = orderMax(pid, c, gi), k = Game.knownPrices(c.to);
+  const info = k
+    ? [TS('muda.prix', { ici: fmt(Game.buyPrice(pid, gi)), port: PORT[c.to].name, prix: fmt(k.p[gi] * Game.tradeMul(false)) }), k.live ? T('marche.enDirect') : T('marche.vuIlYa', { jours: Math.max(0, Math.round(r.day - k.day)) })]
+    : [TS('muda.prixInconnu', { ici: fmt(Game.buyPrice(pid, gi)), port: PORT[c.to].name })];
+  const slider = h('input', { type: 'range', min: 0, max: Math.max(0, max), value: Math.min(orderAdvice(pid, c, gi).n, max), step: 1, 'aria-label': T('marche.quantite'), id: 'muda-' + key });
+  const out = h('output', null, '');
+  const act = btn('', () => {
+    const n = orderConvoy(c, gi, +slider.value);
+    if (n) { UI.toast(TS('muda.embarques', { n, marchandise: lower(g.name), unites: motUnites(n, g), port: PORT[c.to].name, dePort: deLieu(PORT[c.to].name) }), 'gold', 'scroll'); UI.after('cash'); }
+    render();
+  }, 'sm gold');
+  const upd = () => {
+    const n = +slider.value;
+    if (n > 0) out.replaceChildren(String(n), ico('cargo', 'xs'), ' · ' + fmt(orderCost(pid, c, gi, n)), ico('coin', 'xs')); else out.textContent = '—';
+    act.replaceChildren(TS('muda.commander', { n }), ico('cargo', 'xs'));
+    act.disabled = n <= 0;
+  };
+  slider.addEventListener('input', upd);
+  upd();
+  return h('div', { class: 'muda-order' },
+    h('div', { class: 'row muda-goods' }, goods.map(x => btn([ico(GOODS[x].id, 'xs'), ' ', GOODS[x].name], () => { mudaPick[key] = x; render(); }, 'xs' + (x === gi ? ' on' : ''), { 'aria-pressed': x === gi ? 'true' : 'false' }))),
+    h('div', { class: 'd' }, ...info),
+    h('div', { class: 'row' }, h('div', { style: { flex: '1 1 160px' } }, slider), out, act));
+}
+// à l'arrivée, la vente du facteur, au prix du jour du port d'arrivée ; l'argent va à la banque
+// (une cargaison confiée avant que le facteur s'en charge n'a pas de prix d'achat : pas de bénéfice compté)
+function sellFreight(f) {
+  const r = Game.run, rev = Game.sellTotal(f.to, f.g, f.n), profit = f.cost != null ? Math.round(rev - f.cost) : null;
+  f.rev = rev;
+  r.bank += rev;
+  r.stats.sold += rev;
+  if (profit != null) {
+    r.stats.profit += profit;
+    if (profit > 0) { r.stats.profitSales++; Game.unlock('profit'); }
+    if (profit > r.stats.bestSale) r.stats.bestSale = profit;
+    if (profit >= 20000) Game.unlock('coup');
+  }
+  Game.checkTitle();
+  return { rev, profit };
 }
 
 // capture par les corsaires : cargaison et argent à bord perdus, une partie de l'équipage aux fers,
@@ -120822,12 +120965,13 @@ const rules = {
     for (const f of M.freight) {
       if (f.done || d < f.arr) continue;
       f.done = true;
-      Game.ware(f.to)[f.g] += f.n;
-      const q = { n: f.n, marchandise: lower(GOODS[f.g].name), unites: motUnites(f.n, GOODS[f.g]), entrepot: wareName(f.to), port: PORT[f.to].name, dePort: deLieu(PORT[f.to].name) };
-      Bus.emit('toast', { t: TS('muda.arrivee', q), k: 'gold' });
-      Game.log(TS('muda.livre', q));
+      const s = sellFreight(f);
+      const q = { n: f.n, marchandise: lower(GOODS[f.g].name), unites: motUnites(f.n, GOODS[f.g]), entrepot: wareName(f.to), port: PORT[f.to].name, dePort: deLieu(PORT[f.to].name), somme: monnaie(s.rev) };
+      const ben = s.profit != null ? ' · ' + TS('muda.benefice', { benefice: (s.profit >= 0 ? '+' : '') + fmt(s.profit) }) : '';
+      Bus.emit('toast', { t: TS('muda.arrivee', q) + ben, k: s.profit != null && s.profit < 0 ? '' : 'gold' });
+      Game.log(TS('muda.livre', q) + ben);
       Game.unlock('muda');
-      Bus.emit('hint', { id: 'muda', p: { entrepot: q.entrepot, port: q.port } });   // (le conseil du mentor, la première fois)
+      Bus.emit('hint', { id: 'muda', p: { port: q.port, somme: q.somme } });   // (le conseil du mentor, la première fois)
     }
     // en mer, la peste éclate dans le port qu'on vient de quitter : la patente devient brute (le conseil du mentor)
     const pl = !r.port && knownFoul();
@@ -120947,7 +121091,7 @@ const rules = {
       btn(TS('attente.semaine'), () => { Game.advance(7); UI.toast(TS('attente.passe'), ''); UI.after(); render(); }, 'sm'),
       h('span', { class: 'hint' }, TS('attente.aide'))))];
   },
-  // les galères d'État, au fondaco (entrepôt)
+  // les galères d'État, au fondaco (entrepôt) : la commande au facteur, galère par galère
   warehouse(pid, render) {
     const r = Game.run, d = r.day, M = med();
     const list = M.convoys.filter(c => c.from === pid && c.dep > d + 0.5 && c.dep - d < 60);
@@ -120956,21 +121100,17 @@ const rules = {
     const box = h('div', { style: { marginTop: '12px' } }, h('h4', null, TS('muda.titre')));
     for (const c of list) {
       const space = convoySpace(c, d), price = convoyPrice(c, d);
-      const held = GOODS.map((g, gi) => [g, gi]).filter(([, gi]) => r.cargo[gi] > 0);
       box.append(h('div', { class: 'card', style: { marginBottom: '6px' } },
         h('h5', null, TS('muda.nom', { port: PORT[c.to].name, dePort: deLieu(PORT[c.to].name) })),
         h('div', { class: 'd' }, TS('muda.depart', { depart: fmtDate(c.dep, true), arrivee: fmtDate(c.arr, true), n: space, unite: TXT.unitOne, unites: TXT.unit, qteUnites: unites(space), prix: monnaie(price) })),
-        h('div', { class: 'row' }, space <= 0 ? h('span', { class: 'hint' }, TS('muda.complet')) : held.length ? held.map(([g, gi]) => {
-          const n = Math.min(r.cargo[gi], space), cost = n * price;
-          return btn(TS('muda.embarquer', { n, marchandise: lower(g.name), unites: motUnites(n, g), cout: fmt(cost) }), () => { const k = bookConvoy(c, gi, n); if (k) { UI.toast(TS('muda.embarques', { n: k, marchandise: lower(g.name), unites: motUnites(k, g), port: PORT[c.to].name, dePort: deLieu(PORT[c.to].name) }), 'gold', 'scroll'); UI.after('cash'); } render(); }, 'sm gold', r.cash < price ? { disabled: true } : null);
-        }) : h('span', { class: 'hint' }, T('marche.caleVide')))));
+        space <= 0 ? h('span', { class: 'hint' }, TS('muda.complet')) : mudaOrder(pid, c, render)));
     }
     for (const f of going) box.append(h('div', { class: 'stat' }, h('span', null, TS('muda.enRoute', { n: f.n, marchandise: lower(GOODS[f.g].name), unites: motUnites(f.n, GOODS[f.g]), port: PORT[f.to].name })), h('b', null, TS('muda.vers', { date: fmtDate(f.arr, true) }))));
     box.append(h('p', { class: 'hint' }, TS('muda.aide')));
     return box;
   },
   // pour le banc d'essai
-  convoys: () => med().convoys, convoySpace, convoyPrice, bookConvoy, knownFoul, plagueAt,
+  convoys: () => med().convoys, convoySpace, convoyPrice, orderConvoy, orderCost, orderMax, knownFoul, plagueAt,
   closedAt: (pid, day) => !!plagueAt(pid, day),
   quarantineIf(from, to, day, days) { const pl = infectedAt(from, day); return pl && PORT[to].lazaret && day + days >= pl.start ? quarantineDays() : 0; },
 };
@@ -121573,7 +121713,7 @@ Seas.register({
       peste2: 'Si elle éclate dans le port que tu viens de quitter, ta patente de santé devient <b>brute</b>.',
       peste3: 'Avec une patente brute, les ports chrétiens t\'envoient au <b>lazaret</b> : <b>40 jours</b> de quarantaine. La carte te prévient.',
       muda: 'Ensuite, <b>la muda</b> : les galères d\'État. Elles partent de Venise à dates fixes vers le Levant et le Ponant, puis reviennent. Aucun corsaire ne s\'y frotte.',
-      muda2: 'Deux mois avant chaque départ, le <b>fondaco</b> en vend les places aux enchères : plus la galère se remplit, plus c\'est cher. Ta cargaison t\'attend au fondaco d\'arrivée. La première part vers la mi-mars.',
+      muda2: 'Au <b>fondaco</b>, je t\'achète une cargaison au prix du jour et je la confie à la galère ; à l\'arrivée, nos correspondants la vendent et versent l\'argent à la banque. La place se vend aux enchères, et ton argent dort un ou deux mois : garde la muda pour celui dont ta cale n\'a pas besoin. La première part vers la mi-mars.',
       corsaires: 'Les <b>corsaires barbaresques</b>, eux, ne coulent pas leurs prises : ils les emmènent.',
       corsaires1: 'Battu, tu finis <b>captif à Alger</b> : la cargaison et l\'argent à bord sont perdus, et plus de la moitié de l\'équipage.',
       corsaires2: '<b>La rançon</b> te rend ton navire ; la banque et Zorzi peuvent la payer. Sinon, c\'est le bagne, puis une vieille tartane.',
@@ -121586,12 +121726,12 @@ Seas.register({
       fermer: 'Ferme cette fenêtre : le bouton « {sortir} », en haut à droite.',
     },
     // les conseils d'Alvise, la première fois que ça arrive (js/guide.js, Hints) : portPeste, le port d'où vient la peste ;
-    // port, entrepot : le port d'arrivée de la muda et le nom de son entrepôt (« Fondaco », « Han »)
+    // port, somme : le port d'arrivée de la muda et ce qu'y a rapporté la vente de la cargaison
     hints: {
       patente: 'Ta patente est <b>brute</b> : la peste a éclaté à {portPeste}, d\'où tu viens. Un port chrétien te gardera <b>{jours} jours</b> au lazaret ; Alexandrie, Constantinople et Alger n\'en ont pas.',
       corsaires: 'Des <b>corsaires</b> ! Ils ne coulent pas, ils prennent : vaincu, tu finis captif à Alger. S\'ils sont trop forts, fuis vers un port : le canon du fort les chassera.',
       captif: 'Captif, mais vivant. <b>La rançon</b> te rend ton navire tout de suite ; la confrérie te rachète en {jours} jours, sans navire. Et la prochaine fois, laisse ton argent <b>à la banque</b> : ils ne prennent que ce qui est à bord.',
-      muda: 'La muda a tenu parole : ta cargaison t\'attend à {port}, au <b>{entrepot}</b>. Va l\'y charger pour la vendre.',
+      muda: 'La muda a tenu parole : à {port}, nos correspondants ont vendu ta cargaison <b>{somme}</b> et versé l\'argent à la banque.',
       rame: 'Tes <b>rameurs</b> souquent dès que le vent tombe ou tourne contre toi : la galère avance quand même, mais ils mangent une fois et demie plus. Surveille les vivres.',
     },
     // le chapitre de la mer dans l'Aide du capitaine (UI.help)
@@ -121600,7 +121740,7 @@ Seas.register({
       p: [
         '<b>La peste</b> frappe quelques ports chaque année : elle couve deux semaines, puis ferme le port un à deux mois (une croix sur la carte). Une tournée à la taverne la fait souvent annoncer avant qu\'elle frappe ; les Espions du Conseil des Dix (Héritage) la signalent à coup sûr.',
         '<b>La patente brute</b> : si la peste éclate dans le port que vous venez de quitter, votre patente de santé devient brute (le bandeau et la carte le signalent). Les ports chrétiens, qui ont tous un lazaret, vous imposent alors 40 jours de quarantaine, 20 puis 10 avec la Patente sanitaire de l\'Héritage.',
-        '<b>La muda</b> : les galères d\'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mois avant chaque départ, le fondaco du port de départ en vend les places aux enchères : plus la galère est pleine, plus la place est chère. La cargaison voyage à l\'abri des corsaires et vous attend au fondaco d\'arrivée. La peste annule ou retarde des départs.',
+        '<b>La muda</b> : les galères d\'État partent de Venise à dates fixes vers Candie, Constantinople, Alexandrie, Barcelone et Marseille, puis en reviennent. Deux mois avant chaque départ, au fondaco du port de départ, votre facteur vous achète la cargaison de votre choix, au prix du jour et sans faire monter le marché, et paie sa place, vendue aux enchères : plus la galère est pleine, plus elle est chère. À l\'arrivée, il la vend au fondaco, sans faire baisser le marché, et verse l\'argent à la banque. La cargaison voyage à l\'abri des corsaires, mais votre argent reste immobilisé un à deux mois. Les galères d\'État ne chargent pas l\'alun turc. La peste annule ou retarde des départs.',
         '<b>Les corsaires barbaresques</b> ne coulent pas leurs prises. Désemparé par leurs canons ou écrasé à l\'abordage, vous êtes emmené captif à Alger : la cargaison et l\'argent à bord sont perdus, et plus de la moitié de l\'équipage. La rançon, payable avec la banque et un emprunt à Zorzi, vous rend votre navire ; sinon, après 60 jours de bagne (moins avec la Confrérie du rachat des captifs, dans l\'Héritage), la confrérie vous rapatrie sur une vieille tartane. Ils courent surtout d\'avril à octobre. Près d\'un port, les canons du fort chassent vos poursuivants, sauf à Alger, leur repaire.',
         '<b>L\'hiver</b> (mare clausum), de novembre à février : les tempêtes sont fréquentes et les galères y sont fragiles. Le mistral souffle dans le golfe du Lion de novembre à avril, la bora dans l\'Adriatique de décembre à mars ; l\'été, le meltem balaie les Cyclades. La taverne permet d\'attendre une semaine au port.',
         '<b>Les galères</b> (fuste, galère marchande) avancent à la rame par calme plat ou vent debout, mais leurs rameurs mangent davantage, et plus encore quand ils souquent. <b>L\'alun turc</b> est de la contrebande dans les ports chrétiens.',
@@ -121625,19 +121765,23 @@ Seas.register({
       'patente.brute': 'Patente brute',
       'patente.aide': 'Vous venez d\'un port pestiféré : quarantaine dans les ports chrétiens',
       'patente.carte': 'Patente brute (vous venez {dePortPeste}) : {jours} jours de quarantaine au lazaret {dePort}.',
-      // les galères d'État (muda) ; entrepot : le nom de l'entrepôt du port (Fondaco, Han…)
+      // les galères d'État (muda) : le facteur achète au fondaco du départ, vend au fondaco d'arrivée ; entrepot : le nom de
+      // l'entrepôt du port (Fondaco, Han…) ; ici, prix : un prix à l'unité ; somme : ce qu'a rapporté la vente ; benefice : « +8 400 »
       'muda.titre': 'GALÈRES D\'ÉTAT (MUDA)',
       'muda.nom': 'Muda {dePort}',
       'muda.depart': 'Départ le {depart}, arrivée vers le {arrivee} · {n, plural, one {# {unite} libre} other {# {unites} libres}} · {prix} le {unite}',
       'muda.complet': 'Complet.',
-      'muda.embarquer': '{n} {marchandise} · {cout}',
-      'muda.embarques': '{n} {marchandise} embarqués sur la muda {dePort}.',
-      'muda.confies': '{n} {marchandise} confiés à la muda {dePort} ({cout}).',
+      'muda.prix': 'Achat ici : {ici} · revente à {port} : {prix}',   // (suivi de « · vu il y a 12 j » ou « · en direct »)
+      'muda.prixInconnu': 'Achat ici : {ici} · aucun prix connu à {port}',
+      'muda.commander': 'Commander {n}',   // (suivi du dessin de la caisse : 50 quoi ? 50 caisses)
+      'muda.embarques': 'Votre facteur a acheté {n} {marchandise} pour la muda {dePort}.',
+      'muda.confies': 'Votre facteur achète {n} {marchandise} pour la muda {dePort} ({cout}, place comprise).',
       'muda.enRoute': 'En route : {n} {marchandise} → {port}',
       'muda.vers': 'vers le {date}',
-      'muda.arrivee': 'La muda est arrivée à {port} : vos {n} {marchandise} attendent au {entrepot}.',
-      'muda.livre': 'La muda a livré {n} {marchandise} au {entrepot} {dePort}.',
-      'muda.aide': 'La place se vend aux enchères : plus le départ approche, plus elle est chère. Vos marchandises voyagent à l\'abri des corsaires et vous attendent au fondaco d\'arrivée.',
+      'muda.arrivee': 'La muda est arrivée à {port} : votre facteur a vendu {n} {marchandise} pour {somme}, versés à la banque.',
+      'muda.livre': 'Muda {dePort} : {n} {marchandise} vendus {somme} au {entrepot}, versés à la banque.',
+      'muda.benefice': 'bénéfice {benefice}',
+      'muda.aide': 'Votre facteur achète au prix du jour et revend à l\'arrivée, au fondaco, sans faire bouger les marchés ; l\'argent va à la banque. La place se vend aux enchères : plus le départ approche, plus elle est chère. La cargaison voyage à l\'abri des corsaires, mais votre argent dort un à deux mois. Pas d\'alun turc sur les galères d\'État.',
       // les corsaires et la captivité à Alger (par : un corsaire nommé, ou « des corsaires barbaresques » ; nombre : un ou plusieurs)
       'corsaires.alerte': 'Cargaison précieuse et seulement {n, plural, one {# canon} other {# canons}} sur {max} : d\'avril à octobre, les corsaires rôdent. Armez-vous au chantier naval.',
       'captif.corsaires': 'des corsaires barbaresques',
@@ -132062,7 +132206,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 05/10/2026 à 19:02</div>
+<div id="maj">Mise à jour : 05/10/2026 à 20:13</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
