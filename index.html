@@ -981,6 +981,38 @@ input[type=range].red { --fill: #e65c40; --thumb: radial-gradient(circle at 50% 
 .mk-row .sl output .ico.xs { width: 12px; height: 12px; }
 .mobile .panel-head:has(.mk-top) { flex-wrap: wrap; }
 
+/* ── Le marché, ce que peut avaler un port (06/10/2026) : la réglette en trois couleurs (vert, or à --zg, rouge à --zo),
+      assombrie à droite du curseur ; le curseur prend la couleur de sa zone ; le prix moyen sous le nom ; la bulle du
+      mentor au-dessus du curseur ── */
+.mk-row input[type=range].zones::-webkit-slider-runnable-track { background: linear-gradient(90deg, rgba(8, 13, 22, 0) var(--p, 100%), rgba(8, 13, 22, 0.6) var(--p, 100%)), linear-gradient(90deg, var(--jade) var(--zg), var(--gold) var(--zg), var(--gold) var(--zo), var(--red) var(--zo)); }
+.mk-row input[type=range].zones::-moz-range-track { background: linear-gradient(90deg, var(--jade) var(--zg), var(--gold) var(--zg), var(--gold) var(--zo), var(--red) var(--zo)); opacity: 0.45; }
+.mk-row input[type=range].zones::-moz-range-progress { background: transparent; }
+.mk-row input[type=range].zones.z1 { --thumb: radial-gradient(circle at 50% 35%, #f7d58a, #c9902f); }
+.mk-row input[type=range].zones.z2 { --thumb: radial-gradient(circle at 50% 35%, #ff9b84, #c23b22); }
+.mk-avg { font-size: 12.5px; color: var(--text-2); }
+.mk-avg b { font: 800 13.5px var(--font-ui); margin-left: 2px; }
+.mk-avg .ico.xs { margin-left: 2px; }
+.mk-row .warn { color: var(--gold-hi); }
+.mk-row .sl output b { color: var(--text); font-size: 13.5px; }
+.mk-row .sl.has-tip { position: relative; }
+.mk-tip { position: absolute; left: 0; bottom: calc(100% - 2px); z-index: 3; display: flex; gap: 8px; align-items: center; width: max-content; max-width: 280px; padding: 6px 11px 6px 7px; border-radius: 12px; background: rgba(11, 18, 30, 0.97); border: 1px solid rgba(247, 213, 138, 0.6); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45); color: var(--gold-hi); opacity: 0; transform: translateY(4px); transition: opacity 0.35s, transform 0.35s; pointer-events: none; text-align: left; }
+.mk-tip.on { opacity: 1; transform: translateY(0); }
+.mk-tip.r { color: var(--bad); border-color: rgba(255, 138, 112, 0.65); }
+.mk-tip::after { content: ''; position: absolute; left: var(--ax, 50%); bottom: -6px; margin-left: -6px; border: 6px solid transparent; border-bottom: 0; border-top-color: rgba(247, 213, 138, 0.6); }
+.mk-tip.r::after { border-top-color: rgba(255, 138, 112, 0.65); }
+.mk-seal { flex: none; width: 26px; height: 26px; border-radius: 7px; background: linear-gradient(160deg, #e2563a, #9e2f1c); color: #fbe3d8; font: 800 15px/26px var(--font-title); text-align: center; box-shadow: inset 0 0 0 1.5px rgba(251, 227, 216, 0.35); }
+.mk-seal.wax { border-radius: 50%; background: radial-gradient(circle at 34% 30%, #e45a44, #a3281a 60%, #7a1b10); color: #f8dccb; font-style: italic; }
+.mk-tip-t { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.mk-tip-t b { font: 800 12.5px var(--font-ui); white-space: nowrap; }
+.mk-tip-t small { font: 600 11.5px var(--font-ui); color: var(--text-2); line-height: 1.3; }
+@media (prefers-reduced-motion: reduce) { .mk-tip { transition: none; } }
+
+/* ── Journal des prix : le sablier d'un prix vu pendant un surplus (vert) ou une pénurie (rouge) ── */
+.jr-glass { display: inline-block; width: 9px; height: 13px; margin-right: 4px; vertical-align: -1px; }
+.jr-glass svg { display: block; width: 100%; height: 100%; }
+.jr-glass.down { color: var(--good); }
+.jr-glass.up { color: var(--bad); }
+
 /* ── Le détail de la cale (marché, bandeau) ── */
 .hold-pop { position: absolute; z-index: 64; width: 290px; max-width: calc(100vw - 16px); padding: 12px 14px; border-radius: 14px; background: linear-gradient(180deg, rgba(24, 35, 53, 0.98), rgba(13, 21, 34, 0.98)); border: 1px solid var(--line-2); box-shadow: var(--shadow); display: grid; gap: 5px; font-size: 13.5px; animation: panelIn 0.18s ease-out; }
 .hold-pop .hp-title { font: 800 14px var(--font-ui); color: var(--gold-hi); }
@@ -1888,15 +1920,26 @@ Lang.ui('fr', {
   'marche.cale': 'Cale {occupe}/{cale} · libre {libre}',
   'marche.pasDeNavire': 'Pas de navire',
   'marche.sansNavire': 'Il vous faut un navire pour charger des marchandises. Passez au chantier naval.',
-  'marche.revente': 'Revente connue : {prix} {marge}',   // prix : « Batavia 76 » ; marge : « (+56 %) »
   'marche.enDirect': ' · en direct',
   'marche.vuIlYa': ' · vu il y a {jours} j',
-  'marche.aucunPrix': 'Aucun autre prix connu. Explorez !',
   'marche.contrebandeIci': 'contrebande ici',
   'marche.paye': 'Payé {prix} / {unite} · marge {marge}',   // unite : l'unité de cale, au singulier
   'marche.butin': 'Butin : tout est bénéfice.',
-  'marche.mieuxA': ' · mieux à {port} ({prix})',
   'marche.dejaAchete': '{n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %',
+  'marche.prixMoyenAchat': 'Prix moyen d\'achat : {prix}',   // sous le nom de la marchandise, prix moyen de la quantité choisie (06/10/2026) ; prix : le nombre ; suivent la pièce et la caisse
+  'marche.prixMoyenVente': 'Prix moyen de vente : {prix}',
+  'marche.secousse': '{port} : {liste}. Le marché se remet en quelques semaines.',   // message en haut de l'écran quand un achat ou une vente fait bouger le prix de plus d'un tiers ; liste : « soie -68 %, thé -40 % »
+  'marche.bulle.hausse': 'Tu fais monter les prix.',   // bulle du mentor au-dessus de la réglette (il tutoie le joueur) : la réglette passe dans l'or (achat)
+  'marche.bulle.manque': 'Tu vas créer un manque à {port} !',
+  'marche.bulle.manqueConseil': 'Reviens d\'ici quelques semaines, les prix seront redescendus.',
+  'marche.bulle.baisse': 'Le prix commence à céder.',
+  'marche.bulle.inonder': 'Tu vas inonder {port} !',
+  'marche.bulle.inonderConseil': 'Reviens d\'ici quelques semaines, les prix seront remontés.',
+  'marche.bulle.absorption': 'Capacité d\'absorption atteinte !',   // vente à perte parce qu'on vend trop d'un coup ; n : le nombre qu'on peut vendre sans perte
+  'marche.bulle.absorptionConseil': 'Vends-en {n} au plus ; pour le reste, reviens d\'ici quelques semaines ou vise un autre port.',
+  'marche.bulle.mauvaisPort': 'Mauvais port pour vendre !',   // vente à perte parce que ce port paie mal de lui-même
+  'marche.bulle.mauvaisConseil': '{port} paie moins que ce que tu l\'as payé : vise un autre port, si tu as le choix.',
+  'marche.bulle.mauvaisGuere': 'Ces jours-ci, {port} ne paie guère plus que ce que tu l\'as payé : vise un autre port, si tu as le choix.',
   'marche.quantite': 'Quantité',
   'marche.toastAchat': 'Acheté {n} {marchandise} pour {somme}',
   'marche.toastVente': 'Vendu {n} {marchandise} : +{somme}',
@@ -2137,6 +2180,9 @@ Lang.ui('fr', {
   'journal.prix.auj': 'aujourd\'hui',
   'journal.prix.aucun': 'Aucun prix connu pour l\'instant : visitez des ports, ou offrez une tournée à la taverne.',
   'journal.prix.legende': 'Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure vente.',
+  'journal.prix.passagerSurplus': 'Surplus quand ce prix a été vu : prix passager, il remontera.',   // info-bulle d'un prix du journal marqué d'un sablier (vu pendant un surplus)
+  'journal.prix.passagerPenurie': 'Pénurie quand ce prix a été vu : prix passager, il redescendra.',
+  'journal.prix.legendePassager': 'Sablier : prix passager, vu pendant un surplus (vert) ou une pénurie (rouge).',
   'journal.contrats.enCours': 'EN COURS',
   'journal.contrats.termines': 'TERMINÉS',
   'journal.contrats.aucun': 'Aucun contrat en cours : la taverne en propose dans chaque port.',
@@ -2564,9 +2610,9 @@ Lang.ui('fr', {
   'aides.marche.vivres.t': 'Les vivres',
   'aides.marche.vivres.d': 'La nourriture de l\'équipage, comptée en jours. Elle ne prend pas de place et ne se revend pas. Gardez-en toujours assez pour le voyage.',
   'aides.marche.ligne.t': 'Une marchandise',
-  'aides.marche.ligne.d': 'Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.',
+  'aides.marche.ligne.d': 'Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le prix moyen de la quantité choisie.',
   'aides.marche.quantite.t': 'La quantité',
-  'aides.marche.quantite.d': 'Choisissez combien acheter ou vendre ; le total s\'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.',
+  'aides.marche.quantite.d': 'Choisissez combien acheter ou vendre ; le total s\'affiche dessous. La réglette se colore : en vert, le prix tient ; en or, il bouge ; en rouge, vous faites flamber ou s\'effondrer le marché (ou vous vendez à perte).',
   'aides.marche.carte.t': 'La carte des trajets',
   'aides.marche.carte.d': 'Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d\'ici avec votre navire s\'affichent, avec la route à prendre.',
   'aides.usurier.dette.t': 'Dette et intérêts',
@@ -2620,7 +2666,7 @@ Lang.ui('fr', {
   'aides.journal.onglets.t': 'Les onglets',
   'aides.journal.onglets.d': 'Prix, contrats, carnet de bord, nouvelles de la mer et rumeurs entendues.',
   'aides.journal.prix.t': 'Les prix connus',
-  'aides.journal.prix.d': 'Les prix vus dans chaque port. En vert, le meilleur prix d\'achat connu de chaque marchandise ; en or, la meilleure vente.',
+  'aides.journal.prix.d': 'Les prix vus dans chaque port. En vert, le meilleur prix d\'achat connu de chaque marchandise ; en or, la meilleure vente. Un sablier marque un prix passager, vu pendant un surplus ou une pénurie.',
   'aides.journal.age.t': 'L\'âge des prix',
   'aides.journal.age.d': 'À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.',
   'aides.heritage.jetons.t': 'Vos jetons',
@@ -2658,8 +2704,8 @@ Lang.ui('fr', {
   'notice.marche.titre': 'Le marché et les vivres',
   'notice.marche.1': '<b>Les vivres d\'abord.</b> Chaque marin mange chaque jour. Sans vivres, l\'équipage tombe malade puis déserte. Achetez-les en haut du marché, sur la ligne dorée, ou laissez cochée la case des vivres au moment d\'appareiller. Ils ne prennent pas de place et ne se revendent pas.',
   'notice.marche.2': '<b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d\'autres (prix hauts). Les prix changent chaque jour, et chaque partie est différente.',
-  'notice.marche.3': '<b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison entre plusieurs ports.',
-  'notice.marche.4': '<b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.',
+  'notice.marche.3': '<b>Un port n\'avale qu\'une certaine quantité.</b> Vos achats font monter les prix, vos ventes les font baisser : le premier {unite} vendu rapporte plus que le dernier. La réglette du marché le montre en vert, en or puis en rouge. Un marché bousculé se remet en quelques semaines : répartissez une grosse cargaison entre plusieurs ports.',
+  'notice.marche.4': '<b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, et le port en avale bien davantage ; un surplus les effondre, et l\'on peut y acheter en gros. Dans le journal, un sablier marque ces prix passagers.',
   'notice.marche.5': '<b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.',
   'notice.dette.titre': 'La dette et la banque',
   'notice.dette.1': '{Maison} prête sur la parole. Les intérêts s\'ajoutent chaque mois à la dette ; passé le délai, {hommes} viennent se servir sur le quai.',
@@ -2861,13 +2907,11 @@ Lang.ui('en', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'You need a ship to load goods. Visit the shipyard.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Best known: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · live',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · seen {jours} d ago',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'No other prices known. Go exploring!',
   // contrebande ici
   'marche.contrebandeIci': 'contraband here',
   // Payé {prix} / {unite} · marge {marge}
@@ -2875,9 +2919,22 @@ Lang.ui('en', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Plunder: pure profit.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · better at {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n} bought here: buyback at 98%',
+  'marche.prixMoyenAchat': 'Average buying price: {prix}',
+  'marche.prixMoyenVente': 'Average selling price: {prix}',
+  'marche.secousse': '{port}: {liste}. The market will recover in a few weeks.',
+  'marche.bulle.hausse': 'You\'re pushing prices up.',
+  'marche.bulle.manque': 'You\'ll cause a shortage in {port}!',
+  'marche.bulle.manqueConseil': 'Come back in a few weeks; prices will have come down.',
+  'marche.bulle.baisse': 'The price is starting to give.',
+  'marche.bulle.inonder': 'You\'ll flood {port}!',
+  'marche.bulle.inonderConseil': 'Come back in a few weeks; prices will have recovered.',
+  'marche.bulle.absorption': 'Market saturated!',
+  'marche.bulle.absorptionConseil': 'Sell {n} at most; for the rest, come back in a few weeks or try another port.',
+  'marche.bulle.mauvaisPort': 'Wrong port to sell in!',
+  'marche.bulle.mauvaisConseil': '{port} pays less than you paid: try another port, if you have the choice.',
+  'marche.bulle.mauvaisGuere': 'These days, {port} pays barely more than you paid: try another port, if you have the choice.',
   // Quantité
   'marche.quantite': 'Quantity',
   // Acheté {n} {marchandise} pour {somme}
@@ -3306,6 +3363,9 @@ Lang.ui('en', {
   'journal.prix.aucun': 'No prices known yet: visit some ports, or buy a round at the tavern.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Port in green: prices under 15 days old; in gold: under 45 days; in gray: older. Figure in green: best known purchase; in gold: best sale.',
+  'journal.prix.passagerSurplus': 'Glut when this price was seen: a passing price, it will rise again.',
+  'journal.prix.passagerPenurie': 'Shortage when this price was seen: a passing price, it will fall again.',
+  'journal.prix.legendePassager': 'Hourglass: a passing price, seen during a glut (green) or a shortage (red).',
   // EN COURS
   'journal.contrats.enCours': 'ACTIVE',
   // TERMINÉS
@@ -4053,11 +4113,11 @@ Lang.ui('en', {
   // Une marchandise
   'aides.marche.ligne.t': 'Goods',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'The price here (▲ ▼: rising or falling), how much you have aboard, and the best resale price known elsewhere.',
+  'aides.marche.ligne.d': 'The price here (▲ ▼: rising or falling), how much you have aboard, and the average price for the chosen quantity.',
   // La quantité
   'aides.marche.quantite.t': 'Quantity',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Choose how much to buy or sell; the total shows below. Every purchase pushes the price up, every sale pushes it down.',
+  'aides.marche.quantite.d': 'Choose how much to buy or sell; the total shows below. The slider changes color: green, the price holds; gold, it moves; red, you send the market soaring or crashing (or sell at a loss).',
   // La carte des trajets
   'aides.marche.carte.t': 'The route map',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -4165,7 +4225,7 @@ Lang.ui('en', {
   // Les prix connus
   'aides.journal.prix.t': 'Known prices',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'Prices seen in each port. In green, the best known purchase price for each good; in gold, the best sale.',
+  'aides.journal.prix.d': 'Prices seen in each port. In green, the best known purchase price for each good; in gold, the best sale. An hourglass marks a passing price, seen during a glut or a shortage.',
   // L'âge des prix
   'aides.journal.age.t': 'Age of prices',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -4231,9 +4291,9 @@ Lang.ui('en', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Buy low, sell high.</b> Each port produces some goods (low prices) and lacks others (high prices). Prices change every day, and no two careers are alike.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Your sales push prices down</b>, your purchases push them up. The first {unite} sold fetches more than the last: spread a big cargo over several ports.',
+  'notice.marche.3': '<b>A port can only take so much.</b> Your purchases push prices up and your sales push them down: the first {unite} sold fetches more than the last. The market slider shows it in green, gold, then red. A shaken market recovers in a few weeks: spread a big cargo over several ports.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Shortages and gluts.</b> Tavern rumors announce them: a shortage sends prices soaring, a glut makes them collapse.',
+  'notice.marche.4': '<b>Shortages and gluts.</b> Tavern rumors announce them: a shortage sends prices soaring, and the port takes far more; a glut makes them collapse, and you can buy in bulk there. In the log, an hourglass marks these passing prices.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contraband.</b> Some goods are forbidden in some ports: customs can seize the lot.',
   // La dette et la banque
@@ -12543,13 +12603,11 @@ Lang.ui('zh', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': '没有船，货物无处可装。先去船厂吧。',
   // Revente connue : {prix} {marge}
-  'marche.revente': '已知最高售价：{prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · 实时',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · {jours}天前所见',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': '别处行情一概不知。出海探探吧！',
   // contrebande ici
   'marche.contrebandeIci': '此地违禁',
   // Payé {prix} / {unite} · marge {marge}
@@ -12557,9 +12615,22 @@ Lang.ui('zh', {
   // Butin : tout est bénéfice.
   'marche.butin': '战利品：卖多少赚多少。',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · {port}价更高（{prix}）',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, other {此处已买入#}}：卖回可得98%',
+  'marche.prixMoyenAchat': '平均买价：{prix}',
+  'marche.prixMoyenVente': '平均卖价：{prix}',
+  'marche.secousse': '{port}：{liste}。行情要过几周才能恢复。',
+  'marche.bulle.hausse': '你在把价格往上抬。',
+  'marche.bulle.manque': '你要把{port}买空了！',
+  'marche.bulle.manqueConseil': '过几周再来，价格会回落。',
+  'marche.bulle.baisse': '价格开始松动了。',
+  'marche.bulle.inonder': '你要让{port}货满为患了！',
+  'marche.bulle.inonderConseil': '过几周再来，价格会回升。',
+  'marche.bulle.absorption': '市场已经饱和了！',
+  'marche.bulle.absorptionConseil': '最多卖{n}；剩下的过几周再卖，或者换个港口。',
+  'marche.bulle.mauvaisPort': '这里不是卖货的地方！',
+  'marche.bulle.mauvaisConseil': '{port}出的价比你的进价还低：能选的话，换个港口。',
+  'marche.bulle.mauvaisGuere': '这些天{port}出的价只比你的进价高一点点：能选的话，换个港口。',
   // Quantité
   'marche.quantite': '数量',
   // Acheté {n} {marchandise} pour {somme}
@@ -12988,6 +13059,9 @@ Lang.ui('zh', {
   'journal.prix.aucun': '尚无已知行情：去各港口走走，或在酒馆请大家喝一轮。',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': '港口为绿色：行情不足15天；金色：不足45天；灰色：更早。数字为绿色：已知最佳买价；金色：最佳卖价。',
+  'journal.prix.passagerSurplus': '看到这个价格时正逢过剩：只是一时的价格，还会涨回去。',
+  'journal.prix.passagerPenurie': '看到这个价格时正逢短缺：只是一时的价格，还会跌回去。',
+  'journal.prix.legendePassager': '沙漏：过剩（绿色）或短缺（红色）期间看到的一时价格。',
   // EN COURS
   'journal.contrats.enCours': '进行中',
   // TERMINÉS
@@ -13735,11 +13809,11 @@ Lang.ui('zh', {
   // Une marchandise
   'aides.marche.ligne.t': '货物',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': '此地价格（▲ ▼：涨或跌）、你船上的存货，以及已知别处的最高售价。',
+  'aides.marche.ligne.d': '此地价格（▲ ▼：涨或跌）、你船上的存货，以及所选数量的平均价格。',
   // La quantité
   'aides.marche.quantite.t': '数量',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': '选择买卖的数量，总价显示在下方。每买一次，价格便涨；每卖一次，价格便跌。',
+  'aides.marche.quantite.d': '选择买卖的数量，总价显示在下方。滑块会变色：绿色，价格稳住；金色，价格在动；红色，你让市场暴涨或暴跌（或亏本出售）。',
   // La carte des trajets
   'aides.marche.carte.t': '航线图',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -13847,7 +13921,7 @@ Lang.ui('zh', {
   // Les prix connus
   'aides.journal.prix.t': '已知行情',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': '各港见过的行情。绿色为每种货物已知的最佳买价；金色为最佳卖价。',
+  'aides.journal.prix.d': '各港见过的行情。绿色为每种货物已知的最佳买价；金色为最佳卖价。沙漏标出过剩或短缺期间看到的一时价格。',
   // L'âge des prix
   'aides.journal.age.t': '行情新旧',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -13913,9 +13987,9 @@ Lang.ui('zh', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>低买高卖。</b>每个港口都出产某些货物（价低），又缺另一些货物（价高）。行情天天在变，每段生涯也各不相同。',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>你卖货会压低价格</b>，买货则会抬高价格。卖出的第一{unite}总比最后一{unite}值钱：大批货物宜分到几个港口出手。',
+  'notice.marche.3': '<b>一个港口只吃得下一定的量。</b>你买货会抬高价格，卖货会压低价格：卖出的第一{unite}总比最后一{unite}值钱。市场的滑块会用绿色、金色、红色标出来。被搅乱的行情要几周才能恢复：大批货物宜分到几个港口出手。',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>短缺与过剩。</b>酒馆里的传闻会预先透露：短缺令价格飞涨，过剩令价格暴跌。',
+  'notice.marche.4': '<b>短缺与过剩。</b>酒馆里的传闻会预先透露：短缺令价格飞涨，港口也吃得下多得多的货；过剩令价格暴跌，可以在那里大批买进。日志里，这些一时的价格旁有沙漏标记。',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>走私货。</b>某些货物在某些港口是违禁品：海关可能将其全数没收。',
   // La dette et la banque
@@ -22195,13 +22269,11 @@ Lang.ui('zht', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': '沒有船，貨物無處可裝。先去船廠吧。',
   // Revente connue : {prix} {marge}
-  'marche.revente': '已知最高售價：{prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · 即時',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · {jours}天前所見',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': '別處行情一概不知。出海探探吧！',
   // contrebande ici
   'marche.contrebandeIci': '此地違禁',
   // Payé {prix} / {unite} · marge {marge}
@@ -22209,9 +22281,22 @@ Lang.ui('zht', {
   // Butin : tout est bénéfice.
   'marche.butin': '戰利品：賣多少賺多少。',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · {port}價更高（{prix}）',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, other {此處已買進#}}：賣回可得98%',
+  'marche.prixMoyenAchat': '平均買價：{prix}',
+  'marche.prixMoyenVente': '平均賣價：{prix}',
+  'marche.secousse': '{port}：{liste}。行情要過幾週才能恢復。',
+  'marche.bulle.hausse': '你在把價格往上抬。',
+  'marche.bulle.manque': '你要把{port}買空了！',
+  'marche.bulle.manqueConseil': '過幾週再來，價格會回落。',
+  'marche.bulle.baisse': '價格開始鬆動了。',
+  'marche.bulle.inonder': '你要讓{port}貨滿為患了！',
+  'marche.bulle.inonderConseil': '過幾週再來，價格會回升。',
+  'marche.bulle.absorption': '市場已經飽和了！',
+  'marche.bulle.absorptionConseil': '最多賣{n}；剩下的過幾週再賣，或者換個港口。',
+  'marche.bulle.mauvaisPort': '這裡不是賣貨的地方！',
+  'marche.bulle.mauvaisConseil': '{port}出的價比你的進價還低：能選的話，換個港口。',
+  'marche.bulle.mauvaisGuere': '這些天{port}出的價只比你的進價高一點點：能選的話，換個港口。',
   // Quantité
   'marche.quantite': '數量',
   // Acheté {n} {marchandise} pour {somme}
@@ -22640,6 +22725,9 @@ Lang.ui('zht', {
   'journal.prix.aucun': '尚無已知行情：去各港口走走，或在酒館請大家喝一輪。',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': '港口為綠色：行情不到15天；金色：不到45天；灰色：更早。數字為綠色：已知最佳買價；金色：最佳賣價。',
+  'journal.prix.passagerSurplus': '看到這個價格時正逢過剩：只是一時的價格，還會漲回去。',
+  'journal.prix.passagerPenurie': '看到這個價格時正逢短缺：只是一時的價格，還會跌回去。',
+  'journal.prix.legendePassager': '沙漏：過剩（綠色）或短缺（紅色）期間看到的一時價格。',
   // EN COURS
   'journal.contrats.enCours': '進行中',
   // TERMINÉS
@@ -23387,11 +23475,11 @@ Lang.ui('zht', {
   // Une marchandise
   'aides.marche.ligne.t': '貨物',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': '本地價格（▲ ▼：上漲或下跌）、船上的存貨，以及已知別處的最高售價。',
+  'aides.marche.ligne.d': '本地價格（▲ ▼：上漲或下跌）、船上的存貨，以及所選數量的平均價格。',
   // La quantité
   'aides.marche.quantite.t': '數量',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': '選擇要買或賣多少，總價顯示在下方。每買一次價格就漲，每賣一次價格就跌。',
+  'aides.marche.quantite.d': '選擇要買或賣多少，總價顯示在下方。滑桿會變色：綠色，價格穩住；金色，價格在動；紅色，你讓市場暴漲或暴跌（或虧本出售）。',
   // La carte des trajets
   'aides.marche.carte.t': '航線圖',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -23499,7 +23587,7 @@ Lang.ui('zht', {
   // Les prix connus
   'aides.journal.prix.t': '已知行情',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': '各港見過的行情。綠色：每種貨物已知最低的買價；金色：最高的賣價。',
+  'aides.journal.prix.d': '各港見過的行情。綠色：每種貨物已知最低的買價；金色：最高的賣價。沙漏標出過剩或短缺期間看到的一時價格。',
   // L'âge des prix
   'aides.journal.age.t': '行情新舊',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -23565,9 +23653,9 @@ Lang.ui('zht', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>低買高賣。</b>每個港口都出產某些貨物（價低），又缺另一些（價高）。行情天天在變，每一局也各不相同。',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>你賣貨會壓低價格</b>，買貨則會抬高價格。賣出的第一{unite}比最後一{unite}值錢：大批貨物宜分到幾個港口出手。',
+  'notice.marche.3': '<b>一個港口只吃得下一定的量。</b>你買貨會抬高價格，賣貨會壓低價格：賣出的第一{unite}比最後一{unite}值錢。市場的滑桿會用綠色、金色、紅色標出來。被攪亂的行情要幾週才能恢復：大批貨物宜分到幾個港口出手。',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>短缺與過剩。</b>酒館裡的傳聞會預先透露：短缺讓價格飛漲，過剩讓價格暴跌。',
+  'notice.marche.4': '<b>短缺與過剩。</b>酒館裡的傳聞會預先透露：短缺讓價格飛漲，港口也吃得下多得多的貨；過剩讓價格暴跌，可以在那裡大批買進。日誌裡，這些一時的價格旁有沙漏標記。',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>走私貨。</b>有些貨物在某些港口屬於違禁品：海關可能全數沒收。',
   // La dette et la banque
@@ -31849,13 +31937,11 @@ Lang.ui('ja', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': '荷を積むには船が要ります。造船所へ行きましょう。',
   // Revente connue : {prix} {marge}
-  'marche.revente': '最高売値：{prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · 最新',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · {jours}日前',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'ほかの港の相場は不明。探索に出ましょう！',
   // contrebande ici
   'marche.contrebandeIci': '当地では禁制品',
   // Payé {prix} / {unite} · marge {marge}
@@ -31863,9 +31949,22 @@ Lang.ui('ja', {
   // Butin : tout est bénéfice.
   'marche.butin': '戦利品：まるごと儲け。',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · {port}なら高値（{prix}）',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '当地で購入済み{n}：98%で引き取り',
+  'marche.prixMoyenAchat': '平均の買値：{prix}',
+  'marche.prixMoyenVente': '平均の売値：{prix}',
+  'marche.secousse': '{port}：{liste}。相場が戻るには数週間かかる。',
+  'marche.bulle.hausse': '値をつり上げているぞ。',
+  'marche.bulle.manque': '{port}で品薄を起こすぞ！',
+  'marche.bulle.manqueConseil': '数週間したら出直せ。値は下がっているはずだ。',
+  'marche.bulle.baisse': '値が崩れはじめたぞ。',
+  'marche.bulle.inonder': '{port}を品物であふれさせるぞ！',
+  'marche.bulle.inonderConseil': '数週間したら出直せ。値は戻っているはずだ。',
+  'marche.bulle.absorption': 'この市場はもう飽和だ！',
+  'marche.bulle.absorptionConseil': '売るのは{n}までにしておけ。残りは数週間後か、よその港だ。',
+  'marche.bulle.mauvaisPort': '売るには向かない港だ！',
+  'marche.bulle.mauvaisConseil': '{port}では仕入値より安くしか売れん。選べるなら、よその港を目指せ。',
+  'marche.bulle.mauvaisGuere': 'このところ{port}では、仕入値とほとんど変わらん値でしか売れん。選べるなら、よその港を目指せ。',
   // Quantité
   'marche.quantite': '数量',
   // Acheté {n} {marchandise} pour {somme}
@@ -32294,6 +32393,9 @@ Lang.ui('ja', {
   'journal.prix.aucun': 'まだ相場の情報がない。港を巡るか、酒場で皆に一杯おごろう。',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': '港名が緑：15日以内の相場、金：45日以内、灰：それより古い。数字が緑：既知の最安の買い値、金：最高の売り値。',
+  'journal.prix.passagerSurplus': 'この値を見たときは余剰だった。一時の値で、また上がる。',
+  'journal.prix.passagerPenurie': 'この値を見たときは品薄だった。一時の値で、また下がる。',
+  'journal.prix.legendePassager': '砂時計：余剰（緑）や品薄（赤）のときに見た一時の値。',
   // EN COURS
   'journal.contrats.enCours': '進行中',
   // TERMINÉS
@@ -33041,11 +33143,11 @@ Lang.ui('ja', {
   // Une marchandise
   'aides.marche.ligne.t': '商品',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': '当地の値（▲ ▼：値上がり・値下がり）、船上の在庫、ほかの港で知られている最高の売値。',
+  'aides.marche.ligne.d': '当地の値（▲ ▼：値上がり・値下がり）、船上の在庫、選んだ数量の平均値。',
   // La quantité
   'aides.marche.quantite.t': '数量',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': '売買する数を選ぶ。合計は下に出る。買うたびに値は上がり、売るたびに下がる。',
+  'aides.marche.quantite.d': '売買する数を選ぶ。合計は下に出る。スライダーは色が変わる。緑なら値は保たれ、金なら動き、赤なら相場を暴騰・暴落させている（または損をして売っている）。',
   // La carte des trajets
   'aides.marche.carte.t': '航路図',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -33153,7 +33255,7 @@ Lang.ui('ja', {
   // Les prix connus
   'aides.journal.prix.t': '既知の相場',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': '各港で見た相場。緑は商品ごとの既知の最安の買い値、金は最高の売り値。',
+  'aides.journal.prix.d': '各港で見た相場。緑は商品ごとの既知の最安の買い値、金は最高の売り値。砂時計は、余剰や品薄のときに見た一時の値のしるし。',
   // L'âge des prix
   'aides.journal.age.t': '相場の鮮度',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -33219,9 +33321,9 @@ Lang.ui('ja', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>安く買って、高く売る。</b>どの港にも、産する品（安い）と足りない品（高い）がある。相場は日ごとに変わり、航海のたびに違う。',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>売れば値は下がり</b>、買えば上がる。最初に売る1{unite}は、最後の1{unite}より高く売れる。大量の積荷は、いくつもの港に振り分けよう。',
+  'notice.marche.3': '<b>港がさばける量には限りがある。</b>買えば値は上がり、売れば下がる。最初に売る1{unite}は、最後の1{unite}より高く売れる。市場のスライダーは、それを緑、金、そして赤で示す。荒れた相場は数週間で元に戻る。大量の積荷は、いくつもの港に振り分けよう。',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>品薄と余剰。</b>酒場の噂がそれを告げる。品薄になれば値は跳ね上がり、余剰になれば崩れる。',
+  'notice.marche.4': '<b>品薄と余剰。</b>酒場の噂がそれを告げる。品薄になれば値は跳ね上がり、港はずっと多くをさばける。余剰になれば値は崩れ、まとめ買いができる。日誌では、こうした一時の値に砂時計のしるしがつく。',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>禁制品。</b>港によっては持ち込めない品がある。税関に見つかれば、すべて没収されかねない。',
   // La dette et la banque
@@ -41535,13 +41637,11 @@ Lang.ui('ko', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': '교역품을 실으려면 배가 있어야 합니다. 조선소에 들르십시오.',
   // Revente connue : {prix} {marge}
-  'marche.revente': '알려진 최고가: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · 실시간',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · {jours}일 전 확인',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': '다른 시세는 알려지지 않았습니다. 탐험하십시오!',
   // contrebande ici
   'marche.contrebandeIci': '이곳에선 밀수품',
   // Payé {prix} / {unite} · marge {marge}
@@ -41549,9 +41649,22 @@ Lang.ui('ko', {
   // Butin : tout est bénéfice.
   'marche.butin': '전리품: 전부 이익.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · {port}에서 더 비쌈 ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, other {이곳에서 산 물량 #}}: 98% 값에 되사 줌',
+  'marche.prixMoyenAchat': '평균 매입가: {prix}',
+  'marche.prixMoyenVente': '평균 판매가: {prix}',
+  'marche.secousse': '{port}: {liste}. 시세가 돌아오려면 몇 주가 걸립니다.',
+  'marche.bulle.hausse': '네가 값을 끌어올리고 있다.',
+  'marche.bulle.manque': '{port}에 품귀가 들겠다!',
+  'marche.bulle.manqueConseil': '몇 주 뒤에 다시 와라. 값이 내려가 있을 거다.',
+  'marche.bulle.baisse': '값이 꺾이기 시작했다.',
+  'marche.bulle.inonder': '{port}에 물건이 넘쳐나겠다!',
+  'marche.bulle.inonderConseil': '몇 주 뒤에 다시 와라. 값이 다시 올라 있을 거다.',
+  'marche.bulle.absorption': '시장이 꽉 찼다!',
+  'marche.bulle.absorptionConseil': '많아야 {n}만 팔아라. 나머지는 몇 주 뒤에 팔거나 다른 항구로 가져가라.',
+  'marche.bulle.mauvaisPort': '여기는 팔 곳이 아니다!',
+  'marche.bulle.mauvaisConseil': '{port}은(는) 네가 산 값보다 덜 쳐 준다. 고를 수 있으면 다른 항구로 가라.',
+  'marche.bulle.mauvaisGuere': '요즘 {port}은(는) 네가 산 값보다 거의 더 쳐 주지 않는다. 고를 수 있으면 다른 항구로 가라.',
   // Quantité
   'marche.quantite': '수량',
   // Acheté {n} {marchandise} pour {somme}
@@ -41980,6 +42093,9 @@ Lang.ui('ko', {
   'journal.prix.aucun': '아직 아는 시세가 없습니다. 여러 항구를 들르거나 주점에서 술을 한턱내 보세요.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': '항구 이름이 초록색: 15일 이내 시세, 금색: 45일 이내, 회색: 그보다 오래됨. 숫자가 초록색: 알려진 최저 매입가, 금색: 최고 판매가.',
+  'journal.prix.passagerSurplus': '이 시세를 봤을 때 과잉이었습니다. 잠깐의 시세라 다시 오릅니다.',
+  'journal.prix.passagerPenurie': '이 시세를 봤을 때 품귀였습니다. 잠깐의 시세라 다시 내립니다.',
+  'journal.prix.legendePassager': '모래시계: 과잉(초록색)이나 품귀(빨간색) 때 본 잠깐의 시세.',
   // EN COURS
   'journal.contrats.enCours': '진행 중',
   // TERMINÉS
@@ -42727,11 +42843,11 @@ Lang.ui('ko', {
   // Une marchandise
   'aides.marche.ligne.t': '교역품',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': '이곳 시세(▲ ▼: 오름세, 내림세)와 배에 실린 양, 다른 항구에서 알려진 최고가입니다.',
+  'aides.marche.ligne.d': '이곳 시세(▲ ▼: 오름세, 내림세)와 배에 실린 양, 고른 수량의 평균 가격입니다.',
   // La quantité
   'aides.marche.quantite.t': '수량',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': '사거나 팔 양을 고르십시오. 총액은 아래에 나옵니다. 살 때마다 값이 오르고, 팔 때마다 내립니다.',
+  'aides.marche.quantite.d': '사거나 팔 양을 고르십시오. 총액은 아래에 나옵니다. 막대 색이 바뀝니다. 초록색이면 값이 버티고, 금색이면 움직이고, 빨간색이면 시세를 폭등시키거나 폭락시킵니다(또는 손해를 보고 팝니다).',
   // La carte des trajets
   'aides.marche.carte.t': '항로도',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -42839,7 +42955,7 @@ Lang.ui('ko', {
   // Les prix connus
   'aides.journal.prix.t': '알려진 시세',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': '항구마다 본 시세입니다. 초록색은 교역품마다 알려진 최저 매입가, 금색은 최고 판매가입니다.',
+  'aides.journal.prix.d': '항구마다 본 시세입니다. 초록색은 교역품마다 알려진 최저 매입가, 금색은 최고 판매가입니다. 모래시계는 과잉이나 품귀 때 본 잠깐의 시세를 뜻합니다.',
   // L'âge des prix
   'aides.journal.age.t': '확인 시점',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -42905,9 +43021,9 @@ Lang.ui('ko', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>싸게 사서 비싸게 파십시오.</b> 항구마다 많이 나서 싼 교역품이 있고, 귀해서 비싼 교역품이 있습니다. 시세는 날마다 바뀌고, 항해마다 다릅니다.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>팔면 값이 내려가고</b>, 사면 오릅니다. 맨 처음 파는 한 {unite}이(가) 마지막 한 {unite}보다 비싸게 팔리니, 많은 화물은 여러 항구에 나눠 파십시오.',
+  'notice.marche.3': '<b>항구가 받아 줄 수 있는 양에는 한계가 있습니다.</b> 사면 값이 오르고 팔면 내려갑니다. 맨 처음 파는 한 {unite}이(가) 마지막 한 {unite}보다 비싸게 팔립니다. 교역소의 막대가 이를 초록색, 금색, 빨간색으로 보여 줍니다. 흔들린 시세는 몇 주면 돌아오니, 많은 화물은 여러 항구에 나눠 파십시오.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>품귀와 과잉.</b> 주점의 소문이 미리 알려 줍니다. 품귀가 들면 값이 치솟고, 과잉이 들면 값이 폭락합니다.',
+  'notice.marche.4': '<b>품귀와 과잉.</b> 주점의 소문이 미리 알려 줍니다. 품귀가 들면 값이 치솟고 항구가 훨씬 많이 받아 주며, 과잉이 들면 값이 폭락하고 대량으로 사들일 수 있습니다. 일지에서는 이런 잠깐의 시세에 모래시계가 붙습니다.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>밀수품.</b> 어떤 교역품은 항구에 따라 금지됩니다. 세관에 걸리면 모두 몰수당할 수 있습니다.',
   // La dette et la banque
@@ -51186,13 +51302,11 @@ Lang.ui('ru', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'Чтобы грузить товар, нужен корабль. Загляните на верфь.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Лучшая цена: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · сейчас',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · {jours} дн. назад',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'Других цен вы пока не знаете. В путь!',
   // contrebande ici
   'marche.contrebandeIci': 'здесь это контрабанда',
   // Payé {prix} / {unite} · marge {marge}
@@ -51200,9 +51314,22 @@ Lang.ui('ru', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Добыча: всё — чистая прибыль.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · выгоднее в порту {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': 'Куплено здесь: {n} · обратно примут по 98 %',
+  'marche.prixMoyenAchat': 'Средняя цена покупки: {prix}',
+  'marche.prixMoyenVente': 'Средняя цена продажи: {prix}',
+  'marche.secousse': '{port}: {liste}. Рынок придёт в себя через несколько недель.',
+  'marche.bulle.hausse': 'Ты взвинчиваешь цены.',
+  'marche.bulle.manque': 'Ты устроишь нехватку в порту {port}!',
+  'marche.bulle.manqueConseil': 'Вернись через несколько недель — цены опустятся.',
+  'marche.bulle.baisse': 'Цена начинает проседать.',
+  'marche.bulle.inonder': 'Ты завалишь товаром порт {port}!',
+  'marche.bulle.inonderConseil': 'Вернись через несколько недель — цены поднимутся.',
+  'marche.bulle.absorption': 'Рынок насыщен!',
+  'marche.bulle.absorptionConseil': 'Продай не больше {n}; с остальным вернись через несколько недель или иди в другой порт.',
+  'marche.bulle.mauvaisPort': 'Здесь продавать невыгодно!',
+  'marche.bulle.mauvaisConseil': '{port} платит меньше, чем ты заплатил: иди в другой порт, если есть выбор.',
+  'marche.bulle.mauvaisGuere': 'В эти дни {port} платит едва больше, чем ты заплатил: иди в другой порт, если есть выбор.',
   // Quantité
   'marche.quantite': 'Количество',
   // Acheté {n} {marchandise} pour {somme}
@@ -51631,6 +51758,9 @@ Lang.ui('ru', {
   'journal.prix.aucun': 'Цены пока неизвестны: заходите в порты или угостите всех в таверне.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Порт зелёным: цены моложе 15 дней; золотым: моложе 45 дней; серым: старше. Число зелёным: лучшая известная покупка; золотым: лучшая продажа.',
+  'journal.prix.passagerSurplus': 'Избыток, когда была замечена эта цена: цена временная, она поднимется.',
+  'journal.prix.passagerPenurie': 'Нехватка, когда была замечена эта цена: цена временная, она опустится.',
+  'journal.prix.legendePassager': 'Песочные часы: временная цена, замеченная во время избытка (зелёные) или нехватки (красные).',
   // EN COURS
   'journal.contrats.enCours': 'ТЕКУЩИЕ',
   // TERMINÉS
@@ -52378,11 +52508,11 @@ Lang.ui('ru', {
   // Une marchandise
   'aides.marche.ligne.t': 'Товар',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'Его цена здесь (▲ ▼: растёт или падает), сколько его у вас на борту и лучшая известная цена перепродажи в других портах.',
+  'aides.marche.ligne.d': 'Его цена здесь (▲ ▼: растёт или падает), сколько его у вас на борту и средняя цена выбранного количества.',
   // La quantité
   'aides.marche.quantite.t': 'Количество',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Выберите, сколько купить или продать; итог показан ниже. Каждая покупка поднимает цену, каждая продажа её сбивает.',
+  'aides.marche.quantite.d': 'Выберите, сколько купить или продать; итог показан ниже. Ползунок меняет цвет: зелёный — цена держится; золотой — она сдвигается; красный — вы взвинчиваете или обрушиваете рынок (или продаёте в убыток).',
   // La carte des trajets
   'aides.marche.carte.t': 'Карта путей',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -52490,7 +52620,7 @@ Lang.ui('ru', {
   // Les prix connus
   'aides.journal.prix.t': 'Известные цены',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'Цены, которые вы видели в каждом порту. Зелёным — лучшая известная цена покупки каждого товара; золотым — лучшая цена продажи.',
+  'aides.journal.prix.d': 'Цены, которые вы видели в каждом порту. Зелёным — лучшая известная цена покупки каждого товара; золотым — лучшая цена продажи. Песочные часы отмечают временную цену, замеченную во время избытка или нехватки.',
   // L'âge des prix
   'aides.journal.age.t': 'Давность цен',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -52556,9 +52686,9 @@ Lang.ui('ru', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Покупайте дёшево, продавайте дорого.</b> Каждый порт производит одни товары (цены низкие) и нуждается в других (цены высокие). Цены меняются каждый день, и ни одна игра не похожа на другую.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Ваши продажи сбивают цены</b>, а покупки их поднимают: первая проданная мера ({unite}) приносит больше последней. Развозите большой груз по нескольким портам.',
+  'notice.marche.3': '<b>Порт поглощает лишь определённое количество.</b> Ваши покупки поднимают цены, а продажи их сбивают: первая проданная мера ({unite}) приносит больше последней. Ползунок на рынке показывает это зелёным, золотым, затем красным. Встряхнутый рынок приходит в себя за несколько недель: развозите большой груз по нескольким портам.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Нехватка и избыток.</b> О них говорят слухи в таверне: нехватка взвинчивает цены, избыток их обрушивает.',
+  'notice.marche.4': '<b>Нехватка и избыток.</b> О них говорят слухи в таверне: нехватка взвинчивает цены, и порт поглощает куда больше; избыток их обрушивает, и там можно закупаться оптом. В журнале песочные часы отмечают такие временные цены.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Контрабанда.</b> Иные товары в иных портах запрещены: таможня может конфисковать всё.',
   // La dette et la banque
@@ -60977,13 +61107,11 @@ Lang.ui('es', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'Necesitas un barco para cargar mercancías. Pasa por el astillero.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Mejor precio: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · en directo',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · visto hace {jours} d',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'No conoces otros precios. ¡Explora!',
   // contrebande ici
   'marche.contrebandeIci': 'contrabando aquí',
   // Payé {prix} / {unite} · marge {marge}
@@ -60991,9 +61119,22 @@ Lang.ui('es', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Botín: todo es ganancia.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · mejor en {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, one {# comprado aquí} other {# comprados aquí}}: recompra al 98%',
+  'marche.prixMoyenAchat': 'Precio medio de compra: {prix}',
+  'marche.prixMoyenVente': 'Precio medio de venta: {prix}',
+  'marche.secousse': '{port}: {liste}. El mercado se recuperará en unas semanas.',
+  'marche.bulle.hausse': 'Estás haciendo subir los precios.',
+  'marche.bulle.manque': '¡Vas a provocar escasez en {port}!',
+  'marche.bulle.manqueConseil': 'Vuelve dentro de unas semanas: los precios habrán bajado.',
+  'marche.bulle.baisse': 'El precio empieza a ceder.',
+  'marche.bulle.inonder': '¡Vas a inundar {port}!',
+  'marche.bulle.inonderConseil': 'Vuelve dentro de unas semanas: los precios se habrán recuperado.',
+  'marche.bulle.absorption': '¡El mercado está saturado!',
+  'marche.bulle.absorptionConseil': 'Vende {n} como mucho; el resto, vuelve dentro de unas semanas o prueba otro puerto.',
+  'marche.bulle.mauvaisPort': '¡Mal puerto para vender!',
+  'marche.bulle.mauvaisConseil': '{port} paga menos de lo que pagaste tú: busca otro puerto, si puedes elegir.',
+  'marche.bulle.mauvaisGuere': 'Estos días, {port} apenas paga más de lo que pagaste tú: busca otro puerto, si puedes elegir.',
   // Quantité
   'marche.quantite': 'Cantidad',
   // Acheté {n} {marchandise} pour {somme}
@@ -61422,6 +61563,9 @@ Lang.ui('es', {
   'journal.prix.aucun': 'Aún no conoces ningún precio: visita puertos o invita a una ronda en la taberna.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Puerto en verde: precios de menos de 15 días; en oro: de menos de 45 días; en gris: más antiguos. Cifra en verde: la mejor compra conocida; en oro: la mejor venta.',
+  'journal.prix.passagerSurplus': 'Excedente cuando se vio este precio: un precio pasajero, volverá a subir.',
+  'journal.prix.passagerPenurie': 'Escasez cuando se vio este precio: un precio pasajero, volverá a bajar.',
+  'journal.prix.legendePassager': 'Reloj de arena: precio pasajero, visto durante un excedente (verde) o una escasez (rojo).',
   // EN COURS
   'journal.contrats.enCours': 'EN CURSO',
   // TERMINÉS
@@ -62169,11 +62313,11 @@ Lang.ui('es', {
   // Une marchandise
   'aides.marche.ligne.t': 'Una mercancía',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'Su precio aquí (▲ ▼: al alza o a la baja), lo que llevas a bordo y el mejor precio de venta conocido en otro puerto.',
+  'aides.marche.ligne.d': 'Su precio aquí (▲ ▼: al alza o a la baja), lo que llevas a bordo y el precio medio de la cantidad elegida.',
   // La quantité
   'aides.marche.quantite.t': 'La cantidad',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Elige cuánto comprar o vender; el total aparece debajo. Cada compra hace subir el precio y cada venta lo hace bajar.',
+  'aides.marche.quantite.d': 'Elige cuánto comprar o vender; el total aparece debajo. El deslizador cambia de color: verde, el precio aguanta; oro, se mueve; rojo, disparas o hundes el mercado (o vendes con pérdidas).',
   // La carte des trajets
   'aides.marche.carte.t': 'El mapa de rutas',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -62281,7 +62425,7 @@ Lang.ui('es', {
   // Les prix connus
   'aides.journal.prix.t': 'Los precios conocidos',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'Los precios vistos en cada puerto. En verde, el mejor precio de compra conocido de cada mercancía; en oro, la mejor venta.',
+  'aides.journal.prix.d': 'Los precios vistos en cada puerto. En verde, el mejor precio de compra conocido de cada mercancía; en oro, la mejor venta. Un reloj de arena marca un precio pasajero, visto durante un excedente o una escasez.',
   // L'âge des prix
   'aides.journal.age.t': 'Antigüedad de los precios',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -62347,9 +62491,9 @@ Lang.ui('es', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Comprar barato, vender caro.</b> Cada puerto produce ciertas mercancías (precios bajos) y carece de otras (precios altos). Los precios cambian cada día, y cada partida es distinta.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Tus ventas hacen bajar los precios</b>, y tus compras los hacen subir. El primer {unite} vendido rinde más que el último: reparte un cargamento grande entre varios puertos.',
+  'notice.marche.3': '<b>Un puerto solo absorbe cierta cantidad.</b> Tus compras hacen subir los precios y tus ventas los hacen bajar: el primer {unite} vendido rinde más que el último. El deslizador del mercado lo muestra en verde, oro y luego rojo. Un mercado sacudido se recupera en unas semanas: reparte un cargamento grande entre varios puertos.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Escaseces y excedentes.</b> Los rumores de la taberna los anuncian: una escasez dispara los precios; un excedente los hunde.',
+  'notice.marche.4': '<b>Escaseces y excedentes.</b> Los rumores de la taberna los anuncian: una escasez dispara los precios, y el puerto absorbe mucho más; un excedente los hunde, y allí se puede comprar al por mayor. En la bitácora, un reloj de arena marca estos precios pasajeros.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contrabando.</b> Algunas mercancías están prohibidas en ciertos puertos: la aduana puede requisarlo todo.',
   // La dette et la banque
@@ -70654,13 +70798,11 @@ Lang.ui('pt', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'Você precisa de um navio para carregar mercadorias. Passe no estaleiro.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Melhor preço: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · agora',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · visto há {jours} d',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'Nenhum outro preço conhecido. Explore!',
   // contrebande ici
   'marche.contrebandeIci': 'contrabando aqui',
   // Payé {prix} / {unite} · marge {marge}
@@ -70668,9 +70810,22 @@ Lang.ui('pt', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Butim: puro lucro.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · melhor em {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, one {# comprado} other {# comprados}} aqui: recompra a 98%',
+  'marche.prixMoyenAchat': 'Preço médio de compra: {prix}',
+  'marche.prixMoyenVente': 'Preço médio de venda: {prix}',
+  'marche.secousse': '{port}: {liste}. O mercado se recupera em algumas semanas.',
+  'marche.bulle.hausse': 'Você está fazendo os preços subirem.',
+  'marche.bulle.manque': 'Você vai criar uma escassez em {port}!',
+  'marche.bulle.manqueConseil': 'Volte daqui a algumas semanas: os preços terão baixado.',
+  'marche.bulle.baisse': 'O preço começa a ceder.',
+  'marche.bulle.inonder': 'Você vai inundar {port}!',
+  'marche.bulle.inonderConseil': 'Volte daqui a algumas semanas: os preços terão subido de novo.',
+  'marche.bulle.absorption': 'O mercado está saturado!',
+  'marche.bulle.absorptionConseil': 'Venda {n} no máximo; o resto, volte daqui a algumas semanas ou tente outro porto.',
+  'marche.bulle.mauvaisPort': 'Porto errado para vender!',
+  'marche.bulle.mauvaisConseil': '{port} paga menos do que você pagou: tente outro porto, se puder escolher.',
+  'marche.bulle.mauvaisGuere': 'Estes dias, {port} paga quase nada além do que você pagou: tente outro porto, se puder escolher.',
   // Quantité
   'marche.quantite': 'Quantidade',
   // Acheté {n} {marchandise} pour {somme}
@@ -71099,6 +71254,9 @@ Lang.ui('pt', {
   'journal.prix.aucun': 'Nenhum preço conhecido por enquanto: visite portos ou pague uma rodada na taverna.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Porto em verde: preços de menos de 15 dias; em dourado: menos de 45 dias; em cinza: mais antigos. Número em verde: a melhor compra conhecida; em dourado: a melhor venda.',
+  'journal.prix.passagerSurplus': 'Fartura quando este preço foi visto: um preço passageiro, vai subir de novo.',
+  'journal.prix.passagerPenurie': 'Escassez quando este preço foi visto: um preço passageiro, vai baixar de novo.',
+  'journal.prix.legendePassager': 'Ampulheta: preço passageiro, visto durante uma fartura (verde) ou uma escassez (vermelho).',
   // EN COURS
   'journal.contrats.enCours': 'EM ANDAMENTO',
   // TERMINÉS
@@ -71846,11 +72004,11 @@ Lang.ui('pt', {
   // Une marchandise
   'aides.marche.ligne.t': 'Uma mercadoria',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'O preço dela aqui (▲ ▼: em alta ou em baixa), quanto você tem a bordo e o melhor preço de revenda conhecido em outros portos.',
+  'aides.marche.ligne.d': 'O preço dela aqui (▲ ▼: em alta ou em baixa), quanto você tem a bordo e o preço médio da quantidade escolhida.',
   // La quantité
   'aides.marche.quantite.t': 'A quantidade',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Escolha quanto comprar ou vender; o total aparece embaixo. Cada compra faz o preço subir, cada venda o faz baixar.',
+  'aides.marche.quantite.d': 'Escolha quanto comprar ou vender; o total aparece embaixo. O controle deslizante muda de cor: verde, o preço se mantém; dourado, ele se mexe; vermelho, você faz o mercado disparar ou despencar (ou vende com prejuízo).',
   // La carte des trajets
   'aides.marche.carte.t': 'O mapa das rotas',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -71958,7 +72116,7 @@ Lang.ui('pt', {
   // Les prix connus
   'aides.journal.prix.t': 'Os preços conhecidos',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'Os preços vistos em cada porto. Em verde, o melhor preço de compra conhecido de cada mercadoria; em dourado, a melhor venda.',
+  'aides.journal.prix.d': 'Os preços vistos em cada porto. Em verde, o melhor preço de compra conhecido de cada mercadoria; em dourado, a melhor venda. Uma ampulheta marca um preço passageiro, visto durante uma fartura ou uma escassez.',
   // L'âge des prix
   'aides.journal.age.t': 'A idade dos preços',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -72024,9 +72182,9 @@ Lang.ui('pt', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Comprar barato, vender caro.</b> Cada porto produz certas mercadorias (preços baixos) e precisa de outras (preços altos). Os preços mudam todo dia, e cada partida é diferente.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Suas vendas fazem os preços baixar</b>, suas compras os fazem subir. O primeiro {unite} vendido rende mais que o último: distribua uma carga grande entre vários portos.',
+  'notice.marche.3': '<b>Um porto só absorve certa quantidade.</b> Suas compras fazem os preços subir e suas vendas os fazem baixar: o primeiro {unite} vendido rende mais que o último. O controle deslizante do mercado mostra isso em verde, dourado e depois vermelho. Um mercado abalado se recupera em algumas semanas: distribua uma carga grande entre vários portos.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Escassez e fartura.</b> Os rumores da taverna as anunciam: a escassez faz os preços dispararem, a fartura os derruba.',
+  'notice.marche.4': '<b>Escassez e fartura.</b> Os rumores da taverna as anunciam: a escassez faz os preços dispararem, e o porto absorve muito mais; a fartura os derruba, e dá para comprar no atacado. No diário, uma ampulheta marca esses preços passageiros.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contrabando.</b> Certas mercadorias são proibidas em certos portos: a alfândega pode confiscar tudo.',
   // La dette et la banque
@@ -80329,13 +80487,11 @@ Lang.ui('de', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'Ohne Schiff kannst du keine Waren laden. Geh zur Werft.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Bestpreis: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · aktuell',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · vor {jours} Tg. gesehen',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'Keine anderen Preise bekannt. Erkunde die Häfen!',
   // contrebande ici
   'marche.contrebandeIci': 'hier Schmuggelware',
   // Payé {prix} / {unite} · marge {marge}
@@ -80343,9 +80499,22 @@ Lang.ui('de', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Beute: reiner Gewinn.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · besser in {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, one {# hier gekauft} other {# hier gekauft}}: Rücknahme zu 98 %',
+  'marche.prixMoyenAchat': 'Durchschnittlicher Einkaufspreis: {prix}',
+  'marche.prixMoyenVente': 'Durchschnittlicher Verkaufspreis: {prix}',
+  'marche.secousse': '{port}: {liste}. Der Markt erholt sich in ein paar Wochen.',
+  'marche.bulle.hausse': 'Du treibst die Preise hoch.',
+  'marche.bulle.manque': 'Du sorgst für Knappheit in {port}!',
+  'marche.bulle.manqueConseil': 'Komm in ein paar Wochen wieder, dann sind die Preise gesunken.',
+  'marche.bulle.baisse': 'Der Preis gibt allmählich nach.',
+  'marche.bulle.inonder': 'Du überschwemmst {port}!',
+  'marche.bulle.inonderConseil': 'Komm in ein paar Wochen wieder, dann sind die Preise gestiegen.',
+  'marche.bulle.absorption': 'Der Markt ist gesättigt!',
+  'marche.bulle.absorptionConseil': 'Verkauf höchstens {n}; den Rest in ein paar Wochen oder in einem anderen Hafen.',
+  'marche.bulle.mauvaisPort': 'Falscher Hafen zum Verkaufen!',
+  'marche.bulle.mauvaisConseil': '{port} zahlt weniger, als du bezahlt hast: Nimm einen anderen Hafen, wenn du die Wahl hast.',
+  'marche.bulle.mauvaisGuere': 'Zurzeit zahlt {port} kaum mehr, als du bezahlt hast: Nimm einen anderen Hafen, wenn du die Wahl hast.',
   // Quantité
   'marche.quantite': 'Menge',
   // Acheté {n} {marchandise} pour {somme}
@@ -80774,6 +80943,9 @@ Lang.ui('de', {
   'journal.prix.aucun': 'Noch keine Preise bekannt: Lauf Häfen an oder gib in der Schenke eine Runde aus.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Hafen in Grün: Preise jünger als 15 Tage; in Gold: jünger als 45 Tage; in Grau: älter. Zahl in Grün: bester bekannter Einkauf; in Gold: bester Verkauf.',
+  'journal.prix.passagerSurplus': 'Schwemme, als dieser Preis gesehen wurde: ein vorübergehender Preis, er steigt wieder.',
+  'journal.prix.passagerPenurie': 'Knappheit, als dieser Preis gesehen wurde: ein vorübergehender Preis, er sinkt wieder.',
+  'journal.prix.legendePassager': 'Sanduhr: vorübergehender Preis, gesehen während einer Schwemme (grün) oder einer Knappheit (rot).',
   // EN COURS
   'journal.contrats.enCours': 'LAUFEND',
   // TERMINÉS
@@ -81521,11 +81693,11 @@ Lang.ui('de', {
   // Une marchandise
   'aides.marche.ligne.t': 'Eine Ware',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'Ihr Preis hier (▲ ▼: steigend oder fallend), dein Bestand an Bord und der beste bekannte Verkaufspreis anderswo.',
+  'aides.marche.ligne.d': 'Ihr Preis hier (▲ ▼: steigend oder fallend), dein Bestand an Bord und der Durchschnittspreis für die gewählte Menge.',
   // La quantité
   'aides.marche.quantite.t': 'Menge',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Wähle, wie viel du kaufst oder verkaufst; die Summe steht darunter. Jeder Kauf treibt den Preis hoch, jeder Verkauf drückt ihn.',
+  'aides.marche.quantite.d': 'Wähle, wie viel du kaufst oder verkaufst; die Summe steht darunter. Der Regler färbt sich: Grün, der Preis hält; Gold, er bewegt sich; Rot, du treibst den Markt in die Höhe oder lässt ihn einbrechen (oder verkaufst mit Verlust).',
   // La carte des trajets
   'aides.marche.carte.t': 'Die Routenkarte',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -81633,7 +81805,7 @@ Lang.ui('de', {
   // Les prix connus
   'aides.journal.prix.t': 'Bekannte Preise',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'Die in jedem Hafen gesehenen Preise. In Grün der beste bekannte Einkaufspreis jeder Ware, in Gold der beste Verkauf.',
+  'aides.journal.prix.d': 'Die in jedem Hafen gesehenen Preise. In Grün der beste bekannte Einkaufspreis jeder Ware, in Gold der beste Verkauf. Eine Sanduhr markiert einen vorübergehenden Preis, gesehen während einer Schwemme oder einer Knappheit.',
   // L'âge des prix
   'aides.journal.age.t': 'Alter der Preise',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -81699,9 +81871,9 @@ Lang.ui('de', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Billig kaufen, teuer verkaufen.</b> Jeder Hafen erzeugt manche Waren (niedrige Preise) und braucht andere (hohe Preise). Die Preise ändern sich täglich, und jede Partie ist anders.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Deine Verkäufe drücken die Preise</b>, deine Käufe treiben sie hoch. Mit jedem verkauften {unite} sinkt der Erlös: Verteile eine große Ladung auf mehrere Häfen.',
+  'notice.marche.3': '<b>Ein Hafen schluckt nur eine gewisse Menge.</b> Deine Käufe treiben die Preise hoch, deine Verkäufe drücken sie: Mit jedem verkauften {unite} sinkt der Erlös. Der Regler im Markt zeigt es in Grün, Gold, dann Rot. Ein aufgewühlter Markt erholt sich in ein paar Wochen: Verteile eine große Ladung auf mehrere Häfen.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Knappheit und Schwemme.</b> Die Gerüchte in der Schenke kündigen sie an: Knappheit treibt die Preise in die Höhe, eine Schwemme lässt sie einbrechen.',
+  'notice.marche.4': '<b>Knappheit und Schwemme.</b> Die Gerüchte in der Schenke kündigen sie an: Knappheit treibt die Preise in die Höhe, und der Hafen schluckt viel mehr; eine Schwemme lässt sie einbrechen, und man kann dort in großen Mengen kaufen. Im Logbuch markiert eine Sanduhr diese vorübergehenden Preise.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Schmuggelware.</b> Manche Waren sind in manchen Häfen verboten: Der Zoll kann alles beschlagnahmen.',
   // La dette et la banque
@@ -90004,13 +90176,11 @@ Lang.ui('it', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'Ti serve una nave per caricare merci. Passa al cantiere navale.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Miglior prezzo: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · in diretta',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · visto {jours} g fa',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'Nessun altro prezzo noto. Esplora!',
   // contrebande ici
   'marche.contrebandeIci': 'qui è contrabbando',
   // Payé {prix} / {unite} · marge {marge}
@@ -90018,9 +90188,22 @@ Lang.ui('it', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Bottino: tutto guadagno.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · meglio a {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': '{n, plural, one {# comprato} other {# comprati}} qui: riacquisto al 98%',
+  'marche.prixMoyenAchat': 'Prezzo medio d\'acquisto: {prix}',
+  'marche.prixMoyenVente': 'Prezzo medio di vendita: {prix}',
+  'marche.secousse': '{port}: {liste}. Il mercato si riprenderà in qualche settimana.',
+  'marche.bulle.hausse': 'Stai facendo salire i prezzi.',
+  'marche.bulle.manque': 'Stai per creare una penuria a {port}!',
+  'marche.bulle.manqueConseil': 'Torna fra qualche settimana: i prezzi saranno scesi.',
+  'marche.bulle.baisse': 'Il prezzo comincia a cedere.',
+  'marche.bulle.inonder': 'Stai per inondare {port}!',
+  'marche.bulle.inonderConseil': 'Torna fra qualche settimana: i prezzi saranno risaliti.',
+  'marche.bulle.absorption': 'Il mercato è saturo!',
+  'marche.bulle.absorptionConseil': 'Vendine {n} al massimo; per il resto, torna fra qualche settimana o punta su un altro porto.',
+  'marche.bulle.mauvaisPort': 'Porto sbagliato per vendere!',
+  'marche.bulle.mauvaisConseil': '{port} paga meno di quanto hai pagato tu: punta su un altro porto, se puoi scegliere.',
+  'marche.bulle.mauvaisGuere': 'In questi giorni {port} paga appena più di quanto hai pagato tu: punta su un altro porto, se puoi scegliere.',
   // Quantité
   'marche.quantite': 'Quantità',
   // Acheté {n} {marchandise} pour {somme}
@@ -90449,6 +90632,9 @@ Lang.ui('it', {
   'journal.prix.aucun': 'Nessun prezzo noto per ora: visita i porti o offri un giro in taverna.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Porto in verde: prezzi di meno di 15 giorni; in oro: meno di 45 giorni; in grigio: più vecchi. Cifra in verde: il miglior acquisto noto; in oro: la miglior vendita.',
+  'journal.prix.passagerSurplus': 'Eccesso quando hai visto questo prezzo: un prezzo passeggero, risalirà.',
+  'journal.prix.passagerPenurie': 'Penuria quando hai visto questo prezzo: un prezzo passeggero, riscenderà.',
+  'journal.prix.legendePassager': 'Clessidra: prezzo passeggero, visto durante un eccesso (verde) o una penuria (rosso).',
   // EN COURS
   'journal.contrats.enCours': 'IN CORSO',
   // TERMINÉS
@@ -91196,11 +91382,11 @@ Lang.ui('it', {
   // Une marchandise
   'aides.marche.ligne.t': 'Una merce',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'Il suo prezzo qui (▲ ▼: in rialzo o in ribasso), quanta ne hai a bordo e il miglior prezzo di rivendita noto altrove.',
+  'aides.marche.ligne.d': 'Il suo prezzo qui (▲ ▼: in rialzo o in ribasso), quanta ne hai a bordo e il prezzo medio della quantità scelta.',
   // La quantité
   'aides.marche.quantite.t': 'La quantità',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Scegli quanto comprare o vendere; il totale compare sotto. Ogni acquisto fa salire il prezzo, ogni vendita lo fa scendere.',
+  'aides.marche.quantite.d': 'Scegli quanto comprare o vendere; il totale compare sotto. Il cursore si colora: verde, il prezzo tiene; oro, si muove; rosso, fai schizzare o crollare il mercato (o vendi in perdita).',
   // La carte des trajets
   'aides.marche.carte.t': 'La mappa delle rotte',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -91308,7 +91494,7 @@ Lang.ui('it', {
   // Les prix connus
   'aides.journal.prix.t': 'I prezzi noti',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'I prezzi visti in ogni porto. In verde il miglior prezzo d\'acquisto noto per ogni merce; in oro la vendita migliore.',
+  'aides.journal.prix.d': 'I prezzi visti in ogni porto. In verde il miglior prezzo d\'acquisto noto per ogni merce; in oro la vendita migliore. Una clessidra segna un prezzo passeggero, visto durante un eccesso o una penuria.',
   // L'âge des prix
   'aides.journal.age.t': 'L\'età dei prezzi',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -91374,9 +91560,9 @@ Lang.ui('it', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Compra a poco, rivendi a tanto.</b> Ogni porto produce certe merci (prezzi bassi) e ne cerca altre (prezzi alti). I prezzi cambiano ogni giorno, e ogni partita è diversa.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Le tue vendite fanno scendere i prezzi</b>, i tuoi acquisti li fanno salire. Mentre vendi, il prezzo per {unite} cala: meglio dividere un grosso carico tra più porti.',
+  'notice.marche.3': '<b>Un porto assorbe solo una certa quantità.</b> I tuoi acquisti fanno salire i prezzi, le tue vendite li fanno scendere: mentre vendi, il prezzo per {unite} cala. Il cursore del mercato lo mostra in verde, oro e poi rosso. Un mercato scosso si riprende in qualche settimana: meglio dividere un grosso carico tra più porti.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Penurie e abbondanze.</b> Le annunciano le voci di taverna: una penuria fa schizzare i prezzi, un\'abbondanza li fa crollare.',
+  'notice.marche.4': '<b>Penurie e abbondanze.</b> Le annunciano le voci di taverna: una penuria fa schizzare i prezzi, e il porto ne assorbe molto di più; un\'abbondanza li fa crollare, e lì si può comprare all\'ingrosso. Nel diario, una clessidra segna questi prezzi passeggeri.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contrabbando.</b> Alcune merci sono proibite in certi porti: la dogana può sequestrare tutto.',
   // La dette et la banque
@@ -99682,13 +99868,11 @@ Lang.ui('pl', {
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
   'marche.sansNavire': 'Potrzebujesz statku, żeby załadować towar. Zajrzyj do stoczni.',
   // Revente connue : {prix} {marge}
-  'marche.revente': 'Najlepsza cena: {prix} {marge}',
   //  · en direct
   'marche.enDirect': ' · na bieżąco',
   //  · vu il y a {jours} j
   'marche.vuIlYa': ' · sprzed {jours, plural, one {# dnia} few {# dni} many {# dni} other {# dnia}}',
   // Aucun autre prix connu. Explorez !
-  'marche.aucunPrix': 'Innych cen nie znasz. Ruszaj w drogę!',
   // contrebande ici
   'marche.contrebandeIci': 'tu kontrabanda',
   // Payé {prix} / {unite} · marge {marge}
@@ -99696,9 +99880,22 @@ Lang.ui('pl', {
   // Butin : tout est bénéfice.
   'marche.butin': 'Łup: czysty zysk.',
   //  · mieux à {port} ({prix})
-  'marche.mieuxA': ' · lepiej w porcie {port} ({prix})',
   // {n, plural, one {# acheté} other {# achetés}} ici : repris à 98 %
   'marche.dejaAchete': 'Kupione tutaj: {n} · odkup po 98%',
+  'marche.prixMoyenAchat': 'Średnia cena zakupu: {prix}',
+  'marche.prixMoyenVente': 'Średnia cena sprzedaży: {prix}',
+  'marche.secousse': '{port}: {liste}. Rynek dojdzie do siebie za kilka tygodni.',
+  'marche.bulle.hausse': 'Podbijasz ceny.',
+  'marche.bulle.manque': 'Wywołasz niedobór w porcie {port}!',
+  'marche.bulle.manqueConseil': 'Wróć za kilka tygodni, ceny spadną.',
+  'marche.bulle.baisse': 'Cena zaczyna ustępować.',
+  'marche.bulle.inonder': 'Zalejesz towarem port {port}!',
+  'marche.bulle.inonderConseil': 'Wróć za kilka tygodni, ceny odbiją.',
+  'marche.bulle.absorption': 'Rynek jest nasycony!',
+  'marche.bulle.absorptionConseil': 'Sprzedaj najwyżej {n}; z resztą wróć za kilka tygodni albo płyń do innego portu.',
+  'marche.bulle.mauvaisPort': 'Zły port na sprzedaż!',
+  'marche.bulle.mauvaisConseil': '{port} płaci mniej, niż sam zapłaciłeś: płyń do innego portu, jeśli masz wybór.',
+  'marche.bulle.mauvaisGuere': 'W tych dniach {port} płaci ledwie więcej, niż sam zapłaciłeś: płyń do innego portu, jeśli masz wybór.',
   // Quantité
   'marche.quantite': 'Ilość',
   // Acheté {n} {marchandise} pour {somme}
@@ -100127,6 +100324,9 @@ Lang.ui('pl', {
   'journal.prix.aucun': 'Na razie nie znasz żadnych cen: odwiedzaj porty albo postaw kolejkę w tawernie.',
   // Port en vert : prix de moins de 15 jours ; en or : moins de 45 jours ; en gris : plus anciens. Chiffre en vert : le meilleur achat connu ; en or : la meilleure 
   'journal.prix.legende': 'Port na zielono: ceny sprzed mniej niż 15 dni; na złoto: mniej niż 45 dni; na szaro: starsze. Liczba na zielono: najlepszy znany zakup; na złoto: najlepsza sprzedaż.',
+  'journal.prix.passagerSurplus': 'Nadmiar, gdy widziano tę cenę: cena chwilowa, znów wzrośnie.',
+  'journal.prix.passagerPenurie': 'Niedobór, gdy widziano tę cenę: cena chwilowa, znów spadnie.',
+  'journal.prix.legendePassager': 'Klepsydra: cena chwilowa, widziana podczas nadmiaru (zielona) lub niedoboru (czerwona).',
   // EN COURS
   'journal.contrats.enCours': 'BIEŻĄCE',
   // TERMINÉS
@@ -100874,11 +101074,11 @@ Lang.ui('pl', {
   // Une marchandise
   'aides.marche.ligne.t': 'Towar',
   // Son prix ici (▲ ▼ : en hausse ou en baisse), ce que vous en avez à bord, et le meilleur prix de revente connu ailleurs.
-  'aides.marche.ligne.d': 'Jego cena tutaj (▲ ▼: rośnie lub spada), ile go masz na pokładzie i najlepsza znana cena sprzedaży gdzie indziej.',
+  'aides.marche.ligne.d': 'Jego cena tutaj (▲ ▼: rośnie lub spada), ile go masz na pokładzie i średnia cena wybranej ilości.',
   // La quantité
   'aides.marche.quantite.t': 'Ilość',
   // Choisissez combien acheter ou vendre ; le total s'affiche dessous. Chaque achat fait monter le prix, chaque vente le fait baisser.
-  'aides.marche.quantite.d': 'Wybierz, ile kupić lub sprzedać; suma pojawi się poniżej. Każdy zakup podnosi cenę, każda sprzedaż ją obniża.',
+  'aides.marche.quantite.d': 'Wybierz, ile kupić lub sprzedać; suma pojawi się poniżej. Suwak zmienia kolor: zielony, cena się trzyma; złoty, rusza; czerwony, windujesz albo załamujesz rynek (albo sprzedajesz ze stratą).',
   // La carte des trajets
   'aides.marche.carte.t': 'Mapa tras',
   // Les ports de cette mer. Choisissez une ville : les jours de mer pour vous y rendre d'ici avec votre navire s'affichent, avec la route à prendre.
@@ -100986,7 +101186,7 @@ Lang.ui('pl', {
   // Les prix connus
   'aides.journal.prix.t': 'Znane ceny',
   // Les prix vus dans chaque port. En vert, le meilleur prix d'achat connu de chaque marchandise ; en or, la meilleure vente.
-  'aides.journal.prix.d': 'Ceny widziane w każdym porcie. Na zielono najlepsza znana cena zakupu każdego towaru, na złoto najlepsza sprzedaż.',
+  'aides.journal.prix.d': 'Ceny widziane w każdym porcie. Na zielono najlepsza znana cena zakupu każdego towaru, na złoto najlepsza sprzedaż. Klepsydra oznacza cenę chwilową, widzianą podczas nadmiaru lub niedoboru.',
   // L'âge des prix
   'aides.journal.age.t': 'Świeżość cen',
   // À côté de chaque port : quand ses prix ont été vus. Plus ils sont vieux, moins ils sont sûrs.
@@ -101052,9 +101252,9 @@ Lang.ui('pl', {
   // <b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d'autres (prix hauts). Les prix changent chaque jour, et cha
   'notice.marche.2': '<b>Kupuj tanio, sprzedawaj drogo.</b> Każdy port wytwarza pewne towary (niskie ceny), a innych mu brakuje (wysokie ceny). Ceny zmieniają się codziennie, a każda rozgrywka jest inna.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
-  'notice.marche.3': '<b>Twoja sprzedaż obniża ceny</b>, a zakupy je podnoszą. Za pierwszą sprzedaną jednostkę ({unite}) dostaniesz więcej niż za ostatnią: duży ładunek rozdziel między kilka portów.',
+  'notice.marche.3': '<b>Port przyjmie tylko określoną ilość.</b> Twoje zakupy podnoszą ceny, a sprzedaż je obniża: za pierwszą sprzedaną jednostkę ({unite}) dostaniesz więcej niż za ostatnią. Suwak na targu pokazuje to na zielono, złoto, a potem czerwono. Rozchwiany rynek dochodzi do siebie w kilka tygodni: duży ładunek rozdziel między kilka portów.',
   // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Niedobory i nadmiary.</b> Zapowiadają je plotki z tawerny: niedobór winduje ceny, nadmiar je załamuje.',
+  'notice.marche.4': '<b>Niedobory i nadmiary.</b> Zapowiadają je plotki z tawerny: niedobór winduje ceny, a port przyjmie znacznie więcej; nadmiar je załamuje, a można tam kupować hurtem. W dzienniku klepsydra oznacza te chwilowe ceny.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Kontrabanda.</b> W niektórych portach pewne towary są zakazane: celnicy mogą skonfiskować wszystko.',
   // La dette et la banque
@@ -112884,9 +113084,12 @@ const Game = {
 
   // ════════════ Économie ════════════
   portSeed(pid, gi) { return ((this.run.seed ^ (PORT[pid].idx * 7919 + gi * 104729)) >>> 0) % 100000; },
+  // la houle des prix : une vague lente (51 jours) et une plus courte (16,5 jours), d'ampleur réglée par la volatilité de la
+  // marchandise. Trois fois plus lente qu'avant le 06/10/2026 (17 et 5,5 jours), même ampleur sur l'année (choix d'Adrien) :
+  // un prix vu de loin tient pendant le trajet (en 20 jours, 7 % d'écart en médiane au lieu de 11 %), environ 0,4 % par jour
   mod(pid, gi, day) {
     const g = GOODS[gi], s = this.portSeed(pid, gi);
-    return g.vol * (2.2 * (noise1(day / 17 + s * 0.01, s) - 0.5) + 1.3 * (noise1(day / 5.5 + s * 0.013, s + 1) - 0.5));
+    return g.vol * (2.2 * (noise1(day / 51 + s * 0.01, s) - 0.5) + 1.3 * (noise1(day / 16.5 + s * 0.013, s + 1) - 0.5));
   },
   // saisons des prix : coefficient du mois pour une marchandise dans certains ports (données de la mer)
   season(pid, gi, m) {
@@ -112928,6 +113131,19 @@ const Game = {
     }
     return m;
   },
+  // une pénurie ou un surplus rend aussi le marché plus profond (06/10/2026, choix d'Adrien) : le port en manque avale une
+  // grosse cargaison (profondeur × le coefficient de la pénurie), le port qui déborde se laisse acheter en gros (÷ celui du
+  // surplus) ; même montée et même retombée que le prix
+  eventDepth(pid, gi, day) {
+    let m = 1;
+    for (const e of this.run.events) {
+      if (e.p !== pid || e.g !== gi) continue;
+      if (day < e.start - 2 || day > e.start + e.dur + 4) continue;
+      const k = U.clamp(day < e.start ? (day - (e.start - 2)) / 2 : day > e.start + e.dur ? 1 - (day - e.start - e.dur) / 4 : 1, 0, 1);
+      m *= 1 + ((e.shortage ? e.mult : 1 / e.mult) - 1) * k;
+    }
+    return m;
+  },
   activeEvent(pid, gi) {
     const d = this.run.day;
     return this.run.events.find(e => e.p === pid && e.g === gi && d >= e.start - 1 && d <= e.start + e.dur + 2) || null;
@@ -112943,7 +113159,7 @@ const Game = {
     return s[gi][0] * Math.exp(-(this.run.day - s[gi][1]) * 0.0693);
   },
   setStock(pid, gi, v) { (this.run.stock[pid] = this.run.stock[pid] || {})[gi] = [v, this.run.day]; },
-  depth(pid, gi) { return GOODS[gi].depth * PORT[pid].size; },
+  depth(pid, gi) { return GOODS[gi].depth * PORT[pid].size * this.eventDepth(pid, gi, this.run.day); },
   midPrice(pid, gi) { return this.basePrice(pid, gi) * Math.exp(-this.stockOf(pid, gi)); },
   tradeMul(buy) {
     const c = this.her('commerce') * 0.02 + (this.buff('commerce') ? 0.05 : 0);
@@ -112990,6 +113206,28 @@ const Game = {
       rev += Math.round(P * (1 - Math.exp(-rest / d)) / (1 - Math.exp(-1 / d)));
     }
     return { rev, back, n };
+  },
+  // la réglette du marché (06/10/2026, choix d'Adrien), au port où l'on est, pour 1 à max unités. Sur le prix moyen de la
+  // quantité : à l'achat, or au-delà de +25 % (g0 : la dernière quantité en vert), rouge dès +60 % (r0) ; à la vente, or
+  // au-delà de −15 %, rouge dès −40 % ou dès qu'on vend à perte (loss : la première quantité sous le prix payé). Un port qui
+  // paie de lui-même moins de 5 % au-dessus du prix payé n'a pas de vert (wrong : « mauvais port », attendre n'y changera
+  // rien) ; ce qu'on revend à l'escale même, repris à 98 % (resell), n'a ni couleurs ni conseil.
+  tradeBands(gi, buy, max) {
+    const r = this.run, pid = r.port;
+    const P = buy ? this.buyPrice(pid, gi) : this.sellPrice(pid, gi);
+    const resell = !buy && this.visitOf().buys[gi] > 0, paid = buy || resell ? 0 : r.cost[gi];
+    let g0 = max, r0 = null, loss = null;
+    for (let n = 1; n <= max; n++) {
+      const a = (buy ? this.buyTotal(pid, gi, n) : this.quoteSell(gi, n).rev) / n, ch = buy ? a / P - 1 : 1 - a / P;
+      if (g0 === max && ch > (buy ? 0.25 : 0.15)) g0 = n - 1;
+      if (loss == null && paid > 0 && a < paid) loss = n;
+      if (r0 == null && (ch >= (buy ? 0.6 : 0.4) || loss != null)) r0 = n;
+      if (r0 != null && (loss != null || !paid)) break;
+    }
+    if (r0 != null && g0 >= r0) g0 = r0 - 1;
+    const wrong = paid > 0 && P < paid * 1.05;
+    if (wrong) g0 = 0;
+    return { g0, r0, loss, wrong, resell };
   },
   buy(gi, n) {
     const r = this.run, pid = r.port;
@@ -116695,7 +116933,8 @@ const UI = {
     const t = h('div', { class: 'toast ' + (kind || '') }, icon ? ico(icon) : null, h('span', null, text));
     this.el.toasts.append(t);
     while (this.el.toasts.children.length > (this.isMobile() ? 2 : 4)) this.el.toasts.firstChild.remove();
-    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 420); }, 3600 + Math.min(3000, text.length * 25));
+    // (2 s de plus le 06/10/2026, à la demande d'Adrien : on n'avait pas le temps de les lire)
+    setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 420); }, 5600 + Math.min(3000, text.length * 25));
   },
   banner(title, sub, kind, zh) {
     const b = this.el.banner;
@@ -116938,55 +117177,100 @@ const UI = {
         const k = r.known[pid];
         let trend = '';
         if (k && k.prev) { const d = k.p[gi] - k.prev[gi]; if (Math.abs(d) / Math.max(1, k.prev[gi]) > 0.04) trend = d > 0 ? '▲' : '▼'; }
-        let info;
+        // sous le nom (06/10/2026, choix d'Adrien) : le prix moyen de la quantité choisie, en vert, or ou rouge comme la
+        // réglette ; plus de « Revente connue » à l'achat (le joueur peut viser plusieurs ports ou l'entrepôt : la perte se
+        // découvre à la vente), plus de « mieux à… » à la vente. À la vente, la marge est celle de la quantité choisie
+        const avgV = h('b');
+        const avg = h('div', { class: 'mk-avg' }, ...Tn(mode === 'buy' ? 'marche.prixMoyenAchat' : 'marche.prixMoyenVente', { prix: avgV }), ico('coin', 'xs'), '/', ico('cargo', 'xs'));
+        const info = h('span');
+        let marge = null;
         if (mode === 'buy') {
-          const b = Game.bestKnown(gi, pid, true);
-          if (b) {
-            const m = b.v / unit - 1;
-            info = h('span', null, ...Tn('marche.revente', { prix: h('b', null, PORT[b.pid].name + ' ' + fmt(b.v)), marge: h('span', { class: m > 0.15 ? 'pos' : m < 0 ? 'neg' : '' }, `(${pct(m)})`) }), b.live ? T('marche.enDirect') : T('marche.vuIlYa', { jours: b.age }));
-          } else info = h('span', { class: 'dim' }, T('marche.aucunPrix'));
           if (g.contraband && P.customs > 0.15) info.append(h('span', { class: 'tag-ct' }, T('marche.contrebandeIci')));
         } else {
           const cost = r.cost[gi];
-          const m = cost > 0 ? unit / cost - 1 : null;
-          info = h('span', null, cost > 0 ? Tn('marche.paye', { prix: h('b', null, fmt(cost)), unite: TXT.unitOne, marge: h('span', { class: m > 0 ? 'pos' : 'neg' }, pct(m)) }) : T('marche.butin'));
-          const b = Game.bestKnown(gi, pid, true);
-          if (b && b.v > unit * 1.08) info.append(h('span', { class: 'dim' }, T('marche.mieuxA', { port: PORT[b.pid].name, prix: fmt(b.v) })));
+          marge = h('span');
+          info.append(cost > 0 ? h('span', null, ...Tn('marche.paye', { prix: h('b', null, fmt(cost)), unite: TXT.unitOne, marge })) : T('marche.butin'));
           const bought = Game.visitOf().buys[gi];
           if (bought > 0) info.append(h('span', { class: 'tag-ev' }, T('marche.dejaAchete', { n: bought })));
         }
+        // la réglette en trois couleurs (Game.tradeBands), posée au bout du vert à l'achat ; rien de tout cela au prologue
+        // (quantités imposées par le mentor) ni pour ce qu'on revend à l'escale même (repris à 98 %)
+        const B = max > 0 ? Game.tradeBands(gi, mode === 'buy', max) : null;
+        const bands = !pro && B && !B.resell;
+        const zone = n => !bands || n <= B.g0 ? 0 : B.r0 == null || n < B.r0 ? 1 : 2;
+        // le niveau du conseil : 0 à 2 comme la zone ; 3, à perte parce qu'on vend trop d'un coup ; 4, à perte au mauvais port
+        const level = n => { const z = zone(n); return z === 2 && B.loss != null && n >= B.loss ? (B.wrong ? 4 : 3) : z; };
         const out = h('output', null, '');
-        const slider = h('input', { type: 'range', min: 0, max: Math.max(0, max), value: max, step: 1, 'aria-label': T('marche.quantite'), id: 'mk-' + gi, disabled: pro });
+        const slider = h('input', { type: 'range', min: 0, max: Math.max(0, max), value: mode === 'buy' && bands && B.g0 > 0 ? B.g0 : max, step: 1, 'aria-label': T('marche.quantite'), id: 'mk-' + gi, disabled: pro, class: bands ? 'zones' : null });
+        if (bands) { slider.style.setProperty('--zg', (B.g0 / max * 100).toFixed(2) + '%'); slider.style.setProperty('--zo', ((B.r0 == null ? max : B.r0) / max * 100).toFixed(2) + '%'); }
+        // la bulle du mentor au-dessus du curseur, quand la réglette passe dans l'or ou le rouge : seulement dans une mer qui a
+        // un mentor (ailleurs, le joueur connaît déjà la mécanique : les couleurs suffisent) et si ses conseils ne sont pas coupés
+        const tip = bands && SEA.mentorSeal && Game.global.settings.chen !== false ? h('div', { class: 'mk-tip', role: 'status' },
+          h('span', { class: 'mk-seal' + (SEA.mentorWax ? ' wax' : ''), 'aria-hidden': 'true' }, SEA.mentorSeal), h('span', { class: 'mk-tip-t' }, h('b'), h('small'))) : null;
+        const say = L => {
+          const port = PORT[pid].name;
+          if (mode === 'buy') return L === 2 ? [T('marche.bulle.manque', { port }), T('marche.bulle.manqueConseil')] : [T('marche.bulle.hausse'), ''];
+          if (L === 4) return [T('marche.bulle.mauvaisPort'), T(Game.sellPrice(pid, gi) < r.cost[gi] ? 'marche.bulle.mauvaisConseil' : 'marche.bulle.mauvaisGuere', { port })];
+          if (L === 3) return [T('marche.bulle.absorption'), T('marche.bulle.absorptionConseil', { n: B.loss - 1 })];
+          return L === 2 ? [T('marche.bulle.inonder', { port }), T('marche.bulle.inonderConseil')] : [T('marche.bulle.baisse'), ''];
+        };
+        let lastL = -1, tipT = 0;
+        const showTip = (n, L) => {
+          const [t1, t2] = say(L), tt = tip.lastChild;
+          tt.firstChild.textContent = t1; tt.lastChild.textContent = t2; tt.lastChild.hidden = !t2;
+          tip.classList.toggle('r', L >= 2);
+          // (au-dessus du curseur, sans sortir de la ligne du marché ; la pointe reste sur le curseur)
+          const R = row.getBoundingClientRect(), S = slider.parentNode.getBoundingClientRect(), Q = slider.getBoundingClientRect();
+          const x = Q.left - S.left + 9 + (Q.width - 18) * n / max, w = tip.offsetWidth;
+          const left = U.clamp(x - w / 2, R.left - S.left + 6, R.right - S.left - w - 6);
+          tip.style.left = left + 'px';
+          tip.style.setProperty('--ax', U.clamp(x - left, 14, w - 14) + 'px');
+          tip.classList.add('on');
+          clearTimeout(tipT); tipT = setTimeout(() => tip.classList.remove('on'), t2 ? 4500 : 2600);
+        };
         const act = btn('', () => {
           const n = +slider.value;
           if (n <= 0) return;
+          const before = Game.midPrice(pid, gi);
           if (mode === 'buy') {
             const c = Game.buy(gi, n);
-            if (c) { this.toast(T('marche.toastAchat', { n, marchandise: lower(g.name), unites: motUnites(n, g), somme: monnaie(c) }), '', g.id); this.after('coin'); }
+            if (c) { this.toast(T('marche.toastAchat', { n, marchandise: lower(g.name), unites: motUnites(n, g), somme: monnaie(c) }), '', g.id); this.marketShock(pid, [[gi, before]]); this.after('coin'); }
           } else {
             const res = Game.sell(gi, n);
-            if (res) { this.toast(T('marche.toastVente', { n, marchandise: lower(g.name), unites: motUnites(n, g), somme: monnaie(res.rev) }) + (res.profit ? T('marche.benefice', { benefice: (res.profit >= 0 ? '+' : '') + fmt(res.profit) }) : ''), res.profit > 0 ? 'good' : '', 'coin'); this.after('cash'); }
+            if (res) { this.toast(T('marche.toastVente', { n, marchandise: lower(g.name), unites: motUnites(n, g), somme: monnaie(res.rev) }) + (res.profit ? T('marche.benefice', { benefice: (res.profit >= 0 ? '+' : '') + fmt(res.profit) }) : ''), res.profit > 0 ? 'good' : '', 'coin'); this.marketShock(pid, [[gi, before]]); this.after('cash'); }
           }
           render();
         }, mode === 'buy' ? 'jade' : 'gold');
         const upd = () => {
-          const n = +slider.value;
+          const n = +slider.value, z = n > 0 ? zone(n) : 0;
           const tot = mode === 'buy' ? Game.buyTotal(pid, gi, n) : Game.quoteSell(gi, n).rev;
-          if (n > 0) out.replaceChildren(String(n), ico('cargo', 'xs'), ` × ≈ ${fmt(tot / n)} = ${fmt(tot)}`, ico('coin', 'xs')); else out.textContent = '—';
+          if (n > 0) out.replaceChildren(h('b', null, fmt(tot)), ico('coin', 'xs')); else out.textContent = '—';
           act.replaceChildren(T(mode === 'buy' ? 'marche.acheterN' : 'marche.vendreN', { n }), ico('cargo', 'xs'));   // (50 quoi ? 50 caisses : le dessin de la cale)
           act.disabled = n <= 0;
+          avg.style.visibility = n > 0 ? '' : 'hidden';
+          if (n > 0) avgV.textContent = fmt(tot / n);
+          avgV.className = z === 2 ? 'neg' : z === 1 ? 'warn' : 'pos';
+          slider.classList.toggle('z1', z === 1);
+          slider.classList.toggle('z2', z === 2);
+          if (marge && n > 0 && r.cost[gi] > 0) { const m = tot / n / r.cost[gi] - 1; marge.textContent = pct(m); marge.className = m < 0 ? 'neg' : z === 1 ? 'warn' : 'pos'; }
+          if (!tip) return;
+          const L = n > 0 ? level(n) : 0;
+          if (lastL < 0) { lastL = L === 4 ? 0 : L; return; }   // (à l'ouverture, rien ; au mauvais port, le mentor parle dès qu'on touche la réglette)
+          if (L > lastL) showTip(n, L);
+          else if (L === 0) tip.classList.remove('on');
+          lastL = L;
         };
         slider.addEventListener('input', upd);
-        upd();
         const row = h('div', { class: 'mk-row', 'data-g': 'mk-g-' + g.id },
           h('div', { class: 'ic' }, ico(g.id, 'big')),
           h('div', { class: 'nm' }, g.name, ev ? h('span', { class: 'tag-ev' }, ev.shortage ? T('marche.penurie') : T('marche.surplus')) : null),
           h('div', { class: 'pr' }, fmt(unit), ico('coin', 'xs'), h('span', { class: trend === '▲' ? 'trend-up' : 'trend-down' }, trend)),
           h('div', { class: 'hd' }, held ? h('b', null, held) : h('span', { class: 'dim' }, '0'), r.ware[pid] && r.ware[pid][gi] ? h('span', { class: 'dim' }, ` (+${r.ware[pid][gi]})`) : null),
-          h('div', { class: 'inf' }, info),
-          h('div', { class: 'sl' }, slider, out),
+          h('div', { class: 'inf' }, avg, info),
+          h('div', { class: 'sl' + (tip ? ' has-tip' : '') }, slider, out, tip),
           h('div', { class: 'ac' }, act));
         row.title = g.desc;
+        upd();
         list.append(row);
       });
       if (mode === 'sell' && !list.children.length) list.append(h('p', { class: 'hint' }, T('marche.caleVide')));
@@ -116998,8 +117282,10 @@ const UI = {
         foot.append(h('span', { style: { flex: 1 } }, ...Tn('marche.toutVendreRapporte', { somme: money(tot), monnaie: motMonnaie(tot) })),
           btn(T('marche.toutVendre'), () => {
             let rev = 0, prof = 0;
-            r.cargo.forEach((n, gi) => { if (n > 0) { const x = Game.sell(gi, n); if (x) { rev += x.rev; prof += x.profit; } } });
+            const before = [];
+            r.cargo.forEach((n, gi) => { if (n > 0) { before.push([gi, Game.midPrice(pid, gi)]); const x = Game.sell(gi, n); if (x) { rev += x.rev; prof += x.profit; } } });
             this.toast(T('marche.cargaisonVendue', { somme: monnaie(rev), benefice: (prof >= 0 ? '+' : '') + fmt(prof) }), prof > 0 ? 'good' : '', 'coin');
+            this.marketShock(pid, before);
             this.after('cash'); render();
           }, 'gold'));
       }
@@ -117008,6 +117294,12 @@ const UI = {
       put(list0, ...kids);
     };
     render();
+  },
+  // après un achat ou une vente qui a fait bouger le prix d'ici de plus d'un tiers : un mot en haut de l'écran
+  // (before : [indice de la marchandise, prix d'avant] ; la trace s'efface de moitié en 10 jours, d'où « quelques semaines »)
+  marketShock(pid, before) {
+    const moved = before.map(([gi, p]) => [gi, Game.midPrice(pid, gi) / p - 1]).filter(([, d]) => Math.abs(d) >= 1 / 3);
+    if (moved.length) this.toast(T('marche.secousse', { port: PORT[pid].name, liste: listJoin(moved.map(([gi, d]) => `${lower(GOODS[gi].name)} ${pct(d)}`)) }), 'bad', 'coin');
   },
   // ── La cale : un bouton (au marché, dans l'en-tête) qui déplie ce qu'elle contient ; la cale du bandeau fait de même ──
   holdPill(g) {
@@ -117895,13 +118187,27 @@ const UI = {
     const lo = GOODS.map((g, i) => Math.min(...rows.map(x => x.k.p[i]))), hi = GOODS.map((g, i) => Math.max(...rows.map(x => x.k.p[i])));
     const age = k => k.here ? T('journal.prix.ici') : k.live ? T('journal.prix.direct') : (n => n ? T('journal.prix.age', { n }) : T('journal.prix.auj'))(Math.max(0, Math.round(r.day - k.day)));
     const ageCls = k => { const a = k.here || k.live ? 0 : r.day - k.day; return a < 15 ? 'fresh' : a < 45 ? 'mid' : 'old'; };
+    // un prix vu pendant un surplus ou une pénurie : un sablier, vert (il remontera) ou rouge (il redescendra), 06/10/2026
+    const evAt = (pid, gi, k) => { const D = k.here || k.live ? r.day : k.day; return r.events.find(e => e.p === pid && e.g === gi && D >= e.start && D <= e.start + e.dur) || null; };
+    let passing = false;
+    const glass = e => { passing = true; return this.hourglass(e.shortage ? 'up' : 'down'); };
     const table = h('table', { class: 'ledger jr-prices' },
       // (en-têtes : l'icône de la marchandise, comme au marché ; son nom au survol et pour les lecteurs d'écran)
       h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id))))),
       h('tbody', null, rows.map(x => h('tr', { class: ageCls(x.k) + (x.k.here ? ' here' : '') },   // (le port où l'on est : légèrement doré)
         h('td', null, h('b', null, x.p.name), h('small', { class: 'hint' }, ' · ' + age(x.k))),
-        ...GOODS.map((g, i) => { const v = x.k.p[i], cls = 'r' + (rows.length > 1 && v === lo[i] ? ' lo' : rows.length > 1 && v === hi[i] ? ' hi' : ''); return h('td', { class: cls }, fmt(v)); })))));
-    return [h('div', { class: 'jr-scroll', 'data-g': 'jr-table' }, table), h('p', { class: 'hint jr-legend', 'data-g': 'jr-legend' }, T('journal.prix.legende'))];
+        ...GOODS.map((g, i) => {
+          const v = x.k.p[i], cls = 'r' + (rows.length > 1 && v === lo[i] ? ' lo' : rows.length > 1 && v === hi[i] ? ' hi' : ''), e = evAt(x.p.id, i, x.k);
+          return h('td', { class: cls, 'data-tip': e ? T(e.shortage ? 'journal.prix.passagerPenurie' : 'journal.prix.passagerSurplus') : null }, e ? glass(e) : null, fmt(v));
+        })))));
+    return [h('div', { class: 'jr-scroll', 'data-g': 'jr-table' }, table),
+      h('p', { class: 'hint jr-legend', 'data-g': 'jr-legend' }, T('journal.prix.legende'), passing ? [' ', this.hourglass('down'), this.hourglass('up'), ' ', T('journal.prix.legendePassager')] : null)];
+  },
+  // le sablier d'un prix passager (journal des prix) : 'down' surplus, vert ; 'up' pénurie, rouge
+  hourglass(dir) {
+    const e = h('span', { class: 'jr-glass ' + dir, 'aria-hidden': 'true' });
+    e.innerHTML = '<svg viewBox="0 0 10 14"><path d="M1 1h8M1 13h8M2 1c0 4 6 4 6 6s-6 2-6 6M8 1c0 4-6 4-6 6s6 2 6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M3.2 12.2c.8-1.8 2.8-1.8 3.6 0z" fill="currentColor"/></svg>';
+    return e;
   },
   options() {
     const s = Game.global.settings;
@@ -132756,7 +133062,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 06/10/2026 à 00:54</div>
+<div id="maj">Mise à jour : 06/10/2026 à 14:55</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
