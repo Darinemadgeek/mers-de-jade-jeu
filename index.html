@@ -1013,6 +1013,19 @@ input[type=range].red { --fill: #e65c40; --thumb: radial-gradient(circle at 50% 
 .jr-glass.down { color: var(--good); }
 .jr-glass.up { color: var(--bad); }
 
+/* ── Lot « lisibilité » (06/10/2026) : la trace de vos échanges et les rumeurs, au marché et au journal ── */
+.mk-trace { font-size: 12px; color: var(--text-2); line-height: 1.35; }
+.mk-rumor { display: flex; gap: 6px; align-items: center; font: 700 12px/1.3 var(--font-ui); color: var(--gold-hi); margin-top: 2px; }
+.mk-rumor.down { color: #ffb2a0; }
+.mk-seal.xs { width: 17px; height: 17px; border-radius: 5px; font-size: 10.5px; line-height: 17px; }
+.jr-ru { display: inline-block; font-size: 9.5px; margin-right: 3px; vertical-align: 1px; }
+.jr-ru.up { color: var(--gold-hi); }
+.jr-ru.down { color: var(--bad); }
+.jr-tr { display: inline-block; width: 7px; height: 7px; margin-right: 4px; border-radius: 50%; border: 1.5px solid var(--text-2); vertical-align: 1px; }
+.jr-cargo { margin-bottom: 10px; }
+.jr-cargo .stat b { font-weight: 700; text-align: right; }
+.jr-cargo .hint { margin: 4px 0 0; }
+
 /* ── Le détail de la cale (marché, bandeau) ── */
 .hold-pop { position: absolute; z-index: 64; width: 290px; max-width: calc(100vw - 16px); padding: 12px 14px; border-radius: 14px; background: linear-gradient(180deg, rgba(24, 35, 53, 0.98), rgba(13, 21, 34, 0.98)); border: 1px solid var(--line-2); box-shadow: var(--shadow); display: grid; gap: 5px; font-size: 13.5px; animation: panelIn 0.18s ease-out; }
 .hold-pop .hp-title { font: 800 14px var(--font-ui); color: var(--gold-hi); }
@@ -1940,6 +1953,11 @@ Lang.ui('fr', {
   'marche.bulle.mauvaisPort': 'Mauvais port pour vendre !',   // vente à perte parce que ce port paie mal de lui-même
   'marche.bulle.mauvaisConseil': '{port} paie moins que ce que tu l\'as payé : vise un autre port, si tu as le choix.',
   'marche.bulle.mauvaisGuere': 'Ces jours-ci, {port} ne paie guère plus que ce que tu l\'as payé : vise un autre port, si tu as le choix.',
+  'marche.trace.vente': '{n, plural, =0 {Votre vente du jour} one {Votre vente d\'hier} other {Votre vente d\'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.',   // sous une marchandise au marché (06/10/2026) : la trace de vos propres échanges ici ; pct : « -22 % »
+  'marche.trace.achat': '{n, plural, =0 {Votre achat du jour} one {Votre achat d\'hier} other {Votre achat d\'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.',
+  'marche.rumeur.manquera': 'On dit que {port} en manquera {quand} : prix ×{fois}.',   // une rumeur entendue, sous la marchandise (à l'achat) ; quand : « dès le 14 mars » ou « en ce moment » ; fois : « 2,5 »
+  'marche.rumeur.paiera': 'On dit que {port} paiera ×{fois} {quand}.',   // (à la vente : mieux vaut la porter là-bas)
+  'marche.rumeur.regorgera': 'On dit que {port} en regorgera {quand} : prix ÷{fois}.',
   'marche.quantite': 'Quantité',
   'marche.toastAchat': 'Acheté {n} {marchandise} pour {somme}',
   'marche.toastVente': 'Vendu {n} {marchandise} : +{somme}',
@@ -2019,8 +2037,9 @@ Lang.ui('fr', {
   'taverne.tournee': '{action} ({cout})',
   'taverne.offrirTournee': 'Offrir une tournée',
   'taverne.rienARaconter': 'Personne n\'a rien à raconter.',
-  'taverne.rumeursAide': 'Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.',
-  'taverne.evenement': '{port} : {marchandise} {fleche}',
+  'taverne.rienDeNeuf': 'Rien de neuf ces jours-ci : la tournée est pour la maison.',   // une tournée sans rien à raconter : elle ne coûte rien (06/10/2026)
+  'taverne.rumeursAide': 'Une tournée fait parler : pénuries et surplus à venir, ou les prix d\'un port lointain. Tout se note sur la carte et dans le journal.',
+  'taverne.evenementQuand': '{port} : {marchandise} {fleche} {quand}',   // quand : « dès le 14 mars » ou « en ce moment »
   'taverne.contrats': 'CONTRATS PROPOSÉS',
   'taverne.recompense': 'Récompense {prime} · avant le {date}',
   'taverne.prixIci': 'Prix actuel ici : {prix} / {unite}',
@@ -2096,7 +2115,12 @@ Lang.ui('fr', {
   'carte.ouest': 'O',
   'carte.touchezPort': 'Touchez un port sur la carte.',
   'carte.rumeurs': 'RUMEURS',
-  'carte.rumeur': '{port} · {marchandise}',
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  'carte.prixOuiDire': 'Prix rapportés il y a {jours} j (ouï-dire)',   // les prix d'un port donnés par un capitaine à la taverne (06/10/2026)
+  'carte.pourVous': 'vos {n} : {prix} en moyenne',   // à côté d'un prix, pour ce qu'on a à bord : le prix moyen de toute la quantité
+  'carte.onDit': 'On dit',
+  'carte.onDitPenurie': '{Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}',   // Marchandise : le nom avec sa majuscule ; duree : « deux à trois semaines »
+  'carte.onDitSurplus': '{Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}',
   'carte.duree': '~{n, plural, one {# jour} other {# jours}}',
   'carte.danger': 'Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}',
   'carte.douaneSevere': 'douane sévère',
@@ -2183,6 +2207,17 @@ Lang.ui('fr', {
   'journal.prix.passagerSurplus': 'Surplus quand ce prix a été vu : prix passager, il remontera.',   // info-bulle d'un prix du journal marqué d'un sablier (vu pendant un surplus)
   'journal.prix.passagerPenurie': 'Pénurie quand ce prix a été vu : prix passager, il redescendra.',
   'journal.prix.legendePassager': 'Sablier : prix passager, vu pendant un surplus (vert) ou une pénurie (rouge).',
+  'journal.prix.ouiDire': 'ouï-dire, {age}',   // âge d'un prix rapporté par un capitaine à la taverne (06/10/2026) ; age : « il y a 4 jours »
+  'journal.prix.rumeurPenurie': 'Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.',   // info-bulle d'un prix marqué d'une flèche (une rumeur entendue)
+  'journal.prix.rumeurSurplus': 'Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.',
+  'journal.prix.traceVente': 'Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.',   // info-bulle d'un prix marqué d'un cercle : noté au départ, après vos échanges
+  'journal.prix.traceAchat': 'Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.',
+  'journal.prix.legendeRumeur': 'Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.',
+  'journal.prix.legendeTrace': 'Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.',
+  'journal.cargaison.titre': 'POUR VOTRE CARGAISON',   // en tête du journal des prix : ce que rapporterait la cargaison à bord dans les trois meilleurs ports
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  'journal.cargaison.port': '{port} {somme} ({prix})',   // somme : toute la quantité ; prix : le prix moyen
+  'journal.cargaison.aide': 'Ce que rapporterait toute la cargaison d\'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.',
   'journal.contrats.enCours': 'EN COURS',
   'journal.contrats.termines': 'TERMINÉS',
   'journal.contrats.aucun': 'Aucun contrat en cours : la taverne en propose dans chaque port.',
@@ -2376,14 +2411,16 @@ Lang.ui('fr', {
   'contrat.colisLivre': 'Colis livré à {port} : +{prime} {monnaie}',
 
   // ── Rumeurs (deMarchandise : « de riz », « d'indigo », pour le français) ──
-  'rumeur.fausse': 'On raconte que {marchandise} va manquer à {port}… mais l\'homme a beaucoup bu.',
+  'rumeur.fausse': 'On raconte que {port} va manquer {deMarchandise}… mais l\'homme a beaucoup bu.',
   // rumeurs de rue (bulles au port) : un indice vague, sans chiffre ; Marchandise : le nom de la marchandise, avec sa majuscule
   'rue.penurie': '{Marchandise} ? Paraît qu\'à {port}, on se l\'arrache en ce moment.',
   'rue.surplus': '{Marchandise} ? À {port}, paraît qu\'il y en a partout. Personne n\'en veut plus.',
-  'rumeur.dici': 'd\'ici {n, plural, one {# jour} other {# jours}}',
+  'rumeur.des': 'dès le {date}',   // (06/10/2026) date : « 14 mars » ; une date du calendrier reste juste dans le journal
   'rumeur.maintenant': 'en ce moment',
-  'rumeur.penurie': 'Pénurie {deMarchandise} à {port} {quand} : les prix vont s\'envoler.',
-  'rumeur.surplus': 'Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s\'effondrer.',
+  'rumeur.duree': '{n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}',   // combien de temps dure une pénurie ou un surplus (n : 0 à 3)
+  'rumeur.penurie': 'Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.',   // fois : « 2,5 »
+  'rumeur.surplus': 'Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l\'on pourra y acheter en gros.',
+  'rumeur.prix': 'Un capitaine arrivé {dePort} raconte les prix qu\'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.',   // dePort : « de Manille », « d'Alexandrie » (port : le nom seul)
   'rumeur.bouteillePenurie': '« {marchandise} introuvable à {port} »',
   'rumeur.bouteilleSurplus': '« {port} croule sous {stock} »',   // stock : « le riz », « les stocks de thé »
   'rumeur.stocksDe': 'les stocks de {marchandise}',
@@ -2636,7 +2673,7 @@ Lang.ui('fr', {
   'aides.taverne.shanghai.t': 'Shanghaier',
   'aides.taverne.shanghai.d': 'Des marins gratuits… enlevés ivres. Rapide, mais risqué : une amende et un jour perdu si la garde vous surprend.',
   'aides.taverne.rumeurs.t': 'Les rumeurs',
-  'aides.taverne.rumeurs.d': 'Une tournée fait parler : pénuries et surplus à venir dans d\'autres ports. Elles s\'affichent ensuite sur la carte.',
+  'aides.taverne.rumeurs.d': 'Une tournée fait parler : pénuries et surplus à venir dans d\'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d\'un port lointain. Tout se note sur la carte et dans le journal ; s\'il n\'y a rien à dire, la tournée ne coûte rien.',
   'aides.taverne.contrats.t': 'Les contrats',
   'aides.taverne.contrats.d': 'Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.',
   'aides.taverne.onglets.t': 'Les onglets',
@@ -2705,7 +2742,7 @@ Lang.ui('fr', {
   'notice.marche.1': '<b>Les vivres d\'abord.</b> Chaque marin mange chaque jour. Sans vivres, l\'équipage tombe malade puis déserte. Achetez-les en haut du marché, sur la ligne dorée, ou laissez cochée la case des vivres au moment d\'appareiller. Ils ne prennent pas de place et ne se revendent pas.',
   'notice.marche.2': '<b>Acheter bas, vendre haut.</b> Chaque port produit certaines marchandises (prix bas) et en manque d\'autres (prix hauts). Les prix changent chaque jour, et chaque partie est différente.',
   'notice.marche.3': '<b>Un port n\'avale qu\'une certaine quantité.</b> Vos achats font monter les prix, vos ventes les font baisser : le premier {unite} vendu rapporte plus que le dernier. La réglette du marché le montre en vert, en or puis en rouge. Un marché bousculé se remet en quelques semaines : répartissez une grosse cargaison entre plusieurs ports.',
-  'notice.marche.4': '<b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, et le port en avale bien davantage ; un surplus les effondre, et l\'on peut y acheter en gros. Dans le journal, un sablier marque ces prix passagers.',
+  'notice.marche.4': '<b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port en avale bien davantage ; un surplus les effondre, et l\'on peut y acheter en gros. Dans le journal, une flèche marque ce qu\'annoncent les rumeurs, un sablier les prix vus pendant l\'un d\'eux.',
   'notice.marche.5': '<b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.',
   'notice.dette.titre': 'La dette et la banque',
   'notice.dette.1': '{Maison} prête sur la parole. Les intérêts s\'ajoutent chaque mois à la dette ; passé le délai, {hommes} viennent se servir sur le quai.',
@@ -2721,7 +2758,7 @@ Lang.ui('fr', {
   'notice.combat.3': 'Fuir est souvent sage : toutes voiles dehors, au bon angle du vent. Un poursuivant distancé finit par renoncer.',
   'notice.combat.4': 'Si votre navire coule, la partie s\'arrête le plus souvent : le navire, sa cargaison et l\'argent à bord sont perdus. Gardez vos économies à la banque.',
   'notice.journal.titre': 'Le journal de bord',
-  'notice.journal.1': 'Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et les rumeurs entendues. Ouvrez-le avant de choisir une destination.',
+  'notice.journal.1': 'Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge ; ce que rapporterait votre cargaison dans les ports qui la paient le mieux ; vos contrats, le carnet de vos voyages et les rumeurs entendues. Ouvrez-le avant de choisir une destination.',
   'notice.heritage.titre': 'Les jetons et l\'Héritage',
   'notice.heritage.1': 'À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ (navire de famille, coffre) ne compte pas. Les hauts faits en donnent aussi.',
   'notice.heritage.2': 'Dépensez-les dans l\'<b>Héritage</b>, depuis l\'écran titre : chaque amélioration aide toutes vos parties suivantes dans cette mer. Les jetons servent aussi aux couleurs des voiles.',
@@ -2935,6 +2972,16 @@ Lang.ui('en', {
   'marche.bulle.mauvaisPort': 'Wrong port to sell in!',
   'marche.bulle.mauvaisConseil': '{port} pays less than you paid: try another port, if you have the choice.',
   'marche.bulle.mauvaisGuere': 'These days, {port} pays barely more than you paid: try another port, if you have the choice.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {Your sale today} one {Your sale yesterday} other {Your sale # days ago}} still weighs on this price: {pct}, half gone in 10 days.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Your purchase today} one {Your purchase yesterday} other {Your purchase # days ago}} still weighs on this price: {pct}, half gone in 10 days.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Word is {port} will run short {quand}: prices ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Word is {port} will pay ×{fois} {quand}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Word is {port} will be glutted {quand}: prices ÷{fois}.',
   // Quantité
   'marche.quantite': 'Quantity',
   // Acheté {n} {marchandise} pour {somme}
@@ -3085,10 +3132,12 @@ Lang.ui('en', {
   'taverne.offrirTournee': 'Buy a round',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Nobody has anything to tell.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Rumors tell of shortages and gluts, which then appear on the map.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Nothing new these days: this round is on the house.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'A round loosens tongues: shortages and gluts to come, or the prices of a distant port. It all goes on the map and in the logbook.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'CONTRACTS ON OFFER',
   // Récompense {prime} · avant le {date}
@@ -3209,8 +3258,18 @@ Lang.ui('en', {
   'carte.touchezPort': 'Pick a port on the map.',
   // RUMEURS
   'carte.rumeurs': 'RUMORS',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Prices reported {jours} d ago (hearsay)',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'your {n}: {prix} on average',
+  // On dit
+  'carte.onDit': 'Word is',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: shortage {quand}, for {duree}, prices ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: glut {quand}, for {duree}, prices ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# day} other {# days}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -3366,6 +3425,28 @@ Lang.ui('en', {
   'journal.prix.passagerSurplus': 'Glut when this price was seen: a passing price, it will rise again.',
   'journal.prix.passagerPenurie': 'Shortage when this price was seen: a passing price, it will fall again.',
   'journal.prix.legendePassager': 'Hourglass: a passing price, seen during a glut (green) or a shortage (red).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'hearsay, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Rumor: shortage {quand}, for {duree}, prices ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Rumor: glut {quand}, for {duree}, prices ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Noted right after your sale ({pct}): it recovers by half in 10 days.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Noted right after your purchase ({pct}): it eases back by half in 10 days.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Arrow: shortage (gold) or glut (red) announced by a rumor.',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Circle: price noted right after your own sale or purchase; it comes back on its own.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'FOR YOUR CARGO',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'What the whole cargo would fetch at the noted prices, each sale lowering the price of the next; in brackets, the average price.',
   // EN COURS
   'journal.contrats.enCours': 'ACTIVE',
   // TERMINÉS
@@ -3698,20 +3779,24 @@ Lang.ui('en', {
   'contrat.expire': 'Contract expired: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Parcel delivered to {port}: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Word is that {marchandise} will run short at {port}… but the fellow has had a good deal to drink.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? Word is they\'re snapping it up in {port} right now.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? In {port} it\'s everywhere, they say. Nobody wants any more.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': 'in {n, plural, one {# day} other {# days}}',
+  // dès le {date}
+  'rumeur.des': 'from {date}',
   // en ce moment
   'rumeur.maintenant': 'right now',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': 'A shortage of {marchandise} at {port} {quand}: prices are set to soar.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': 'A glut of {marchandise} at {port} {quand}: prices are set to collapse.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {a few more days} =1 {one to two weeks} =2 {two to three weeks} other {three to four weeks}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': 'A shortage of {marchandise} at {port} {quand}, for {duree}: prices there will be multiplied by {fois}, and the port will take far more.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': 'A glut of {marchandise} at {port} {quand}, for {duree}: prices there will be divided by {fois}, and you can buy in bulk.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'A captain just in from {port} tells of the prices he saw there {n, plural, =1 {yesterday} other {# days ago}}: they\'re now in your logbook.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '“No {marchandise} to be had at {port}”',
   // « {port} croule sous {stock} »
@@ -4164,8 +4249,8 @@ Lang.ui('en', {
   'aides.taverne.shanghai.d': 'Free sailors… carried off dead drunk. Quick, but risky: a fine and a lost day if the watch catches you.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Rumors',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'A round loosens tongues: coming shortages and gluts in other ports. They then appear on the map.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'A round loosens tongues: shortages and gluts to come in other ports, with their date, length and size, or the prices of a distant port. It all goes on the map and in the logbook; if there\'s nothing to tell, the round costs nothing.',
   // Les contrats
   'aides.taverne.contrats.t': 'Contracts',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -4292,8 +4377,8 @@ Lang.ui('en', {
   'notice.marche.2': '<b>Buy low, sell high.</b> Each port produces some goods (low prices) and lacks others (high prices). Prices change every day, and no two careers are alike.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>A port can only take so much.</b> Your purchases push prices up and your sales push them down: the first {unite} sold fetches more than the last. The market slider shows it in green, gold, then red. A shaken market recovers in a few weeks: spread a big cargo over several ports.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Shortages and gluts.</b> Tavern rumors announce them: a shortage sends prices soaring, and the port takes far more; a glut makes them collapse, and you can buy in bulk there. In the log, an hourglass marks these passing prices.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Shortages and gluts.</b> Tavern rumors announce them, with their date, length and size: a shortage sends prices soaring, and the port takes far more; a glut makes them collapse, and you can buy in bulk there. In the logbook, an arrow marks what the rumors announce, an hourglass the prices seen during one.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contraband.</b> Some goods are forbidden in some ports: customs can seize the lot.',
   // La dette et la banque
@@ -4324,8 +4409,8 @@ Lang.ui('en', {
   'notice.combat.4': 'If your ship sinks, your career usually ends there: the ship, her cargo and the money aboard are lost. Keep your savings in the bank.',
   // Le journal de bord
   'notice.journal.titre': 'Logbook',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'The logbook keeps the prices seen in each port (in green, the best purchase; in gold, the best sale) and their age, your contracts, notes on your voyages and the rumors you\'ve heard. Open it before choosing a destination.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'The logbook keeps the prices seen in each port (in green, the best purchase; in gold, the best sale), noted as you leave, after your trades, with their age; what your cargo would fetch in the ports that pay best for it; your contracts, notes on your voyages and the rumors you\'ve heard. Open it before choosing a destination.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'Tokens and the Legacy',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -12631,6 +12716,16 @@ Lang.ui('zh', {
   'marche.bulle.mauvaisPort': '这里不是卖货的地方！',
   'marche.bulle.mauvaisConseil': '{port}出的价比你的进价还低：能选的话，换个港口。',
   'marche.bulle.mauvaisGuere': '这些天{port}出的价只比你的进价高一点点：能选的话，换个港口。',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {你今天的卖出} =1 {你昨天的卖出} other {你#天前的卖出}}仍压着这个价格：{pct}，十天后消去一半。',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {你今天的买入} =1 {你昨天的买入} other {你#天前的买入}}仍抬着这个价格：{pct}，十天后消去一半。',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': '听说{quand}{port}会缺货：价格×{fois}。',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': '听说{quand}{port}会出×{fois}的价。',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': '听说{quand}{port}会过剩：价格÷{fois}。',
   // Quantité
   'marche.quantite': '数量',
   // Acheté {n} {marchandise} pour {somme}
@@ -12781,10 +12876,12 @@ Lang.ui('zh', {
   'taverne.offrirTournee': '请大家喝一轮',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': '没人有什么可说的。',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': '传闻会透露哪里短缺、哪里过剩，随后便会标在地图上。',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}：{marchandise}{fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': '这几天没什么新鲜事：这一轮算店家请的。',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': '请一轮酒，话匣子就开了：哪里将短缺、哪里将过剩，或是远方港口的行情。都会记在地图和航海日志上。',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}：{marchandise}{fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': '可接合约',
   // Récompense {prime} · avant le {date}
@@ -12905,8 +13002,18 @@ Lang.ui('zh', {
   'carte.touchezPort': '在地图上点选一个港口。',
   // RUMEURS
   'carte.rumeurs': '传闻',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': '{jours}天前听来的行情（传闻）',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': '你的{n}：均价{prix}',
+  // On dit
+  'carte.onDit': '听说',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}：{quand}短缺，持续{duree}，价格×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}：{quand}过剩，持续{duree}，价格÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '约{n, plural, other {#天}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -13062,6 +13169,28 @@ Lang.ui('zh', {
   'journal.prix.passagerSurplus': '看到这个价格时正逢过剩：只是一时的价格，还会涨回去。',
   'journal.prix.passagerPenurie': '看到这个价格时正逢短缺：只是一时的价格，还会跌回去。',
   'journal.prix.legendePassager': '沙漏：过剩（绿色）或短缺（红色）期间看到的一时价格。',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': '传闻，{age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': '传闻：{quand}短缺，持续{duree}，价格×{fois}。',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': '传闻：{quand}过剩，持续{duree}，价格÷{fois}。',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': '就在你卖出后记下的（{pct}）：十天回升一半。',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': '就在你买入后记下的（{pct}）：十天回落一半。',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': '箭头：传闻中的短缺（金色）或过剩（红色）。',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': '圆圈：就在你买卖之后记下的价格，会自行回到原位。',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': '你的货物',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}，{n}{unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme}（{prix}）',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': '按记下的行情，整批货物能卖多少；每卖一批，下一批的价格就低一些。括号里是均价。',
   // EN COURS
   'journal.contrats.enCours': '进行中',
   // TERMINÉS
@@ -13394,20 +13523,24 @@ Lang.ui('zh', {
   'contrat.expire': '合约过期：{contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': '货件已送到{port}：+{prime}{monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': '听说{port}的{marchandise}要缺货了……不过那人喝得可不少。',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}？听说{port}那边最近抢着要。',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}？听说{port}那边到处都是，没人要了。',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': '{n, plural, other {#天内}}',
+  // dès le {date}
+  'rumeur.des': '{date}起',
   // en ce moment
   'rumeur.maintenant': '眼下',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': '{quand}{port}{marchandise}告缺：价格就要飞涨。',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': '{quand}大批{marchandise}涌入{port}：价格就要暴跌。',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {几天} =1 {一两周} =2 {两三周} other {三四周}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': '{quand}{port}{marchandise}告缺，持续{duree}：价格将涨到{fois}倍，港口也会吃进更多货。',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': '{quand}大批{marchandise}涌入{port}，持续{duree}：价格将只剩原价的1/{fois}，可以大量收购。',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': '一位刚从{port}来的船长讲了他{n, plural, =1 {昨天} other {#天前}}在那里看到的行情：已记入你的航海日志。',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '“{port}已买不到{marchandise}”',
   // « {port} croule sous {stock} »
@@ -13860,8 +13993,8 @@ Lang.ui('zh', {
   'aides.taverne.shanghai.d': '不花钱的水手……趁醉掳来的。来得快，但有风险：被巡丁撞见，要罚款，还要误一天。',
   // Les rumeurs
   'aides.taverne.rumeurs.t': '传闻',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': '请大家喝一轮，话匣子就打开了：别的港口将有何短缺、何过剩。这些传闻随后会标在地图上。',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': '请一轮酒，话匣子就开了：别处港口将来的短缺和过剩，连同日期、持续多久和幅度，或是远方港口的行情。都会记在地图和航海日志上；若没什么可说，这一轮不花钱。',
   // Les contrats
   'aides.taverne.contrats.t': '合约',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -13988,8 +14121,8 @@ Lang.ui('zh', {
   'notice.marche.2': '<b>低买高卖。</b>每个港口都出产某些货物（价低），又缺另一些货物（价高）。行情天天在变，每段生涯也各不相同。',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>一个港口只吃得下一定的量。</b>你买货会抬高价格，卖货会压低价格：卖出的第一{unite}总比最后一{unite}值钱。市场的滑块会用绿色、金色、红色标出来。被搅乱的行情要几周才能恢复：大批货物宜分到几个港口出手。',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>短缺与过剩。</b>酒馆里的传闻会预先透露：短缺令价格飞涨，港口也吃得下多得多的货；过剩令价格暴跌，可以在那里大批买进。日志里，这些一时的价格旁有沙漏标记。',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>短缺与过剩。</b>酒馆里的传闻会预先透露，连同日期、持续多久和幅度：短缺令价格飞涨，港口也吃得下多得多的货；过剩令价格暴跌，可以在那里大批买进。日志里，箭头标出传闻所说，沙漏标出期间看到的一时价格。',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>走私货。</b>某些货物在某些港口是违禁品：海关可能将其全数没收。',
   // La dette et la banque
@@ -14020,8 +14153,8 @@ Lang.ui('zh', {
   'notice.combat.4': '船一旦沉没，生涯多半就此结束：船只、货物和船上的钱尽数丧失。积蓄还是存在银行里为好。',
   // Le journal de bord
   'notice.journal.titre': '航海日志',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': '日志记下各港见过的行情（绿色为最佳买价，金色为最佳卖价）及其新旧、你的合约、航程记事和听来的传闻。选定目的地之前，先翻一翻。',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': '航海日志记着每个港口看到的行情（绿色是最划算的买价，金色是最好的卖价），在你离港时、做完买卖后记下，并注明多久之前；你的货物在出价最高的几个港口能卖多少；你的契约、航行记录和听来的传闻。选定目的地之前，先翻一翻。',
   // Les jetons et l'Héritage
   'notice.heritage.titre': '信物与传承',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -22297,6 +22430,16 @@ Lang.ui('zht', {
   'marche.bulle.mauvaisPort': '這裡不是賣貨的地方！',
   'marche.bulle.mauvaisConseil': '{port}出的價比你的進價還低：能選的話，換個港口。',
   'marche.bulle.mauvaisGuere': '這些天{port}出的價只比你的進價高一點點：能選的話，換個港口。',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {你今天的賣出} =1 {你昨天的賣出} other {你#天前的賣出}}仍壓著這個價格：{pct}，十天後消去一半。',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {你今天的買入} =1 {你昨天的買入} other {你#天前的買入}}仍抬著這個價格：{pct}，十天後消去一半。',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': '聽說{quand}{port}會缺貨：價格×{fois}。',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': '聽說{quand}{port}會出×{fois}的價。',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': '聽說{quand}{port}會過剩：價格÷{fois}。',
   // Quantité
   'marche.quantite': '數量',
   // Acheté {n} {marchandise} pour {somme}
@@ -22447,10 +22590,12 @@ Lang.ui('zht', {
   'taverne.offrirTournee': '請大家喝一輪',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': '沒人有什麼可說的。',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': '傳聞會透露哪裡短缺、哪裡過剩，隨後便會標在地圖上。',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}：{marchandise}{fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': '這幾天沒什麼新鮮事：這一輪算店家請的。',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': '請一輪酒，話匣子就開了：哪裡將短缺、哪裡將過剩，或是遠方港口的行情。都會記在地圖和航海日誌上。',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}：{marchandise}{fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': '可接合約',
   // Récompense {prime} · avant le {date}
@@ -22571,8 +22716,18 @@ Lang.ui('zht', {
   'carte.touchezPort': '在地圖上點選一個港口。',
   // RUMEURS
   'carte.rumeurs': '傳聞',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': '{jours}天前聽來的行情（傳聞）',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': '你的{n}：均價{prix}',
+  // On dit
+  'carte.onDit': '聽說',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}：{quand}短缺，持續{duree}，價格×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}：{quand}過剩，持續{duree}，價格÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '約{n, plural, other {#天}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -22728,6 +22883,28 @@ Lang.ui('zht', {
   'journal.prix.passagerSurplus': '看到這個價格時正逢過剩：只是一時的價格，還會漲回去。',
   'journal.prix.passagerPenurie': '看到這個價格時正逢短缺：只是一時的價格，還會跌回去。',
   'journal.prix.legendePassager': '沙漏：過剩（綠色）或短缺（紅色）期間看到的一時價格。',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': '傳聞，{age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': '傳聞：{quand}短缺，持續{duree}，價格×{fois}。',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': '傳聞：{quand}過剩，持續{duree}，價格÷{fois}。',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': '就在你賣出後記下的（{pct}）：十天回升一半。',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': '就在你買入後記下的（{pct}）：十天回落一半。',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': '箭頭：傳聞中的短缺（金色）或過剩（紅色）。',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': '圓圈：就在你買賣之後記下的價格，會自行回到原位。',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': '你的貨物',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}，{n}{unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme}（{prix}）',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': '按記下的行情，整批貨物能賣多少；每賣一批，下一批的價格就低一些。括號裡是均價。',
   // EN COURS
   'journal.contrats.enCours': '進行中',
   // TERMINÉS
@@ -23060,20 +23237,24 @@ Lang.ui('zht', {
   'contrat.expire': '合約過期：{contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': '貨件已送到{port}：+{prime}{monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': '聽說{port}的{marchandise}要缺貨了……不過那人喝得可不少。',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}？聽說{port}那邊最近搶著要。',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}？聽說{port}那邊到處都是，沒人要了。',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': '{n, plural, other {#天內}}',
+  // dès le {date}
+  'rumeur.des': '{date}起',
   // en ce moment
   'rumeur.maintenant': '眼下',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': '{quand}{port}{marchandise}告缺：價格就要飛漲。',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': '{quand}大批{marchandise}湧入{port}：價格就要暴跌。',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {幾天} =1 {一兩週} =2 {兩三週} other {三四週}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': '{quand}{port}{marchandise}告缺，持續{duree}：價格將漲到{fois}倍，港口也會吃進更多貨。',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': '{quand}大批{marchandise}湧入{port}，持續{duree}：價格將只剩原價的1/{fois}，可以大量收購。',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': '一位剛從{port}來的船長講了他{n, plural, =1 {昨天} other {#天前}}在那裡看到的行情：已記入你的航海日誌。',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '「{port}已買不到{marchandise}」',
   // « {port} croule sous {stock} »
@@ -23526,8 +23707,8 @@ Lang.ui('zht', {
   'aides.taverne.shanghai.d': '不花錢的水手……趁醉擄來的。來得快，卻有風險：若被巡丁撞見，要罰款，還得耽誤一天。',
   // Les rumeurs
   'aides.taverne.rumeurs.t': '傳聞',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': '請大家喝一輪，話匣子就打開了：哪些港口即將短缺或過剩。這些消息隨後會標在地圖上。',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': '請一輪酒，話匣子就開了：別處港口將來的短缺和過剩，連同日期、持續多久和幅度，或是遠方港口的行情。都會記在地圖和航海日誌上；若沒什麼可說，這一輪不花錢。',
   // Les contrats
   'aides.taverne.contrats.t': '合約',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -23654,8 +23835,8 @@ Lang.ui('zht', {
   'notice.marche.2': '<b>低買高賣。</b>每個港口都出產某些貨物（價低），又缺另一些（價高）。行情天天在變，每一局也各不相同。',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>一個港口只吃得下一定的量。</b>你買貨會抬高價格，賣貨會壓低價格：賣出的第一{unite}比最後一{unite}值錢。市場的滑桿會用綠色、金色、紅色標出來。被攪亂的行情要幾週才能恢復：大批貨物宜分到幾個港口出手。',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>短缺與過剩。</b>酒館裡的傳聞會預先透露：短缺讓價格飛漲，港口也吃得下多得多的貨；過剩讓價格暴跌，可以在那裡大批買進。日誌裡，這些一時的價格旁有沙漏標記。',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>短缺與過剩。</b>酒館裡的傳聞會預先透露，連同日期、持續多久和幅度：短缺讓價格飛漲，港口也吃得下多得多的貨；過剩讓價格暴跌，可以在那裡大批買進。日誌裡，箭頭標出傳聞所說，沙漏標出期間看到的一時價格。',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>走私貨。</b>有些貨物在某些港口屬於違禁品：海關可能全數沒收。',
   // La dette et la banque
@@ -23686,8 +23867,8 @@ Lang.ui('zht', {
   'notice.combat.4': '船一沉，本局多半就此結束：船、貨和船上的錢全數化為烏有。積蓄最好存在銀行。',
   // Le journal de bord
   'notice.journal.titre': '航海日誌',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': '日誌記下各港見過的行情（綠色為最佳買處，金色為最佳賣處）及其新舊、你的合約、航程記事，以及聽來的傳聞。選定目的地之前，先翻一翻。',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': '航海日誌記著每個港口看到的行情（綠色是最划算的買價，金色是最好的賣價），在你離港時、做完買賣後記下，並註明多久之前；你的貨物在出價最高的幾個港口能賣多少；你的契約、航行紀錄和聽來的傳聞。選定目的地之前，先翻一翻。',
   // Les jetons et l'Héritage
   'notice.heritage.titre': '信物與傳承',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -31965,6 +32146,16 @@ Lang.ui('ja', {
   'marche.bulle.mauvaisPort': '売るには向かない港だ！',
   'marche.bulle.mauvaisConseil': '{port}では仕入値より安くしか売れん。選べるなら、よその港を目指せ。',
   'marche.bulle.mauvaisGuere': 'このところ{port}では、仕入値とほとんど変わらん値でしか売れん。選べるなら、よその港を目指せ。',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {今日の売り} =1 {昨日の売り} other {#日前の売り}}がまだこの値を押し下げている：{pct}。10日で半分に戻る。',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {今日の買い} =1 {昨日の買い} other {#日前の買い}}がまだこの値を押し上げている：{pct}。10日で半分に戻る。',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': '{quand}、{port}で品薄になるそうだ：値は×{fois}。',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': '{quand}、{port}では×{fois}の値がつくそうだ。',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': '{quand}、{port}は余剰になるそうだ：値は÷{fois}。',
   // Quantité
   'marche.quantite': '数量',
   // Acheté {n} {marchandise} pour {somme}
@@ -32115,10 +32306,12 @@ Lang.ui('ja', {
   'taverne.offrirTournee': '皆に一杯おごる',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': '話の種を持つ者はいない。',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': '噂は品薄や余剰を告げる。聞いた噂は地図にも記される。',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}：{marchandise}{fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'このところ新しい話はない。この一杯は店のおごりだ。',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': '一杯おごれば口も軽くなる。これからの品薄や余剰、遠い港の相場。どれも地図と航海日誌に記される。',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}：{marchandise}{fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': '受けられる依頼',
   // Récompense {prime} · avant le {date}
@@ -32239,8 +32432,18 @@ Lang.ui('ja', {
   'carte.touchezPort': '地図上の港を選んでください。',
   // RUMEURS
   'carte.rumeurs': '噂',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port}・{marchandise}・{quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': '{jours}日前に聞いた相場（伝聞）',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': '手持ちの{n}：平均{prix}',
+  // On dit
+  'carte.onDit': '噂では',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}：{quand}品薄、{duree}続き、値は×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}：{quand}余剰、{duree}続き、値は÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '約{n, plural, other {#日}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -32396,6 +32599,28 @@ Lang.ui('ja', {
   'journal.prix.passagerSurplus': 'この値を見たときは余剰だった。一時の値で、また上がる。',
   'journal.prix.passagerPenurie': 'この値を見たときは品薄だった。一時の値で、また下がる。',
   'journal.prix.legendePassager': '砂時計：余剰（緑）や品薄（赤）のときに見た一時の値。',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': '伝聞、{age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': '噂：{quand}品薄、{duree}続き、値は×{fois}。',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': '噂：{quand}余剰、{duree}続き、値は÷{fois}。',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': '売った直後に記した値（{pct}）。10日で半分戻る。',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': '買った直後に記した値（{pct}）。10日で半分戻る。',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': '矢印：噂で知らされた品薄（金）や余剰（赤）。',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': '丸：自分の売買の直後に記した値。ひとりでに戻る。',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': '積荷の売り先',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}、{n}{unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme}（{prix}）',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': '記した相場で積荷を全て売ったときの額。売るたびに次の値が下がる分も含む。括弧内は平均値。',
   // EN COURS
   'journal.contrats.enCours': '進行中',
   // TERMINÉS
@@ -32728,20 +32953,24 @@ Lang.ui('ja', {
   'contrat.expire': '依頼の期限切れ：{contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': '{port}に荷を届けた：+{prime}{monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': '{port}で{marchandise}が足りなくなるそうだ……もっとも、話した男はだいぶ酔っていたが。',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}？　{port}じゃ今、みんな奪い合ってるらしいぜ。',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}？　{port}じゃどこでも余ってるらしい。もう誰も欲しがらないってさ。',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': '{n, plural, other {#日}}後には',
+  // dès le {date}
+  'rumeur.des': '{date}から',
   // en ce moment
   'rumeur.maintenant': '今まさに',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': '{quand}、{port}で{marchandise}が品薄に——値は跳ね上がるぞ。',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': '{quand}、{port}は{marchandise}の山に——値は崩れるぞ。',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {あと数日} =1 {一、二週間} =2 {二、三週間} other {三、四週間}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': '{quand}、{port}で{marchandise}が品薄に。{duree}続き、値は{fois}倍になり、港はずっと多く買い取るぞ。',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': '{quand}、{port}は{marchandise}の山に。{duree}続き、値は{fois}分の1に下がり、まとめ買いができるぞ。',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': '{port}から来たばかりの船長が、{n, plural, =1 {昨日} other {#日前}}そこで見た相場を話してくれた。航海日誌に書き留めてある。',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '「{port}にて{marchandise}、手に入らず」',
   // « {port} croule sous {stock} »
@@ -33194,8 +33423,8 @@ Lang.ui('ja', {
   'aides.taverne.shanghai.d': 'ただで水夫が手に入る……酔いつぶれたところをさらうのだ。手っ取り早いが危ない。夜警に見つかれば、罰金を取られ一日を失う。',
   // Les rumeurs
   'aides.taverne.rumeurs.t': '噂',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': '一杯おごれば口も軽くなる。ほかの港でこれから起きる品薄や余剰が聞ける。聞いた噂は地図にも記される。',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': '一杯おごれば口も軽くなる。他の港でこれから起きる品薄や余剰を、時期・期間・規模とともに。あるいは遠い港の相場。どれも地図と航海日誌に記される。話の種がなければ、おごりはただだ。',
   // Les contrats
   'aides.taverne.contrats.t': '依頼',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -33322,8 +33551,8 @@ Lang.ui('ja', {
   'notice.marche.2': '<b>安く買って、高く売る。</b>どの港にも、産する品（安い）と足りない品（高い）がある。相場は日ごとに変わり、航海のたびに違う。',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>港がさばける量には限りがある。</b>買えば値は上がり、売れば下がる。最初に売る1{unite}は、最後の1{unite}より高く売れる。市場のスライダーは、それを緑、金、そして赤で示す。荒れた相場は数週間で元に戻る。大量の積荷は、いくつもの港に振り分けよう。',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>品薄と余剰。</b>酒場の噂がそれを告げる。品薄になれば値は跳ね上がり、港はずっと多くをさばける。余剰になれば値は崩れ、まとめ買いができる。日誌では、こうした一時の値に砂時計のしるしがつく。',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>品薄と余剰。</b>酒場の噂が、時期・期間・規模とともにそれを告げる。品薄になれば値は跳ね上がり、港はずっと多くをさばける。余剰になれば値は崩れ、まとめ買いができる。日誌では、矢印が噂の知らせを、砂時計がその最中に見た一時の値を示す。',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>禁制品。</b>港によっては持ち込めない品がある。税関に見つかれば、すべて没収されかねない。',
   // La dette et la banque
@@ -33354,8 +33583,8 @@ Lang.ui('ja', {
   'notice.combat.4': '船が沈めば、たいていはそこで航海が終わる。船も積荷も、船上の金も失われる。蓄えは銀行に預けておこう。',
   // Le journal de bord
   'notice.journal.titre': '航海日誌',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': '日誌には、各港で見た相場（緑は最良の買い場、金は最良の売り場）とその鮮度、依頼、航海の記録、耳にした噂が残る。行き先を決める前に開いてみよう。',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': '航海日誌には、各港で見た相場（緑は最も安い買い値、金は最も高い売り値）が、出港時、売買を終えた後の値として、いつのものかとともに記される。積荷を最も高く買う港でいくらになるか、契約、航海の記録、聞いた噂も。行き先を決める前に開こう。',
   // Les jetons et l'Héritage
   'notice.heritage.titre': '遺産とその証',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -41665,6 +41894,16 @@ Lang.ui('ko', {
   'marche.bulle.mauvaisPort': '여기는 팔 곳이 아니다!',
   'marche.bulle.mauvaisConseil': '{port}은(는) 네가 산 값보다 덜 쳐 준다. 고를 수 있으면 다른 항구로 가라.',
   'marche.bulle.mauvaisGuere': '요즘 {port}은(는) 네가 산 값보다 거의 더 쳐 주지 않는다. 고를 수 있으면 다른 항구로 가라.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {오늘 판매한 물량이} =1 {어제 판매한 물량이} other {#일 전에 판매한 물량이}} 아직 이 시세를 누르고 있습니다: {pct}, 10일이면 절반이 회복됩니다.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {오늘 사들인 물량이} =1 {어제 사들인 물량이} other {#일 전에 사들인 물량이}} 아직 이 시세를 끌어올리고 있습니다: {pct}, 10일이면 절반이 회복됩니다.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': '{quand} {port}에 품귀가 든다는 소문: 값 ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': '{quand} {port}에서 ×{fois} 값을 쳐준다는 소문.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': '{quand} {port}에 과잉이 든다는 소문: 값 ÷{fois}.',
   // Quantité
   'marche.quantite': '수량',
   // Acheté {n} {marchandise} pour {somme}
@@ -41815,10 +42054,12 @@ Lang.ui('ko', {
   'taverne.offrirTournee': '술 한턱내기',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': '아무도 들려줄 이야기가 없습니다.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': '소문은 품귀와 과잉을 알려 줍니다. 들은 소문은 지도에도 표시됩니다.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': '요즘은 새 소식이 없습니다. 이번 술은 주점에서 냅니다.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': '한턱내면 입이 풀립니다. 곧 올 품귀와 과잉, 또는 먼 항구의 시세. 모두 지도와 항해 일지에 적힙니다.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': '제안된 계약',
   // Récompense {prime} · avant le {date}
@@ -41939,8 +42180,18 @@ Lang.ui('ko', {
   'carte.touchezPort': '지도에서 항구를 고르십시오.',
   // RUMEURS
   'carte.rumeurs': '소문',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': '{jours}일 전에 전해 들은 시세(소문)',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': '보유한 {n}: 평균 {prix}',
+  // On dit
+  'carte.onDit': '소문으로는',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: {quand} 품귀, {duree} 동안, 값 ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: {quand} 과잉, {duree} 동안, 값 ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, other {#일}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -42096,6 +42347,28 @@ Lang.ui('ko', {
   'journal.prix.passagerSurplus': '이 시세를 봤을 때 과잉이었습니다. 잠깐의 시세라 다시 오릅니다.',
   'journal.prix.passagerPenurie': '이 시세를 봤을 때 품귀였습니다. 잠깐의 시세라 다시 내립니다.',
   'journal.prix.legendePassager': '모래시계: 과잉(초록색)이나 품귀(빨간색) 때 본 잠깐의 시세.',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': '전해 들음, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': '소문: {quand} 품귀, {duree} 동안, 값 ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': '소문: {quand} 과잉, {duree} 동안, 값 ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': '판매 직후에 적은 시세({pct}): 10일이면 절반이 회복됩니다.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': '매입 직후에 적은 시세({pct}): 10일이면 절반이 내려갑니다.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': '화살표: 소문으로 알려진 품귀(금색)나 과잉(빨간색).',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': '동그라미: 직접 사고판 직후에 적은 시세. 저절로 돌아옵니다.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': '싣고 있는 화물',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n}{unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme}({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': '적어 둔 시세로 화물 전부를 팔 때 받을 금액. 팔 때마다 다음 값이 내려가는 것까지 셈합니다. 괄호 안은 평균값.',
   // EN COURS
   'journal.contrats.enCours': '진행 중',
   // TERMINÉS
@@ -42428,20 +42701,24 @@ Lang.ui('ko', {
   'contrat.expire': '계약 만료: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': '{port}에 짐 전달: +{prime}{monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': '{port}에서 곧 {marchandise}이(가) 귀해진답니다… 다만 말한 사내가 술을 꽤 마셨더군요.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? {port}에서 요즘 서로 사겠다고 난리래.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? {port}에는 사방에 널렸대. 아무도 안 산다더군.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': '{n, plural, other {#일}} 뒤',
+  // dès le {date}
+  'rumeur.des': '{date}부터',
   // en ce moment
   'rumeur.maintenant': '지금',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': '{quand} {port}에서 {marchandise} 품귀: 값이 치솟을 겁니다.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': '{quand} {port}에 {marchandise}이(가) 쏟아져 들어옵니다: 값이 폭락할 겁니다.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {며칠} =1 {한두 주} =2 {두세 주} other {서너 주}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': '{quand} {port}에서 {marchandise} 품귀, {duree} 동안: 값이 {fois}배로 뛰고, 항구가 훨씬 많이 사들일 겁니다.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': '{quand} {port}에 {marchandise}이(가) 쏟아져 들어옵니다. {duree} 동안 값이 {fois}분의 1로 떨어져 대량으로 살 수 있습니다.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': '{port}에서 막 온 선장이 {n, plural, =1 {어제} other {#일 전}} 그곳에서 본 시세를 들려줍니다. 항해 일지에 적어 두었습니다.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '“{port}에서는 {marchandise}을(를) 구할 수 없음”',
   // « {port} croule sous {stock} »
@@ -42894,8 +43171,8 @@ Lang.ui('ko', {
   'aides.taverne.shanghai.d': '공짜 선원… 술에 취한 사람을 끌고 옵니다. 빠르지만 위험합니다. 경비대에 들키면 벌금을 물고 하루를 허비합니다.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': '소문',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': '술을 한턱내면 입이 풀립니다. 다른 항구에 곧 닥칠 품귀와 과잉 소식을 듣고, 들은 소문은 지도에도 표시됩니다.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': '한턱내면 입이 풀립니다. 다른 항구에 곧 올 품귀와 과잉을 날짜, 기간, 규모와 함께, 또는 먼 항구의 시세를. 모두 지도와 항해 일지에 적힙니다. 들려줄 이야기가 없으면 술값은 받지 않습니다.',
   // Les contrats
   'aides.taverne.contrats.t': '계약',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -43022,8 +43299,8 @@ Lang.ui('ko', {
   'notice.marche.2': '<b>싸게 사서 비싸게 파십시오.</b> 항구마다 많이 나서 싼 교역품이 있고, 귀해서 비싼 교역품이 있습니다. 시세는 날마다 바뀌고, 항해마다 다릅니다.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>항구가 받아 줄 수 있는 양에는 한계가 있습니다.</b> 사면 값이 오르고 팔면 내려갑니다. 맨 처음 파는 한 {unite}이(가) 마지막 한 {unite}보다 비싸게 팔립니다. 교역소의 막대가 이를 초록색, 금색, 빨간색으로 보여 줍니다. 흔들린 시세는 몇 주면 돌아오니, 많은 화물은 여러 항구에 나눠 파십시오.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>품귀와 과잉.</b> 주점의 소문이 미리 알려 줍니다. 품귀가 들면 값이 치솟고 항구가 훨씬 많이 받아 주며, 과잉이 들면 값이 폭락하고 대량으로 사들일 수 있습니다. 일지에서는 이런 잠깐의 시세에 모래시계가 붙습니다.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>품귀와 과잉.</b> 주점의 소문이 날짜, 기간, 규모와 함께 미리 알려 줍니다. 품귀가 들면 값이 치솟고 항구가 훨씬 많이 받아 주며, 과잉이 들면 값이 폭락하고 대량으로 사들일 수 있습니다. 일지에서 화살표는 소문이 알린 것을, 모래시계는 그동안 본 잠깐의 시세를 표시합니다.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>밀수품.</b> 어떤 교역품은 항구에 따라 금지됩니다. 세관에 걸리면 모두 몰수당할 수 있습니다.',
   // La dette et la banque
@@ -43054,8 +43331,8 @@ Lang.ui('ko', {
   'notice.combat.4': '배가 가라앉으면 대개 항해는 거기서 끝납니다. 배와 화물, 선상의 돈을 모두 잃습니다. 모아 둔 돈은 은행에 맡기십시오.',
   // Le journal de bord
   'notice.journal.titre': '항해 일지',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': '일지에는 항구마다 본 시세(초록색은 가장 싸게 살 곳, 금색은 가장 비싸게 팔 곳)와 그 확인 시점, 계약, 항해 기록, 들은 소문이 남습니다. 목적지를 고르기 전에 펼쳐 보십시오.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': '항해 일지에는 항구마다 본 시세(초록색은 가장 싼 매입가, 금색은 가장 비싼 판매가)가 출항할 때, 거래를 마친 뒤의 값으로, 언제 본 것인지와 함께 적힙니다. 싣고 있는 화물을 가장 비싸게 사 주는 항구들에서 얼마를 받을지, 계약, 항해 기록, 들은 소문도 있습니다. 목적지를 정하기 전에 펼쳐 보세요.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': '증표와 유산',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -51330,6 +51607,16 @@ Lang.ui('ru', {
   'marche.bulle.mauvaisPort': 'Здесь продавать невыгодно!',
   'marche.bulle.mauvaisConseil': '{port} платит меньше, чем ты заплатил: иди в другой порт, если есть выбор.',
   'marche.bulle.mauvaisGuere': 'В эти дни {port} платит едва больше, чем ты заплатил: иди в другой порт, если есть выбор.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {Ваша сегодняшняя продажа} =1 {Ваша вчерашняя продажа} one {Ваша продажа # день назад} few {Ваша продажа # дня назад} many {Ваша продажа # дней назад} other {Ваша продажа # дня назад}} всё ещё давит на эту цену: {pct}, за 10 дней след сойдёт наполовину.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Ваша сегодняшняя покупка} =1 {Ваша вчерашняя покупка} one {Ваша покупка # день назад} few {Ваша покупка # дня назад} many {Ваша покупка # дней назад} other {Ваша покупка # дня назад}} всё ещё давит на эту цену: {pct}, за 10 дней след сойдёт наполовину.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Говорят, в порту {port} {quand} будет нехватка: цены ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Говорят, в порту {port} {quand} заплатят ×{fois}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Говорят, в порту {port} {quand} будет избыток: цены ÷{fois}.',
   // Quantité
   'marche.quantite': 'Количество',
   // Acheté {n} {marchandise} pour {somme}
@@ -51480,10 +51767,12 @@ Lang.ui('ru', {
   'taverne.offrirTournee': 'Угостить всех',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Никому нечего рассказать.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Слухи сулят нехватку и избыток товаров; потом это видно и на карте.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Ничего нового в эти дни: угощение за счёт заведения.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'Угощение развязывает языки: грядущие нехватки и избытки или цены далёкого порта. Всё это отмечается на карте и в журнале.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'КОНТРАКТЫ НА ВЫБОР',
   // Récompense {prime} · avant le {date}
@@ -51604,8 +51893,18 @@ Lang.ui('ru', {
   'carte.touchezPort': 'Выберите порт на карте.',
   // RUMEURS
   'carte.rumeurs': 'СЛУХИ',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Цены со слов, {jours} дн. назад',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'ваши {n}: в среднем {prix}',
+  // On dit
+  'carte.onDit': 'Говорят',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: нехватка {quand}, на {duree}, цены ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: избыток {quand}, на {duree}, цены ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# день} few {# дня} many {# дней} other {# дня}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -51761,6 +52060,28 @@ Lang.ui('ru', {
   'journal.prix.passagerSurplus': 'Избыток, когда была замечена эта цена: цена временная, она поднимется.',
   'journal.prix.passagerPenurie': 'Нехватка, когда была замечена эта цена: цена временная, она опустится.',
   'journal.prix.legendePassager': 'Песочные часы: временная цена, замеченная во время избытка (зелёные) или нехватки (красные).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'по слухам, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Слух: нехватка {quand}, на {duree}, цены ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Слух: избыток {quand}, на {duree}, цены ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Записано сразу после вашей продажи ({pct}): за 10 дней цена восстановится наполовину.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Записано сразу после вашей покупки ({pct}): за 10 дней цена опустится наполовину обратно.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Стрелка: нехватка (золотая) или избыток (красная), о которых ходят слухи.',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Кружок: цена, записанная сразу после вашей продажи или покупки; она вернётся сама.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'ДЛЯ ВАШЕГО ГРУЗА',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'Сколько принёс бы весь груз по записанным ценам, ведь каждая продажа сбивает цену следующей; в скобках средняя цена.',
   // EN COURS
   'journal.contrats.enCours': 'ТЕКУЩИЕ',
   // TERMINÉS
@@ -52093,20 +52414,24 @@ Lang.ui('ru', {
   'contrat.expire': 'Контракт просрочен: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Доставлено в порт {port}: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Говорят, в порту {port} скоро будет нехватка: {marchandise}… но рассказчик изрядно выпил.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? В порту {port}, говорят, этого добра сейчас не сыскать – с руками отрывают.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? В порту {port}, говорят, этого добра навалом. Никому уже не нужно.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': 'через {n, plural, one {# день} few {# дня} many {# дней} other {# дня}}',
+  // dès le {date}
+  'rumeur.des': 'с {date}',
   // en ce moment
   'rumeur.maintenant': 'уже сейчас',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': 'В порту {port} {quand} нехватка: {marchandise}. Цены взлетят.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': 'В порту {port} {quand} избыток: {marchandise}. Цены рухнут.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {несколько дней} =1 {одну-две недели} =2 {две-три недели} other {три-четыре недели}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': 'В порту {port} {quand} нехватка, на {duree}: {marchandise}. Цены там вырастут в {fois} раза, и порт возьмёт куда больше.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': 'В порту {port} {quand} избыток, на {duree}: {marchandise}. Цены там упадут в {fois} раза, можно будет закупаться оптом.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'Капитан, только что пришедший из порта {port}, рассказывает о ценах, которые видел там {n, plural, =1 {вчера} one {# день назад} few {# дня назад} many {# дней назад} other {# дня назад}}: они записаны в ваш журнал.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '«В порту {port} не достать товара: {marchandise}»',
   // « {port} croule sous {stock} »
@@ -52559,8 +52884,8 @@ Lang.ui('ru', {
   'aides.taverne.shanghai.d': 'Моряки даром… прихваченные спьяну. Быстро, но рискованно: попадётесь страже — штраф и потерянный день.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Слухи',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'Угостите всех — и языки развяжутся: где скоро будет нехватка, а где избыток. Потом это видно и на карте.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'Угощение развязывает языки: грядущие нехватки и избытки в других портах, с датой, сроком и размахом, или цены далёкого порта. Всё отмечается на карте и в журнале; если рассказать нечего, угощение ничего не стоит.',
   // Les contrats
   'aides.taverne.contrats.t': 'Контракты',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -52687,8 +53012,8 @@ Lang.ui('ru', {
   'notice.marche.2': '<b>Покупайте дёшево, продавайте дорого.</b> Каждый порт производит одни товары (цены низкие) и нуждается в других (цены высокие). Цены меняются каждый день, и ни одна игра не похожа на другую.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>Порт поглощает лишь определённое количество.</b> Ваши покупки поднимают цены, а продажи их сбивают: первая проданная мера ({unite}) приносит больше последней. Ползунок на рынке показывает это зелёным, золотым, затем красным. Встряхнутый рынок приходит в себя за несколько недель: развозите большой груз по нескольким портам.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Нехватка и избыток.</b> О них говорят слухи в таверне: нехватка взвинчивает цены, и порт поглощает куда больше; избыток их обрушивает, и там можно закупаться оптом. В журнале песочные часы отмечают такие временные цены.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Нехватка и избыток.</b> О них говорят слухи в таверне, с датой, сроком и размахом: нехватка взвинчивает цены, и порт поглощает куда больше; избыток их обрушивает, и там можно закупаться оптом. В журнале стрелка отмечает то, о чём говорят слухи, а песочные часы отмечают цены, увиденные во время одного из них.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Контрабанда.</b> Иные товары в иных портах запрещены: таможня может конфисковать всё.',
   // La dette et la banque
@@ -52719,8 +53044,8 @@ Lang.ui('ru', {
   'notice.combat.4': 'Если ваш корабль пойдёт ко дну, игра чаще всего заканчивается: корабль, груз и деньги на борту пропадают. Храните сбережения в банке.',
   // Le journal de bord
   'notice.journal.titre': 'Судовой журнал',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'Журнал хранит цены, которые вы видели в каждом порту (зелёным — лучшая покупка, золотым — лучшая продажа), и их давность, ваши контракты, записи о плаваниях и услышанные слухи. Загляните в него, прежде чем выбрать, куда плыть.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'Журнал хранит цены, увиденные в каждом порту (зелёным: лучшая покупка; золотым: лучшая продажа), записанные при отплытии, после ваших сделок, с их давностью; сколько принёс бы ваш груз в портах, где за него платят лучше всего; ваши контракты, записи о плаваниях и услышанные слухи. Загляните в него, прежде чем выбрать порт назначения.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'Жетоны и Наследие',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -61135,6 +61460,16 @@ Lang.ui('es', {
   'marche.bulle.mauvaisPort': '¡Mal puerto para vender!',
   'marche.bulle.mauvaisConseil': '{port} paga menos de lo que pagaste tú: busca otro puerto, si puedes elegir.',
   'marche.bulle.mauvaisGuere': 'Estos días, {port} apenas paga más de lo que pagaste tú: busca otro puerto, si puedes elegir.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {Tu venta de hoy} one {Tu venta de ayer} other {Tu venta de hace # días}} aún pesa sobre este precio: {pct}, la mitad se borra en 10 días.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Tu compra de hoy} one {Tu compra de ayer} other {Tu compra de hace # días}} aún pesa sobre este precio: {pct}, la mitad se borra en 10 días.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Dicen que en {port} faltará {quand}: precios ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Dicen que {port} pagará ×{fois} {quand}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Dicen que {port} estará inundado {quand}: precios ÷{fois}.',
   // Quantité
   'marche.quantite': 'Cantidad',
   // Acheté {n} {marchandise} pour {somme}
@@ -61285,10 +61620,12 @@ Lang.ui('es', {
   'taverne.offrirTournee': 'Invitar a una ronda',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Nadie tiene nada que contar.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Los rumores anuncian escaseces y excedentes, que luego aparecen en el mapa.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Nada nuevo estos días: la ronda corre a cuenta de la casa.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'Una ronda suelta lenguas: escaseces y excedentes por venir, o los precios de un puerto lejano. Todo queda anotado en el mapa y en la bitácora.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'CONTRATOS OFRECIDOS',
   // Récompense {prime} · avant le {date}
@@ -61409,8 +61746,18 @@ Lang.ui('es', {
   'carte.touchezPort': 'Toca un puerto en el mapa.',
   // RUMEURS
   'carte.rumeurs': 'RUMORES',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Precios contados hace {jours} d (de oídas)',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'tus {n}: {prix} de media',
+  // On dit
+  'carte.onDit': 'Se dice',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: escasez {quand}, por {duree}, precios ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: excedente {quand}, por {duree}, precios ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# día} other {# días}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -61566,6 +61913,28 @@ Lang.ui('es', {
   'journal.prix.passagerSurplus': 'Excedente cuando se vio este precio: un precio pasajero, volverá a subir.',
   'journal.prix.passagerPenurie': 'Escasez cuando se vio este precio: un precio pasajero, volverá a bajar.',
   'journal.prix.legendePassager': 'Reloj de arena: precio pasajero, visto durante un excedente (verde) o una escasez (rojo).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'de oídas, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Rumor: escasez {quand}, por {duree}, precios ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Rumor: excedente {quand}, por {duree}, precios ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Anotado justo después de tu venta ({pct}): se recupera a la mitad en 10 días.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Anotado justo después de tu compra ({pct}): vuelve a bajar a la mitad en 10 días.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Flecha: escasez (oro) o excedente (rojo) anunciados por un rumor.',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Círculo: precio anotado justo después de tu venta o compra; se recupera solo.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'PARA TU CARGAMENTO',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'Lo que daría todo el cargamento según los precios anotados, cada venta bajando el precio de la siguiente; entre paréntesis, el precio medio.',
   // EN COURS
   'journal.contrats.enCours': 'EN CURSO',
   // TERMINÉS
@@ -61898,20 +62267,24 @@ Lang.ui('es', {
   'contrat.expire': 'Contrato vencido: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Encargo entregado en {port}: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Dicen que habrá escasez de {marchandise} en {port}… pero el hombre había bebido mucho.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '¿{Marchandise}? Dicen que en {port} se lo quitan de las manos.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '¿{Marchandise}? Dicen que en {port} sobra por todas partes. Ya nadie quiere.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': 'dentro de {n, plural, one {# día} other {# días}}',
+  // dès le {date}
+  'rumeur.des': 'a partir del {date}',
   // en ce moment
   'rumeur.maintenant': 'en este momento',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': 'Escasez de {marchandise} en {port} {quand}: los precios se van a disparar.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': 'Una avalancha de {marchandise} llega a {port} {quand}: los precios se van a hundir.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {unos pocos días más} =1 {una o dos semanas} =2 {dos o tres semanas} other {tres o cuatro semanas}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': 'Escasez de {marchandise} en {port} {quand}, por {duree}: los precios se multiplicarán por {fois} y el puerto comprará mucho más.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': 'Una avalancha de {marchandise} llega a {port} {quand}, por {duree}: los precios se dividirán por {fois} y se podrá comprar al por mayor.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'Un capitán recién llegado de {port} cuenta los precios que vio allí {n, plural, =1 {ayer} other {hace # días}}: ya están en tu bitácora.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '«Ni rastro de {marchandise} en {port}»',
   // « {port} croule sous {stock} »
@@ -62364,8 +62737,8 @@ Lang.ui('es', {
   'aides.taverne.shanghai.d': 'Marineros gratis… secuestrados en plena borrachera. Rápido, pero arriesgado: multa y un día perdido si te sorprende la guardia.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Los rumores',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'Una ronda suelta las lenguas: escaseces y excedentes por venir en otros puertos. Luego aparecen en el mapa.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'Una ronda suelta lenguas: escaseces y excedentes por venir en otros puertos, con su fecha, su duración y su magnitud, o los precios de un puerto lejano. Todo queda en el mapa y en la bitácora; si no hay nada que contar, la ronda no cuesta nada.',
   // Les contrats
   'aides.taverne.contrats.t': 'Los contratos',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -62492,8 +62865,8 @@ Lang.ui('es', {
   'notice.marche.2': '<b>Comprar barato, vender caro.</b> Cada puerto produce ciertas mercancías (precios bajos) y carece de otras (precios altos). Los precios cambian cada día, y cada partida es distinta.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>Un puerto solo absorbe cierta cantidad.</b> Tus compras hacen subir los precios y tus ventas los hacen bajar: el primer {unite} vendido rinde más que el último. El deslizador del mercado lo muestra en verde, oro y luego rojo. Un mercado sacudido se recupera en unas semanas: reparte un cargamento grande entre varios puertos.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Escaseces y excedentes.</b> Los rumores de la taberna los anuncian: una escasez dispara los precios, y el puerto absorbe mucho más; un excedente los hunde, y allí se puede comprar al por mayor. En la bitácora, un reloj de arena marca estos precios pasajeros.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Escaseces y excedentes.</b> Los rumores de la taberna los anuncian, con su fecha, su duración y su magnitud: una escasez dispara los precios, y el puerto absorbe mucho más; un excedente los hunde, y allí se puede comprar al por mayor. En la bitácora, una flecha marca lo que anuncian los rumores, y un reloj de arena los precios vistos durante uno de ellos.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contrabando.</b> Algunas mercancías están prohibidas en ciertos puertos: la aduana puede requisarlo todo.',
   // La dette et la banque
@@ -62524,8 +62897,8 @@ Lang.ui('es', {
   'notice.combat.4': 'Si tu barco se hunde, casi siempre se acaba la partida: se pierden el barco, su carga y el dinero de a bordo. Guarda tus ahorros en el banco.',
   // Le journal de bord
   'notice.journal.titre': 'El cuaderno de bitácora',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'La bitácora guarda los precios vistos en cada puerto (en verde, la mejor compra; en oro, la mejor venta) y su antigüedad, tus contratos, las notas de tus viajes y los rumores oídos. Consúltala antes de elegir destino.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'La bitácora guarda los precios vistos en cada puerto (en verde, la mejor compra; en oro, la mejor venta), anotados al zarpar, después de tus tratos, con su antigüedad; lo que daría tu cargamento en los puertos que mejor lo pagan; tus contratos, las notas de tus viajes y los rumores oídos. Ábrela antes de elegir destino.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'Las fichas y el Legado',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -70826,6 +71199,16 @@ Lang.ui('pt', {
   'marche.bulle.mauvaisPort': 'Porto errado para vender!',
   'marche.bulle.mauvaisConseil': '{port} paga menos do que você pagou: tente outro porto, se puder escolher.',
   'marche.bulle.mauvaisGuere': 'Estes dias, {port} paga quase nada além do que você pagou: tente outro porto, se puder escolher.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {Sua venda de hoje} one {Sua venda de ontem} other {Sua venda de # dias atrás}} ainda pesa neste preço: {pct}, metade se apaga em 10 dias.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Sua compra de hoje} one {Sua compra de ontem} other {Sua compra de # dias atrás}} ainda pesa neste preço: {pct}, metade se apaga em 10 dias.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Dizem que vai faltar em {port} {quand}: preços ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Dizem que {port} vai pagar ×{fois} {quand}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Dizem que {port} vai ficar abarrotado {quand}: preços ÷{fois}.',
   // Quantité
   'marche.quantite': 'Quantidade',
   // Acheté {n} {marchandise} pour {somme}
@@ -70976,10 +71359,12 @@ Lang.ui('pt', {
   'taverne.offrirTournee': 'Pagar uma rodada',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Ninguém tem nada para contar.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Os rumores anunciam escassez e fartura. Depois, aparecem no mapa.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Nada de novo por estes dias: a rodada é por conta da casa.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'Uma rodada solta as línguas: escassez e fartura por vir, ou os preços de um porto distante. Tudo fica anotado no mapa e no diário.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'CONTRATOS OFERECIDOS',
   // Récompense {prime} · avant le {date}
@@ -71100,8 +71485,18 @@ Lang.ui('pt', {
   'carte.touchezPort': 'Toque em um porto no mapa.',
   // RUMEURS
   'carte.rumeurs': 'RUMORES',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Preços relatados há {jours} d (de ouvir dizer)',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'seus {n}: {prix} em média',
+  // On dit
+  'carte.onDit': 'Dizem',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: escassez {quand}, por {duree}, preços ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: fartura {quand}, por {duree}, preços ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# dia} other {# dias}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -71257,6 +71652,28 @@ Lang.ui('pt', {
   'journal.prix.passagerSurplus': 'Fartura quando este preço foi visto: um preço passageiro, vai subir de novo.',
   'journal.prix.passagerPenurie': 'Escassez quando este preço foi visto: um preço passageiro, vai baixar de novo.',
   'journal.prix.legendePassager': 'Ampulheta: preço passageiro, visto durante uma fartura (verde) ou uma escassez (vermelho).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'de ouvir dizer, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Rumor: escassez {quand}, por {duree}, preços ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Rumor: fartura {quand}, por {duree}, preços ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Anotado logo após a sua venda ({pct}): recupera metade em 10 dias.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Anotado logo após a sua compra ({pct}): volta a cair metade em 10 dias.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Seta: escassez (dourado) ou fartura (vermelho) anunciadas por um rumor.',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Círculo: preço anotado logo após a sua venda ou compra; volta sozinho.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'PARA A SUA CARGA',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'Quanto renderia toda a carga pelos preços anotados, cada venda baixando o preço da seguinte; entre parênteses, o preço médio.',
   // EN COURS
   'journal.contrats.enCours': 'EM ANDAMENTO',
   // TERMINÉS
@@ -71589,20 +72006,24 @@ Lang.ui('pt', {
   'contrat.expire': 'Contrato expirado: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Encomenda entregue em {port}: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Dizem que vai faltar {marchandise} em {port}… mas o sujeito bebeu além da conta.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? Dizem que em {port} estão disputando a tapa.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? Dizem que em {port} sobra em todo canto. Ninguém quer mais.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': 'daqui a {n, plural, one {# dia} other {# dias}}',
+  // dès le {date}
+  'rumeur.des': 'a partir de {date}',
   // en ce moment
   'rumeur.maintenant': 'neste momento',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': 'Escassez de {marchandise} em {port} {quand}: os preços vão disparar.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': 'Cargas de {marchandise} inundam {port} {quand}: os preços vão despencar.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {mais alguns dias} =1 {uma a duas semanas} =2 {duas a três semanas} other {três a quatro semanas}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': 'Escassez de {marchandise} em {port} {quand}, por {duree}: os preços lá serão multiplicados por {fois}, e o porto vai comprar muito mais.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': 'Cargas de {marchandise} inundam {port} {quand}, por {duree}: os preços lá serão divididos por {fois}, e dará para comprar em grande quantidade.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'Um capitão que acaba de chegar de {port} conta os preços que viu lá {n, plural, =1 {ontem} other {há # dias}}: estão anotados no seu diário.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '“Não há {marchandise} em {port}”',
   // « {port} croule sous {stock} »
@@ -72055,8 +72476,8 @@ Lang.ui('pt', {
   'aides.taverne.shanghai.d': 'Marinheiros de graça… levados bêbados. Rápido, mas arriscado: multa e um dia perdido se a guarda pegar você.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Os rumores',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'Uma rodada solta as línguas: escassez e fartura por vir em outros portos. Depois, os rumores aparecem no mapa.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'Uma rodada solta as línguas: escassez e fartura por vir em outros portos, com data, duração e tamanho, ou os preços de um porto distante. Tudo fica no mapa e no diário; se não houver nada para contar, a rodada não custa nada.',
   // Les contrats
   'aides.taverne.contrats.t': 'Os contratos',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -72183,8 +72604,8 @@ Lang.ui('pt', {
   'notice.marche.2': '<b>Comprar barato, vender caro.</b> Cada porto produz certas mercadorias (preços baixos) e precisa de outras (preços altos). Os preços mudam todo dia, e cada partida é diferente.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>Um porto só absorve certa quantidade.</b> Suas compras fazem os preços subir e suas vendas os fazem baixar: o primeiro {unite} vendido rende mais que o último. O controle deslizante do mercado mostra isso em verde, dourado e depois vermelho. Um mercado abalado se recupera em algumas semanas: distribua uma carga grande entre vários portos.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Escassez e fartura.</b> Os rumores da taverna as anunciam: a escassez faz os preços dispararem, e o porto absorve muito mais; a fartura os derruba, e dá para comprar no atacado. No diário, uma ampulheta marca esses preços passageiros.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Escassez e fartura.</b> Os rumores da taverna as anunciam, com data, duração e tamanho: a escassez faz os preços dispararem, e o porto absorve muito mais; a fartura os derruba, e dá para comprar no atacado. No diário, uma seta marca o que os rumores anunciam, e uma ampulheta os preços vistos durante uma delas.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contrabando.</b> Certas mercadorias são proibidas em certos portos: a alfândega pode confiscar tudo.',
   // La dette et la banque
@@ -72215,8 +72636,8 @@ Lang.ui('pt', {
   'notice.combat.4': 'Se o seu navio afundar, quase sempre é o fim da partida: o navio, a carga e o dinheiro a bordo se perdem. Guarde suas economias no banco.',
   // Le journal de bord
   'notice.journal.titre': 'O diário de bordo',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'O diário guarda os preços vistos em cada porto (em verde, a melhor compra; em dourado, a melhor venda) e a idade deles, seus contratos, as anotações das suas viagens e os rumores ouvidos. Abra-o antes de escolher um destino.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'O diário guarda os preços vistos em cada porto (em verde, a melhor compra; em dourado, a melhor venda), anotados na partida, depois das suas negociações, com a sua idade; quanto renderia a sua carga nos portos que pagam melhor por ela; os seus contratos, as notas das suas viagens e os rumores ouvidos. Abra-o antes de escolher um destino.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'As fichas e a Herança',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -80515,6 +80936,16 @@ Lang.ui('de', {
   'marche.bulle.mauvaisPort': 'Falscher Hafen zum Verkaufen!',
   'marche.bulle.mauvaisConseil': '{port} zahlt weniger, als du bezahlt hast: Nimm einen anderen Hafen, wenn du die Wahl hast.',
   'marche.bulle.mauvaisGuere': 'Zurzeit zahlt {port} kaum mehr, als du bezahlt hast: Nimm einen anderen Hafen, wenn du die Wahl hast.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {Dein Verkauf von heute} one {Dein Verkauf von gestern} other {Dein Verkauf vor # Tagen}} drückt noch auf diesen Preis: {pct}, nach 10 Tagen zur Hälfte verflogen.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Dein Kauf von heute} one {Dein Kauf von gestern} other {Dein Kauf vor # Tagen}} treibt diesen Preis noch: {pct}, nach 10 Tagen zur Hälfte verflogen.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Es heißt, in {port} wird es {quand} knapp: Preise ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Es heißt, {port} zahlt {quand} ×{fois}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Es heißt, {port} wird {quand} überschwemmt: Preise ÷{fois}.',
   // Quantité
   'marche.quantite': 'Menge',
   // Acheté {n} {marchandise} pour {somme}
@@ -80665,10 +81096,12 @@ Lang.ui('de', {
   'taverne.offrirTournee': 'Eine Runde ausgeben',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Niemand hat etwas zu erzählen.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Gerüchte kündigen Knappheit und Schwemme an. Danach erscheinen sie auf der Karte.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Nichts Neues in diesen Tagen: Die Runde geht aufs Haus.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'Eine Runde löst die Zungen: kommende Knappheit und Schwemme oder die Preise eines fernen Hafens. Alles kommt auf die Karte und ins Logbuch.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'ANGEBOTENE AUFTRÄGE',
   // Récompense {prime} · avant le {date}
@@ -80789,8 +81222,18 @@ Lang.ui('de', {
   'carte.touchezPort': 'Tippe auf einen Hafen auf der Karte.',
   // RUMEURS
   'carte.rumeurs': 'GERÜCHTE',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Preise vor {jours} Tg. berichtet (Hörensagen)',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'deine {n}: im Schnitt {prix}',
+  // On dit
+  'carte.onDit': 'Es heißt',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: Knappheit {quand}, für {duree}, Preise ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: Schwemme {quand}, für {duree}, Preise ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# Tag} other {# Tage}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -80946,6 +81389,28 @@ Lang.ui('de', {
   'journal.prix.passagerSurplus': 'Schwemme, als dieser Preis gesehen wurde: ein vorübergehender Preis, er steigt wieder.',
   'journal.prix.passagerPenurie': 'Knappheit, als dieser Preis gesehen wurde: ein vorübergehender Preis, er sinkt wieder.',
   'journal.prix.legendePassager': 'Sanduhr: vorübergehender Preis, gesehen während einer Schwemme (grün) oder einer Knappheit (rot).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'Hörensagen, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Gerücht: Knappheit {quand}, für {duree}, Preise ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Gerücht: Schwemme {quand}, für {duree}, Preise ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Direkt nach deinem Verkauf notiert ({pct}): Er erholt sich in 10 Tagen zur Hälfte.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Direkt nach deinem Kauf notiert ({pct}): Er sinkt in 10 Tagen zur Hälfte zurück.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Pfeil: von einem Gerücht angekündigte Knappheit (gold) oder Schwemme (rot).',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Kreis: Preis direkt nach deinem Verkauf oder Kauf notiert; er erholt sich von selbst.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'FÜR DEINE LADUNG',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'Was die ganze Ladung zu den notierten Preisen einbrächte, wobei jeder Verkauf den Preis des nächsten drückt; in Klammern der Durchschnittspreis.',
   // EN COURS
   'journal.contrats.enCours': 'LAUFEND',
   // TERMINÉS
@@ -81278,20 +81743,24 @@ Lang.ui('de', {
   'contrat.expire': 'Auftrag abgelaufen: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Sendung in {port} abgeliefert: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Es heißt, in {port} werde es bald knapp: {marchandise} … nur hat der Mann reichlich getrunken.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? In {port} reißt man sich gerade darum, heißt es.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? In {port} gibt es das angeblich überall. Keiner will mehr was davon.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': '{n, plural, one {binnen eines Tages} other {binnen # Tagen}}',
+  // dès le {date}
+  'rumeur.des': 'ab dem {date}',
   // en ce moment
   'rumeur.maintenant': 'derzeit',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': '{marchandise}: {quand} Knappheit in {port} – die Preise werden in die Höhe schießen.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': '{marchandise}: {quand} Schwemme in {port} – die Preise werden einbrechen.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {nur noch wenige Tage} =1 {ein bis zwei Wochen} =2 {zwei bis drei Wochen} other {drei bis vier Wochen}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': '{marchandise}: {quand} Knappheit in {port}, für {duree} – die Preise steigen dort auf das {fois}-Fache, und der Hafen nimmt weit mehr ab.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': '{marchandise}: {quand} Schwemme in {port}, für {duree} – die Preise fallen dort um den Faktor {fois}, und man kann in großen Mengen kaufen.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'Ein Kapitän, der gerade aus {port} kommt, erzählt von den Preisen, die er dort {n, plural, =1 {gestern} other {vor # Tagen}} gesehen hat: Sie stehen jetzt in deinem Logbuch.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '„{marchandise} in {port} nicht zu haben“',
   // « {port} croule sous {stock} »
@@ -81744,8 +82213,8 @@ Lang.ui('de', {
   'aides.taverne.shanghai.d': 'Seeleute umsonst … betrunken verschleppt. Schnell, aber riskant: eine Strafe und ein verlorener Tag, wenn die Wache dich erwischt.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Gerüchte',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'Eine Runde löst die Zungen: kommende Knappheit und Schwemme in anderen Häfen. Danach erscheinen sie auf der Karte.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'Eine Runde löst die Zungen: kommende Knappheit und Schwemme in anderen Häfen, mit Datum, Dauer und Ausmaß, oder die Preise eines fernen Hafens. Alles kommt auf die Karte und ins Logbuch; gibt es nichts zu erzählen, kostet die Runde nichts.',
   // Les contrats
   'aides.taverne.contrats.t': 'Aufträge',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -81872,8 +82341,8 @@ Lang.ui('de', {
   'notice.marche.2': '<b>Billig kaufen, teuer verkaufen.</b> Jeder Hafen erzeugt manche Waren (niedrige Preise) und braucht andere (hohe Preise). Die Preise ändern sich täglich, und jede Partie ist anders.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>Ein Hafen schluckt nur eine gewisse Menge.</b> Deine Käufe treiben die Preise hoch, deine Verkäufe drücken sie: Mit jedem verkauften {unite} sinkt der Erlös. Der Regler im Markt zeigt es in Grün, Gold, dann Rot. Ein aufgewühlter Markt erholt sich in ein paar Wochen: Verteile eine große Ladung auf mehrere Häfen.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Knappheit und Schwemme.</b> Die Gerüchte in der Schenke kündigen sie an: Knappheit treibt die Preise in die Höhe, und der Hafen schluckt viel mehr; eine Schwemme lässt sie einbrechen, und man kann dort in großen Mengen kaufen. Im Logbuch markiert eine Sanduhr diese vorübergehenden Preise.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Knappheit und Schwemme.</b> Die Gerüchte in der Schenke kündigen sie an, mit Datum, Dauer und Ausmaß: Knappheit treibt die Preise in die Höhe, und der Hafen schluckt viel mehr; eine Schwemme lässt sie einbrechen, und man kann dort in großen Mengen kaufen. Im Logbuch markiert ein Pfeil, was die Gerüchte ankündigen, eine Sanduhr die Preise, die währenddessen gesehen wurden.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Schmuggelware.</b> Manche Waren sind in manchen Häfen verboten: Der Zoll kann alles beschlagnahmen.',
   // La dette et la banque
@@ -81904,8 +82373,8 @@ Lang.ui('de', {
   'notice.combat.4': 'Sinkt dein Schiff, ist die Partie meist vorbei: Schiff, Ladung und das Geld an Bord sind verloren. Bring deine Ersparnisse zur Bank.',
   // Le journal de bord
   'notice.journal.titre': 'Logbuch',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'Das Logbuch verzeichnet die in jedem Hafen gesehenen Preise (in Grün der beste Einkauf, in Gold der beste Verkauf) und ihr Alter, deine Aufträge, Notizen zu deinen Reisen und gehörte Gerüchte. Schlag es auf, bevor du ein Ziel wählst.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'Das Logbuch hält die in jedem Hafen gesehenen Preise fest (in Grün der beste Einkauf, in Gold der beste Verkauf), notiert beim Ablegen, nach deinen Geschäften, mit ihrem Alter; was deine Ladung in den Häfen einbrächte, die am besten zahlen; deine Verträge, die Notizen zu deinen Fahrten und die gehörten Gerüchte. Schlag es auf, bevor du ein Ziel wählst.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'Erbmarken und Erbe',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -90204,6 +90673,16 @@ Lang.ui('it', {
   'marche.bulle.mauvaisPort': 'Porto sbagliato per vendere!',
   'marche.bulle.mauvaisConseil': '{port} paga meno di quanto hai pagato tu: punta su un altro porto, se puoi scegliere.',
   'marche.bulle.mauvaisGuere': 'In questi giorni {port} paga appena più di quanto hai pagato tu: punta su un altro porto, se puoi scegliere.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {La tua vendita di oggi} one {La tua vendita di ieri} other {La tua vendita di # giorni fa}} pesa ancora su questo prezzo: {pct}, dimezzata in 10 giorni.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Il tuo acquisto di oggi} one {Il tuo acquisto di ieri} other {Il tuo acquisto di # giorni fa}} pesa ancora su questo prezzo: {pct}, dimezzato in 10 giorni.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Si dice che a {port} ne mancherà {quand}: prezzi ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Si dice che {port} pagherà ×{fois} {quand}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Si dice che a {port} ce ne sarà in eccesso {quand}: prezzi ÷{fois}.',
   // Quantité
   'marche.quantite': 'Quantità',
   // Acheté {n} {marchandise} pour {somme}
@@ -90354,10 +90833,12 @@ Lang.ui('it', {
   'taverne.offrirTournee': 'Offri un giro',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Nessuno ha niente da raccontare.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Le voci annunciano penurie e abbondanze, che poi compaiono sulla mappa.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Niente di nuovo in questi giorni: il giro lo offre la casa.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'Un giro scioglie le lingue: penurie ed eccessi in arrivo, o i prezzi di un porto lontano. Tutto finisce sulla mappa e nel diario.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'CONTRATTI OFFERTI',
   // Récompense {prime} · avant le {date}
@@ -90478,8 +90959,18 @@ Lang.ui('it', {
   'carte.touchezPort': 'Tocca un porto sulla mappa.',
   // RUMEURS
   'carte.rumeurs': 'VOCI',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Prezzi riferiti {jours} g fa (per sentito dire)',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'i tuoi {n}: {prix} in media',
+  // On dit
+  'carte.onDit': 'Si dice',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: penuria {quand}, per {duree}, prezzi ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: eccesso {quand}, per {duree}, prezzi ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# giorno} other {# giorni}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -90635,6 +91126,28 @@ Lang.ui('it', {
   'journal.prix.passagerSurplus': 'Eccesso quando hai visto questo prezzo: un prezzo passeggero, risalirà.',
   'journal.prix.passagerPenurie': 'Penuria quando hai visto questo prezzo: un prezzo passeggero, riscenderà.',
   'journal.prix.legendePassager': 'Clessidra: prezzo passeggero, visto durante un eccesso (verde) o una penuria (rosso).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'per sentito dire, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Voce: penuria {quand}, per {duree}, prezzi ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Voce: eccesso {quand}, per {duree}, prezzi ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Annotato subito dopo la tua vendita ({pct}): risale per metà in 10 giorni.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Annotato subito dopo il tuo acquisto ({pct}): riscende per metà in 10 giorni.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Freccia: penuria (oro) o eccesso (rosso) annunciati da una voce.',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Cerchio: prezzo annotato subito dopo una tua vendita o un tuo acquisto; torna da sé.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'PER IL TUO CARICO',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'Quanto renderebbe tutto il carico ai prezzi annotati, ogni vendita abbassando il prezzo della successiva; tra parentesi, il prezzo medio.',
   // EN COURS
   'journal.contrats.enCours': 'IN CORSO',
   // TERMINÉS
@@ -90967,20 +91480,24 @@ Lang.ui('it', {
   'contrat.expire': 'Contratto scaduto: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Consegna effettuata a {port}: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Si dice che a {port} ci sarà penuria di {marchandise}… ma quel tale ha bevuto parecchio.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? Pare che a {port} se lo strappino di mano, di questi tempi.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? A {port}, pare, ce n\'è dappertutto. Nessuno ne vuole più.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': 'tra {n, plural, one {# giorno} other {# giorni}}',
+  // dès le {date}
+  'rumeur.des': 'dal {date}',
   // en ce moment
   'rumeur.maintenant': 'in questo momento',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': 'Penuria di {marchandise} a {port} {quand}: i prezzi andranno alle stelle.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': 'Abbondanza di {marchandise} a {port} {quand}: i prezzi crolleranno.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {ancora pochi giorni} =1 {una o due settimane} =2 {due o tre settimane} other {tre o quattro settimane}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': 'Penuria di {marchandise} a {port} {quand}, per {duree}: i prezzi lì saranno moltiplicati per {fois}, e il porto ne assorbirà molto di più.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': 'Abbondanza di {marchandise} a {port} {quand}, per {duree}: i prezzi lì saranno divisi per {fois}, e si potrà comprare all\'ingrosso.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'Un capitano appena arrivato da {port} racconta i prezzi che ha visto lì {n, plural, =1 {ieri} other {# giorni fa}}: sono annotati nel tuo diario.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '«A {port} non c\'è più traccia di {marchandise}»',
   // « {port} croule sous {stock} »
@@ -91433,8 +91950,8 @@ Lang.ui('it', {
   'aides.taverne.shanghai.d': 'Marinai gratis… trascinati a bordo ubriachi. Rapido ma rischioso: multa e un giorno perso se la ronda ti sorprende.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Le voci',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'Un giro offerto scioglie le lingue: penurie e abbondanze in arrivo in altri porti. Poi compaiono sulla mappa.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'Un giro scioglie le lingue: penurie ed eccessi in arrivo in altri porti, con data, durata e portata, o i prezzi di un porto lontano. Tutto finisce sulla mappa e nel diario; se non c\'è niente da dire, il giro non costa nulla.',
   // Les contrats
   'aides.taverne.contrats.t': 'I contratti',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -91561,8 +92078,8 @@ Lang.ui('it', {
   'notice.marche.2': '<b>Compra a poco, rivendi a tanto.</b> Ogni porto produce certe merci (prezzi bassi) e ne cerca altre (prezzi alti). I prezzi cambiano ogni giorno, e ogni partita è diversa.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>Un porto assorbe solo una certa quantità.</b> I tuoi acquisti fanno salire i prezzi, le tue vendite li fanno scendere: mentre vendi, il prezzo per {unite} cala. Il cursore del mercato lo mostra in verde, oro e poi rosso. Un mercato scosso si riprende in qualche settimana: meglio dividere un grosso carico tra più porti.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Penurie e abbondanze.</b> Le annunciano le voci di taverna: una penuria fa schizzare i prezzi, e il porto ne assorbe molto di più; un\'abbondanza li fa crollare, e lì si può comprare all\'ingrosso. Nel diario, una clessidra segna questi prezzi passeggeri.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Penurie e abbondanze.</b> Le annunciano le voci di taverna, con data, durata e portata: una penuria fa schizzare i prezzi, e il porto ne assorbe molto di più; un\'abbondanza li fa crollare, e lì si può comprare all\'ingrosso. Nel diario, una freccia segna ciò che annunciano le voci, una clessidra i prezzi visti durante una di esse.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Contrabbando.</b> Alcune merci sono proibite in certi porti: la dogana può sequestrare tutto.',
   // La dette et la banque
@@ -91593,8 +92110,8 @@ Lang.ui('it', {
   'notice.combat.4': 'Se la tua nave affonda, quasi sempre la partita finisce: nave, carico e denaro a bordo vanno perduti. Tieni i tuoi risparmi in banca.',
   // Le journal de bord
   'notice.journal.titre': 'Il diario di bordo',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'Il diario conserva i prezzi visti in ogni porto (in verde il miglior acquisto, in oro la miglior vendita) e quanto sono vecchi, i tuoi contratti, il taccuino dei tuoi viaggi e le voci raccolte. Aprilo prima di scegliere una destinazione.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'Il diario conserva i prezzi visti in ogni porto (in verde, il miglior acquisto; in oro, la miglior vendita), annotati alla partenza, dopo i tuoi scambi, con la loro età; quanto renderebbe il tuo carico nei porti che lo pagano meglio; i tuoi contratti, le note dei tuoi viaggi e le voci sentite. Aprilo prima di scegliere una destinazione.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'I gettoni e l\'Eredità',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -99896,6 +100413,16 @@ Lang.ui('pl', {
   'marche.bulle.mauvaisPort': 'Zły port na sprzedaż!',
   'marche.bulle.mauvaisConseil': '{port} płaci mniej, niż sam zapłaciłeś: płyń do innego portu, jeśli masz wybór.',
   'marche.bulle.mauvaisGuere': 'W tych dniach {port} płaci ledwie więcej, niż sam zapłaciłeś: płyń do innego portu, jeśli masz wybór.',
+  // {n, plural, =0 {Votre vente du jour} one {Votre vente d'hier} other {Votre vente d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.vente': '{n, plural, =0 {Twoja dzisiejsza sprzedaż} =1 {Twoja wczorajsza sprzedaż} one {Twoja sprzedaż sprzed # dnia} few {Twoja sprzedaż sprzed # dni} many {Twoja sprzedaż sprzed # dni} other {Twoja sprzedaż sprzed # dnia}} wciąż ciąży na tej cenie: {pct}, połowa zniknie w 10 dni.',
+  // {n, plural, =0 {Votre achat du jour} one {Votre achat d'hier} other {Votre achat d'il y a # jours}} pèse encore sur ce prix : {pct}, moitié effacée en 10 jours.
+  'marche.trace.achat': '{n, plural, =0 {Twój dzisiejszy zakup} =1 {Twój wczorajszy zakup} one {Twój zakup sprzed # dnia} few {Twój zakup sprzed # dni} many {Twój zakup sprzed # dni} other {Twój zakup sprzed # dnia}} wciąż ciąży na tej cenie: {pct}, połowa zniknie w 10 dni.',
+  // On dit que {port} en manquera {quand} : prix ×{fois}.
+  'marche.rumeur.manquera': 'Podobno w porcie {port} zabraknie tego {quand}: ceny ×{fois}.',
+  // On dit que {port} paiera ×{fois} {quand}.
+  'marche.rumeur.paiera': 'Podobno port {port} zapłaci ×{fois} {quand}.',
+  // On dit que {port} en regorgera {quand} : prix ÷{fois}.
+  'marche.rumeur.regorgera': 'Podobno w porcie {port} będzie nadmiar {quand}: ceny ÷{fois}.',
   // Quantité
   'marche.quantite': 'Ilość',
   // Acheté {n} {marchandise} pour {somme}
@@ -100046,10 +100573,12 @@ Lang.ui('pl', {
   'taverne.offrirTournee': 'Postaw kolejkę',
   // Personne n'a rien à raconter.
   'taverne.rienARaconter': 'Nikt nie ma nic do opowiedzenia.',
-  // Les rumeurs annoncent pénuries et surplus. Elles apparaissent ensuite sur la carte.
-  'taverne.rumeursAide': 'Plotki zapowiadają niedobory i nadmiary. Potem widać je na mapie.',
-  // {port} : {marchandise} {fleche}
-  'taverne.evenement': '{port}: {marchandise} {fleche}',
+  // Rien de neuf ces jours-ci : la tournée est pour la maison.
+  'taverne.rienDeNeuf': 'Nic nowego w tych dniach: kolejka na koszt firmy.',
+  // Une tournée fait parler : pénuries et surplus à venir, ou les prix d'un port lointain. Tout se note sur la carte et dans le journal.
+  'taverne.rumeursAide': 'Kolejka rozwiązuje języki: nadchodzące niedobory i nadmiary albo ceny w dalekim porcie. Wszystko trafia na mapę i do dziennika.',
+  // {port} : {marchandise} {fleche} {quand}
+  'taverne.evenementQuand': '{port}: {marchandise} {fleche} {quand}',
   // CONTRATS PROPOSÉS
   'taverne.contrats': 'KONTRAKTY DO WZIĘCIA',
   // Récompense {prime} · avant le {date}
@@ -100170,8 +100699,18 @@ Lang.ui('pl', {
   'carte.touchezPort': 'Wybierz port na mapie.',
   // RUMEURS
   'carte.rumeurs': 'PLOTKI',
-  // {port} · {marchandise}
-  'carte.rumeur': '{port} · {marchandise}',
+  // {port} · {marchandise} · {quand}
+  'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
+  // Prix rapportés il y a {jours} j (ouï-dire)
+  'carte.prixOuiDire': 'Ceny zasłyszane, sprzed {jours, plural, one {# dnia} few {# dni} many {# dni} other {# dnia}}',
+  // vos {n} : {prix} en moyenne
+  'carte.pourVous': 'twoje {n}: średnio {prix}',
+  // On dit
+  'carte.onDit': 'Słychać',
+  // {Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}
+  'carte.onDitPenurie': '{Marchandise}: niedobór {quand}, przez {duree}, ceny ×{fois}',
+  // {Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}
+  'carte.onDitSurplus': '{Marchandise}: nadmiar {quand}, przez {duree}, ceny ÷{fois}',
   // ~{n, plural, one {# jour} other {# jours}}
   'carte.duree': '~{n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}',
   // Danger {niveau, select, eleve {élevé} moyen {moyen} other {faible}}
@@ -100327,6 +100866,28 @@ Lang.ui('pl', {
   'journal.prix.passagerSurplus': 'Nadmiar, gdy widziano tę cenę: cena chwilowa, znów wzrośnie.',
   'journal.prix.passagerPenurie': 'Niedobór, gdy widziano tę cenę: cena chwilowa, znów spadnie.',
   'journal.prix.legendePassager': 'Klepsydra: cena chwilowa, widziana podczas nadmiaru (zielona) lub niedoboru (czerwona).',
+  // ouï-dire, {age}
+  'journal.prix.ouiDire': 'zasłyszane, {age}',
+  // Rumeur : pénurie {quand}, pour {duree}, prix ×{fois}.
+  'journal.prix.rumeurPenurie': 'Plotka: niedobór {quand}, przez {duree}, ceny ×{fois}.',
+  // Rumeur : surplus {quand}, pour {duree}, prix ÷{fois}.
+  'journal.prix.rumeurSurplus': 'Plotka: nadmiar {quand}, przez {duree}, ceny ÷{fois}.',
+  // Noté juste après votre vente ({pct}) : il remonte de moitié en 10 jours.
+  'journal.prix.traceVente': 'Zapisane tuż po twojej sprzedaży ({pct}): w 10 dni odrabia połowę.',
+  // Noté juste après votre achat ({pct}) : il redescend de moitié en 10 jours.
+  'journal.prix.traceAchat': 'Zapisane tuż po twoim zakupie ({pct}): w 10 dni cofa się o połowę.',
+  // Flèche : pénurie (or) ou surplus (rouge) annoncés par une rumeur.
+  'journal.prix.legendeRumeur': 'Strzałka: niedobór (złota) lub nadmiar (czerwona) zapowiedziany przez plotkę.',
+  // Cercle : prix noté juste après votre vente ou votre achat, il revient de lui-même.
+  'journal.prix.legendeTrace': 'Kółko: cena zapisana tuż po twojej sprzedaży lub zakupie; sama wraca do normy.',
+  // POUR VOTRE CARGAISON
+  'journal.cargaison.titre': 'DLA TWOJEGO ŁADUNKU',
+  // {marchandise}, {n} {unites}
+  'journal.cargaison.ligne': '{marchandise}, {n} {unites}',
+  // {port} {somme} ({prix})
+  'journal.cargaison.port': '{port} {somme} ({prix})',
+  // Ce que rapporterait toute la cargaison d'après les prix notés, chaque vente faisant baisser le prix de la suivante ; entre parenthèses, le prix moyen.
+  'journal.cargaison.aide': 'Ile przyniósłby cały ładunek według zapisanych cen, gdy każda sprzedaż obniża cenę następnej; w nawiasie średnia cena.',
   // EN COURS
   'journal.contrats.enCours': 'BIEŻĄCE',
   // TERMINÉS
@@ -100659,20 +101220,24 @@ Lang.ui('pl', {
   'contrat.expire': 'Kontrakt wygasł: {contrat}',
   // Colis livré à {port} : +{prime} {monnaie}
   'contrat.colisLivre': 'Przesyłka dostarczona do portu {port}: +{prime} {monnaie}',
-  // On raconte que {marchandise} va manquer à {port}… mais l'homme a beaucoup bu.
+  // On raconte que {port} va manquer {deMarchandise}… mais l'homme a beaucoup bu.
   'rumeur.fausse': 'Podobno w porcie {port} zabraknie towaru: {marchandise}… ale ten, kto o tym gada, był mocno wstawiony.',
   // {Marchandise} ? Paraît qu'à {port}, on se l'arrache en ce moment.
   'rue.penurie': '{Marchandise}? Podobno w porcie {port} schodzi teraz jak świeże bułeczki.',
   // {Marchandise} ? À {port}, paraît qu'il y en a partout. Personne n'en veut plus.
   'rue.surplus': '{Marchandise}? W porcie {port} podobno tego pełno. Nikt już nawet nie chce patrzeć.',
-  // d'ici {n, plural, one {# jour} other {# jours}}
-  'rumeur.dici': 'za {n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}',
+  // dès le {date}
+  'rumeur.des': 'od {date}',
   // en ce moment
   'rumeur.maintenant': 'już teraz',
-  // Pénurie {deMarchandise} à {port} {quand} : les prix vont s'envoler.
-  'rumeur.penurie': 'Niedobór w porcie {port} {quand}: {marchandise}. Ceny wystrzelą w górę.',
-  // Des cargaisons {deMarchandise} inondent {port} {quand} : les prix vont s'effondrer.
-  'rumeur.surplus': 'Nadmiar w porcie {port} {quand}: {marchandise}. Ceny runą.',
+  // {n, plural, =0 {quelques jours encore} =1 {une à deux semaines} =2 {deux à trois semaines} other {trois à quatre semaines}}
+  'rumeur.duree': '{n, plural, =0 {jeszcze kilka dni} =1 {tydzień lub dwa} =2 {dwa lub trzy tygodnie} other {trzy lub cztery tygodnie}}',
+  // Pénurie {deMarchandise} à {port} {quand}, pour {duree} : les prix y seront multipliés par {fois}, et le port en prendra bien plus.
+  'rumeur.penurie': 'Niedobór w porcie {port} {quand}, przez {duree}: {marchandise}. Ceny wzrosną tam {fois} razy, a port przyjmie znacznie więcej.',
+  // Des cargaisons {deMarchandise} inondent {port} {quand}, pour {duree} : les prix y seront divisés par {fois}, et l'on pourra y acheter en gros.
+  'rumeur.surplus': 'Nadmiar w porcie {port} {quand}, przez {duree}: {marchandise}. Ceny spadną tam {fois} razy, będzie można kupować hurtem.',
+  // Un capitaine arrivé {dePort} raconte les prix qu'il y a vus {n, plural, one {hier} other {il y a # jours}} : ils sont notés dans votre journal.
+  'rumeur.prix': 'Kapitan, który właśnie przypłynął z portu {port}, opowiada o cenach, jakie tam widział {n, plural, =1 {wczoraj} few {# dni temu} many {# dni temu} other {# dnia temu}}: są już w twoim dzienniku.',
   // « {marchandise} introuvable à {port} »
   'rumeur.bouteillePenurie': '„Port {port}: {marchandise} nie do zdobycia”',
   // « {port} croule sous {stock} »
@@ -101125,8 +101690,8 @@ Lang.ui('pl', {
   'aides.taverne.shanghai.d': 'Marynarze za darmo… zawleczeni na pokład po pijanemu. Szybko, ale ryzykownie: jeśli przyłapie cię straż, zapłacisz karę i stracisz dzień.',
   // Les rumeurs
   'aides.taverne.rumeurs.t': 'Plotki',
-  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports. Elles s'affichent ensuite sur la carte.
-  'aides.taverne.rumeurs.d': 'Postawiona kolejka rozwiązuje języki: niedobory i nadmiary w innych portach. Potem widać je na mapie.',
+  // Une tournée fait parler : pénuries et surplus à venir dans d'autres ports, avec leur date, leur durée et leur ampleur, ou les prix d'un port lointain. Tout se n
+  'aides.taverne.rumeurs.d': 'Kolejka rozwiązuje języki: nadchodzące niedobory i nadmiary w innych portach, z datą, czasem trwania i skalą, albo ceny w dalekim porcie. Wszystko trafia na mapę i do dziennika; jeśli nie ma nic do powiedzenia, kolejka nic nie kosztuje.',
   // Les contrats
   'aides.taverne.contrats.t': 'Kontrakty',
   // Livraisons et missions bien payées, avec une date limite. Un contrat échoué ne rapporte rien.
@@ -101253,8 +101818,8 @@ Lang.ui('pl', {
   'notice.marche.2': '<b>Kupuj tanio, sprzedawaj drogo.</b> Każdy port wytwarza pewne towary (niskie ceny), a innych mu brakuje (wysokie ceny). Ceny zmieniają się codziennie, a każda rozgrywka jest inna.',
   // <b>Vos ventes font baisser les prix</b>, vos achats les font monter. Le premier {unite} vendu rapporte plus que le dernier : répartissez une grosse cargaison en
   'notice.marche.3': '<b>Port przyjmie tylko określoną ilość.</b> Twoje zakupy podnoszą ceny, a sprzedaż je obniża: za pierwszą sprzedaną jednostkę ({unite}) dostaniesz więcej niż za ostatnią. Suwak na targu pokazuje to na zielono, złoto, a potem czerwono. Rozchwiany rynek dochodzi do siebie w kilka tygodni: duży ładunek rozdziel między kilka portów.',
-  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent : une pénurie fait flamber les prix, un surplus les effondre.
-  'notice.marche.4': '<b>Niedobory i nadmiary.</b> Zapowiadają je plotki z tawerny: niedobór winduje ceny, a port przyjmie znacznie więcej; nadmiar je załamuje, a można tam kupować hurtem. W dzienniku klepsydra oznacza te chwilowe ceny.',
+  // <b>Pénuries et surplus.</b> Les rumeurs de la taverne les annoncent, avec leur date, leur durée et leur ampleur : une pénurie fait flamber les prix, et le port 
+  'notice.marche.4': '<b>Niedobory i nadmiary.</b> Zapowiadają je plotki z tawerny, z datą, czasem trwania i skalą: niedobór winduje ceny, a port przyjmie znacznie więcej; nadmiar je załamuje, a można tam kupować hurtem. W dzienniku strzałka oznacza to, co zapowiadają plotki, a klepsydra ceny widziane w ich trakcie.',
   // <b>Contrebande.</b> Certaines marchandises sont interdites dans certains ports : la douane peut tout saisir.
   'notice.marche.5': '<b>Kontrabanda.</b> W niektórych portach pewne towary są zakazane: celnicy mogą skonfiskować wszystko.',
   // La dette et la banque
@@ -101285,8 +101850,8 @@ Lang.ui('pl', {
   'notice.combat.4': 'Gdy twój statek pójdzie na dno, rozgrywka najczęściej się kończy: statek, ładunek i pieniądze na pokładzie przepadają. Oszczędności trzymaj w banku.',
   // Le journal de bord
   'notice.journal.titre': 'Dziennik pokładowy',
-  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente) et leur âge, vos contrats, le carnet de vos voyages et l
-  'notice.journal.1': 'Dziennik zapisuje ceny widziane w każdym porcie (na zielono najlepszy zakup, na złoto najlepsza sprzedaż) i to, jak są stare, a także twoje kontrakty, notatki z podróży i zasłyszane plotki. Zajrzyj do niego, zanim wybierzesz cel podróży.',
+  // Le journal garde les prix vus dans chaque port (en vert, le meilleur achat ; en or, la meilleure vente), notés à votre départ, après vos échanges, avec leur âge
+  'notice.journal.1': 'Dziennik przechowuje ceny widziane w każdym porcie (na zielono najlepszy zakup, na złoto najlepsza sprzedaż), zapisane przy wypłynięciu, po twoich transakcjach, wraz z ich wiekiem; ile przyniósłby twój ładunek w portach, które płacą za niego najlepiej; twoje kontrakty, notatki z podróży i zasłyszane plotki. Zajrzyj do niego, zanim wybierzesz cel.',
   // Les jetons et l'Héritage
   'notice.heritage.titre': 'Żetony i Dziedzictwo',
   // À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ 
@@ -113270,9 +113835,30 @@ const Game = {
     this.checkTitle();
     return { rev, profit, n };
   },
+  // les prix d'un port notés au journal : à l'arrivée, puis de nouveau au départ (notePrices), après les échanges de l'escale
+  // (06/10/2026 : le journal gardait le prix d'avant votre propre vente, et l'on revenait le trouver bien plus bas). t : la
+  // trace de vos échanges au moment noté, en % du prix (« noté juste après votre vente, −22 % : il remonte »)
   recordPrices(pid) {
     const r = this.run, prev = r.known[pid];
-    r.known[pid] = { day: r.day, p: GOODS.map((g, i) => Math.round(this.midPrice(pid, i))), prev: prev ? prev.p : null };
+    r.known[pid] = { day: r.day, p: GOODS.map((g, i) => Math.round(this.midPrice(pid, i))), prev: prev ? prev.p : null, t: this.traceNow(pid) };
+  },
+  notePrices(pid) {
+    const r = this.run, k = r.known[pid];
+    if (!k || k.heard) { this.recordPrices(pid); return; }
+    k.day = r.day; k.p = GOODS.map((g, i) => Math.round(this.midPrice(pid, i))); k.t = this.traceNow(pid);
+  },
+  traceNow(pid) { return GOODS.map((g, i) => Math.round((Math.exp(-this.stockOf(pid, i)) - 1) * 100)); },
+  // ce que rapporterait la vente de n unités dans un port, d'après le prix qu'on en connaît (journal, ouï-dire ou direct) et
+  // la profondeur de son marché : le prix moyen de toute la cargaison, glissement compris (le journal et la carte le montrent)
+  knownSellQuote(pid, gi, n) {
+    if (n <= 0) return null;
+    if (pid === this.run.port) return this.quoteSell(gi, n).rev;
+    const k = this.knownPrices(pid);
+    if (!k) return null;
+    let P = k.p[gi] * this.tradeMul(false);
+    if (SEA.rules && SEA.rules.portMul) P *= SEA.rules.portMul(pid, gi, false);
+    const d = this.depth(pid, gi);
+    return Math.round(P * (1 - Math.exp(-n / d)) / (1 - Math.exp(-1 / d)));
   },
   knownPrices(pid) {
     const r = this.run;
@@ -113710,26 +114296,70 @@ const Game = {
 
   // ════════════ Rumeurs ════════════
   rumorCost() { return this.her('informateurs') >= 1 ? 10 : 25; },
+  // une tournée (06/10/2026, Maz ne voyait pas à quoi servaient les rumeurs) : une rumeur propre à la mer ; sinon une pénurie
+  // ou un surplus à venir, avec sa date, sa durée et son ampleur ; sinon les prix d'un port lointain rapportés par un capitaine
+  // (notés au journal, ouï-dire). La tournée ne vend plus une phrase d'ambiance : s'il n'y a rien à dire, elle ne coûte rien.
+  // Sans informateurs, une pénurie sur sept est inventée par un ivrogne.
   hearRumor() {
+    const r = this.run, cost = this.rumorCost();
+    if (r.cash < cost) return null;
+    const x = this.rumorPick();
+    if (!x.nothing) r.cash -= cost;
+    return x;
+  },
+  rumorPick() {
     const r = this.run;
-    if (r.cash < this.rumorCost()) return null;
-    r.cash -= this.rumorCost();
     if (SEA.rules && SEA.rules.rumor) { const x = SEA.rules.rumor(); if (x) return x; }   // rumeurs propres à la mer
     const d = r.day;
     const cands = r.events.filter(e => e.p !== r.port && e.start + e.dur > d && e.start - d < 28 && !r.rumors.includes(e.id) && !this.portDormant(e.p));
     const reliable = this.her('informateurs') >= 1 || R.chance(0.85);
-    if (!cands.length || !reliable) {
-      if (!reliable && cands.length) {
-        const p = R.pick(PORTS.filter(x => x.id !== r.port && !this.portDormant(x.id))), g = R.pick(GOODS);
-        return { fake: true, text: T('rumeur.fausse', { marchandise: lower(g.name), port: p.name }) };
-      }
-      return { text: R.pick(TAVERN_LINES) };
+    if (cands.length && !reliable) {
+      const p = R.pick(PORTS.filter(x => x.id !== r.port && !this.portDormant(x.id))), g = R.pick(GOODS);
+      return { fake: true, text: T('rumeur.fausse', { marchandise: lower(g.name), deMarchandise: this.deGood(g.idx), port: p.name }) };
     }
-    const e = R.pick(cands);
-    r.rumors.push(e.id);
-    const g = lower(GOODS[e.g].name), de = GOODS[e.g].de || 'de ' + g, p = PORT[e.p].name;   // (de : « d'indigo »…, pour le français)
-    const when = e.start > d + 1 ? T('rumeur.dici', { n: Math.round(e.start - d) }) : T('rumeur.maintenant');
-    return { ev: e, text: T(e.shortage ? 'rumeur.penurie' : 'rumeur.surplus', { deMarchandise: de, marchandise: g, port: p, quand: when }) };
+    if (cands.length) {
+      const e = R.pick(cands);
+      r.rumors.push(e.id);
+      return { ev: e, text: this.rumorText(e) };
+    }
+    return this.priceRumor() || { nothing: true, text: T('taverne.rienDeNeuf') };
+  },
+  // ce qu'on sait d'une pénurie ou d'un surplus : à partir de quand (date du calendrier, qui reste juste dans le journal),
+  // pour combien de temps (une fourchette tirée des jours qui restent), de combien les prix bougent (à la demi-unité)
+  rumorFacts(e) {
+    const d = this.run.day, left = e.start + e.dur - Math.max(d, e.start);
+    const f = Math.round((e.shortage ? e.mult : 1 / e.mult) * 2) / 2;
+    return {
+      quand: e.start > d + 1 ? T('rumeur.des', { date: fmtDate(e.start, true) }) : T('rumeur.maintenant'),
+      duree: T('rumeur.duree', { n: left < 7 ? 0 : left < 12 ? 1 : left < 19 ? 2 : 3 }),
+      fois: dec(f, Number.isInteger(f) ? 0 : 1),
+    };
+  },
+  // « de riz », « d'armes », « d'indigo » (pour le français ; la mer peut le donner, GOODS[i].de)
+  deGood(gi) { const g = lower(GOODS[gi].name); return GOODS[gi].de || (/^[aeiouyàâäéèêëîïôöûü]/i.test(g) ? 'd\'' : 'de ') + g; },
+  rumorText(e) {
+    const g = lower(GOODS[e.g].name), de = this.deGood(e.g), q = this.rumorFacts(e);
+    return T(e.shortage ? 'rumeur.penurie' : 'rumeur.surplus', { deMarchandise: de, marchandise: g, port: PORT[e.p].name, quand: q.quand, duree: q.duree, fois: q.fois });
+  },
+  // les prix d'un port lointain, rapportés par un capitaine qui en arrive : le port dont on sait le moins (jamais vu, ou vu il
+  // y a le plus longtemps), tels qu'ils étaient à son départ (2 à 6 jours plus tôt, 1 à 3 avec des informateurs) ; notés au
+  // journal comme ouï-dire. Rien avec les prix en direct, ni quand on en sait déjà davantage partout.
+  priceRumor() {
+    const r = this.run;
+    if (this.her('informateurs') >= 2) return null;
+    const lag = this.her('informateurs') >= 1 ? R.int(1, 3) : R.int(2, 6), day = r.day - lag;
+    const age = p => (r.known[p.id] ? r.known[p.id].day : -1e9);
+    const cands = PORTS.filter(p => p.id !== r.port && !this.portDormant(p.id) && age(p) < day);
+    if (!cands.length) return null;
+    const oldest = Math.min(...cands.map(age)), p = R.pick(cands.filter(q => age(q) === oldest));
+    const prev = r.known[p.id];
+    r.known[p.id] = { day, p: GOODS.map((g, i) => Math.round(this.basePrice(p.id, i, day) * Math.exp(-this.stockOf(p.id, i)))), prev: prev ? prev.p : null, heard: true };
+    return { price: p.id, text: T('rumeur.prix', { port: p.name, dePort: deLieu(p.name), n: lag }) };
+  },
+  // les pénuries et surplus entendus pour une marchandise (pid : dans ce port seulement), pas encore finis, les plus proches d'abord
+  rumorsFor(gi, pid) {
+    const d = this.run.day;
+    return this.knownEvents().filter(e => e.g === gi && (!pid || e.p === pid) && e.start + e.dur > d).sort((a, b) => a.start - b.start);
   },
   hearRumorFree() {
     const r = this.run, d = r.day;
@@ -113840,6 +114470,7 @@ const Game = {
   depart(dest) {
     const r = this.run;
     this.flushTrades();
+    if (r.port) this.notePrices(r.port);   // (le journal garde les prix du départ, après vos échanges)
     r.port = null; r.dest = dest; r.from = r.lastPort; r.visit = null; r.departDay = r.day;
     if (SEA.rules && SEA.rules.onDepart) SEA.rules.onDepart(r.from, dest);
     this.saveRun();
@@ -117193,6 +117824,12 @@ const UI = {
           const bought = Game.visitOf().buys[gi];
           if (bought > 0) info.append(h('span', { class: 'tag-ev' }, T('marche.dejaAchete', { n: bought })));
         }
+        // la trace de vos échanges récents ici, et ce qu'on dit ailleurs de cette marchandise (06/10/2026, lot « lisibilité » :
+        // le prix d'ici est bas parce que vous y avez vendu ; une pénurie annoncée à Manille, c'est là qu'il faut la porter)
+        const stk = r.stock[pid] && r.stock[pid][gi], trf = Math.exp(-Game.stockOf(pid, gi)) - 1;
+        const trace = !pro && stk && Math.abs(trf) >= 0.05 ? h('div', { class: 'mk-trace' }, T(trf < 0 ? 'marche.trace.vente' : 'marche.trace.achat', { n: Math.max(0, Math.round(r.day - stk[1])), pct: pct(trf) })) : null;
+        const heard = pro ? null : Game.rumorsFor(gi).find(e => e.p !== pid);
+        const rumor = heard ? this.marketRumor(heard, mode) : null;
         // la réglette en trois couleurs (Game.tradeBands), posée au bout du vert à l'achat ; rien de tout cela au prologue
         // (quantités imposées par le mentor) ni pour ce qu'on revend à l'escale même (repris à 98 %)
         const B = max > 0 ? Game.tradeBands(gi, mode === 'buy', max) : null;
@@ -117266,7 +117903,7 @@ const UI = {
           h('div', { class: 'nm' }, g.name, ev ? h('span', { class: 'tag-ev' }, ev.shortage ? T('marche.penurie') : T('marche.surplus')) : null),
           h('div', { class: 'pr' }, fmt(unit), ico('coin', 'xs'), h('span', { class: trend === '▲' ? 'trend-up' : 'trend-down' }, trend)),
           h('div', { class: 'hd' }, held ? h('b', null, held) : h('span', { class: 'dim' }, '0'), r.ware[pid] && r.ware[pid][gi] ? h('span', { class: 'dim' }, ` (+${r.ware[pid][gi]})`) : null),
-          h('div', { class: 'inf' }, avg, info),
+          h('div', { class: 'inf' }, avg, info, trace, rumor),
           h('div', { class: 'sl' + (tip ? ' has-tip' : '') }, slider, out, tip),
           h('div', { class: 'ac' }, act));
         row.title = g.desc;
@@ -117294,6 +117931,14 @@ const UI = {
       put(list0, ...kids);
     };
     render();
+  },
+  // une rumeur sur la ligne d'une marchandise au marché : où elle va manquer (l'acheter ici, la vendre là-bas) ou abonder ;
+  // dans une mer à mentor (conseils actifs), son sceau la signe
+  marketRumor(e, mode) {
+    const q = Game.rumorFacts(e), port = PORT[e.p].name;
+    const key = e.shortage ? (mode === 'buy' ? 'marche.rumeur.manquera' : 'marche.rumeur.paiera') : 'marche.rumeur.regorgera';
+    const seal = SEA.mentorSeal && Game.global.settings.chen !== false ? h('span', { class: 'mk-seal xs' + (SEA.mentorWax ? ' wax' : ''), 'aria-hidden': 'true' }, SEA.mentorSeal) : null;
+    return h('div', { class: 'mk-rumor ' + (e.shortage ? 'up' : 'down') }, seal, h('span', null, T(key, { port, quand: q.quand, fois: q.fois })));
   },
   // après un achat ou une vente qui a fait bouger le prix d'ici de plus d'un tiers : un mot en haut de l'écran
   // (before : [indice de la marchandise, prix d'avant] ; la trace s'efface de moitié en 10 jours, d'où « quelques semaines »)
@@ -117511,11 +118156,12 @@ const UI = {
         }
       } else if (tab === 'rumeurs') {
         kids.push(h('div', { class: 'row', 'data-g': 'tv-rumeurs' },
-          btn(T('taverne.tournee', { action: (P.labels && P.labels.rumor) || T('taverne.offrirTournee'), cout: monnaie(Game.rumorCost()) }), () => { const x = Game.hearRumor(); rumor = x ? x.text : T('taverne.rienARaconter'); if (x) { Sound.sfxPlay('coin'); Game.log(x.text, 'rumor', 'tavern'); } this.after(); render(); }, 'gold', r.cash < Game.rumorCost() ? { disabled: true } : null),
+          // (une tournée sans rien à raconter ne coûte rien et ne s'écrit pas au journal)
+          btn(T('taverne.tournee', { action: (P.labels && P.labels.rumor) || T('taverne.offrirTournee'), cout: monnaie(Game.rumorCost()) }), () => { const x = Game.hearRumor(); rumor = x ? x.text : T('taverne.rienARaconter'); if (x && !x.nothing) { Sound.sfxPlay('coin'); Game.log(x.text, 'rumor', 'tavern'); } this.after(); render(); }, 'gold', r.cash < Game.rumorCost() ? { disabled: true } : null),
           h('span', { class: 'hint' }, T('taverne.rumeursAide'))));
         if (rumor) kids.push(h('p', { class: 'flavor' }, rumor));
-        const known = Game.knownEvents();
-        if (known.length) kids.push(h('div', { class: 'row', style: { marginTop: '6px' } }, ...known.slice(0, 6).map(e => h('span', { class: 'pill ' + (e.shortage ? 'gold' : 'red') }, T('taverne.evenement', { port: PORT[e.p].name, marchandise: GOODS[e.g].name, fleche: e.shortage ? '▲' : '▼' })))));
+        const known = Game.knownEvents().sort((a, b) => a.start - b.start);
+        if (known.length) kids.push(h('div', { class: 'row', style: { marginTop: '6px' } }, ...known.slice(0, 8).map(e => h('span', { class: 'pill ' + (e.shortage ? 'gold' : 'red') }, T('taverne.evenementQuand', { port: PORT[e.p].name, marchandise: GOODS[e.g].name, fleche: e.shortage ? '▲' : '▼', quand: Game.rumorFacts(e).quand })))));
         // (ce que la mer ajoute à la taverne : attendre une semaine, le chef de l'île…)
         if (SEA.rules && SEA.rules.tavern) kids.push(...SEA.rules.tavern(pid, render));
       } else {
@@ -117792,13 +118438,23 @@ const UI = {
       }
       // trésors
       for (const tr of r.treasures) if (!tr.found) { ctx.strokeStyle = RED; ctx.lineWidth = 2.2; const x = tr.x / C, y = tr.y / C; ctx.beginPath(); ctx.moveTo(x - 5, y - 5); ctx.lineTo(x + 5, y + 5); ctx.moveTo(x + 5, y - 5); ctx.lineTo(x - 5, y + 5); ctx.stroke(); }
-      // rumeurs : flèches de pénurie (▲) ou de surplus (▼)
+      // rumeurs (06/10/2026 : les petites flèches ne se voyaient pas) : sous chaque port, une pastille par pénurie (or, ▲) ou
+      // surplus (rouge, ▼) entendus, avec l'icône de la marchandise
+      const badges = {};
       for (const e of Game.knownEvents()) {
-        const p = World.ports.find(q => q.id === e.p), x = p.x / C + 10, y = p.y / C + 10;
-        ctx.fillStyle = e.shortage ? '#237a60' : RED;
+        const p = World.ports.find(q => q.id === e.p); if (!p) continue;
+        const k = badges[e.p] = (badges[e.p] || 0) + 1, R6 = 6.5 * LS;
+        const x = p.x / C + (k - 1) * R6 * 2.3 - 2 * R6 * 0.55, y = p.y / C + R6 * 2.1;
+        ctx.fillStyle = e.shortage ? '#e8b54a' : '#d8472b'; ctx.strokeStyle = '#f7f1e3'; ctx.lineWidth = 1.3;
+        ctx.beginPath(); ctx.arc(x, y, R6, 0, TAU); ctx.fill(); ctx.stroke();
+        const img = (this.goodImgs = this.goodImgs || {})[GOODS[e.g].id] || (this.goodImgs[GOODS[e.g].id] = Object.assign(new Image(), { src: Icons.urls[GOODS[e.g].id] || '' }));
+        // (l'icône pas encore chargée : on redessine à son arrivée, si la carte est encore ouverte)
+        if (img.complete && img.naturalWidth) ctx.drawImage(img, x - R6 * 0.72, y - R6 * 0.72, R6 * 1.44, R6 * 1.44); else img.onload = () => { if (Game.run && cv.isConnected) draw(); };
+        const t = R6 * 0.55, ax = x + R6 * 0.85, ay = y - R6 * 0.85;
+        ctx.fillStyle = e.shortage ? '#237a60' : '#9e2f1c';
         ctx.beginPath();
-        if (e.shortage) { ctx.moveTo(x, y - 4); ctx.lineTo(x + 4, y + 3); ctx.lineTo(x - 4, y + 3); } else { ctx.moveTo(x, y + 4); ctx.lineTo(x + 4, y - 3); ctx.lineTo(x - 4, y - 3); }
-        ctx.closePath(); ctx.fill();
+        if (e.shortage) { ctx.moveTo(ax, ay - t); ctx.lineTo(ax + t, ay + t * 0.8); ctx.lineTo(ax - t, ay + t * 0.8); } else { ctx.moveTo(ax, ay + t); ctx.lineTo(ax + t, ay - t * 0.8); ctx.lineTo(ax - t, ay - t * 0.8); }
+        ctx.closePath(); ctx.fill(); ctx.stroke();
       }
       // route
       if (sel && pos) {
@@ -117847,8 +118503,8 @@ const UI = {
       const kids = [];
       if (!sel) {
         kids.push(h('p', { class: 'hint' }, T('carte.touchezPort')));
-        const known = Game.knownEvents();
-        if (known.length) kids.push(h('h4', null, T('carte.rumeurs')), ...known.map(e => h('div', { class: 'stat' }, h('span', null, T('carte.rumeur', { port: PORT[e.p].name, marchandise: GOODS[e.g].name })), h('b', { class: e.shortage ? 'pos' : 'neg' }, e.shortage ? T('marche.penurie') : T('marche.surplus')))));
+        const known = Game.knownEvents().sort((a, b) => a.start - b.start);
+        if (known.length) kids.push(h('h4', null, T('carte.rumeurs')), ...known.map(e => h('div', { class: 'stat' }, h('span', null, T('carte.rumeurQuand', { port: PORT[e.p].name, marchandise: GOODS[e.g].name, quand: Game.rumorFacts(e).quand })), h('b', { class: e.shortage ? 'pos' : 'neg' }, e.shortage ? T('marche.penurie') : T('marche.surplus')))));
         kids.push(h('p', { class: 'hint' }, TXT.chartHint));
       } else {
         const P = PORT[sel], dp = World.ports.find(q => q.id === sel);
@@ -117869,10 +118525,18 @@ const UI = {
         if (shut) kids.push(h('p', { class: 'neg' }, T('commun.titreTexte', { titre: shut[0], texte: shut[1] })));
         if (SEA.rules && SEA.rules.chartSide) kids.push(...SEA.rules.chartSide(sel, departing));
         const dorm = Game.portDormant(sel), k = dorm ? null : Game.knownPrices(sel);   // (un site à fonder n'a pas encore de marché)
+        // les prix connus du port, et pour ce qui est à bord, le prix moyen de toute la cargaison (glissement compris) ;
+        // puis ce qu'on y annonce (06/10/2026)
         if (k) {
-          kids.push(h('div', { class: 'card prices', 'data-g': 'ch-prices' }, h('div', { class: 'd' }, k.live ? T('carte.prixDirect') : T('carte.prixVus', { jours: Math.round(r.day - k.day) })),
-            ...GOODS.map((g, gi) => h('div', { class: 'stat' }, h('span', null, ico(g.id, 'sm'), ' ', g.name), h('b', null, fmt(k.p[gi]))))));
+          kids.push(h('div', { class: 'card prices', 'data-g': 'ch-prices' }, h('div', { class: 'd' }, k.live ? T('carte.prixDirect') : T(k.heard ? 'carte.prixOuiDire' : 'carte.prixVus', { jours: Math.round(r.day - k.day) })),
+            ...GOODS.map((g, gi) => {
+              const n = r.cargo[gi], q = n > 0 ? Game.knownSellQuote(sel, gi, n) : null;
+              return h('div', { class: 'stat' }, h('span', null, ico(g.id, 'sm'), ' ', g.name, q ? h('small', { class: 'hint' }, ' · ' + T('carte.pourVous', { n, prix: fmt(q / n) })) : null), h('b', null, fmt(k.p[gi])));
+            })));
         } else if (!dorm) kids.push(h('p', { class: 'hint' }, T('carte.prixInconnus')));
+        const said = dorm ? [] : Game.knownEvents().filter(e => e.p === sel).sort((a, b) => a.start - b.start);
+        if (said.length) kids.push(h('div', { class: 'card', 'data-g': 'ch-rumeurs' }, h('div', { class: 'd' }, T('carte.onDit')),
+          ...said.map(e => { const q = Game.rumorFacts(e); return h('div', { class: 'd ' + (e.shortage ? 'pos' : 'neg') }, (e.shortage ? '▲ ' : '▼ ') + T(e.shortage ? 'carte.onDitPenurie' : 'carte.onDitSurplus', { Marchandise: GOODS[e.g].name, quand: q.quand, duree: q.duree, fois: q.fois })); })));
         const cs = r.contracts.filter(c => c.to === sel);
         if (cs.length) kids.push(h('div', { class: 'card' }, h('div', { class: 'd' }, T('carte.contrats')), ...cs.map(c => h('div', { class: 'd' }, '• ' + Game.contractText(c)))));
         if (departing) {
@@ -118185,12 +118849,16 @@ const UI = {
     const rows = PORTS.map(p => ({ p, k: p.id === r.port ? { day: r.day, p: GOODS.map((g, i) => Math.round(Game.midPrice(p.id, i))), here: true } : Game.knownPrices(p.id) })).filter(x => x.k);
     if (!rows.length) return [h('p', { class: 'hint' }, T('journal.prix.aucun'))];
     const lo = GOODS.map((g, i) => Math.min(...rows.map(x => x.k.p[i]))), hi = GOODS.map((g, i) => Math.max(...rows.map(x => x.k.p[i])));
-    const age = k => k.here ? T('journal.prix.ici') : k.live ? T('journal.prix.direct') : (n => n ? T('journal.prix.age', { n }) : T('journal.prix.auj'))(Math.max(0, Math.round(r.day - k.day)));
+    const age = k => k.here ? T('journal.prix.ici') : k.live ? T('journal.prix.direct') : (n => (k.heard ? s => T('journal.prix.ouiDire', { age: s }) : s => s)(n ? T('journal.prix.age', { n }) : T('journal.prix.auj')))(Math.max(0, Math.round(r.day - k.day)));
     const ageCls = k => { const a = k.here || k.live ? 0 : r.day - k.day; return a < 15 ? 'fresh' : a < 45 ? 'mid' : 'old'; };
     // un prix vu pendant un surplus ou une pénurie : un sablier, vert (il remontera) ou rouge (il redescendra), 06/10/2026
     const evAt = (pid, gi, k) => { const D = k.here || k.live ? r.day : k.day; return r.events.find(e => e.p === pid && e.g === gi && D >= e.start && D <= e.start + e.dur) || null; };
-    let passing = false;
+    let passing = false, said = false, traced = false;
     const glass = e => { passing = true; return this.hourglass(e.shortage ? 'up' : 'down'); };
+    // (06/10/2026) une pénurie ou un surplus annoncés par une rumeur : une flèche, or (▲, le prix va monter) ou rouge (▼) ;
+    // un prix noté juste après votre propre vente (ou achat) : un petit cercle, il remonte (ou redescend) de lui-même
+    const arrow = e => { said = true; return h('span', { class: 'jr-ru ' + (e.shortage ? 'up' : 'down'), 'aria-hidden': 'true' }, e.shortage ? '▲' : '▼'); };
+    const mark = () => { traced = true; return h('span', { class: 'jr-tr', 'aria-hidden': 'true' }); };
     const table = h('table', { class: 'ledger jr-prices' },
       // (en-têtes : l'icône de la marchandise, comme au marché ; son nom au survol et pour les lecteurs d'écran)
       h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id))))),
@@ -118198,10 +118866,32 @@ const UI = {
         h('td', null, h('b', null, x.p.name), h('small', { class: 'hint' }, ' · ' + age(x.k))),
         ...GOODS.map((g, i) => {
           const v = x.k.p[i], cls = 'r' + (rows.length > 1 && v === lo[i] ? ' lo' : rows.length > 1 && v === hi[i] ? ' hi' : ''), e = evAt(x.p.id, i, x.k);
-          return h('td', { class: cls, 'data-tip': e ? T(e.shortage ? 'journal.prix.passagerPenurie' : 'journal.prix.passagerSurplus') : null }, e ? glass(e) : null, fmt(v));
+          const ru = e ? null : Game.rumorsFor(i, x.p.id)[0], tr = !e && !x.k.here && !x.k.live && x.k.t && Math.abs(x.k.t[i]) >= 5 ? x.k.t[i] : null;
+          const tips = [e ? T(e.shortage ? 'journal.prix.passagerPenurie' : 'journal.prix.passagerSurplus') : null,
+            ru ? T(ru.shortage ? 'journal.prix.rumeurPenurie' : 'journal.prix.rumeurSurplus', Game.rumorFacts(ru)) : null,
+            tr != null ? T(tr < 0 ? 'journal.prix.traceVente' : 'journal.prix.traceAchat', { pct: pct(tr / 100) }) : null].filter(Boolean);
+          return h('td', { class: cls, 'data-tip': tips.length ? tips.join(' ') : null }, e ? glass(e) : null, ru ? arrow(ru) : null, tr != null ? mark() : null, fmt(v));
         })))));
-    return [h('div', { class: 'jr-scroll', 'data-g': 'jr-table' }, table),
-      h('p', { class: 'hint jr-legend', 'data-g': 'jr-legend' }, T('journal.prix.legende'), passing ? [' ', this.hourglass('down'), this.hourglass('up'), ' ', T('journal.prix.legendePassager')] : null)];
+    return [this.journalCargo(rows), h('div', { class: 'jr-scroll', 'data-g': 'jr-table' }, table),
+      h('p', { class: 'hint jr-legend', 'data-g': 'jr-legend' }, T('journal.prix.legende'),
+        passing ? [' ', this.hourglass('down'), this.hourglass('up'), ' ', T('journal.prix.legendePassager')] : null,
+        said ? [' ', h('span', { class: 'jr-ru up' }, '▲'), h('span', { class: 'jr-ru down' }, '▼'), ' ', T('journal.prix.legendeRumeur')] : null,
+        traced ? [' ', h('span', { class: 'jr-tr' }), ' ', T('journal.prix.legendeTrace')] : null)];
+  },
+  // (06/10/2026) ce que rapporterait la cargaison à bord, marchandise par marchandise, dans les trois ports qui la paient le
+  // mieux d'après les prix connus : le prix moyen de toute la quantité, glissement compris (le prix d'un picul trompait le plan)
+  journalCargo(rows) {
+    const r = Game.run, lines = [];
+    GOODS.forEach((g, gi) => {
+      const n = r.cargo[gi];
+      if (n <= 0) return;
+      const best = rows.map(x => ({ p: x.p, v: Game.knownSellQuote(x.p.id, gi, n) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v).slice(0, 3);
+      if (!best.length) return;
+      lines.push(h('div', { class: 'stat' }, h('span', null, ico(g.id, 'sm'), ' ', T('journal.cargaison.ligne', { marchandise: g.name, n, unites: motUnites(n, g) })),
+        // (une flèche après le port quand une rumeur y annonce une pénurie ou un surplus de cette marchandise)
+        h('b', null, listJoin(best.map(x => { const ru = Game.rumorsFor(gi, x.p.id)[0]; return T('journal.cargaison.port', { port: x.p.name + (ru ? (ru.shortage ? ' ▲' : ' ▼') : ''), somme: fmt(x.v), prix: fmt(x.v / n) }); })))));
+    });
+    return lines.length ? h('div', { class: 'jr-cargo', 'data-g': 'jr-cargo' }, h('h4', null, T('journal.cargaison.titre')), ...lines, h('p', { class: 'hint' }, T('journal.cargaison.aide'))) : null;
   },
   // le sablier d'un prix passager (journal des prix) : 'down' surplus, vert ; 'up' pénurie, rouge
   hourglass(dir) {
@@ -133062,7 +133752,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 06/10/2026 à 14:55</div>
+<div id="maj">Mise à jour : 06/10/2026 à 22:06</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
