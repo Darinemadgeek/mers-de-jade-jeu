@@ -1152,6 +1152,62 @@ body.guide-top:not(.mobile) .chart-cv { height: min(calc(100vh - 150px - var(--g
 body:not(.pad):not(.mobile) #seahud [data-key]::after { content: attr(data-key); display: inline-flex; align-items: center; margin-left: 7px; font: 800 10px var(--font-ui); padding: 1px 5px; border-radius: 5px; background: rgba(243, 235, 218, 0.12); color: var(--text-3); }
 body:not(.pad):not(.mobile) #seahud .btn.on[data-key]::after { background: rgba(4, 23, 15, 0.18); color: inherit; }
 
+/* ── Les onglets en classeur doré (proposition A choisie le 07/10/2026 : taverne, journal, marché) : un trait d'or sous la
+      rangée, l'onglet choisi s'y ouvre comme un intercalaire (liseré d'or, filet en tête), les autres en retrait ── */
+.tabs.onglets { display: flex; flex-wrap: nowrap; gap: 4px; padding: 0 2px; margin: 0 0 12px; background: none; border: none; border-radius: 0; box-shadow: inset 0 -1.5px 0 rgba(232, 181, 74, 0.55); overflow-x: auto; scrollbar-width: none; }
+.tabs.onglets::-webkit-scrollbar { display: none; }
+.tabs.onglets .btn { flex: none; gap: 7px; padding: 8px 15px 9px; font-size: 14.5px; color: var(--text-2); background: rgba(243, 235, 218, 0.04); border: 1.5px solid rgba(243, 235, 218, 0.13); border-bottom: none; border-radius: 11px 11px 0 0; }
+.tabs.onglets .btn:hover:not(:disabled) { background: rgba(243, 235, 218, 0.1); border-color: rgba(243, 235, 218, 0.24); color: var(--text); }
+.tabs.onglets .btn:active:not(:disabled) { transform: none; }
+.tabs.onglets .btn .ico { width: 18px; height: 18px; opacity: 0.6; transition: opacity 0.15s; }
+.tabs.onglets .btn:hover .ico { opacity: 0.9; }
+.tabs.onglets .btn.on, .tabs.onglets .btn.on:hover:not(:disabled) { color: var(--gold-hi); background: linear-gradient(180deg, #26334b, #172234); border-color: rgba(232, 181, 74, 0.6); box-shadow: inset 0 3px 0 var(--gold); }
+.tabs.onglets .btn.on .ico { opacity: 1; }
+.mk-head .tabs.onglets { flex: 1; margin: 0; }
+.jr-tabs.onglets { margin: 0; }
+.tv-tabs.onglets { margin: 4px 0 14px; }
+.mobile .tabs.onglets .btn { padding: 7px 11px 8px; font-size: 13.5px; }
+
+/* les fenêtres à onglets posées en haut de l'écran : un onglet plus long ne les fait plus remonter sous la souris */
+.overlay.ancre { align-items: flex-start; padding-top: max(16px, 8vh); }
+
+/* ── Au port, le nom de la ville centré sous le bandeau (07/10/2026) : un cartouche à liseré d'or, le nom en lettres de titre et
+      la description du port dessous ── */
+.hud .it.hud-port { position: absolute; top: calc(52px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); flex-direction: column; justify-content: center; gap: 1px; height: auto; min-height: 34px; width: max-content; max-width: clamp(220px, calc(100vw - 660px), 460px); padding: 5px 18px 6px; border-radius: 16px; border-color: rgba(232, 181, 74, 0.55); text-align: center; white-space: normal; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22), inset 0 0 0 3px rgba(232, 181, 74, 0.08); }
+.hud .it.hud-port b { font: 800 17px/1.15 var(--font-title); letter-spacing: 0.03em; color: var(--paper); }
+.hud .it.hud-port small { font: 500 12px/1.3 var(--font-ui); color: var(--text-2); }
+
+/* ── Les contrats en cours et leur prime : au journal, et sous le bouton d'appareillage (07/10/2026) ── */
+.jr-ct { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 4px 14px; flex: none; }
+.ct-prime { display: inline-flex; align-items: center; gap: 4px; color: var(--gold-hi); font-variant-numeric: tabular-nums; }
+.ch-contracts { margin-top: 14px; }
+.ch-contracts h4 { margin-bottom: 6px; }
+.ch-ct { display: flex; flex-direction: column; gap: 1px; padding: 7px 10px; margin-bottom: 5px; border-radius: 10px; border: 1px solid var(--line); background: rgba(243, 235, 218, 0.04); font-size: 14px; }
+.ch-ct small { font-size: 12.5px; color: var(--text-2); }
+.ch-ct small b { color: var(--gold-hi); }
+.ch-ct.here { border-color: rgba(232, 181, 74, 0.6); background: rgba(232, 181, 74, 0.09); box-shadow: inset 3px 0 0 var(--gold); }
+.tab-n.go { background: var(--gold); color: var(--gold-ink); }
+.ct-prime.big { display: flex; justify-content: center; font: 800 22px var(--font-ui); margin-top: 6px; }
+.ct-prime.big .ico { width: 22px; height: 22px; }
+.ch-deliver { margin: 4px 0 10px; padding: 9px 11px; border-radius: 12px; border: 1px solid rgba(232, 181, 74, 0.6); background: rgba(232, 181, 74, 0.1); display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.ch-deliver > b { color: var(--gold-hi); font-size: 13px; }
+
+/* ── Les rumeurs du journal rangées par état (07/10/2026) : ▲ pénurie en vert (on y vend cher), ▼ surplus en rouge ── */
+.jr-ev { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 11px; margin-bottom: 5px; border-radius: 11px; border: 1px solid var(--line); background: rgba(243, 235, 218, 0.035); }
+.jr-ev-ic { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: rgba(243, 235, 218, 0.07); }
+.jr-ev-ic .ico { width: 20px; height: 20px; }
+.jr-ev.up .jr-ev-ic { background: rgba(111, 214, 168, 0.16); box-shadow: inset 0 0 0 1px rgba(111, 214, 168, 0.4); }
+.jr-ev.down .jr-ev-ic { background: rgba(255, 138, 112, 0.14); box-shadow: inset 0 0 0 1px rgba(255, 138, 112, 0.4); }
+.jr-ev-t b { display: block; font-size: 14.5px; }
+.jr-ev-t small { display: block; font-size: 12.5px; color: var(--text-2); }
+.jr-ev.up .jr-ev-t small { color: var(--good); }
+.jr-ev.down .jr-ev-t small { color: var(--bad); }
+.jr-ev-r { display: flex; flex-direction: column; align-items: flex-end; text-align: right; font-size: 13.5px; }
+.jr-ev-r small { font-size: 12px; color: var(--text-3); }
+.jr-ev.up .jr-ev-r b { color: var(--good); }
+.jr-ev.down .jr-ev-r b { color: var(--bad); }
+.jr-ev.old { opacity: 0.5; }
+
 </style>
 </head>
 <body>
@@ -1925,6 +1981,7 @@ Lang.ui('fr', {
 
   // ── Marché ──
   'marche.contrat': 'Contrat : {contrat} → {prime} {monnaie}',
+  'marche.reserve': 'dont {n} promis par contrat',
   'marche.livrer': 'Livrer',
   'marche.contratHonore': 'Contrat honoré : +{somme}',
   'marche.acheter': 'Acheter',
@@ -2051,6 +2108,7 @@ Lang.ui('fr', {
 
   // ── Taverne (suite) ──
   'taverne.enCours': 'CONTRATS EN COURS',
+  'taverne.aLivrer': '{n} à livrer',
   'taverne.contratEnCours': ' · {prime} · avant le {date}',
 
   // ── Banque ──
@@ -2127,7 +2185,7 @@ Lang.ui('fr', {
   'carte.prixDirect': 'Prix en direct (informateurs)',
   'carte.prixVus': 'Prix vus il y a {jours} j',
   'carte.prixInconnus': 'Prix inconnus : jamais visité.',
-  'carte.contrats': 'Contrats pour ce port :',
+  'carte.livrableIci': 'À livrer ici avant de partir :',
   'carte.sansNavire': 'Il vous faut un navire (chantier naval).',
   'carte.equipageInsuffisant': 'Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.',
   'carte.coqueEndommagee': 'Coque endommagée : pensez au chantier naval.',
@@ -2233,6 +2291,19 @@ Lang.ui('fr', {
   'journal.faits': 'Faits d\'armes et de commerce',
   'journal.vide': 'Rien de noté pour l\'instant.',
   'journal.rumeurs.aucune': 'Aucune rumeur pour l\'instant : offrez une tournée à la taverne, ou tendez l\'oreille en ville.',
+  'journal.rumeurs.maintenant': 'EN CE MOMENT',
+  'journal.rumeurs.aVenir': 'À VENIR',
+  'journal.rumeurs.prixRapportes': 'PRIX RAPPORTÉS',
+  'journal.rumeurs.autres': 'AUTRES NOUVELLES',
+  'journal.rumeurs.passees': 'PASSÉES',
+  'journal.rumeurs.bavardages': 'Bavardages du port ({n})',
+  'journal.rumeurs.titre': '{Marchandise} à {port}',
+  'journal.rumeurs.penurie': 'Pénurie : prix ×{fois}',
+  'journal.rumeurs.surplus': 'Surplus : prix ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, one {demain} other {dans # jours}}',
+  'journal.rumeurs.prixDe': 'Les prix {dePort}',
+  'journal.rumeurs.prixVus': 'vus le {date} · onglet {onglet}',
+  'journal.rumeurs.finie': 'finie le {date}',
   'journal.rumeur.tavern': 'taverne',
   'journal.rumeur.free': 'en mer',
   'journal.rumeur.street': 'dans la rue',
@@ -2396,7 +2467,12 @@ Lang.ui('fr', {
   'equipage.desertent': 'Solde impayée : {n, plural, one {# marin déserte} other {# marins désertent}} !',
 
   // ── Contrats ──
-  'contrat.livraison': 'Livrer {n} {marchandise} à {port}',
+  'contrat.livraison': 'Livraison de {n} {marchandise} à {port}',
+  'contrat.livraisonAide': 'Achetez-les où vous voulez, puis livrez-les à {port}.',
+  'contrat.aBord': 'à bord : {a} / {n}',
+  'contrat.livrerTitre': 'Contrat · {port}',
+  'contrat.livrerQuestion': 'Livrer {n} {marchandise} au marchand qui les attend ?',
+  'contrat.plusTard': 'Plus tard',
   'contrat.colis': 'Porter {quoi} à {port} ({place} {unites})',   // quoi : « des lettres de change »…
   'contrat.chasse': 'Couler {n} {ennemis} ({fait}/{n})',
   'contrat.naviresPirates': 'navires pirates',
@@ -2927,6 +3003,7 @@ Lang.ui('en', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Contract: {contrat} → {prime} {monnaie}',
+  'marche.reserve': '{n} promised under contract',
   // Livrer
   'marche.livrer': 'Deliver',
   // Contrat honoré : +{somme}
@@ -3154,6 +3231,7 @@ Lang.ui('en', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'CURRENT CONTRACTS',
+  'taverne.aLivrer': '{n} to deliver',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · by {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -3283,7 +3361,7 @@ Lang.ui('en', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Prices unknown: never visited.',
   // Contrats pour ce port :
-  'carte.contrats': 'Contracts for this port:',
+  'carte.livrableIci': 'To deliver here before you sail:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'You need a ship: visit the shipyard.',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -3477,6 +3555,19 @@ Lang.ui('en', {
   'journal.vide': 'Nothing logged yet.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'No rumors yet: buy a round at the tavern, or keep your ears open in town.',
+  'journal.rumeurs.maintenant': 'RIGHT NOW',
+  'journal.rumeurs.aVenir': 'COMING UP',
+  'journal.rumeurs.prixRapportes': 'REPORTED PRICES',
+  'journal.rumeurs.autres': 'OTHER NEWS',
+  'journal.rumeurs.passees': 'OVER',
+  'journal.rumeurs.bavardages': 'Harbour chatter ({n})',
+  'journal.rumeurs.titre': '{Marchandise} in {port}',
+  'journal.rumeurs.penurie': 'Shortage: prices ×{fois}',
+  'journal.rumeurs.surplus': 'Glut: prices ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, one {tomorrow} other {in # days}}',
+  'journal.rumeurs.prixDe': 'Prices in {port}',
+  'journal.rumeurs.prixVus': 'seen on {date} · {onglet} tab',
+  'journal.rumeurs.finie': 'ended on {date}',
   // taverne
   'journal.rumeur.tavern': 'tavern',
   // en mer
@@ -3754,7 +3845,12 @@ Lang.ui('en', {
   // Solde impayée : {n, plural, one {# marin déserte} other {# marins désertent}} !
   'equipage.desertent': 'Wages unpaid: {n, plural, one {# sailor deserts} other {# sailors desert}}!',
   // Livrer {n} {marchandise} à {port}
-  'contrat.livraison': 'Deliver {n} {marchandise} to {port}',
+  'contrat.livraison': 'Delivery of {n} {marchandise} to {port}',
+  'contrat.livraisonAide': 'Buy them wherever you like, then deliver them to {port}.',
+  'contrat.aBord': 'aboard: {a} / {n}',
+  'contrat.livrerTitre': 'Contract · {port}',
+  'contrat.livrerQuestion': 'Deliver {n} {marchandise} to the merchant waiting for them?',
+  'contrat.plusTard': 'Later',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': 'Carry {quoi} to {port} ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -12671,6 +12767,7 @@ Lang.ui('zh', {
   'port.batimentDe': '{port}{batiment}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': '合约：{contrat} → {prime}{monnaie}',
+  'marche.reserve': '其中{n}为合约所需',
   // Livrer
   'marche.livrer': '交货',
   // Contrat honoré : +{somme}
@@ -12898,6 +12995,7 @@ Lang.ui('zh', {
   'commun.titreTexte': '{titre}：{texte}',
   // CONTRATS EN COURS
   'taverne.enCours': '进行中的合约',
+  'taverne.aLivrer': '{n}项可交货',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · {date}前',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -13027,7 +13125,7 @@ Lang.ui('zh', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': '行情未知：从未到过。',
   // Contrats pour ce port :
-  'carte.contrats': '此港合约：',
+  'carte.livrableIci': '离港前可在此交货：',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': '你需要一条船（去船厂）。',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -13221,6 +13319,19 @@ Lang.ui('zh', {
   'journal.vide': '暂无记录。',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': '暂无传闻：在酒馆请大家喝一轮，或在城里多留心听听。',
+  'journal.rumeurs.maintenant': '当前',
+  'journal.rumeurs.aVenir': '即将到来',
+  'journal.rumeurs.prixRapportes': '传来的行情',
+  'journal.rumeurs.autres': '其他消息',
+  'journal.rumeurs.passees': '已结束',
+  'journal.rumeurs.bavardages': '港口闲谈（{n}）',
+  'journal.rumeurs.titre': '{port}的{Marchandise}',
+  'journal.rumeurs.penurie': '短缺：价格×{fois}',
+  'journal.rumeurs.surplus': '过剩：价格÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, =1 {明天} other {#天后}}',
+  'journal.rumeurs.prixDe': '{port}的行情',
+  'journal.rumeurs.prixVus': '{date}所见 · 见“{onglet}”页',
+  'journal.rumeurs.finie': '{date}结束',
   // taverne
   'journal.rumeur.tavern': '酒馆',
   // en mer
@@ -13499,6 +13610,11 @@ Lang.ui('zh', {
   'equipage.desertent': '薪饷拖欠：{n, plural, other {#名水手开了小差}}！',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': '将{n}{unites}{marchandise}送到{port}',
+  'contrat.livraisonAide': '可在任意港口购入，再送到{port}。',
+  'contrat.aBord': '船上：{a} / {n}',
+  'contrat.livrerTitre': '合约 · {port}',
+  'contrat.livrerQuestion': '把{n}{unites}{marchandise}交给等货的商人吗？',
+  'contrat.plusTard': '稍后',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': '将{quoi}送到{port}（占{place}{unites}）',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -22385,6 +22501,7 @@ Lang.ui('zht', {
   'port.batimentDe': '{port}{batiment}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': '合約：{contrat} → {prime}{monnaie}',
+  'marche.reserve': '其中{n}為合約所需',
   // Livrer
   'marche.livrer': '交貨',
   // Contrat honoré : +{somme}
@@ -22612,6 +22729,7 @@ Lang.ui('zht', {
   'commun.titreTexte': '{titre}：{texte}',
   // CONTRATS EN COURS
   'taverne.enCours': '進行中的合約',
+  'taverne.aLivrer': '{n}項可交貨',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · {date}前',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -22741,7 +22859,7 @@ Lang.ui('zht', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': '行情未知：從未到過。',
   // Contrats pour ce port :
-  'carte.contrats': '此港合約：',
+  'carte.livrableIci': '離港前可在此交貨：',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': '你需要一條船（去船廠）。',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -22935,6 +23053,19 @@ Lang.ui('zht', {
   'journal.vide': '目前沒有任何紀錄。',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': '目前沒有傳聞：在酒館請大家喝一輪，或在城裡多留心聽聽。',
+  'journal.rumeurs.maintenant': '當前',
+  'journal.rumeurs.aVenir': '即將到來',
+  'journal.rumeurs.prixRapportes': '傳來的行情',
+  'journal.rumeurs.autres': '其他消息',
+  'journal.rumeurs.passees': '已結束',
+  'journal.rumeurs.bavardages': '港口閒談（{n}）',
+  'journal.rumeurs.titre': '{port}的{Marchandise}',
+  'journal.rumeurs.penurie': '短缺：價格×{fois}',
+  'journal.rumeurs.surplus': '過剩：價格÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, =1 {明天} other {#天後}}',
+  'journal.rumeurs.prixDe': '{port}的行情',
+  'journal.rumeurs.prixVus': '{date}所見 · 見「{onglet}」頁',
+  'journal.rumeurs.finie': '{date}結束',
   // taverne
   'journal.rumeur.tavern': '酒館',
   // en mer
@@ -23213,6 +23344,11 @@ Lang.ui('zht', {
   'equipage.desertent': '薪餉拖欠：{n, plural, other {#名水手開了小差}}！',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': '將{n}{unites}{marchandise}送到{port}',
+  'contrat.livraisonAide': '可在任意港口購入，再送到{port}。',
+  'contrat.aBord': '船上：{a} / {n}',
+  'contrat.livrerTitre': '合約 · {port}',
+  'contrat.livrerQuestion': '把{n}{unites}{marchandise}交給等貨的商人嗎？',
+  'contrat.plusTard': '稍後',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': '將{quoi}送到{port}（佔{place}{unites}）',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -32101,6 +32237,7 @@ Lang.ui('ja', {
   'port.batimentDe': '{port}の{batiment}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': '依頼：{contrat} → {prime}{monnaie}',
+  'marche.reserve': 'うち{n}は依頼の品',
   // Livrer
   'marche.livrer': '納品',
   // Contrat honoré : +{somme}
@@ -32328,6 +32465,7 @@ Lang.ui('ja', {
   'commun.titreTexte': '{titre}：{texte}',
   // CONTRATS EN COURS
   'taverne.enCours': '受注中の依頼',
+  'taverne.aLivrer': '納品できる依頼 {n}',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · {date}まで',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -32457,7 +32595,7 @@ Lang.ui('ja', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': '相場不明：未訪問。',
   // Contrats pour ce port :
-  'carte.contrats': 'この港への依頼：',
+  'carte.livrableIci': '出港前にここで納品できます：',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': '船が必要です（造船所へ）。',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -32651,6 +32789,19 @@ Lang.ui('ja', {
   'journal.vide': 'まだ記録はない。',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'まだ噂はない。酒場で皆に一杯おごるか、町で耳を澄ませよう。',
+  'journal.rumeurs.maintenant': '進行中',
+  'journal.rumeurs.aVenir': 'これから',
+  'journal.rumeurs.prixRapportes': '伝え聞いた相場',
+  'journal.rumeurs.autres': 'その他の知らせ',
+  'journal.rumeurs.passees': '終わったもの',
+  'journal.rumeurs.bavardages': '港の世間話（{n}）',
+  'journal.rumeurs.titre': '{port}の{Marchandise}',
+  'journal.rumeurs.penurie': '品不足：価格×{fois}',
+  'journal.rumeurs.surplus': '供給過多：価格÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, =1 {明日} other {#日後}}',
+  'journal.rumeurs.prixDe': '{port}の相場',
+  'journal.rumeurs.prixVus': '{date}時点 · 「{onglet}」タブ',
+  'journal.rumeurs.finie': '{date}に終了',
   // taverne
   'journal.rumeur.tavern': '酒場',
   // en mer
@@ -32929,6 +33080,11 @@ Lang.ui('ja', {
   'equipage.desertent': '給金未払い：{n, plural, other {水夫#人}}が脱走！',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': '{port}へ{marchandise}{n}{unites}を納品',
+  'contrat.livraisonAide': 'どこで仕入れてもよい。{port}へ届けること。',
+  'contrat.aBord': '船上：{a} / {n}',
+  'contrat.livrerTitre': '依頼 · {port}',
+  'contrat.livrerQuestion': '待っている商人に{marchandise}{n}{unites}を納品しますか？',
+  'contrat.plusTard': 'あとで',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': '{quoi}を{port}へ運ぶ（{place}{unites}）',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -41849,6 +42005,7 @@ Lang.ui('ko', {
   'port.batimentDe': '{port} {batiment}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': '계약: {contrat} → {prime}{monnaie}',
+  'marche.reserve': '그중 {n}은 계약 물량',
   // Livrer
   'marche.livrer': '납품',
   // Contrat honoré : +{somme}
@@ -42076,6 +42233,7 @@ Lang.ui('ko', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': '진행 중인 계약',
+  'taverne.aLivrer': '납품 가능 {n}건',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · {date}까지',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -42205,7 +42363,7 @@ Lang.ui('ko', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': '시세 모름: 가 본 적 없는 항구.',
   // Contrats pour ce port :
-  'carte.contrats': '이 항구의 계약:',
+  'carte.livrableIci': '출항 전에 여기서 납품할 수 있습니다:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': '배가 있어야 합니다 (조선소).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -42399,6 +42557,19 @@ Lang.ui('ko', {
   'journal.vide': '아직 기록된 것이 없습니다.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': '아직 소문이 없습니다. 주점에서 술을 한턱내거나 시내에서 귀를 기울여 보세요.',
+  'journal.rumeurs.maintenant': '진행 중',
+  'journal.rumeurs.aVenir': '다가오는 일',
+  'journal.rumeurs.prixRapportes': '전해 들은 시세',
+  'journal.rumeurs.autres': '그 밖의 소식',
+  'journal.rumeurs.passees': '지난 일',
+  'journal.rumeurs.bavardages': '항구의 잡담 ({n})',
+  'journal.rumeurs.titre': '{port}의 {Marchandise}',
+  'journal.rumeurs.penurie': '품귀: 가격 ×{fois}',
+  'journal.rumeurs.surplus': '과잉: 가격 ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, =1 {내일} other {#일 후}}',
+  'journal.rumeurs.prixDe': '{port}의 시세',
+  'journal.rumeurs.prixVus': '{date} 기준 · "{onglet}" 탭',
+  'journal.rumeurs.finie': '{date}에 끝남',
   // taverne
   'journal.rumeur.tavern': '주점',
   // en mer
@@ -42677,6 +42848,11 @@ Lang.ui('ko', {
   'equipage.desertent': '급료 체불: 선원 {n, plural, other {#명}}이 탈주합니다!',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': '{port}에 {marchandise} {n}{unites} 납품',
+  'contrat.livraisonAide': '어디서든 사들인 뒤 {port}에 납품하세요.',
+  'contrat.aBord': '선적: {a} / {n}',
+  'contrat.livrerTitre': '계약 · {port}',
+  'contrat.livrerQuestion': '기다리는 상인에게 {marchandise} {n}{unites}을(를) 납품할까요?',
+  'contrat.plusTard': '나중에',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': '{port}에 {quoi} 운송 ({place}{unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -51562,6 +51738,7 @@ Lang.ui('ru', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Контракт: {contrat} → {prime} {monnaie}',
+  'marche.reserve': 'из них {n} — по контракту',
   // Livrer
   'marche.livrer': 'Доставить',
   // Contrat honoré : +{somme}
@@ -51789,6 +51966,7 @@ Lang.ui('ru', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'ТЕКУЩИЕ КОНТРАКТЫ',
+  'taverne.aLivrer': 'к доставке: {n}',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · до {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -51918,7 +52096,7 @@ Lang.ui('ru', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Цены неизвестны: вы здесь не бывали.',
   // Contrats pour ce port :
-  'carte.contrats': 'Контракты на этот порт:',
+  'carte.livrableIci': 'Можно доставить здесь до отплытия:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'Нужен корабль (загляните на верфь).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -52112,6 +52290,19 @@ Lang.ui('ru', {
   'journal.vide': 'Пока ничего не записано.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'Слухов пока нет: угостите всех в таверне или прислушайтесь к разговорам в городе.',
+  'journal.rumeurs.maintenant': 'СЕЙЧАС',
+  'journal.rumeurs.aVenir': 'СКОРО',
+  'journal.rumeurs.prixRapportes': 'ЦЕНЫ ПО СЛУХАМ',
+  'journal.rumeurs.autres': 'ДРУГИЕ ВЕСТИ',
+  'journal.rumeurs.passees': 'ПРОШЛО',
+  'journal.rumeurs.bavardages': 'Портовые разговоры ({n})',
+  'journal.rumeurs.titre': '{Marchandise}, порт {port}',
+  'journal.rumeurs.penurie': 'Нехватка: цены ×{fois}',
+  'journal.rumeurs.surplus': 'Избыток: цены ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, =1 {завтра} one {через # день} few {через # дня} many {через # дней} other {через # дня}}',
+  'journal.rumeurs.prixDe': 'Цены в порту {port}',
+  'journal.rumeurs.prixVus': 'на {date} · вкладка «{onglet}»',
+  'journal.rumeurs.finie': 'закончилось {date}',
   // taverne
   'journal.rumeur.tavern': 'таверна',
   // en mer
@@ -52390,6 +52581,11 @@ Lang.ui('ru', {
   'equipage.desertent': 'Жалованье не выплачено: {n, plural, one {# моряк дезертирует} few {# моряка дезертируют} many {# моряков дезертируют} other {# моряка дезертируют}}!',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': 'Доставить в порт {port}: {marchandise} ({n} {unites})',
+  'contrat.livraisonAide': 'Купите где угодно и доставьте в порт {port}.',
+  'contrat.aBord': 'на борту: {a} / {n}',
+  'contrat.livrerTitre': 'Контракт · {port}',
+  'contrat.livrerQuestion': 'Доставить купцу, который ждёт груз: {marchandise} ({n} {unites})?',
+  'contrat.plusTard': 'Позже',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': 'Отвезти в порт {port}: {quoi} ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -61415,6 +61611,7 @@ Lang.ui('es', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Contrato: {contrat} → {prime} {monnaie}',
+  'marche.reserve': '{n} prometidas por contrato',
   // Livrer
   'marche.livrer': 'Entregar',
   // Contrat honoré : +{somme}
@@ -61642,6 +61839,7 @@ Lang.ui('es', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'CONTRATOS EN CURSO',
+  'taverne.aLivrer': '{n} por entregar',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · antes del {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -61771,7 +61969,7 @@ Lang.ui('es', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Precios desconocidos: nunca visitado.',
   // Contrats pour ce port :
-  'carte.contrats': 'Contratos para este puerto:',
+  'carte.livrableIci': 'Para entregar aquí antes de zarpar:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'Necesitas un barco (astillero).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -61965,6 +62163,19 @@ Lang.ui('es', {
   'journal.vide': 'Nada anotado por ahora.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'Ningún rumor por ahora: invita a una ronda en la taberna o presta oído en la ciudad.',
+  'journal.rumeurs.maintenant': 'AHORA MISMO',
+  'journal.rumeurs.aVenir': 'PRÓXIMAMENTE',
+  'journal.rumeurs.prixRapportes': 'PRECIOS DE OÍDAS',
+  'journal.rumeurs.autres': 'OTRAS NOTICIAS',
+  'journal.rumeurs.passees': 'PASADAS',
+  'journal.rumeurs.bavardages': 'Charlas del puerto ({n})',
+  'journal.rumeurs.titre': '{Marchandise} en {port}',
+  'journal.rumeurs.penurie': 'Escasez: precios ×{fois}',
+  'journal.rumeurs.surplus': 'Excedente: precios ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, one {mañana} other {dentro de # días}}',
+  'journal.rumeurs.prixDe': 'Precios de {port}',
+  'journal.rumeurs.prixVus': 'vistos el {date} · pestaña {onglet}',
+  'journal.rumeurs.finie': 'terminó el {date}',
   // taverne
   'journal.rumeur.tavern': 'taberna',
   // en mer
@@ -62243,6 +62454,11 @@ Lang.ui('es', {
   'equipage.desertent': '¡Soldada sin pagar! {n, plural, one {Deserta # marinero.} other {Desertan # marineros.}}',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': 'Entregar {n} {unites} de {marchandise} en {port}',
+  'contrat.livraisonAide': 'Cómpralas donde quieras y entrégalas en {port}.',
+  'contrat.aBord': 'a bordo: {a} / {n}',
+  'contrat.livrerTitre': 'Contrato · {port}',
+  'contrat.livrerQuestion': '¿Entregar {n} {unites} de {marchandise} al mercader que las espera?',
+  'contrat.plusTard': 'Más tarde',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': 'Llevar {quoi} a {port} ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -71154,6 +71370,7 @@ Lang.ui('pt', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Contrato: {contrat} → {prime} {monnaie}',
+  'marche.reserve': '{n} prometidas por contrato',
   // Livrer
   'marche.livrer': 'Entregar',
   // Contrat honoré : +{somme}
@@ -71381,6 +71598,7 @@ Lang.ui('pt', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'CONTRATOS EM CURSO',
+  'taverne.aLivrer': '{n} por entregar',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · até {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -71510,7 +71728,7 @@ Lang.ui('pt', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Preços desconhecidos: nunca visitado.',
   // Contrats pour ce port :
-  'carte.contrats': 'Contratos para este porto:',
+  'carte.livrableIci': 'Para entregar aqui antes de zarpar:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'Você precisa de um navio (estaleiro).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -71704,6 +71922,19 @@ Lang.ui('pt', {
   'journal.vide': 'Nada anotado por enquanto.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'Nenhum rumor por enquanto: pague uma rodada na taverna ou fique de ouvido atento na cidade.',
+  'journal.rumeurs.maintenant': 'NESTE MOMENTO',
+  'journal.rumeurs.aVenir': 'EM BREVE',
+  'journal.rumeurs.prixRapportes': 'PREÇOS DE OUVIR DIZER',
+  'journal.rumeurs.autres': 'OUTRAS NOTÍCIAS',
+  'journal.rumeurs.passees': 'PASSADAS',
+  'journal.rumeurs.bavardages': 'Conversas do porto ({n})',
+  'journal.rumeurs.titre': '{Marchandise} em {port}',
+  'journal.rumeurs.penurie': 'Escassez: preços ×{fois}',
+  'journal.rumeurs.surplus': 'Excedente: preços ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, one {amanhã} other {daqui a # dias}}',
+  'journal.rumeurs.prixDe': 'Preços de {port}',
+  'journal.rumeurs.prixVus': 'vistos em {date} · separador {onglet}',
+  'journal.rumeurs.finie': 'terminou em {date}',
   // taverne
   'journal.rumeur.tavern': 'taverna',
   // en mer
@@ -71982,6 +72213,11 @@ Lang.ui('pt', {
   'equipage.desertent': 'Soldo atrasado: {n, plural, one {# marinheiro deserta} other {# marinheiros desertam}}!',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': 'Entregar {n} {marchandise} em {port}',
+  'contrat.livraisonAide': 'Compre-as onde quiser e entregue-as em {port}.',
+  'contrat.aBord': 'a bordo: {a} / {n}',
+  'contrat.livrerTitre': 'Contrato · {port}',
+  'contrat.livrerQuestion': 'Entregar {n} {marchandise} ao mercador que as espera?',
+  'contrat.plusTard': 'Mais tarde',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': 'Levar {quoi} para {port} ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -80891,6 +81127,7 @@ Lang.ui('de', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Auftrag: {contrat} → {prime} {monnaie}',
+  'marche.reserve': 'davon {n} für einen Auftrag',
   // Livrer
   'marche.livrer': 'Liefern',
   // Contrat honoré : +{somme}
@@ -81118,6 +81355,7 @@ Lang.ui('de', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'LAUFENDE AUFTRÄGE',
+  'taverne.aLivrer': '{n} zu liefern',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · bis zum {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -81247,7 +81485,7 @@ Lang.ui('de', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Preise unbekannt: nie besucht.',
   // Contrats pour ce port :
-  'carte.contrats': 'Aufträge für diesen Hafen:',
+  'carte.livrableIci': 'Hier lieferbar, bevor du ablegst:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'Du brauchst ein Schiff (Werft).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -81441,6 +81679,19 @@ Lang.ui('de', {
   'journal.vide': 'Noch nichts eingetragen.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'Noch keine Gerüchte: Gib in der Schenke eine Runde aus oder hör dich in der Stadt um.',
+  'journal.rumeurs.maintenant': 'GERADE JETZT',
+  'journal.rumeurs.aVenir': 'DEMNÄCHST',
+  'journal.rumeurs.prixRapportes': 'GEHÖRTE PREISE',
+  'journal.rumeurs.autres': 'ANDERE NACHRICHTEN',
+  'journal.rumeurs.passees': 'VORBEI',
+  'journal.rumeurs.bavardages': 'Hafengerede ({n})',
+  'journal.rumeurs.titre': '{Marchandise} in {port}',
+  'journal.rumeurs.penurie': 'Knappheit: Preise ×{fois}',
+  'journal.rumeurs.surplus': 'Überangebot: Preise ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, one {morgen} other {in # Tagen}}',
+  'journal.rumeurs.prixDe': 'Preise in {port}',
+  'journal.rumeurs.prixVus': 'gesehen am {date} · Reiter {onglet}',
+  'journal.rumeurs.finie': 'vorbei seit {date}',
   // taverne
   'journal.rumeur.tavern': 'Schenke',
   // en mer
@@ -81719,6 +81970,11 @@ Lang.ui('de', {
   'equipage.desertent': 'Heuer nicht bezahlt: {n, plural, one {# Seemann desertiert} other {# Seeleute desertieren}}!',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': '{n} {unites} {marchandise} nach {port} liefern',
+  'contrat.livraisonAide': 'Kauf sie, wo du willst, und liefere sie nach {port}.',
+  'contrat.aBord': 'an Bord: {a} / {n}',
+  'contrat.livrerTitre': 'Auftrag · {port}',
+  'contrat.livrerQuestion': '{n} {unites} {marchandise} an den wartenden Händler liefern?',
+  'contrat.plusTard': 'Später',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': '{quoi} nach {port} bringen ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -90628,6 +90884,7 @@ Lang.ui('it', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Contratto: {contrat} → {prime} {monnaie}',
+  'marche.reserve': '{n} promesse per contratto',
   // Livrer
   'marche.livrer': 'Consegna',
   // Contrat honoré : +{somme}
@@ -90855,6 +91112,7 @@ Lang.ui('it', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'CONTRATTI IN CORSO',
+  'taverne.aLivrer': '{n} da consegnare',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · scadenza {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -90984,7 +91242,7 @@ Lang.ui('it', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Prezzi ignoti: porto mai visitato.',
   // Contrats pour ce port :
-  'carte.contrats': 'Contratti per questo porto:',
+  'carte.livrableIci': 'Da consegnare qui prima di salpare:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'Ti serve una nave (cantiere navale).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -91178,6 +91436,19 @@ Lang.ui('it', {
   'journal.vide': 'Nulla di annotato per ora.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'Nessuna voce per ora: offri un giro in taverna o tendi l\'orecchio in città.',
+  'journal.rumeurs.maintenant': 'IN QUESTO MOMENTO',
+  'journal.rumeurs.aVenir': 'IN ARRIVO',
+  'journal.rumeurs.prixRapportes': 'PREZZI SENTITI DIRE',
+  'journal.rumeurs.autres': 'ALTRE NOTIZIE',
+  'journal.rumeurs.passees': 'PASSATE',
+  'journal.rumeurs.bavardages': 'Chiacchiere del porto ({n})',
+  'journal.rumeurs.titre': '{Marchandise} a {port}',
+  'journal.rumeurs.penurie': 'Penuria: prezzi ×{fois}',
+  'journal.rumeurs.surplus': 'Eccedenza: prezzi ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, one {domani} other {tra # giorni}}',
+  'journal.rumeurs.prixDe': 'Prezzi di {port}',
+  'journal.rumeurs.prixVus': 'visti il {date} · scheda {onglet}',
+  'journal.rumeurs.finie': 'finita il {date}',
   // taverne
   'journal.rumeur.tavern': 'taverna',
   // en mer
@@ -91456,6 +91727,11 @@ Lang.ui('it', {
   'equipage.desertent': 'Paga non versata: {n, plural, one {# marinaio diserta} other {# marinai disertano}}!',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': 'Consegna {n} {unites} di {marchandise} a {port}',
+  'contrat.livraisonAide': 'Comprale dove vuoi, poi consegnale a {port}.',
+  'contrat.aBord': 'a bordo: {a} / {n}',
+  'contrat.livrerTitre': 'Contratto · {port}',
+  'contrat.livrerQuestion': 'Consegnare {n} {unites} di {marchandise} al mercante che le aspetta?',
+  'contrat.plusTard': 'Più tardi',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': 'Porta {quoi} a {port} ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -100368,6 +100644,7 @@ Lang.ui('pl', {
   'port.batimentDe': '{batiment} · {port}',
   // Contrat : {contrat} → {prime} {monnaie}
   'marche.contrat': 'Kontrakt: {contrat} → {prime} {monnaie}',
+  'marche.reserve': 'w tym {n} z kontraktu',
   // Livrer
   'marche.livrer': 'Dostarcz',
   // Contrat honoré : +{somme}
@@ -100595,6 +100872,7 @@ Lang.ui('pl', {
   'commun.titreTexte': '{titre}: {texte}',
   // CONTRATS EN COURS
   'taverne.enCours': 'BIEŻĄCE KONTRAKTY',
+  'taverne.aLivrer': 'do dostarczenia: {n}',
   //  · {prime} · avant le {date}
   'taverne.contratEnCours': ' · {prime} · do {date}',
   // Vos {monnaie} à l'abri des pirates et des voleurs
@@ -100724,7 +101002,7 @@ Lang.ui('pl', {
   // Prix inconnus : jamais visité.
   'carte.prixInconnus': 'Ceny nieznane: port nieodwiedzony.',
   // Contrats pour ce port :
-  'carte.contrats': 'Kontrakty do tego portu:',
+  'carte.livrableIci': 'Do dostarczenia tutaj przed wypłynięciem:',
   // Il vous faut un navire (chantier naval).
   'carte.sansNavire': 'Potrzebujesz statku (stocznia).',
   // Équipage insuffisant ({n}/{min}) : le navire sera lent. Passez à la taverne.
@@ -100918,6 +101196,19 @@ Lang.ui('pl', {
   'journal.vide': 'Na razie nic nie zapisano.',
   // Aucune rumeur pour l'instant : offrez une tournée à la taverne, ou tendez l'oreille en ville.
   'journal.rumeurs.aucune': 'Na razie żadnych plotek: postaw kolejkę w tawernie albo nadstaw ucha w mieście.',
+  'journal.rumeurs.maintenant': 'TERAZ',
+  'journal.rumeurs.aVenir': 'WKRÓTCE',
+  'journal.rumeurs.prixRapportes': 'CENY ZE SŁYSZENIA',
+  'journal.rumeurs.autres': 'INNE WIEŚCI',
+  'journal.rumeurs.passees': 'MINIONE',
+  'journal.rumeurs.bavardages': 'Portowe plotki ({n})',
+  'journal.rumeurs.titre': '{Marchandise}, port {port}',
+  'journal.rumeurs.penurie': 'Niedobór: ceny ×{fois}',
+  'journal.rumeurs.surplus': 'Nadmiar: ceny ÷{fois}',
+  'journal.rumeurs.dans': '{n, plural, =1 {jutro} one {za # dzień} few {za # dni} many {za # dni} other {za # dnia}}',
+  'journal.rumeurs.prixDe': 'Ceny w porcie {port}',
+  'journal.rumeurs.prixVus': 'z {date} · zakładka {onglet}',
+  'journal.rumeurs.finie': 'skończyło się {date}',
   // taverne
   'journal.rumeur.tavern': 'tawerna',
   // en mer
@@ -101196,6 +101487,11 @@ Lang.ui('pl', {
   'equipage.desertent': 'Niewypłacony żołd: {n, plural, one {# marynarz dezerteruje} few {# marynarzy dezerteruje} many {# marynarzy dezerteruje} other {# marynarzy dezerteruje}}!',
   // Livrer {n} {marchandise} à {port}
   'contrat.livraison': 'Dostarcz: {marchandise} ({n} {unites}) do portu {port}',
+  'contrat.livraisonAide': 'Kup gdziekolwiek, potem dostarcz do portu {port}.',
+  'contrat.aBord': 'na pokładzie: {a} / {n}',
+  'contrat.livrerTitre': 'Kontrakt · {port}',
+  'contrat.livrerQuestion': 'Dostarczyć kupcowi, który czeka: {marchandise} ({n} {unites})?',
+  'contrat.plusTard': 'Później',
   // Porter {quoi} à {port} ({place} {unites})
   'contrat.colis': 'Zawieź do portu {port}: {quoi} ({place} {unites})',
   // Couler {n} {ennemis} ({fait}/{n})
@@ -113592,9 +113888,11 @@ const Game = {
   // journal de bord : chaque ligne a sa famille (k) pour les onglets et le filtre du carnet : trade (commerce et argent),
   // voyage, combat, career, sea (événements propres à la mer : c'est le défaut, pour les modules des mers), rumor
   // (s : d'où vient la rumeur, tavern, free ou street)
-  log(t, k, s) {
+  // (x : ce que la ligne désigne, pour ranger les rumeurs du journal : ev, la pénurie ou le surplus ; pr et pd, les prix
+  // d'un port rapportés et le jour où ils ont été vus)
+  log(t, k, s, x) {
     const r = this.run; if (!r) return;
-    r.journal.push(s ? { d: r.day, t, k: k || 'sea', s } : { d: r.day, t, k: k || 'sea' });
+    r.journal.push(Object.assign(s ? { d: r.day, t, k: k || 'sea', s } : { d: r.day, t, k: k || 'sea' }, x || null));
     if (r.journal.length > 300) r.journal.shift();
   },
   // achats et ventes d'une escale, regroupés : une ligne au départ plutôt qu'une par clic
@@ -114220,6 +114518,15 @@ const Game = {
     if (o) o.list = o.list.filter(x => x.id !== offer.id);
     return null;
   },
+  // ce qu'une rumeur notée au journal désigne (pour Game.log)
+  rumorTag(x) { return x && x.ev ? { ev: x.ev.id } : x && x.price ? { pr: x.price, pd: x.day } : null; },
+  // une livraison : ce qu'on en a déjà à bord (« à bord : 40 / 100 »)
+  contractHold(c) { return c.type === 'livraison' ? T('contrat.aBord', { a: Math.min(this.run.cargo[c.g], c.qty), n: c.qty }) : null; },
+  // la marchandise promise par contrat (07/10/2026) : « Tout vendre » la garde à bord
+  reserved(gi) {
+    const r = this.run;
+    return Math.min(r.cargo[gi], U.sum(r.contracts.filter(c => c.type === 'livraison' && c.g === gi).map(c => c.qty)));
+  },
   deliverable(pid) {
     const r = this.run;
     return r.contracts.filter(c => c.type === 'livraison' && c.to === pid && r.cargo[c.g] >= c.qty);
@@ -114354,7 +114661,7 @@ const Game = {
     const oldest = Math.min(...cands.map(age)), p = R.pick(cands.filter(q => age(q) === oldest));
     const prev = r.known[p.id];
     r.known[p.id] = { day, p: GOODS.map((g, i) => Math.round(this.basePrice(p.id, i, day) * Math.exp(-this.stockOf(p.id, i)))), prev: prev ? prev.p : null, heard: true };
-    return { price: p.id, text: T('rumeur.prix', { port: p.name, dePort: deLieu(p.name), n: lag }) };
+    return { price: p.id, day, text: T('rumeur.prix', { port: p.name, dePort: deLieu(p.name), n: lag }) };
   },
   // les pénuries et surplus entendus pour une marchandise (pid : dans ce port seulement), pas encore finis, les plus proches d'abord
   rumorsFor(gi, pid) {
@@ -114405,6 +114712,8 @@ const Game = {
       const value = Math.round(armes * GOODS[cgi].base * P.f[cgi]);
       out.push({ kind: 'customs', bribe: Math.max(80, Math.round(value * 0.14)), value, n: armes, chance: U.clamp(0.35 + P.customs, 0.4, 0.85) });
     }
+    // les livraisons possibles ici : proposées une à une, après la douane (07/10/2026 : on vendait tout au marché sans livrer)
+    for (const c of this.deliverable(pid)) out.push({ kind: 'deliver', c });
     // les hommes de l'usurier
     if (this.debtOverdue() && R.chance(0.45)) out.push({ kind: 'wang' });
     // voleurs
@@ -116608,7 +116917,7 @@ const SeaScene = {
         } else if (l.type === 'bottle') {
           l.gone = true;
           const ru = Game.hearRumorFree ? Game.hearRumorFree() : null;
-          if (ru) Game.log(ru.text, 'rumor', 'free');
+          if (ru) Game.log(ru.text, 'rumor', 'free', Game.rumorTag(ru));
           Bus.emit('toast', { t: T('mer.bouteille', { message: ru ? ru.text : R.pick(TAVERN_LINES) }), k: 'gold' });
         } else if (l.type === 'raft') {
           l.gone = true;
@@ -117490,6 +117799,7 @@ const UI = {
 
   // ════════════ Modales ════════════
   // o.id : l'écran (marche, chantier…), pour le guide et ses aides « ? » (bouton dans l'en-tête, sauf o.help === false) ;
+  // o.top : la fenêtre posée en haut de l'écran, pas au centre (fenêtres à onglets : elle ne grandit que vers le bas)
   // o.head : ce que la fenêtre ajoute à son en-tête, avant le « ? » (l'argent et la cale, au marché)
   // Le bouton qui ferme dit ce qu'il fait, en rouge pâle : « Sortir » d'un bâtiment, « Fermer » une autre fenêtre (une
   // croix ne parlait pas aux testeurs)
@@ -117509,7 +117819,7 @@ const UI = {
     inner.append(head, body);
     if (o.foot) inner.append(h('div', { class: 'panel-foot' }, o.foot));
     panel.append(inner);
-    const ov = h('div', { class: 'overlay' + (o.clear ? ' clear' : '') }, panel);
+    const ov = h('div', { class: 'overlay' + (o.clear ? ' clear' : '') + (o.top ? ' ancre' : '') }, panel);
     ov.addEventListener('pointerdown', e => { if (e.target === ov && o.closable !== false && !o.sticky) this.close(); });
     this.el.modal.append(ov);
     const entry = { ov, panel, body, o };
@@ -117640,6 +117950,8 @@ const UI = {
     put(this.el.hud,
       h('div', { class: 'hud-bar' }, kids),
       h('span', { class: 'sp' }),
+      // (07/10/2026) au port, le nom de la ville et sa description, centrés sous le bandeau : on revient d'une pause, on sait où l'on est
+      this.mode === 'port' && r.port && PORT[r.port] ? [h('span', { class: 'it hud-port hide-sm', 'data-g': 'hud-port' }, h('b', null, PORT[r.port].name), PORT[r.port].desc ? h('small', null, PORT[r.port].desc) : null)] : null,
       h('span', { class: 'it title hide-sm', 'data-g': 'hud-title' }, TITLES[titleIndex(Game.worth())].name),
       // (les aides « ? » de l'écran : le port, ou la mer)
       btn('?', () => Help.show(this.mode === 'sea' ? 'mer' : 'port', true), 'sm glass menu-btn q', { 'aria-label': T('aides.bouton'), title: T('aides.bouton'), 'data-g': 'hud-help' }),
@@ -117774,7 +118086,7 @@ const UI = {
     // (toujours sur « Acheter » : on ne voyait pas qu'on était sur « Vendre » ; seul le prologue choisit, pour sa vente)
     let mode = (Prologue.on && this.marketMode) || 'buy';
     const pro = Prologue.on;   // (le prologue : les quantités que dit le mentor, rien d'autre)
-    const entry = this.open({ id: 'marche', title: T('port.batimentDe', { batiment: BUILDINGS.marche.name, port: P.name, dePort: deLieu(P.name) }), sub: P.desc, icon: 'marche', cls: 'wide' + (map ? ' mk-wide' : ''), head: top, body });
+    const entry = this.open({ id: 'marche', title: T('port.batimentDe', { batiment: BUILDINGS.marche.name, port: P.name, dePort: deLieu(P.name) }), sub: P.desc, icon: 'marche', cls: 'wide' + (map ? ' mk-wide' : ''), top: true, head: top, body });
     const render = () => {
       this.marketMode = mode;
       const st = Game.stats();
@@ -117790,9 +118102,9 @@ const UI = {
           btn(T('marche.livrer'), () => { Game.deliver(c); this.toast(T('marche.contratHonore', { somme: monnaie(c.reward) }), 'gold', 'coin'); this.after('cash'); render(); }, 'gold sm')));
       }
       const head = h('div', { class: 'mk-head' },
-        h('div', { class: 'tabs', style: { marginBottom: 0 }, 'data-g': 'mk-tabs' },
-          btn(T('marche.acheter'), () => { mode = 'buy'; render(); }, 'sm' + (mode === 'buy' ? ' on' : '')),
-          btn(T('marche.vendre'), () => { mode = 'sell'; render(); }, 'sm' + (mode === 'sell' ? ' on' : ''))));
+        h('div', { class: 'tabs onglets', role: 'tablist', 'data-g': 'mk-tabs' },
+          btn([ico('cargo'), T('marche.acheter')], () => { mode = 'buy'; render(); }, 'sm' + (mode === 'buy' ? ' on' : ''), { role: 'tab', 'aria-selected': String(mode === 'buy') }),
+          btn([ico('coin'), T('marche.vendre')], () => { mode = 'sell'; render(); }, 'sm' + (mode === 'sell' ? ' on' : ''), { role: 'tab', 'aria-selected': String(mode === 'sell') })));
       kids.push(head);
       if (!st && mode === 'buy') kids.push(h('p', { class: 'hint' }, T('marche.sansNavire')));
       // les vivres de l'équipage, en tête du marché (achats seulement : ils ne se revendent pas) : une ligne dorée à part,
@@ -117821,6 +118133,8 @@ const UI = {
           const cost = r.cost[gi];
           marge = h('span');
           info.append(cost > 0 ? h('span', null, ...Tn('marche.paye', { prix: h('b', null, fmt(cost)), unite: TXT.unitOne, marge })) : T('marche.butin'));
+          const kept = Game.reserved(gi);
+          if (kept > 0) info.append(h('span', { class: 'tag-ev' }, T('marche.reserve', { n: kept })));
           const bought = Game.visitOf().buys[gi];
           if (bought > 0) info.append(h('span', { class: 'tag-ev' }, T('marche.dejaAchete', { n: bought })));
         }
@@ -117914,13 +118228,15 @@ const UI = {
       kids.push(list);
       // pied : tout vendre
       const foot = h('div', { class: 'mk-foot' });
-      if (mode === 'sell' && U.sum(r.cargo) > 0) {
-        let tot = 0; r.cargo.forEach((n, gi) => { tot += Game.quoteSell(gi, n).rev; });
+      // (07/10/2026) « Tout vendre » garde à bord ce qui est promis par contrat (Game.reserved)
+      const sellable = r.cargo.map((n, gi) => n - Game.reserved(gi));
+      if (mode === 'sell' && U.sum(sellable) > 0) {
+        let tot = 0; sellable.forEach((n, gi) => { if (n > 0) tot += Game.quoteSell(gi, n).rev; });
         foot.append(h('span', { style: { flex: 1 } }, ...Tn('marche.toutVendreRapporte', { somme: money(tot), monnaie: motMonnaie(tot) })),
           btn(T('marche.toutVendre'), () => {
             let rev = 0, prof = 0;
             const before = [];
-            r.cargo.forEach((n, gi) => { if (n > 0) { before.push([gi, Game.midPrice(pid, gi)]); const x = Game.sell(gi, n); if (x) { rev += x.rev; prof += x.profit; } } });
+            sellable.forEach((n, gi) => { if (n > 0) { before.push([gi, Game.midPrice(pid, gi)]); const x = Game.sell(gi, n); if (x) { rev += x.rev; prof += x.profit; } } });
             this.toast(T('marche.cargaisonVendue', { somme: monnaie(rev), benefice: (prof >= 0 ? '+' : '') + fmt(prof) }), prof > 0 ? 'good' : '', 'coin');
             this.marketShock(pid, before);
             this.after('cash'); render();
@@ -118102,18 +118418,18 @@ const UI = {
   tavern() {
     const r = Game.run, pid = r.port, P = PORT[pid];
     const body = h('div');
-    this.open({ id: 'taverne', title: (P.titles && P.titles.taverne) || T('port.batimentDe', { batiment: BUILDINGS.taverne.name, port: P.name, dePort: deLieu(P.name) }), sub: T('taverne.sousTitre'), icon: 'taverne', cls: 'wide', body });
+    this.open({ id: 'taverne', title: (P.titles && P.titles.taverne) || T('port.batimentDe', { batiment: BUILDINGS.taverne.name, port: P.name, dePort: deLieu(P.name) }), sub: T('taverne.sousTitre'), icon: 'taverne', cls: 'wide', top: true, body });
     let rumor = null, shang = null, n = 0, picked = false;
-    let tab = (this.nextTab && this.nextTab.taverne) || 'equipage';
+    let tab = (this.nextTab && this.nextTab.taverne) || (Game.deliverable(pid).length ? 'contrats' : 'equipage');
     if (this.nextTab) delete this.nextTab.taverne;
     const line = R.pick(TAVERN_LINES);
     const render = () => {
       const st = Game.stats(), s = r.ship;
       const offers = Game.offersFor(pid).filter(o => o.type !== 'prime' || !r.hunts[o.target]);
-      const tabBt = (id, label, count) => btn([label, count ? h('span', { class: 'tab-n' }, count) : null], () => { if (tab === id) return; tab = id; render(); }, 'sm' + (tab === id ? ' on' : ''), { role: 'tab', 'aria-selected': String(tab === id) });
+      const tabBt = (id, ic, label, count, extra) => btn([ico(ic), label, count ? h('span', { class: 'tab-n' }, count) : null, extra || null], () => { if (tab === id) return; tab = id; render(); }, 'sm' + (tab === id ? ' on' : ''), { role: 'tab', 'aria-selected': String(tab === id) });
       const kids = [h('p', { class: 'flavor' }, T('commun.citation', { texte: line })),
-        h('div', { class: 'tabs tv-tabs', role: 'tablist', 'data-g': 'tv-tabs' },
-          tabBt('equipage', T('chantier.equipage')), tabBt('rumeurs', T('journal.onglet.rumeurs')), tabBt('contrats', T('journal.onglet.contrats'), offers.length))];
+        h('div', { class: 'tabs onglets tv-tabs', role: 'tablist', 'data-g': 'tv-tabs' },
+          tabBt('equipage', 'crew', T('chantier.equipage')), tabBt('rumeurs', 'wind', T('journal.onglet.rumeurs')), tabBt('contrats', 'scroll', T('journal.onglet.contrats'), offers.length, (n => n ? h('span', { class: 'tab-n go' }, T('taverne.aLivrer', { n })) : null)(Game.deliverable(pid).length)))];
       if (tab === 'equipage') {
         if (!s) kids.push(h('p', { class: 'hint' }, T('taverne.sansNavire')));
         else {
@@ -118157,7 +118473,7 @@ const UI = {
       } else if (tab === 'rumeurs') {
         kids.push(h('div', { class: 'row', 'data-g': 'tv-rumeurs' },
           // (une tournée sans rien à raconter ne coûte rien et ne s'écrit pas au journal)
-          btn(T('taverne.tournee', { action: (P.labels && P.labels.rumor) || T('taverne.offrirTournee'), cout: monnaie(Game.rumorCost()) }), () => { const x = Game.hearRumor(); rumor = x ? x.text : T('taverne.rienARaconter'); if (x && !x.nothing) { Sound.sfxPlay('coin'); Game.log(x.text, 'rumor', 'tavern'); } this.after(); render(); }, 'gold', r.cash < Game.rumorCost() ? { disabled: true } : null),
+          btn(T('taverne.tournee', { action: (P.labels && P.labels.rumor) || T('taverne.offrirTournee'), cout: monnaie(Game.rumorCost()) }), () => { const x = Game.hearRumor(); rumor = x ? x.text : T('taverne.rienARaconter'); if (x && !x.nothing) { Sound.sfxPlay('coin'); Game.log(x.text, 'rumor', 'tavern', Game.rumorTag(x)); } this.after(); render(); }, 'gold', r.cash < Game.rumorCost() ? { disabled: true } : null),
           h('span', { class: 'hint' }, T('taverne.rumeursAide'))));
         if (rumor) kids.push(h('p', { class: 'flavor' }, rumor));
         const known = Game.knownEvents().sort((a, b) => a.start - b.start);
@@ -118170,6 +118486,7 @@ const UI = {
           cards.append(h('div', { class: 'card' },
             h('h5', null, ico(o.type === 'prime' ? 'skull' : o.type === 'chasse' ? 'sword' : o.type === 'colis' ? 'scroll' : GOODS[o.g].id), ' ', Game.contractText(o)),
             h('div', { class: 'd' }, ...Tn('taverne.recompense', { prime: h('b', null, monnaie(o.reward)), date: fmtDate(o.deadline, true) })),
+            o.type === 'livraison' ? h('div', { class: 'd' }, T('contrat.livraisonAide', { port: PORT[o.to].name })) : null,
             o.type === 'livraison' ? h('div', { class: 'd' }, T('taverne.prixIci', { prix: fmt(Game.buyPrice(pid, o.g)), unite: TXT.unitOne })) : null,
             btn(T('taverne.accepter'), () => { const err = Game.acceptContract(o); if (err) { this.toast(err, 'bad'); Sound.sfxPlay('error'); } else { this.toast(T('taverne.contratAccepte'), 'good', 'scroll'); this.after('stamp'); } render(); }, 'jade sm')));
         }
@@ -118179,7 +118496,7 @@ const UI = {
           kids.push(h('h4', null, T('taverne.enCours')));
           for (const c of r.contracts) {
             const can = c.type === 'livraison' && c.to === pid && r.cargo[c.g] >= c.qty;
-            kids.push(h('div', { class: 'row sb stat' }, h('span', null, Game.contractText(c), h('span', { class: 'hint' }, T('taverne.contratEnCours', { prime: monnaie(c.reward), date: fmtDate(c.deadline, true) }))),
+            kids.push(h('div', { class: 'row sb stat' }, h('span', null, Game.contractText(c), h('span', { class: 'hint' }, T('taverne.contratEnCours', { prime: monnaie(c.reward), date: fmtDate(c.deadline, true) }), Game.contractHold(c) ? ' · ' + Game.contractHold(c) : null)),
               can ? btn(T('marche.livrer'), () => { Game.deliver(c); this.toast(T('marche.contratHonore', { somme: monnaie(c.reward) }), 'gold', 'coin'); this.after('cash'); render(); }, 'gold sm') : null));
           }
         }
@@ -118501,6 +118818,13 @@ const UI = {
     };
     const renderSide = () => {
       const kids = [];
+      // (07/10/2026) un contrat livrable ici, en tête : on le voit avant de partir, sans faire défiler
+      if (departing && r.ship) {
+        const dv = Game.deliverable(here);
+        if (dv.length) kids.push(h('div', { class: 'ch-deliver', 'data-g': 'ch-livrer' }, h('b', null, T('carte.livrableIci')),
+          ...dv.map(c => h('div', { class: 'row sb' }, h('span', null, Game.contractText(c), ' · ', h('b', { class: 'ct-prime' }, monnaie(c.reward))),
+            btn(T('marche.livrer'), () => { Game.deliver(c); this.toast(T('marche.contratHonore', { somme: monnaie(c.reward) }), 'gold', 'coin'); this.after('cash'); renderSide(); }, 'gold sm')))));
+      }
       if (!sel) {
         kids.push(h('p', { class: 'hint' }, T('carte.touchezPort')));
         const known = Game.knownEvents().sort((a, b) => a.start - b.start);
@@ -118537,8 +118861,6 @@ const UI = {
         const said = dorm ? [] : Game.knownEvents().filter(e => e.p === sel).sort((a, b) => a.start - b.start);
         if (said.length) kids.push(h('div', { class: 'card', 'data-g': 'ch-rumeurs' }, h('div', { class: 'd' }, T('carte.onDit')),
           ...said.map(e => { const q = Game.rumorFacts(e); return h('div', { class: 'd ' + (e.shortage ? 'pos' : 'neg') }, (e.shortage ? '▲ ' : '▼ ') + T(e.shortage ? 'carte.onDitPenurie' : 'carte.onDitSurplus', { Marchandise: GOODS[e.g].name, quand: q.quand, duree: q.duree, fois: q.fois })); })));
-        const cs = r.contracts.filter(c => c.to === sel);
-        if (cs.length) kids.push(h('div', { class: 'card' }, h('div', { class: 'd' }, T('carte.contrats')), ...cs.map(c => h('div', { class: 'd' }, '• ' + Game.contractText(c)))));
         if (departing) {
           const s = r.ship, st = Game.stats();
           if (!s) kids.push(h('p', { class: 'neg' }, T('carte.sansNavire')));
@@ -118562,6 +118884,13 @@ const UI = {
         } else {
           kids.push(btn(T('carte.mettreCap', { port: P.name }), () => { SeaScene.setDest(sel); this.close(entry); this.toast(T('carte.capPilote', { port: P.name }), ''); }, 'jade wide', { 'data-g': 'ch-go' }));
         }
+      }
+      // (07/10/2026) les contrats en cours et leur prime, sous le bouton : ceux du port choisi d'abord, soulignés d'or
+      if (r.contracts.length) {
+        const cs = r.contracts.slice().sort((a, b) => (b.to === sel) - (a.to === sel) || a.deadline - b.deadline);
+        kids.push(h('div', { class: 'ch-contracts', 'data-g': 'ch-contrats' }, h('h4', null, T('taverne.enCours')),
+          ...cs.map(c => h('div', { class: 'ch-ct' + (sel && c.to === sel ? ' here' : '') }, h('span', null, Game.contractText(c)),
+            h('small', null, ...Tn('taverne.recompense', { prime: h('b', null, monnaie(c.reward)), date: fmtDate(c.deadline, true) }), Game.contractHold(c) ? ' · ' + Game.contractHold(c) : null)))));
       }
       put(side, ...kids);
     };
@@ -118807,41 +119136,89 @@ const UI = {
     if (!r) return;
     if (tab) this.journalTab = tab;
     tab = this.journalTab || 'prix';
-    const tabs = [['prix', T('journal.onglet.prix')], ['contrats', T('journal.onglet.contrats')], ['carnet', T('journal.onglet.carnet')], ['mer', capFirst(TXT.seaName)], ['rumeurs', T('journal.onglet.rumeurs')]];
-    const bar = h('div', { class: 'tabs jr-tabs', role: 'tablist', 'data-g': 'jr-tabs' }, tabs.map(([id, l]) => btn(l, () => { this.close(); this.journal(id); }, 'sm' + (id === tab ? ' on' : ''), { role: 'tab', 'aria-selected': id === tab ? 'true' : 'false' })));
-    const head = h('div', { class: 'row jr-head' },
-      h('span', { class: 'pill' }, ico('date', 'sm'), fmtDate(r.day)),
-      h('span', { class: 'pill jade' }, T('pause.valeurNette', { somme: monnaie(Game.worth()) })),
-      h('span', { class: 'pill gold' }, TITLES[titleIndex(Game.worth())].name));
-    const list = (rows, empty) => rows.length ? rows.slice().reverse().map(e => h('div', { class: 'stat' }, h('span', null, e.t), h('b', { class: 'hint' }, fmtDate(e.d, true)))) : [h('p', { class: 'hint' }, empty || T('journal.vide'))];
-    let body;
-    if (tab === 'prix') body = this.journalPrices();
-    else if (tab === 'contrats') {
-      const cur = r.contracts.map(c => {
-        const left = Math.ceil(c.deadline - r.day);
-        return h('div', { class: 'stat' }, h('span', null, Game.contractText(c)), h('b', { class: left <= 7 ? 'neg' : 'hint' }, left >= 0 ? T('journal.contrats.reste', { n: left }) : T('journal.contrats.depasse')));
-      });
-      const past = (r.contractLog || []).slice().reverse().map(e => h('div', { class: 'stat' }, h('span', null, e.t), h('b', { class: e.ok ? 'pos' : 'neg' }, (e.ok ? T('journal.contrats.honore') : T('journal.contrats.echoue')) + ' · ' + fmtDate(e.d, true))));
-      body = [h('h4', null, T('journal.contrats.enCours')), ...(cur.length ? cur : [h('p', { class: 'hint' }, T('journal.contrats.aucun'))]), past.length ? h('h4', null, T('journal.contrats.termines')) : null, ...past];
-    } else if (tab === 'carnet') {
-      const F = this.journalFilter || 'tout', kinds = { commerce: 'trade', voyages: 'voyage', combats: 'combat', carriere: 'career' };
-      const rows = r.journal.filter(e => e.k && e.k !== 'sea' && e.k !== 'rumor' && (F === 'tout' || e.k === kinds[F]));
-      const st = r.stats, stat = (a, b) => h('div', { class: 'stat' }, h('span', null, a), h('b', null, b));
-      body = [
-        h('div', { class: 'tabs jr-filter' }, ['tout', 'commerce', 'voyages', 'combats', 'carriere'].map(f => btn(T('journal.filtre.' + f), () => { this.journalFilter = f; this.close(); this.journal('carnet'); }, 'sm' + (f === F ? ' on' : '')))),
-        ...list(rows),
-        h('details', { class: 'jr-faits' }, h('summary', null, T('journal.faits')),
-          stat(T('journal.capitaine'), r.captain + ' · ' + r.shipName),
-          stat(T('journal.mode'), r.mode === 'daily' ? T('journal.modeDefi', { jour: r.dailyKey }) : T('journal.modeCarriere')),
-          stat(T('journal.escales'), st.voyages), stat(T('journal.benefices'), monnaie(st.profit)), stat(T('journal.meilleureVente'), monnaie(st.bestSale)),
-          stat(T('journal.pirates'), st.sunk), stat(T('journal.abordages'), st.boarded), stat(T('journal.butin'), monnaie(st.loot)),
-          stat(T('journal.contrats'), st.contracts), stat(T('journal.tempetes'), st.storms), stat(T('journal.ports'), Object.keys(r.visited).length + ' / ' + PORTS.length)),
-      ];
-    } else if (tab === 'mer') body = list(r.journal.filter(e => !e.k || e.k === 'sea'));
-    else body = r.journal.some(e => e.k === 'rumor')
-      ? r.journal.filter(e => e.k === 'rumor').reverse().map(e => h('div', { class: 'stat jr-rumor' }, h('span', null, e.t), h('b', { class: 'hint' }, T('journal.rumeur.' + (e.s || 'tavern')) + ' · ' + fmtDate(e.d, true))))
-      : [h('p', { class: 'hint' }, T('journal.rumeurs.aucune'))];
-    this.open({ id: 'journal', title: T('pause.journal'), sub: r.captain + ' · ' + r.shipName, icon: 'scroll', cls: tab === 'prix' ? 'wide' : '', body: h('div', { class: 'jr' }, head, bar, h('div', { class: 'jr-body' }, body)) });
+    // (07/10/2026) l'argent et la cale en haut à droite, comme au marché ; la fenêtre reste ouverte d'un onglet à l'autre,
+    // toujours large et posée en haut de l'écran : elle ne grandit que vers le bas, les onglets restent sous la souris
+    const top = h('div', { class: 'mk-top' },
+      h('span', { class: 'pill big', 'data-g': 'jr-pills', title: T('hud.aBord', { Monnaie: TXT.Money }) }, ico('coin'), money(r.cash), ' ' + motMonnaie(r.cash)),
+      r.ship ? this.holdPill('jr-pills') : null);
+    const wrap = h('div', { class: 'jr' });
+    const entry = this.open({ id: 'journal', title: T('pause.journal'), sub: r.captain + ' · ' + r.shipName, icon: 'scroll', cls: 'wide', top: true, head: top, body: wrap });
+    const render = () => {
+      const tabs = [['prix', 'coin', T('journal.onglet.prix')], ['contrats', 'scroll', T('journal.onglet.contrats')], ['carnet', 'anchor', T('journal.onglet.carnet')], ['mer', 'map', capFirst(TXT.seaName)], ['rumeurs', 'wind', T('journal.onglet.rumeurs')]];
+      const bar = h('div', { class: 'tabs onglets jr-tabs', role: 'tablist', 'data-g': 'jr-tabs' }, tabs.map(([id, ic, l]) => btn([ico(ic), l], () => { if (id === tab) return; tab = this.journalTab = id; render(); entry.body.scrollTop = 0; }, 'sm' + (id === tab ? ' on' : ''), { role: 'tab', 'aria-selected': id === tab ? 'true' : 'false' })));
+      const head = h('div', { class: 'row jr-head' },
+        h('span', { class: 'pill' }, ico('date', 'sm'), fmtDate(r.day)),
+        h('span', { class: 'pill jade' }, T('pause.valeurNette', { somme: monnaie(Game.worth()) })),
+        h('span', { class: 'pill gold' }, TITLES[titleIndex(Game.worth())].name));
+      const list = (rows, empty) => rows.length ? rows.slice().reverse().map(e => h('div', { class: 'stat' }, h('span', null, e.t), h('b', { class: 'hint' }, fmtDate(e.d, true)))) : [h('p', { class: 'hint' }, empty || T('journal.vide'))];
+      let body;
+      if (tab === 'prix') body = this.journalPrices();
+      else if (tab === 'contrats') {
+        const cur = r.contracts.map(c => {
+          const left = Math.ceil(c.deadline - r.day);
+          return h('div', { class: 'stat' }, h('span', null, Game.contractText(c), Game.contractHold(c) ? h('small', { class: 'hint' }, ' · ' + Game.contractHold(c)) : null), h('span', { class: 'jr-ct' }, h('b', { class: 'ct-prime' }, ico('coin', 'sm'), monnaie(c.reward)), h('b', { class: left <= 7 ? 'neg' : 'hint' }, left >= 0 ? T('journal.contrats.reste', { n: left }) : T('journal.contrats.depasse'))));
+        });
+        const past = (r.contractLog || []).slice().reverse().map(e => h('div', { class: 'stat' }, h('span', null, e.t), h('b', { class: e.ok ? 'pos' : 'neg' }, (e.ok ? T('journal.contrats.honore') : T('journal.contrats.echoue')) + ' · ' + fmtDate(e.d, true))));
+        body = [h('h4', null, T('journal.contrats.enCours')), ...(cur.length ? cur : [h('p', { class: 'hint' }, T('journal.contrats.aucun'))]), past.length ? h('h4', null, T('journal.contrats.termines')) : null, ...past];
+      } else if (tab === 'carnet') {
+        const F = this.journalFilter || 'tout', kinds = { commerce: 'trade', voyages: 'voyage', combats: 'combat', carriere: 'career' };
+        const rows = r.journal.filter(e => e.k && e.k !== 'sea' && e.k !== 'rumor' && (F === 'tout' || e.k === kinds[F]));
+        const st = r.stats, stat = (a, b) => h('div', { class: 'stat' }, h('span', null, a), h('b', null, b));
+        body = [
+          h('div', { class: 'tabs jr-filter' }, ['tout', 'commerce', 'voyages', 'combats', 'carriere'].map(f => btn(T('journal.filtre.' + f), () => { this.journalFilter = f; render(); }, 'sm' + (f === F ? ' on' : '')))),
+          ...list(rows),
+          h('details', { class: 'jr-faits' }, h('summary', null, T('journal.faits')),
+            stat(T('journal.capitaine'), r.captain + ' · ' + r.shipName),
+            stat(T('journal.mode'), r.mode === 'daily' ? T('journal.modeDefi', { jour: r.dailyKey }) : T('journal.modeCarriere')),
+            stat(T('journal.escales'), st.voyages), stat(T('journal.benefices'), monnaie(st.profit)), stat(T('journal.meilleureVente'), monnaie(st.bestSale)),
+            stat(T('journal.pirates'), st.sunk), stat(T('journal.abordages'), st.boarded), stat(T('journal.butin'), monnaie(st.loot)),
+            stat(T('journal.contrats'), st.contracts), stat(T('journal.tempetes'), st.storms), stat(T('journal.ports'), Object.keys(r.visited).length + ' / ' + PORTS.length)),
+        ];
+      } else if (tab === 'mer') body = list(r.journal.filter(e => !e.k || e.k === 'sea'));
+      else body = this.journalRumors();
+      put(wrap, head, bar, h('div', { class: 'jr-body' }, body));
+    };
+    render();
+  },
+  // (07/10/2026) les rumeurs rangées par état : ce qui se passe en ce moment, ce qui s'annonce (compté depuis le jour où on lit,
+  // pas celui où on l'a apprise), les prix rapportés, les autres nouvelles, ce qui est fini ; les bavardages de la rue repliés
+  journalRumors() {
+    const r = Game.run, d = r.day, J = r.journal.filter(e => e.k === 'rumor');
+    // (les rumeurs notées avant le 07/10/2026 n'ont pas ce qu'elles désignent : retrouvé d'après le texte, une fois pour toutes)
+    for (const e of J) {
+      if (e.ev != null || e.pr || e.s === 'street' || e.old) continue;
+      e.old = 1;
+      const ev = r.events.find(x => r.rumors.includes(x.id) && e.t.includes(PORT[x.p].name) && e.t.includes(lower(GOODS[x.g].name)));
+      if (ev) { e.ev = ev.id; continue; }
+      for (const p of PORTS) for (let n = 1; n <= 6 && !e.pr; n++) if (e.t === T('rumeur.prix', { port: p.name, dePort: deLieu(p.name), n })) { e.pr = p.id; e.pd = e.d - n; }
+    }
+    const said =e => T('journal.rumeur.' + (e.s || 'tavern')) + ' · ' + fmtDate(e.d, true);
+    const card = (cls, icon, title, sub, right) => h('div', { class: 'jr-ev ' + cls }, h('span', { class: 'jr-ev-ic' }, icon),
+      h('div', { class: 'jr-ev-t' }, h('b', null, title), sub ? h('small', null, sub) : null), right ? h('div', { class: 'jr-ev-r' }, right) : null);
+    const evCard = (e, right, old) => {
+      const q = Game.rumorFacts(e), s = J.find(x => x.ev === e.id);
+      return card((e.shortage ? 'up' : 'down') + (old ? ' old' : ''), ico(GOODS[e.g].id), T('journal.rumeurs.titre', { Marchandise: GOODS[e.g].name, port: PORT[e.p].name }),
+        T(e.shortage ? 'journal.rumeurs.penurie' : 'journal.rumeurs.surplus', { fois: q.fois }) + (s ? ' · ' + said(s) : ''), right);
+    };
+    const evs = r.events.filter(e => r.rumors.includes(e.id) && !Game.portDormant(e.p)), end = e => e.start + e.dur;
+    const now = evs.filter(e => e.start <= d && end(e) > d).sort((a, b) => end(a) - end(b));
+    const soon = evs.filter(e => e.start > d).sort((a, b) => a.start - b.start);
+    const past = evs.filter(e => end(e) <= d).sort((a, b) => end(b) - end(a)).slice(0, 4);
+    const seen = new Set(), prices = J.filter(e => e.pr && PORT[e.pr]).reverse().filter(e => !seen.has(e.pr) && seen.add(e.pr)).slice(0, 6);
+    const other = J.filter(e => e.ev == null && !e.pr && e.s !== 'street').reverse().slice(0, 8);
+    const street = J.filter(e => e.s === 'street').reverse();
+    const sec = (key, list) => list.length ? [h('h4', null, T('journal.rumeurs.' + key)), ...list] : [];
+    const out = [
+      ...sec('maintenant', now.map(e => evCard(e, h('b', null, Game.rumorFacts(e).duree)))),
+      ...sec('aVenir', soon.map(e => evCard(e, [h('b', null, T('journal.rumeurs.dans', { n: Math.max(1, Math.ceil(e.start - d)) })), h('small', null, T('rumeur.des', { date: fmtDate(e.start, true) }))]))),
+      ...sec('prixRapportes', prices.map(e => card('pr', ico('coin'), T('journal.rumeurs.prixDe', { port: PORT[e.pr].name, dePort: deLieu(PORT[e.pr].name) }),
+        T('journal.rumeurs.prixVus', { date: fmtDate(e.pd != null ? e.pd : e.d, true), onglet: T('journal.onglet.prix') }), h('small', null, said(e))))),
+      ...sec('autres', other.map(e => h('div', { class: 'stat jr-rumor' }, h('span', null, e.t), h('b', { class: 'hint' }, said(e))))),
+      ...sec('passees', past.map(e => evCard(e, h('small', null, T('journal.rumeurs.finie', { date: fmtDate(end(e), true) })), true))),
+      street.length ? h('details', { class: 'jr-faits' }, h('summary', null, T('journal.rumeurs.bavardages', { n: street.length })),
+        ...street.map(e => h('div', { class: 'stat jr-rumor' }, h('span', null, e.t), h('b', { class: 'hint' }, said(e))))) : null,
+    ].filter(Boolean);
+    return out.length ? out : [h('p', { class: 'hint' }, T('journal.rumeurs.aucune'))];
   },
   // les derniers prix connus de chaque port, avec leur âge ; meilleur achat (vert) et meilleure vente (or) de chaque marchandise
   journalPrices() {
@@ -119377,6 +119754,13 @@ const UI = {
         const res = Game.resolveCustoms(ev, v);
         this.toast(res.t, res.ok ? 'good' : 'bad');
         Sound.sfxPlay(res.ok ? 'coin' : 'error');
+      } else if (ev.kind === 'deliver') {
+        // (07/10/2026) une livraison possible : « Livrer » ou « Plus tard » ; plus tard, le marché, la taverne et l'appareillage la rappellent
+        const r = Game.run, c = ev.c;
+        if (!Game.deliverable(r.port).includes(c)) continue;   // (la douane a pu saisir la marchandise)
+        const v = await this.choice(T('contrat.livrerTitre', { port: PORT[r.port].name }), [T('contrat.livrerQuestion', { n: c.qty, marchandise: lower(GOODS[c.g].name), unites: motUnites(c.qty, GOODS[c.g]) }), h('p', { class: 'ct-prime big' }, ico('coin'), '+' + monnaie(c.reward))],
+          [{ label: T('contrat.plusTard'), value: false }, { label: T('marche.livrer'), value: true, cls: 'gold' }], 'scroll');
+        if (v && Game.deliver(c)) { this.toast(T('marche.contratHonore', { somme: monnaie(c.reward) }), 'gold', 'coin'); Sound.sfxPlay('cash'); }
       } else if (ev.kind === 'wang') {
         const res = Game.wangVisit();
         await this.choice(capFirst(TXT.men), [TXT.usurer.visit, res.hurt ? T('usurier.prennentBlesses', { somme: monnaie(res.take), n: res.hurt }) : T('usurier.prennent', { somme: monnaie(res.take) })], [{ label: T('usurier.encaisser'), value: 1, cls: 'red' }], 'usurier');
@@ -133752,7 +134136,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 06/10/2026 à 22:06</div>
+<div id="maj">Mise à jour : 06/10/2026 à 22:52</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
