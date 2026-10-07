@@ -433,9 +433,9 @@ kbd.pill { font-size: 11.5px; padding: 1px 7px; }
 .touch > div { display: flex; gap: 8px; align-items: center; pointer-events: auto; }
 .tc { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; color: var(--paper); background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--line-2); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); touch-action: none; }
 .tc:active, .tc.on { background: rgba(63, 174, 138, 0.45); }
-/* la colonne de droite (07/10/2026, demande d'Adrien) : la toile sur deux boutons l'un sur l'autre, toute voile en haut,
-   voiles ferlées dessous (un cran par toucher : Input up / down, comme le clavier), puis les canons ; trois points à côté
-   montrent le cran, son nom passe un instant à leur gauche quand il change (UI.frame) */
+/* la colonne de droite (07/10/2026, demandes d'Adrien) : la toile sur deux boutons l'un sur l'autre, toute voile en haut,
+   mi-voile dessous (celle qu'on envoie quand le pouce pousse la barre, et sous le pilote : Input.gear), puis les canons ;
+   le bouton choisi reste allumé, son nom passe un instant à gauche quand il change (UI.frame) */
 .touch > .tc-right { flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: none; }
 .tc-right > * { pointer-events: auto; }
 .tc-fire { display: flex; gap: 8px; align-items: center; }
@@ -444,11 +444,8 @@ kbd.pill { font-size: 11.5px; padding: 1px 7px; }
 .tc.sail svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .tc.sail svg .fill { fill: currentColor; fill-opacity: 0.92; stroke: none; }
 .tc.sail svg .furl { stroke-width: 2.8; }
-.tc-sails[data-s="2"] [data-act=up], .tc-sails[data-s="0"] [data-act=down] { opacity: 0.42; }
-.ts-pips { position: absolute; right: calc(100% + 8px); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
-.ts-pips i { width: 7px; height: 7px; border-radius: 50%; background: rgba(243, 235, 218, 0.24); box-shadow: 0 0 0 1px rgba(8, 13, 22, 0.55); transition: background 0.15s, box-shadow 0.15s; }
-.tc-sails[data-s="2"] .ts-pips i:nth-child(1), .tc-sails[data-s="1"] .ts-pips i:nth-child(2), .tc-sails[data-s="0"] .ts-pips i:nth-child(3) { background: var(--jade-hi); box-shadow: 0 0 0 1px rgba(8, 13, 22, 0.55), 0 0 7px rgba(127, 217, 182, 0.85); }
-.ts-lbl { position: absolute; right: calc(100% + 23px); top: 50%; transform: translateY(-50%); padding: 4px 11px; border-radius: 999px; background: rgba(11, 18, 30, 0.88); border: 1px solid rgba(127, 217, 182, 0.5); font: 800 12.5px var(--font-ui); color: var(--jade-hi); white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.tc-sails[data-g="2"] [data-gear="2"], .tc-sails[data-g="1"] [data-gear="1"] { color: var(--jade-ink); background: radial-gradient(circle at 50% 35%, #8be3c1, #33a07b); border-color: rgba(160, 235, 205, 0.85); box-shadow: 0 0 12px rgba(127, 217, 182, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3); }
+.ts-lbl { position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); padding: 4px 11px; border-radius: 999px; background: rgba(11, 18, 30, 0.88); border: 1px solid rgba(127, 217, 182, 0.5); font: 800 12.5px var(--font-ui); color: var(--jade-hi); white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
 .tc-sails.flash .ts-lbl { opacity: 1; transition-duration: 0.1s; }
 .tc.fire { width: 72px; height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font: 800 14px/1 var(--font-ui); color: #fff5ee; background: radial-gradient(circle at 50% 32%, rgba(236, 98, 70, 0.95), rgba(158, 40, 22, 0.92)); border-color: rgba(255, 138, 112, 0.6); }
 .tc.fire small { font: 600 10px var(--font-ui); opacity: 0.85; }
@@ -679,13 +676,13 @@ button, .prompt, .objectives { touch-action: manipulation; }
 }
 .stick.held .st-base { opacity: 1; background: radial-gradient(circle, rgba(11, 18, 30, 0.3) 40%, rgba(11, 18, 30, 0.66)); }
 .st-ring { position: absolute; inset: 3px; border-radius: 50%; border: 1.5px solid rgba(243, 235, 218, 0.2); transition: border-color 0.15s, box-shadow 0.15s; }
-.stick.live .st-ring { border-color: rgba(127, 217, 182, 0.65); box-shadow: 0 0 12px rgba(127, 217, 182, 0.35), inset 0 0 12px rgba(127, 217, 182, 0.2); }
+.stick.live:not(.idle) .st-ring { border-color: rgba(127, 217, 182, 0.65); box-shadow: 0 0 12px rgba(127, 217, 182, 0.35), inset 0 0 12px rgba(127, 217, 182, 0.2); }
 .st-knob {
   position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%;
   display: grid; place-items: center; transform: translate(var(--kx, 0px), var(--ky, 0px));
   color: #172233; background: radial-gradient(circle at 50% 35%, #fbf4e4, #d6c9ad); border: 2px solid rgba(255, 255, 255, 0.75); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }
-.stick.live .st-knob { background: radial-gradient(circle at 50% 35%, #8be3c1, #33a07b); color: var(--jade-ink); }
+.stick.live:not(.idle) .st-knob { background: radial-gradient(circle at 50% 35%, #8be3c1, #33a07b); color: var(--jade-ink); }
 .st-knob svg { grid-area: 1 / 1; width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
 .st-knob .st-arrow { display: none; width: 24px; height: 24px; fill: currentColor; stroke-width: 1.4; transform: rotate(var(--a, 0rad)); }
 .stick.live .st-knob .st-arrow { display: block; }
@@ -1355,9 +1352,8 @@ body:not(.pad):not(.mobile) #seahud .btn.on[data-key]::after { background: rgba(
   <div id="touch" class="touch" hidden>
     <div class="tc-right">
       <div class="tc-sails">
-        <button class="tc sail" data-act="up" aria-label="Plus de voile" data-t-aria="tactile.plusVoile"><svg viewBox="0 0 24 24"><path class="fill" d="M12.9 3 19.8 14.7h-6.9zM11.1 5.3 4.6 14.7h6.5z"/><path d="M12 2.4v14.4M3.2 16.8h17.6l-2.6 3.8H5.8z"/></svg></button>
-        <button class="tc sail" data-act="down" aria-label="Moins de voile" data-t-aria="tactile.moinsVoile"><svg viewBox="0 0 24 24"><path d="M12 2.4v14.4M3.2 16.8h17.6l-2.6 3.8H5.8z"/><path class="furl" d="M7.4 6.2h9.2M8.4 11.2h7.2"/></svg></button>
-        <span class="ts-pips" aria-hidden="true"><i></i><i></i><i></i></span>
+        <button class="tc sail" data-gear="2" aria-label="Toute voile" data-t-aria="mer.voiles.2"><svg viewBox="0 0 24 24"><path class="fill" d="M12.9 3 19.8 14.7h-6.9zM11.1 5.3 4.6 14.7h6.5z"/><path d="M12 2.4v14.4M3.2 16.8h17.6l-2.6 3.8H5.8z"/></svg></button>
+        <button class="tc sail" data-gear="1" aria-label="Mi-voile" data-t-aria="mer.voiles.1"><svg viewBox="0 0 24 24"><path class="fill" d="M12.9 8.2 17.6 14.7h-4.7z"/><path d="M12 2.4v14.4M3.2 16.8h17.6l-2.6 3.8H5.8z"/><path class="furl" d="M8.2 5.6h7.6"/></svg></button>
         <span class="ts-lbl" aria-hidden="true"></span>
       </div>
       <div class="tc-fire">
@@ -1700,6 +1696,9 @@ const Input = {
   blocked: false, // vrai quand un panneau modal capte le clavier
   steer: 0,       // la barre tenue au stick de la manette, de -1 (bâbord) à 1 (tribord) (js/pad.js)
   aim: null,      // le cap voulu, montré au pouce sur l'écran tactile (js/stick.js), en radians ; null : personne ne tient la barre
+  thrust: false,  // le pouce pousse la barre (hors du centre) : le navire avance
+  gear: null,     // la toile choisie au doigt (1 mi-voile, 2 toute voile) ; null : pas de commandes tactiles
+  gearHit: false, // un bouton de la toile vient d'être touché
 
   init(target) {
     addEventListener('keydown', e => {
@@ -2157,12 +2156,10 @@ Lang.ui('fr', {
   'mer.btVitesseTitre': 'Accélérer le temps (F)',
 
   // ── En mer : commandes tactiles (<small> : la seconde ligne du bouton ; la barre au pouce : son nom pour les lecteurs
-  //    d'écran, et l'invite qu'elle porte au repos tant qu'on ne s'en est jamais servi ; plus et moins de voile : les noms
-  //    des deux boutons de la toile, au-dessus des canons) ──
+  //    d'écran, et l'invite qu'elle porte au repos tant qu'on ne s'en est jamais servi ; les deux boutons de la toile, au-dessus
+  //    des canons, prennent les noms de mer.voiles.2 et mer.voiles.1) ──
   'tactile.barre': 'La barre : posez le pouce et glissez',
-  'tactile.barreAide': 'Posez le pouce et glissez pour barrer',
-  'tactile.plusVoile': 'Plus de voile',
-  'tactile.moinsVoile': 'Moins de voile',
+  'tactile.barreAide': 'Posez le pouce et glissez pour naviguer',
   'tactile.feuBabord': 'Feu<small>bâbord</small>',
   'tactile.feuTribord': 'Feu<small>tribord</small>',
   'tactile.abordage': 'À l\'abordage',
@@ -2947,9 +2944,9 @@ Lang.ui('fr', {
   'aides.mer.temps.t': 'Accélérer',
   'aides.mer.temps.d': 'Le temps passe plus vite, sauf en combat et dans la tempête.',
   'aides.mer.barre.t': 'La barre',
-  'aides.mer.barre.d': 'Posez le pouce n\'importe où sur la moitié gauche de l\'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.',
+  'aides.mer.barre.d': 'Posez le pouce n\'importe où sur la moitié gauche de l\'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s\'arrête, sauf quand le pilote mène.',
   'aides.mer.toile.t': 'La toile',
-  'aides.mer.toile.d': 'En haut, plus de toile, jusqu\'à toute voile ; en dessous, moins de toile, jusqu\'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.',
+  'aides.mer.toile.d': 'La toile qu\'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.',
   'aides.mer.feu.t': 'Feu !',
   'aides.mer.feu.d': 'Tirer à gauche (bâbord) ou à droite (tribord).',
   'aides.marche.onglets.t': 'Acheter ou vendre',
@@ -3163,12 +3160,8 @@ Lang.ui('en', {
   'mer.btVitesseTitre': 'Speed up time (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Helm: place your thumb and slide',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Place your thumb and slide to steer',
-  // Plus de voile
-  'tactile.plusVoile': 'More sail',
-  // Moins de voile
-  'tactile.moinsVoile': 'Less sail',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Place your thumb and slide to sail',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fire<small>port</small>',
   // Feu<small>tribord</small>
@@ -4517,12 +4510,12 @@ Lang.ui('en', {
   'aides.mer.temps.d': 'Time passes faster, except in battle and in storms.',
   // La barre
   'aides.mer.barre.t': 'Helm',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Place your thumb anywhere on the left half of the screen and slide: the ship comes round to that heading. Lift your thumb and it holds its heading.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Place your thumb anywhere on the left half of the screen and slide: the ship sails where your thumb points. Lift your thumb or bring it back to the centre and she furls her sails and stops, unless the autopilot is in command.',
   // La toile
   'aides.mer.toile.t': 'Sail',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'Top button: more sail, up to full sail; the one below: less sail, down to sails furled. One tap per step; the three dots beside them show where you are.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'The sail you carry while your thumb pushes the helm, and under the autopilot: full sail on top, half sail below.',
   // Feu !
   'aides.mer.feu.t': 'Fire!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -12939,12 +12932,8 @@ Lang.ui('zh', {
   'mer.btVitesseTitre': '加快时间（F）',
   // La barre : posez le pouce et glissez
   'tactile.barre': '舵：按住拇指并滑动',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': '按住拇指滑动即可掌舵',
-  // Plus de voile
-  'tactile.plusVoile': '加帆',
-  // Moins de voile
-  'tactile.moinsVoile': '减帆',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': '按住拇指滑动即可航行',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '开火<small>左舷</small>',
   // Feu<small>tribord</small>
@@ -14293,12 +14282,12 @@ Lang.ui('zh', {
   'aides.mer.temps.d': '让时间过得更快；交战和风暴中除外。',
   // La barre
   'aides.mer.barre.t': '舵',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': '把拇指放在屏幕左半边任意处并滑动：船便转向那个方向。松开拇指，船保持航向。',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': '把拇指放在屏幕左半边任意处并滑动：船便朝拇指所指的方向驶去。松开拇指或移回中心，船就收帆停下，自动航行时除外。',
   // La toile
   'aides.mer.toile.t': '帆',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': '上方按钮加帆，直到满帆；下方按钮减帆，直到收帆。每按一下变一档，旁边三个点标出当前档位。',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': '拇指推舵时与自动航行时张的帆：上为满帆，下为半帆。',
   // Feu !
   'aides.mer.feu.t': '开火！',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -22685,12 +22674,8 @@ Lang.ui('zht', {
   'mer.btVitesseTitre': '加快時間（F）',
   // La barre : posez le pouce et glissez
   'tactile.barre': '舵：按住拇指並滑動',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': '按住拇指滑動即可掌舵',
-  // Plus de voile
-  'tactile.plusVoile': '加帆',
-  // Moins de voile
-  'tactile.moinsVoile': '減帆',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': '按住拇指滑動即可航行',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '開火<small>左舷</small>',
   // Feu<small>tribord</small>
@@ -24039,12 +24024,12 @@ Lang.ui('zht', {
   'aides.mer.temps.d': '讓時間過得更快，交戰時和風暴中除外。',
   // La barre
   'aides.mer.barre.t': '舵',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': '把拇指放在螢幕左半邊任意處並滑動：船便轉向那個方向。鬆開拇指，船保持航向。',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': '把拇指放在螢幕左半邊任意處並滑動：船便朝拇指所指的方向駛去。鬆開拇指或移回中心，船就收帆停下，自動航行時除外。',
   // La toile
   'aides.mer.toile.t': '帆',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': '上方按鈕加帆，直到滿帆；下方按鈕減帆，直到收帆。每按一下變一檔，旁邊三個點標出目前檔位。',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': '拇指推舵時與自動航行時張的帆：上為滿帆，下為半帆。',
   // Feu !
   'aides.mer.feu.t': '開火！',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -32433,12 +32418,8 @@ Lang.ui('ja', {
   'mer.btVitesseTitre': '時間を早める（F）',
   // La barre : posez le pouce et glissez
   'tactile.barre': '舵：親指を置いて滑らせる',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': '親指を置いて滑らせると、舵を取れます',
-  // Plus de voile
-  'tactile.plusVoile': '帆を張る',
-  // Moins de voile
-  'tactile.moinsVoile': '帆を絞る',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': '親指を置いて滑らせると、船が進みます',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '砲撃<small>左舷</small>',
   // Feu<small>tribord</small>
@@ -33787,12 +33768,12 @@ Lang.ui('ja', {
   'aides.mer.temps.d': '時が速く流れる。ただし戦闘中と嵐の中は別。',
   // La barre
   'aides.mer.barre.t': '舵',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': '画面の左半分のどこかに親指を置いて滑らせると、船はその針路へ向かう。指を離せば、針路をそのまま保つ。',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': '画面の左半分のどこかに親指を置いて滑らせると、船は親指の示す方へ進む。指を離すか中心に戻すと、帆を畳んで止まる（自動航行中を除く）。',
   // La toile
   'aides.mer.toile.t': '帆',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': '上のボタンで帆を張り（総帆まで）、下のボタンで帆を絞る（畳帆まで）。一度触れるごとに一段階変わり、横の三つの点が今の段階を示す。',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': '親指で舵を押しているときと自動航行中に張る帆：上が総帆、下が半帆。',
   // Feu !
   'aides.mer.feu.t': '砲撃',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -42213,12 +42194,8 @@ Lang.ui('ko', {
   'mer.btVitesseTitre': '시간 가속 (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': '키: 엄지를 대고 미십시오',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': '엄지를 대고 밀어 배를 조종하십시오',
-  // Plus de voile
-  'tactile.plusVoile': '돛 펴기',
-  // Moins de voile
-  'tactile.moinsVoile': '돛 줄이기',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': '엄지를 대고 밀어 항해하십시오',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '발사<small>좌현</small>',
   // Feu<small>tribord</small>
@@ -43567,12 +43544,12 @@ Lang.ui('ko', {
   'aides.mer.temps.d': '시간이 빨리 흐릅니다. 전투 중과 폭풍 속에서는 예외입니다.',
   // La barre
   'aides.mer.barre.t': '키',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': '화면 왼쪽 절반 아무 곳에나 엄지를 대고 밀면 배가 그쪽으로 뱃머리를 돌립니다. 엄지를 떼면 침로를 그대로 유지합니다.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': '화면 왼쪽 절반 아무 곳에나 엄지를 대고 밀면 배가 엄지가 가리키는 쪽으로 나아갑니다. 엄지를 떼거나 가운데로 되돌리면 돛을 걷고 멈춥니다. 자동 항해 중에는 예외입니다.',
   // La toile
   'aides.mer.toile.t': '돛',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': '위 버튼은 돛을 더 펴고(돛 활짝까지), 아래 버튼은 돛을 줄입니다(돛 걷음까지). 한 번 누를 때마다 한 단계씩 바뀌며, 옆의 점 세 개가 지금 단계를 보여 줍니다.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': '엄지로 키를 밀 때와 자동 항해 중에 펴는 돛입니다. 위는 돛 활짝, 아래는 반돛입니다.',
   // Feu !
   'aides.mer.feu.t': '발사!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -51958,12 +51935,8 @@ Lang.ui('ru', {
   'mer.btVitesseTitre': 'Ускорить время (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Руль: положите палец и проведите',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Положите палец и проведите, чтобы править',
-  // Plus de voile
-  'tactile.plusVoile': 'Прибавить парусов',
-  // Moins de voile
-  'tactile.moinsVoile': 'Убавить парусов',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Положите палец и проведите, чтобы плыть',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Огонь<small>слева</small>',
   // Feu<small>tribord</small>
@@ -53312,12 +53285,12 @@ Lang.ui('ru', {
   'aides.mer.temps.d': 'Время течёт быстрее — но не в бою и не в бурю.',
   // La barre
   'aides.mer.barre.t': 'Руль',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Положите палец в любом месте левой половины экрана и проведите: корабль ляжет на этот курс. Уберите палец — он сохранит курс.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Положите палец в любом месте левой половины экрана и проведите: корабль пойдёт туда, куда указывает палец. Уберите палец или верните его в центр — корабль уберёт паруса и остановится, если только им не правит автопилот.',
   // La toile
   'aides.mer.toile.t': 'Паруса',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'Верхняя кнопка — больше парусов, до «все паруса»; нижняя — меньше, до «паруса убраны». Одно касание — одна ступень; три точки рядом показывают, где вы.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'Паруса, которые несёт корабль, пока палец ведёт руль, и под автопилотом: сверху — все паруса, снизу — полпаруса.',
   // Feu !
   'aides.mer.feu.t': 'Огонь!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -61843,12 +61816,8 @@ Lang.ui('es', {
   'mer.btVitesseTitre': 'Acelerar el tiempo (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Timón: apoya el pulgar y desliza',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Apoya el pulgar y desliza para gobernar',
-  // Plus de voile
-  'tactile.plusVoile': 'Más vela',
-  // Moins de voile
-  'tactile.moinsVoile': 'Menos vela',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Apoya el pulgar y desliza para navegar',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fuego<small>babor</small>',
   // Feu<small>tribord</small>
@@ -63197,12 +63166,12 @@ Lang.ui('es', {
   'aides.mer.temps.d': 'El tiempo pasa más deprisa, salvo en combate y en plena tempestad.',
   // La barre
   'aides.mer.barre.t': 'El timón',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Apoya el pulgar en cualquier punto de la mitad izquierda de la pantalla y desliza: el barco pone rumbo hacia allí. Al levantar el pulgar, mantiene el rumbo.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Apoya el pulgar en cualquier punto de la mitad izquierda de la pantalla y desliza: el barco avanza hacia donde señala el pulgar. Si levantas el pulgar o lo devuelves al centro, aferra las velas y se detiene, salvo con el piloto automático.',
   // La toile
   'aides.mer.toile.t': 'La vela',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'El botón de arriba da más vela, hasta ir a toda vela; el de abajo quita vela, hasta las velas aferradas. Un toque por paso; los tres puntos de al lado indican en cuál estás.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'La vela que llevas mientras el pulgar empuja el timón, y con el piloto automático: arriba a toda vela, abajo a media vela.',
   // Feu !
   'aides.mer.feu.t': '¡Fuego!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -71614,12 +71583,8 @@ Lang.ui('pt', {
   'mer.btVitesseTitre': 'Acelerar o tempo (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Leme: pouse o polegar e deslize',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Pouse o polegar e deslize para governar',
-  // Plus de voile
-  'tactile.plusVoile': 'Mais pano',
-  // Moins de voile
-  'tactile.moinsVoile': 'Menos pano',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Pouse o polegar e deslize para navegar',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fogo<small>bombordo</small>',
   // Feu<small>tribord</small>
@@ -72968,12 +72933,12 @@ Lang.ui('pt', {
   'aides.mer.temps.d': 'O tempo passa mais depressa, exceto em combate e nas tempestades.',
   // La barre
   'aides.mer.barre.t': 'O leme',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Pouse o polegar em qualquer ponto da metade esquerda da tela e deslize: o navio toma esse rumo. Ao levantar o polegar, ele mantém o rumo.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Pouse o polegar em qualquer ponto da metade esquerda da tela e deslize: o navio avança para onde o polegar aponta. Ao levantar o polegar ou trazê-lo de volta ao centro, ele recolhe as velas e para, a menos que o piloto automático esteja no comando.',
   // La toile
   'aides.mer.toile.t': 'O pano',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'O botão de cima larga mais pano, até todo o pano; o de baixo reduz, até as velas recolhidas. Um toque por etapa; os três pontos ao lado mostram em qual você está.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'O pano que você leva enquanto o polegar empurra o leme, e com o piloto automático: em cima todo o pano, embaixo meia vela.',
   // Feu !
   'aides.mer.feu.t': 'Fogo!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -81383,12 +81348,8 @@ Lang.ui('de', {
   'mer.btVitesseTitre': 'Zeitraffer (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Ruder: Daumen auflegen und ziehen',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Daumen auflegen und ziehen, um zu steuern',
-  // Plus de voile
-  'tactile.plusVoile': 'Mehr Segel',
-  // Moins de voile
-  'tactile.moinsVoile': 'Weniger Segel',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Daumen auflegen und ziehen, um zu segeln',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Feuer<small>Backbord</small>',
   // Feu<small>tribord</small>
@@ -82737,12 +82698,12 @@ Lang.ui('de', {
   'aides.mer.temps.d': 'Die Zeit vergeht schneller, außer im Gefecht und im Sturm.',
   // La barre
   'aides.mer.barre.t': 'Ruder',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Leg den Daumen irgendwo auf die linke Bildschirmhälfte und zieh: Das Schiff dreht auf diesen Kurs. Nimmst du den Daumen weg, hält es den Kurs.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Leg den Daumen irgendwo auf die linke Bildschirmhälfte und zieh: Das Schiff fährt dorthin, wohin der Daumen zeigt. Nimmst du den Daumen weg oder führst ihn zur Mitte zurück, birgt es die Segel und hält an – außer der Autopilot steuert.',
   // La toile
   'aides.mer.toile.t': 'Segel',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'Oben mehr Segel, bis volle Segel; darunter weniger Segel, bis die Segel geborgen sind. Ein Tippen pro Stufe; die drei Punkte daneben zeigen die Stufe.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'Die Segel, die du fährst, solange der Daumen das Ruder führt, und unter Autopilot: oben volle Segel, darunter halbe Segel.',
   // Feu !
   'aides.mer.feu.t': 'Feuer!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -91152,12 +91113,8 @@ Lang.ui('it', {
   'mer.btVitesseTitre': 'Accelera il tempo (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Timone: appoggia il pollice e trascina',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Appoggia il pollice e trascina per governare',
-  // Plus de voile
-  'tactile.plusVoile': 'Più vela',
-  // Moins de voile
-  'tactile.moinsVoile': 'Meno vela',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Appoggia il pollice e trascina per navigare',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fuoco<small>babordo</small>',
   // Feu<small>tribord</small>
@@ -92506,12 +92463,12 @@ Lang.ui('it', {
   'aides.mer.temps.d': 'Il tempo scorre più in fretta, tranne in combattimento e nella tempesta.',
   // La barre
   'aides.mer.barre.t': 'Timone',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Appoggia il pollice in un punto qualsiasi della metà sinistra dello schermo e trascina: la nave si porta su quella rotta. Sollevato il pollice, mantiene la rotta.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Appoggia il pollice in un punto qualsiasi della metà sinistra dello schermo e trascina: la nave avanza dove indica il pollice. Sollevato il pollice o riportato al centro, serra le vele e si ferma, a meno che non guidi il pilota automatico.',
   // La toile
   'aides.mer.toile.t': 'Le vele',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'Il pulsante in alto spiega più vela, fino a tutta vela; quello sotto la riduce, fino alle vele serrate. Un tocco per volta; i tre punti accanto mostrano a che punto sei.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'La vela che porti mentre il pollice spinge il timone, e col pilota automatico: in alto tutta vela, sotto mezza vela.',
   // Feu !
   'aides.mer.feu.t': 'Fuoco!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -100924,12 +100881,8 @@ Lang.ui('pl', {
   'mer.btVitesseTitre': 'Przyspiesz czas (F)',
   // La barre : posez le pouce et glissez
   'tactile.barre': 'Ster: połóż kciuk i przesuń',
-  // Posez le pouce et glissez pour barrer
-  'tactile.barreAide': 'Połóż kciuk i przesuń, by sterować',
-  // Plus de voile
-  'tactile.plusVoile': 'Więcej żagli',
-  // Moins de voile
-  'tactile.moinsVoile': 'Mniej żagli',
+  // Posez le pouce et glissez pour naviguer
+  'tactile.barreAide': 'Połóż kciuk i przesuń, by płynąć',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Ognia<small>z lewej burty</small>',
   // Feu<small>tribord</small>
@@ -102278,12 +102231,12 @@ Lang.ui('pl', {
   'aides.mer.temps.d': 'Czas płynie szybciej, z wyjątkiem walki i sztormu.',
   // La barre
   'aides.mer.barre.t': 'Ster',
-  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Pouce levé, il garde son cap.
-  'aides.mer.barre.d': 'Połóż kciuk w dowolnym miejscu lewej połowy ekranu i przesuń: statek obierze ten kurs. Po uniesieniu kciuka trzyma kurs.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire avance vers où montre le pouce. Pouce levé ou ramené au centre, il ferle ses voiles et s'arrête, sauf quand le pilote mène.
+  'aides.mer.barre.d': 'Połóż kciuk w dowolnym miejscu lewej połowy ekranu i przesuń: statek płynie tam, gdzie wskazuje kciuk. Gdy uniesiesz kciuk lub wrócisz nim do środka, statek zwinie żagle i stanie, chyba że prowadzi go autopilot.',
   // La toile
   'aides.mer.toile.t': 'Żagle',
-  // En haut, plus de toile, jusqu'à toute voile ; en dessous, moins de toile, jusqu'aux voiles ferlées. Un toucher par cran ; les trois points à côté montrent où vous en êtes.
-  'aides.mer.toile.d': 'Górny przycisk stawia więcej żagli, aż do pełnych żagli; dolny zwija, aż do zwiniętych. Jedno dotknięcie to jeden stopień; trzy kropki obok pokazują, na którym jesteś.',
+  // La toile qu'on envoie quand le pouce pousse la barre, et sous le pilote : toute voile en haut, mi-voile en dessous.
+  'aides.mer.toile.d': 'Żagle, które statek niesie, gdy kciuk prowadzi ster, i pod autopilotem: u góry pełne żagle, niżej pół żagli.',
   // Feu !
   'aides.mer.feu.t': 'Ognia!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -116925,6 +116878,14 @@ const SeaScene = {
     if (this.over || !p) return;
     if (Input.hit('up')) p.sail = Math.min(2, p.sail + 1);
     if (Input.hit('down')) p.sail = Math.max(0, p.sail - 1);
+    // (au doigt, 07/10/2026, choix d'Adrien : à la main, la toile choisie tant que le pouce pousse la barre, voiles ferlées
+    //  quand il la lâche ou la ramène au centre ; sous le pilote, la toile choisie, jamais ferlée : une mer peut relancer le
+    //  pilote d'elle-même, et le pilote garde sa mi-voile en approche ou devant un récif)
+    if (Input.gear != null && !Input.blocked) {
+      if (this.auto) { if (Input.gearHit || p.sail === 0) p.sail = Input.gear; }
+      else p.sail = Input.thrust ? Input.gear : 0;
+      Input.gearHit = false;
+    }
     if (Input.hit('auto')) this.toggleAuto();
     if (Input.hit('fast')) this.fast = !this.fast;
     // (une mer sans canons a ses propres armes : l'éperon et les archers de la Phénicie)
@@ -118093,6 +118054,11 @@ const UI = {
       b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointerleave', off); b.addEventListener('pointercancel', off);
     }
     Stick.init();   // (la barre au pouce, js/stick.js)
+    // les deux boutons de la toile : mi-voile ou toute voile (SeaScene.handleInput)
+    for (const b of this.el.touch.querySelectorAll('[data-gear]')) b.addEventListener('pointerdown', e => {
+      e.preventDefault(); Bus.emit('audio-unlock');
+      this.gear = Input.gear = +b.dataset.gear; Input.gearHit = true; this.buzz(6);
+    });
     document.getElementById('bt-map').onclick = () => { Sound.sfxPlay('click'); this.chart(false); };
     document.getElementById('bt-auto').onclick = () => { Sound.sfxPlay('click'); SeaScene.toggleAuto(); };
     document.getElementById('bt-fast').onclick = () => { Sound.sfxPlay('click'); SeaScene.fast = !SeaScene.fast; };
@@ -118185,7 +118151,9 @@ const UI = {
   touchControls() {
     const on = this.mode === 'sea' && this.touchOn();
     this.el.touch.hidden = !on;
-    if (Stick.el) { if (!on) { Stick.reset(); this.sailShown = null; } Stick.el.hidden = !on; }
+    if (Stick.el) { if (!on) { Stick.reset(); this.gearShown = null; } Stick.el.hidden = !on; }
+    // (la toile choisie au doigt : gardée d'un voyage à l'autre ; sans commandes tactiles, la toile se règle comme avant)
+    Input.gear = on ? (this.gear || 2) : null; Input.gearHit = on;
     document.body.classList.toggle('touch-sea', on);
   },
   // l'abordage, au doigt : le bouton se pose sur le navire à aborder et le suit (07/10/2026, demande d'Adrien : en
@@ -118423,13 +118391,13 @@ const UI = {
         this.fireBt[1].style.setProperty('--p', gr.style.getPropertyValue('--p')); this.fireBt[1].classList.toggle('ready', p.rr <= 0);
         if ((this.hudTick || 0) % 15 === 0) this.el.touch.style.bottom = document.body.classList.contains('portrait') ? (this.el.seahud.offsetHeight + 14) + 'px' : '';
         Stick.frame(this.hudTick || 0);
-        // la toile, sur ses deux boutons au-dessus des canons : les trois points montrent le cran, le libellé passe un
-        // instant à côté quand elle change, le bouton en butée s'éteint
+        // la toile choisie, sur ses deux boutons au-dessus des canons (toute voile, mi-voile) : le bouton choisi reste allumé,
+        // son nom passe un instant à côté quand on change
         const ts = this.sailEl || (this.sailEl = this.el.touch.querySelector('.tc-sails'));
-        if (p.sail !== this.sailShown) {
-          const first = this.sailShown == null;
-          this.sailShown = p.sail; ts.dataset.s = p.sail;
-          ts.querySelector('.ts-lbl').textContent = T('mer.voiles.' + p.sail);
+        if (Input.gear !== this.gearShown) {
+          const first = this.gearShown == null;
+          this.gearShown = Input.gear; ts.dataset.g = Input.gear;
+          ts.querySelector('.ts-lbl').textContent = T('mer.voiles.' + Input.gear);
           if (!first) { ts.classList.add('flash'); clearTimeout(this.sailT); this.sailT = setTimeout(() => ts.classList.remove('flash'), 1300); }
         }
       }
@@ -121274,12 +121242,14 @@ const Pad = {
 <script>
 'use strict';
 // ─── Silk & Cannons · la barre au pouce (téléphone, tablette : commandes tactiles en mer) ───
-// On pose le pouce n'importe où sur la moitié gauche de l'écran : la barre vient sous lui. En glissant, le navire prend le
-// cap que montre le pouce (Input.aim, en radians comme le monde : la caméra ne tourne pas, le haut de l'écran est le nord).
-// Pouce levé, le navire garde son cap. Un toucher sans glisser ne change rien (le pilote reste engagé). La toile se règle à
-// part, sur les deux boutons au-dessus des canons. Au repos, la barre attend en bas à gauche, à demi effacée.
+// On pose le pouce n'importe où sur la moitié gauche de l'écran : la barre vient sous lui. En glissant, le navire avance
+// vers où montre le pouce (Input.aim, en radians comme le monde : la caméra ne tourne pas, le haut de l'écran est le nord ;
+// Input.thrust tant que le pouce est hors du centre), avec la toile choisie sur les deux boutons au-dessus des canons
+// (mi-voile, toute voile). Pouce levé ou ramené au centre : voiles ferlées, le navire s'arrête en gardant son cap, sauf
+// quand le pilote mène (SeaScene.handleInput). Un toucher sans glisser ne change rien (le pilote reste engagé). Au repos, la
+// barre attend en bas à gauche, à demi effacée.
 // (07/10/2026, demandes d'Adrien : les quatre flèches n'étaient pas intuitives ; puis la toile à la distance du pouce, pas
-//  facile à tenir : elle passe sur ses boutons. Seulement là où sont les commandes tactiles)
+//  facile à tenir. Seulement là où sont les commandes tactiles)
 const STICK = { dead: 10, r: 60 };   // en pixels CSS : zone morte, course du pouce
 
 const Stick = {
@@ -121321,17 +121291,19 @@ const Stick = {
     if (!this.live && !Game.global.stickUsed) { Game.global.stickUsed = 1; Game.saveGlobal(); }   // (l'invite au repos s'efface pour de bon)
     this.live = true;
     this.el.classList.add('live');
-    // (revenu tout près du centre : le cap reste le dernier montré)
-    if (d >= STICK.dead) { Input.aim = Math.atan2(dy, dx); this.knob.style.setProperty('--a', Input.aim + 'rad'); }
+    // (revenu tout près du centre : voiles ferlées, le cap reste le dernier montré)
+    Input.thrust = d >= STICK.dead;
+    this.el.classList.toggle('idle', !Input.thrust);
+    if (Input.thrust) { Input.aim = Math.atan2(dy, dx); this.knob.style.setProperty('--a', Input.aim + 'rad'); }
   },
   knobAt(x, y) { this.knob.style.setProperty('--kx', x.toFixed(1) + 'px'); this.knob.style.setProperty('--ky', y.toFixed(1) + 'px'); },
   reset() {
     if (this.id != null) { try { this.el.releasePointerCapture(this.id); } catch (err) { /* déjà relâché */ } }
     this.id = null; this.live = false; this.tip = null;
-    Input.aim = null;
+    Input.aim = null; Input.thrust = false;
     this.base.style.removeProperty('--x'); this.base.style.removeProperty('--y');
     this.knobAt(0, 0);
-    this.el.classList.remove('held', 'live');
+    this.el.classList.remove('held', 'live', 'idle');
   },
   // à chaque image en mer : tant qu'on ne s'est jamais servi de la barre, une invite au repos
   frame(tick) {
@@ -134645,7 +134617,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen):not(:has(#loading)) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 07/10/2026 à 16:46</div>
+<div id="maj">Mise à jour : 07/10/2026 à 16:59</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>

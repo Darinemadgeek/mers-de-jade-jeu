@@ -6,8 +6,8 @@ The files are subsets (only the characters the game displays), made with the Goo
 Manrope : 5 fichier(s)
 Shippori Mincho B1 : 25 fichier(s)
 Noto Serif : 2 fichier(s)
-Noto Sans SC, Noto Sans TC, Noto Sans JP, Noto Sans KR (Noto Sans CJK) : 25 fichier(s)
-Noto Serif SC, Noto Serif TC, Noto Serif KR (Noto Serif CJK) : 19 fichier(s)
+Noto Sans SC, Noto Sans TC, Noto Sans JP, Noto Sans KR (Noto Sans CJK) : 26 fichier(s)
+Noto Serif SC, Noto Serif TC, Noto Serif KR (Noto Serif CJK) : 20 fichier(s)
 Noto Sans Symbols 2 : 1 fichier(s)
 Noto Sans Math : 1 fichier(s)
 
