@@ -429,18 +429,22 @@ kbd.pill { font-size: 11.5px; padding: 1px 7px; }
 .duel-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 50%; background: linear-gradient(90deg, #33a07b, #7fd9b6); box-shadow: 0 0 12px rgba(127, 217, 182, 0.6); }
 
 /* ── Commandes tactiles ── */
-.touch { position: absolute; left: 0; right: 0; bottom: 150px; z-index: 8; display: flex; justify-content: space-between; padding: 0 12px; pointer-events: none; }
+.touch { position: absolute; left: 0; right: 0; bottom: 150px; z-index: 8; display: flex; justify-content: flex-end; padding: 0 12px; pointer-events: none; }
 .touch > div { display: flex; gap: 8px; align-items: center; pointer-events: auto; }
-.tc-col { display: flex; flex-direction: column; gap: 8px; }
 .tc { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; color: var(--paper); background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--line-2); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); touch-action: none; }
-.tc svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .tc:active, .tc.on { background: rgba(63, 174, 138, 0.45); }
 .tc.fire { width: 72px; height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font: 800 14px/1 var(--font-ui); color: #fff5ee; background: radial-gradient(circle at 50% 32%, rgba(236, 98, 70, 0.95), rgba(158, 40, 22, 0.92)); border-color: rgba(255, 138, 112, 0.6); }
 .tc.fire small { font: 600 10px var(--font-ui); opacity: 0.85; }
 .tc.fire.long { font-size: 11.5px; letter-spacing: -0.2px; }
 .tc.fire.long small { font-size: 8.5px; }
 .tc.fire:active, .tc.fire.on { background: radial-gradient(circle at 50% 32%, #ff8a6a, #c23b22); }
-.tc.board { width: auto; height: 48px; border-radius: 999px; padding: 0 16px; font: 800 13px var(--font-ui); color: var(--jade-ink); background: linear-gradient(180deg, #56c7a0, #33a07b); border-color: rgba(127, 217, 182, 0.65); }
+/* l'abordage : une étiquette posée sur le navire à aborder, qui le suit (UI.boardSpot) ; sa pointe montre le navire */
+.tc.board { position: fixed; z-index: 9; left: 50%; top: 40%; width: auto; height: 40px; padding: 0 16px; border-radius: 999px; display: flex; align-items: center; font: 800 13.5px var(--font-ui); white-space: nowrap; color: var(--jade-ink); background: linear-gradient(180deg, #5fd0a8, #33a07b); border: 1px solid rgba(160, 235, 205, 0.85); pointer-events: auto; transform: translateX(-50%); animation: boardPop 0.3s cubic-bezier(.2, 1.5, .4, 1), boardPulse 1.5s ease-in-out 0.3s infinite; }
+.tc.board::after { content: ''; position: absolute; left: calc(50% + var(--tail, 0px)); top: calc(100% - 1px); transform: translateX(-50%); border: 8px solid transparent; border-bottom: 0; border-top-color: #33a07b; }
+.tc.board.below::after { top: auto; bottom: calc(100% - 1px); border: 8px solid transparent; border-top: 0; border-bottom-color: #5fd0a8; }
+.tc.board:active, .tc.board.on { background: linear-gradient(180deg, #7fe0bd, #3fae8a); }
+@keyframes boardPop { from { opacity: 0; transform: translateX(-50%) scale(0.55); } }
+@keyframes boardPulse { 0%, 100% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(127, 217, 182, 0.55); } 50% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 0 8px rgba(127, 217, 182, 0); } }
 
 /* ── Chargement ── */
 .loading { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; font: 600 14px var(--font-ui); color: var(--text-2); letter-spacing: 0.04em; background: radial-gradient(ellipse at 50% 40%, #1b2944, #0b1220 70%); z-index: 100; text-align: center; padding: 20px; transition: opacity 0.5s; }
@@ -524,9 +528,10 @@ body.mobile .sp-go { letter-spacing: 0.16em; padding-left: 0.16em; }
 }
 /* ═════════ Interface mobile (classe posée par Main.resize) ═════════ */
 button, .prompt, .objectives { touch-action: manipulation; }
-.mobile .btn { min-height: 40px; }
-.mobile .btn.xs { min-height: 34px; }
-.mobile .panel-head .x { width: 40px; height: 40px; }
+/* (07/10/2026, demande d'Adrien : des fenêtres un peu plus petites ; boutons un cran plus bas, toujours faciles au doigt) */
+.mobile .btn { min-height: 36px; }
+.mobile .btn.xs { min-height: 30px; }
+.mobile .panel-head .x { width: 36px; height: 36px; }
 
 /* curseurs plus faciles à attraper au doigt */
 /* (réglettes du téléphone : un curseur plus gros, voir « Réglettes » en fin de fichier) */
@@ -549,6 +554,16 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .mobile .hud .menu-btn { width: 38px; height: 38px; min-height: 0; padding: 0; border-radius: 50%; margin-left: 6px; flex: none; }
 .mobile .hud .menu-btn span { display: none; }
 .mobile .hud .it.hide-sm, .mobile .hud .hide-sm { display: none; }
+/* (07/10/2026) les vivres restent au bandeau du téléphone : en mer, on ne les voyait nulle part */
+.mobile .hud .it.hide-sm.food { display: inline-flex; }
+/* en portrait, le bandeau prend toute la largeur (date, argent, cale, coque, équipage, vivres : plus rien n'en tombe) ;
+   les boutons passent à la ligne d'en dessous, à droite, en face de l'objectif */
+.mobile.portrait .hud { flex-wrap: wrap; row-gap: 6px; }
+.mobile.portrait .hud-bar { flex: 1 1 100%; }
+.mobile.portrait .hud-bar .it { flex: 1 1 auto; justify-content: center; }
+.mobile.portrait .hud .sp { display: none; }
+.mobile.portrait .hud .menu-btn.q { margin-left: auto; }
+.mobile.portrait .objectives { top: calc(52px + env(safe-area-inset-top, 0px)); max-width: calc(100vw - 154px); }
 @media (max-width: 370px) { .mobile .hud .it { padding: 0 5px; font-size: 12.5px; } .mobile .hud .it .bar { width: 24px; } }
 /* bandeau trop plein (UI.renderHud le mesure) : resserré, puis les alertes en rouge (dette, patente brute…) réduites à leur icône
    (le montant de la dette reste dans les objectifs) */
@@ -569,6 +584,7 @@ button, .prompt, .objectives { touch-action: manipulation; }
 
 /* notifications : en haut, plus compactes */
 .mobile .toasts { top: calc(88px + env(safe-area-inset-top, 0px)); width: calc(100vw - 16px); }
+.mobile.portrait .toasts { top: calc(96px + env(safe-area-inset-top, 0px)); }
 .mobile .toast { font-size: 13px; padding: 8px 12px; border-radius: 11px; }
 .mobile .banner { top: 24%; }
 .mobile .banner .b-in { padding: 16px 20px 14px; }
@@ -596,16 +612,23 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .mobile.portrait .panel-head { padding-top: 20px; touch-action: none; }
 .mobile.portrait .panel-head::before { content: ''; position: absolute; left: 50%; top: 7px; width: 40px; height: 5px; margin-left: -20px; border-radius: 3px; background: rgba(243, 235, 218, 0.28); }
 @keyframes sheetIn { from { transform: translateY(100%); } }
-.mobile .panel-head .ico.big { width: 38px; height: 38px; padding: 6px; }
+.mobile .panel-head .ico.big { width: 34px; height: 34px; padding: 5px; }
 .mobile .panel-head .sub { font-size: 12.5px; }
+.mobile.portrait .panel-head { padding: 18px 12px 10px 14px; gap: 10px; }
+.mobile.portrait .panel-head .sub { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.mobile .panel-body { font-size: 14px; }
+.mobile.portrait .panel-body { padding: 10px 12px 12px; }
+.mobile .flavor { font-size: 14.5px; line-height: 1.45; }
 .mobile .panel-foot { padding: 10px 12px; }
 .mobile .panel-foot > .btn { flex: 1 1 auto; }
 .mobile .cards { grid-template-columns: 1fr; }
-.mobile .tabs .btn { min-height: 36px; }
+.mobile .tabs .btn { min-height: 34px; }
 
 /* marché : chaque ligne tient dans la largeur */
-.mobile .mk-row { grid-template-columns: 34px 1fr 64px 44px; grid-template-areas: "ic name price held" "info info info info" "slider slider act act"; column-gap: 8px; row-gap: 4px; padding: 10px; }
-.mobile .mk-row .ac .btn { width: 100%; min-width: 0; padding: 8px 6px; }
+.mobile .mk-row { grid-template-columns: 30px 1fr 64px 44px; grid-template-areas: "ic name price held" "info info info info" "slider slider act act"; column-gap: 8px; row-gap: 2px; padding: 7px 10px 8px; }
+.mobile .mk-row .ic .ico.big { width: 28px; height: 28px; }
+.mobile .mk-row .ac .btn { width: 100%; min-width: 0; min-height: 34px; padding: 6px; }
+.mobile .mk-row .sl output { font-size: 12px; line-height: 1.3; }
 .mobile .mk-row .sl output { text-align: left; }
 .mobile .mk-row .sl { min-width: 0; }
 .mobile .mk-head .pill { font-size: 12px; }
@@ -618,17 +641,52 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .tc.fire.ready::before { background: var(--jade-hi); filter: drop-shadow(0 0 6px rgba(127, 217, 182, 0.8)); }
 .tc.fire:not(.ready) { filter: saturate(0.55) brightness(0.85); }
 .mobile.portrait .touch { padding: 0 14px; align-items: flex-end; }
-.mobile.portrait .tc-left { display: grid !important; grid-template-columns: 54px 54px 54px; grid-template-rows: 54px 54px; gap: 6px; }
-.mobile.portrait .tc-left .tc-col { display: contents; }
-.mobile.portrait .tc-left .tc { width: 54px; height: 54px; }
-.mobile.portrait .tc-left [data-act=up] { grid-column: 2; grid-row: 1; }
-.mobile.portrait .tc-left [data-act=down] { grid-column: 2; grid-row: 2; }
-.mobile.portrait .tc-left [data-act=left] { grid-column: 1; grid-row: 2; }
-.mobile.portrait .tc-left [data-act=right] { grid-column: 3; grid-row: 2; }
 .mobile.portrait .tc-right { display: grid !important; grid-template-columns: 70px 70px; gap: 12px; }
 .mobile.portrait .tc-right .tc.fire { width: 70px; height: 70px; }
 .mobile.portrait .tc-right .tc.fire[data-act=fireL] { margin-top: 26px; }
-.mobile.portrait .tc-right .tc.board { grid-column: 1 / -1; grid-row: 1; justify-self: center; }
+/* (le cap et la destination ne sont que du texte : le pouce passe au travers, vers la barre) */
+.touch-sea .sh-center { pointer-events: none; }
+
+/* ── La barre au pouce (js/stick.js) : toute la moitié gauche de l'écran, sous les HUD ; la barre vient sous le pouce, et
+      attend au repos en bas à gauche, à demi effacée. Trois cercles : voiles ferlées au centre, mi-voile, toute voile au bord
+      (rayons 28 et 48 px, comme STICK) ; celui de la toile envoyée est allumé ── */
+.stick { position: absolute; left: 0; top: calc(56px + env(safe-area-inset-top, 0px)); bottom: 0; width: 50%; z-index: 4; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; --st-r: 64px; }
+.mobile .stick { top: calc(50px + env(safe-area-inset-top, 0px)); }
+.mobile.portrait .stick { top: calc(96px + env(safe-area-inset-top, 0px)); }
+.st-base {
+  position: absolute; width: calc(var(--st-r) * 2); height: calc(var(--st-r) * 2); margin: calc(var(--st-r) * -1) 0 0 calc(var(--st-r) * -1);
+  left: var(--x, calc(env(safe-area-inset-left, 0px) + 20px + var(--st-r)));
+  top: var(--y, calc(100% - var(--st-bot, calc(16px + env(safe-area-inset-bottom, 0px))) - var(--st-r)));   /* (--st-bot : posé par Stick.frame, au-dessus du HUD de mer) */
+  border-radius: 50%; background: radial-gradient(circle, rgba(11, 18, 30, 0.18) 40%, rgba(11, 18, 30, 0.5)); border: 1px solid var(--line-2);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28); opacity: 0.6; transition: opacity 0.2s; pointer-events: none;
+}
+.stick.held .st-base { opacity: 1; background: radial-gradient(circle, rgba(11, 18, 30, 0.3) 40%, rgba(11, 18, 30, 0.66)); }
+.st-z { position: absolute; border-radius: 50%; border: 1.5px solid rgba(243, 235, 218, 0.16); transition: border-color 0.15s, box-shadow 0.15s; }
+.st-z.z2 { inset: 3px; }
+.st-z.z1 { inset: 16px; border-style: dashed; }
+.st-z.z0 { inset: 36px; }
+.st-base[data-z="0"] .z0 { border-color: rgba(243, 235, 218, 0.7); }
+.st-base[data-z="1"] .z1 { border-style: solid; border-color: var(--gold); box-shadow: 0 0 10px rgba(232, 181, 74, 0.4), inset 0 0 10px rgba(232, 181, 74, 0.25); }
+.st-base[data-z="2"] .z2 { border-color: var(--jade-hi); box-shadow: 0 0 12px rgba(127, 217, 182, 0.45), inset 0 0 12px rgba(127, 217, 182, 0.25); }
+.st-knob {
+  position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; border-radius: 50%;
+  display: grid; place-items: center; transform: translate(var(--kx, 0px), var(--ky, 0px));
+  color: #172233; background: radial-gradient(circle at 50% 35%, #fbf4e4, #d6c9ad); border: 2px solid rgba(255, 255, 255, 0.75); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+.st-base[data-z="1"] .st-knob { background: radial-gradient(circle at 50% 35%, #f7d58a, #c9902f); color: var(--gold-ink); }
+.st-base[data-z="2"] .st-knob { background: radial-gradient(circle at 50% 35%, #8be3c1, #33a07b); color: var(--jade-ink); }
+.st-knob svg { grid-area: 1 / 1; width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; }
+.st-knob .st-arrow { display: none; width: 24px; height: 24px; fill: currentColor; stroke-width: 1.4; transform: rotate(var(--a, 0rad)); }
+.stick.live .st-knob .st-arrow { display: block; }
+.stick.live .st-helm { display: none; }
+.st-lbl { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); padding: 4px 11px; border-radius: 999px; background: rgba(11, 18, 30, 0.88); border: 1px solid var(--line-2); font: 800 12.5px var(--font-ui); color: var(--paper); white-space: nowrap; opacity: 0; transition: opacity 0.15s; }
+.stick.held .st-lbl { opacity: 1; }
+/* l'invite, tant qu'on ne s'est jamais servi de la barre */
+.stick.invite .st-base { opacity: 0.9; }
+.stick.invite .st-lbl { opacity: 1; left: 0; transform: none; width: max-content; max-width: 200px; white-space: normal; line-height: 1.3; text-align: left; border-radius: 12px; padding: 5px 11px; color: var(--gold-hi); border-color: rgba(232, 181, 74, 0.55); animation: stTip 2.6s ease-in-out infinite; }
+@keyframes stTip { 50% { opacity: 0.55; } }
+.st-base[data-z="1"] .st-lbl { color: var(--gold-hi); border-color: rgba(232, 181, 74, 0.55); }
+.st-base[data-z="2"] .st-lbl { color: var(--jade-hi); border-color: rgba(127, 217, 182, 0.55); }
 
 .mobile.portrait .seahud { padding: 0 10px calc(10px + env(safe-area-inset-bottom, 0px)); grid-template-columns: auto 1fr auto; grid-template-areas: "center center center" "left . right"; column-gap: 8px; }
 .mobile.portrait .sh-left canvas { width: 54px; height: 54px; }
@@ -675,11 +733,11 @@ button, .prompt, .objectives { touch-action: manipulation; }
 /* navires dessinés : jamais plus hauts qu'une fiche (en portrait comme en paysage) */
 .mobile .card canvas.ship-cv { max-height: 118px; width: auto; max-width: 100%; margin-inline: auto; }
 /* marché : une ligne par marchandise, comme sur grand écran */
-.mobile.landscape .mk-row { grid-template-columns: 30px minmax(70px, 1fr) 58px 44px minmax(110px, 1.5fr) 104px; grid-template-areas: "ic name price held slider act" "ic info info info slider act"; column-gap: 8px; row-gap: 0; padding: 5px 10px; }
+.mobile.landscape .mk-row { grid-template-columns: 30px minmax(70px, 1fr) 58px 44px minmax(110px, 1.5fr) 118px; grid-template-areas: "ic name price held slider act" "ic info info info slider act"; column-gap: 8px; row-gap: 0; padding: 4px 10px; }
 .mobile.landscape .mk-row .ic .ico.big { width: 28px; height: 28px; }
 .mobile.landscape .mk-row .inf { font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mobile.landscape .mk-row .sl output { text-align: center; }
-.mobile.landscape .mk-row .ac .btn { min-height: 36px; padding: 6px; }
+.mobile.landscape .mk-row .ac .btn { min-height: 32px; padding: 5px 6px; font-size: 13.5px; }
 .mobile.landscape .mk-head { margin-bottom: 6px; }
 /* mini-jeux : le dessin laisse la place aux boutons */
 /* fin d'année : le sceau du titre plus petit, le décompte remonte */
@@ -973,9 +1031,9 @@ input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rg
 input[type=range]:disabled { cursor: var(--cur); opacity: 0.75; }
 .mk-row.mk-food input[type=range] { --fill: var(--gold); --thumb: radial-gradient(circle at 50% 35%, #f7d58a, #c9902f); }
 input[type=range].red { --fill: #e65c40; --thumb: radial-gradient(circle at 50% 35%, #ff9b84, #c23b22); }
-.mobile input[type=range] { height: 30px; }
-.mobile input[type=range]::-webkit-slider-thumb { width: 26px; height: 26px; margin-top: -10px; }
-.mobile input[type=range]::-moz-range-thumb { width: 22px; height: 22px; }
+.mobile input[type=range] { height: 26px; }
+.mobile input[type=range]::-webkit-slider-thumb { width: 24px; height: 24px; margin-top: -9px; }
+.mobile input[type=range]::-moz-range-thumb { width: 20px; height: 20px; }
 
 /* ── L'usurier : la réglette, de zéro au plus qu'il prête ── */
 .us-loan { align-items: flex-start; }
@@ -999,6 +1057,11 @@ input[type=range].red { --fill: #e65c40; --thumb: radial-gradient(circle at 50% 
 .mk-row .pr .ico.xs { width: 15px; height: 15px; }
 .mk-row .sl output .ico.xs { width: 12px; height: 12px; }
 .mobile .panel-head:has(.mk-top) { flex-wrap: wrap; }
+/* (07/10/2026) en portrait, le « ? » et « Sortir » restent sur la ligne du titre ; l'argent et la cale passent dessous
+   (l'en-tête du marché tenait sur trois lignes) */
+.mobile.portrait .panel-head .mk-top { order: 5; flex: 1 1 100%; justify-content: flex-start; gap: 6px; }
+.mobile .panel-head .mk-top .pill.big { font-size: 13.5px; padding: 4px 11px; gap: 6px; }
+.mobile .panel-head .mk-top .pill.big .ico { width: 17px; height: 17px; }
 
 /* ── Le marché, ce que peut avaler un port (06/10/2026) : la réglette en trois couleurs (vert, or à --zg, rouge à --zo),
       assombrie à droite du curseur ; le curseur prend la couleur de sa zone ; le prix moyen sous le nom ; la bulle du
@@ -1145,6 +1208,18 @@ body.guide-top:not(.mobile) .chart-cv { height: min(calc(100vh - 150px - var(--g
 .tv-sum .grow { flex: 1 1 260px; color: var(--text-2); font-size: 14px; }
 .tv-more { align-items: center; gap: 10px; }
 .tv-more .sp { flex: 1; }
+/* (07/10/2026) au téléphone, la taverne plus ramassée : couchettes plus petites (une rangée de moins), citation et
+   bilan en plus petit */
+.mobile .berths { gap: 15px 5px; padding: 18px 16px 4px 0; }   /* (le repère « min. » tient entre deux rangées ; à droite, sa place quand il tombe en bout de rangée) */
+.mobile .berth { width: 27px; height: 36px; border-radius: 7px; }
+.mobile .berth svg { width: 16px; height: 22px; }
+.mobile .berth.min::after { right: -4px; top: -4px; bottom: -4px; }
+.mobile .berth.min::before { top: -16px; font-size: 10px; }
+.mobile .tv-count { font-size: 16px; }
+.mobile .tv-head .hint { font-size: 12.5px; line-height: 1.4; }
+.mobile .tv-sum { padding: 8px 10px; margin: 8px 0; gap: 6px 8px; }
+.mobile .tv-sum .grow { font-size: 13px; line-height: 1.4; }
+.mobile .tv-more .hint { font-size: 12.5px; }
 
 /* ── Le marché : la carte des trajets à gauche (jours de mer vers chaque port) ── */
 .panel.wide.mk-wide { width: min(1340px, 100%); }
@@ -1258,20 +1333,19 @@ body:not(.pad):not(.mobile) #seahud .btn.on[data-key]::after { background: rgba(
     </div>
   </div>
   <div id="portbar" class="portbar" hidden></div>
-  <div id="touch" class="touch" hidden>
-    <div class="tc-left">
-      <button class="tc" data-act="left" aria-label="Barre à bâbord" data-t-aria="tactile.barreBabord"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="tc-col">
-        <button class="tc" data-act="up" aria-label="Plus de voile" data-t-aria="tactile.plusVoile"><svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg></button>
-        <button class="tc" data-act="down" aria-label="Moins de voile" data-t-aria="tactile.moinsVoile"><svg viewBox="0 0 24 24"><path d="M5 9l7 7 7-7"/></svg></button>
-      </div>
-      <button class="tc" data-act="right" aria-label="Barre à tribord" data-t-aria="tactile.barreTribord"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <div id="stick" class="stick" hidden role="application" aria-label="La barre : posez le pouce et glissez" data-t-aria="tactile.barre">
+    <div class="st-base" data-z="0">
+      <i class="st-z z2"></i><i class="st-z z1"></i><i class="st-z z0"></i>
+      <b class="st-knob"><svg class="st-helm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.2"/><circle cx="12" cy="12" r="1.8"/><path d="M12 2.6v3.6M12 17.8v3.6M2.6 12h3.6M17.8 12h3.6M5.4 5.4l2.5 2.5M16.1 16.1l2.5 2.5M5.4 18.6l2.5-2.5M16.1 7.9l2.5-2.5"/></svg><svg class="st-arrow" viewBox="0 0 24 24"><path d="M20 12 5.5 5 8.8 12 5.5 19z"/></svg></b>
+      <span class="st-lbl"></span>
     </div>
+  </div>
+  <div id="touch" class="touch" hidden>
     <div class="tc-right">
       <button class="tc fire" data-act="fireL" data-t-html="tactile.feuBabord">Feu<small>bâbord</small></button>
       <button class="tc fire" data-act="fireR" data-t-html="tactile.feuTribord">Feu<small>tribord</small></button>
-      <button class="tc board" data-act="board" id="tc-board" data-t="tactile.abordage" hidden>À l'abordage</button>
     </div>
+    <button class="tc board" data-act="board" id="tc-board" data-t="tactile.abordage" hidden>À l'abordage</button>
   </div>
   <div id="prompt" class="prompt" hidden></div>
   <div id="toasts" class="toasts"></div>
@@ -1605,6 +1679,8 @@ const Input = {
   touch: false,
   blocked: false, // vrai quand un panneau modal capte le clavier
   steer: 0,       // la barre tenue au stick de la manette, de -1 (bâbord) à 1 (tribord) (js/pad.js)
+  aim: null,      // le cap voulu, montré au pouce sur l'écran tactile (js/stick.js), en radians ; null : personne ne tient la barre
+  sailTo: null,   // la toile demandée au pouce (0 à 2), prise une fois par la scène de mer
 
   init(target) {
     addEventListener('keydown', e => {
@@ -2061,11 +2137,10 @@ Lang.ui('fr', {
   'mer.btPiloteTitre': 'Pilote automatique (R)',
   'mer.btVitesseTitre': 'Accélérer le temps (F)',
 
-  // ── En mer : commandes tactiles (<small> : la seconde ligne du bouton) ──
-  'tactile.barreBabord': 'Barre à bâbord',
-  'tactile.plusVoile': 'Plus de voile',
-  'tactile.moinsVoile': 'Moins de voile',
-  'tactile.barreTribord': 'Barre à tribord',
+  // ── En mer : commandes tactiles (<small> : la seconde ligne du bouton ; la barre au pouce : son nom pour les lecteurs
+  //    d'écran, et l'invite qu'elle porte au repos tant qu'on ne s'en est jamais servi) ──
+  'tactile.barre': 'La barre : posez le pouce et glissez',
+  'tactile.barreAide': 'Posez le pouce et glissez pour barrer',
   'tactile.feuBabord': 'Feu<small>bâbord</small>',
   'tactile.feuTribord': 'Feu<small>tribord</small>',
   'tactile.abordage': 'À l\'abordage',
@@ -2850,7 +2925,7 @@ Lang.ui('fr', {
   'aides.mer.temps.t': 'Accélérer',
   'aides.mer.temps.d': 'Le temps passe plus vite, sauf en combat et dans la tempête.',
   'aides.mer.barre.t': 'La barre et la toile',
-  'aides.mer.barre.d': 'Tourner à gauche ou à droite, envoyer ou réduire la toile.',
+  'aides.mer.barre.d': 'Posez le pouce n\'importe où sur la moitié gauche de l\'écran et glissez : le navire prend ce cap. Plus le pouce s\'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.',
   'aides.mer.feu.t': 'Feu !',
   'aides.mer.feu.d': 'Tirer à gauche (bâbord) ou à droite (tribord).',
   'aides.marche.onglets.t': 'Acheter ou vendre',
@@ -3062,14 +3137,10 @@ Lang.ui('en', {
   'mer.btPiloteTitre': 'Autopilot (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Speed up time (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Steer to port',
-  // Plus de voile
-  'tactile.plusVoile': 'More sail',
-  // Moins de voile
-  'tactile.moinsVoile': 'Less sail',
-  // Barre à tribord
-  'tactile.barreTribord': 'Steer to starboard',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Helm: place your thumb and slide',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Place your thumb and slide to steer',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fire<small>port</small>',
   // Feu<small>tribord</small>
@@ -4418,8 +4489,8 @@ Lang.ui('en', {
   'aides.mer.temps.d': 'Time passes faster, except in battle and in storms.',
   // La barre et la toile
   'aides.mer.barre.t': 'Helm and sail',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Turn left or right, make or shorten sail.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Place your thumb anywhere on the left half of the screen and slide: the ship comes round to that heading. The farther your thumb goes, the more sail: sails furled, half sail, full sail. Lift your thumb and the ship holds its heading and sail.',
   // Feu !
   'aides.mer.feu.t': 'Fire!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -12834,14 +12905,10 @@ Lang.ui('zh', {
   'mer.btPiloteTitre': '自动航行（R）',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': '加快时间（F）',
-  // Barre à bâbord
-  'tactile.barreBabord': '左转舵',
-  // Plus de voile
-  'tactile.plusVoile': '加帆',
-  // Moins de voile
-  'tactile.moinsVoile': '减帆',
-  // Barre à tribord
-  'tactile.barreTribord': '右转舵',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': '舵：按住拇指并滑动',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': '按住拇指滑动即可掌舵',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '开火<small>左舷</small>',
   // Feu<small>tribord</small>
@@ -14190,8 +14257,8 @@ Lang.ui('zh', {
   'aides.mer.temps.d': '让时间过得更快；交战和风暴中除外。',
   // La barre et la toile
   'aides.mer.barre.t': '舵与帆',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': '向左或向右转舵，加帆或减帆。',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': '把拇指放在屏幕左半边任意处并滑动：船便转向那个方向。拇指离得越远，帆张得越多：收帆、半帆、满帆。松开拇指，船保持原有航向与帆。',
   // Feu !
   'aides.mer.feu.t': '开火！',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -22576,14 +22643,10 @@ Lang.ui('zht', {
   'mer.btPiloteTitre': '自動航行（R）',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': '加快時間（F）',
-  // Barre à bâbord
-  'tactile.barreBabord': '左轉舵',
-  // Plus de voile
-  'tactile.plusVoile': '加帆',
-  // Moins de voile
-  'tactile.moinsVoile': '減帆',
-  // Barre à tribord
-  'tactile.barreTribord': '右轉舵',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': '舵：按住拇指並滑動',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': '按住拇指滑動即可掌舵',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '開火<small>左舷</small>',
   // Feu<small>tribord</small>
@@ -23932,8 +23995,8 @@ Lang.ui('zht', {
   'aides.mer.temps.d': '讓時間過得更快，交戰時和風暴中除外。',
   // La barre et la toile
   'aides.mer.barre.t': '舵與帆',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': '向左或向右轉舵，加帆或減帆。',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': '把拇指放在螢幕左半邊任意處並滑動：船便轉向那個方向。拇指離得越遠，帆張得越多：收帆、半帆、滿帆。鬆開拇指，船保持原有航向與帆。',
   // Feu !
   'aides.mer.feu.t': '開火！',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -32320,14 +32383,10 @@ Lang.ui('ja', {
   'mer.btPiloteTitre': '自動航行（R）',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': '時間を早める（F）',
-  // Barre à bâbord
-  'tactile.barreBabord': '取舵',
-  // Plus de voile
-  'tactile.plusVoile': '帆を張る',
-  // Moins de voile
-  'tactile.moinsVoile': '帆を絞る',
-  // Barre à tribord
-  'tactile.barreTribord': '面舵',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': '舵：親指を置いて滑らせる',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': '親指を置いて滑らせると、舵を取れます',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '砲撃<small>左舷</small>',
   // Feu<small>tribord</small>
@@ -33676,8 +33735,8 @@ Lang.ui('ja', {
   'aides.mer.temps.d': '時が速く流れる。ただし戦闘中と嵐の中は別。',
   // La barre et la toile
   'aides.mer.barre.t': '舵と帆',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': '左右に舵を切り、帆を張ったり絞ったりする。',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': '画面の左半分のどこかに親指を置いて滑らせると、船はその針路へ向かう。親指を遠くへ離すほど帆を張る（畳帆、半帆、総帆）。指を離せば、船は針路と帆をそのまま保つ。',
   // Feu !
   'aides.mer.feu.t': '砲撃',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -42096,14 +42155,10 @@ Lang.ui('ko', {
   'mer.btPiloteTitre': '자동 항해 (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': '시간 가속 (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': '좌현 조타',
-  // Plus de voile
-  'tactile.plusVoile': '돛 펴기',
-  // Moins de voile
-  'tactile.moinsVoile': '돛 줄이기',
-  // Barre à tribord
-  'tactile.barreTribord': '우현 조타',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': '키: 엄지를 대고 미십시오',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': '엄지를 대고 밀어 배를 조종하십시오',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': '발사<small>좌현</small>',
   // Feu<small>tribord</small>
@@ -43452,8 +43507,8 @@ Lang.ui('ko', {
   'aides.mer.temps.d': '시간이 빨리 흐릅니다. 전투 중과 폭풍 속에서는 예외입니다.',
   // La barre et la toile
   'aides.mer.barre.t': '키와 돛',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': '왼쪽이나 오른쪽으로 방향을 틀고, 돛을 펴거나 줄입니다.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': '화면 왼쪽 절반 아무 곳에나 엄지를 대고 밀면 배가 그쪽으로 뱃머리를 돌립니다. 엄지가 멀어질수록 돛을 더 폅니다: 돛 걷음, 반돛, 돛 활짝. 엄지를 떼면 배는 침로와 돛을 그대로 유지합니다.',
   // Feu !
   'aides.mer.feu.t': '발사!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -51837,14 +51892,10 @@ Lang.ui('ru', {
   'mer.btPiloteTitre': 'Автопилот (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Ускорить время (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Лево руля',
-  // Plus de voile
-  'tactile.plusVoile': 'Прибавить парусов',
-  // Moins de voile
-  'tactile.moinsVoile': 'Убавить парусов',
-  // Barre à tribord
-  'tactile.barreTribord': 'Право руля',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Руль: положите палец и проведите',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Положите палец и проведите, чтобы править',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Огонь<small>слева</small>',
   // Feu<small>tribord</small>
@@ -53193,8 +53244,8 @@ Lang.ui('ru', {
   'aides.mer.temps.d': 'Время течёт быстрее — но не в бою и не в бурю.',
   // La barre et la toile
   'aides.mer.barre.t': 'Руль и паруса',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Повернуть влево или вправо, прибавить или убавить парусов.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Положите палец в любом месте левой половины экрана и проведите: корабль ляжет на этот курс. Чем дальше палец, тем больше парусов: паруса убраны, полпаруса, все паруса. Уберите палец — корабль сохранит курс и паруса.',
   // Feu !
   'aides.mer.feu.t': 'Огонь!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -61718,14 +61769,10 @@ Lang.ui('es', {
   'mer.btPiloteTitre': 'Piloto automático (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Acelerar el tiempo (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Timón a babor',
-  // Plus de voile
-  'tactile.plusVoile': 'Más vela',
-  // Moins de voile
-  'tactile.moinsVoile': 'Menos vela',
-  // Barre à tribord
-  'tactile.barreTribord': 'Timón a estribor',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Timón: apoya el pulgar y desliza',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Apoya el pulgar y desliza para gobernar',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fuego<small>babor</small>',
   // Feu<small>tribord</small>
@@ -63074,8 +63121,8 @@ Lang.ui('es', {
   'aides.mer.temps.d': 'El tiempo pasa más deprisa, salvo en combate y en plena tempestad.',
   // La barre et la toile
   'aides.mer.barre.t': 'El timón y la vela',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Girar a la izquierda o a la derecha, dar o quitar vela.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Apoya el pulgar en cualquier punto de la mitad izquierda de la pantalla y desliza: el barco pone rumbo hacia allí. Cuanto más se aleja el pulgar, más vela: velas aferradas, a media vela, a toda vela. Al levantar el pulgar, el barco mantiene el rumbo y la vela.',
   // Feu !
   'aides.mer.feu.t': '¡Fuego!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -71485,14 +71532,10 @@ Lang.ui('pt', {
   'mer.btPiloteTitre': 'Piloto automático (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Acelerar o tempo (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Leme a bombordo',
-  // Plus de voile
-  'tactile.plusVoile': 'Mais pano',
-  // Moins de voile
-  'tactile.moinsVoile': 'Menos pano',
-  // Barre à tribord
-  'tactile.barreTribord': 'Leme a estibordo',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Leme: pouse o polegar e deslize',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Pouse o polegar e deslize para governar',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fogo<small>bombordo</small>',
   // Feu<small>tribord</small>
@@ -72841,8 +72884,8 @@ Lang.ui('pt', {
   'aides.mer.temps.d': 'O tempo passa mais depressa, exceto em combate e nas tempestades.',
   // La barre et la toile
   'aides.mer.barre.t': 'O leme e o pano',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Virar à esquerda ou à direita, largar ou reduzir o pano.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Pouse o polegar em qualquer ponto da metade esquerda da tela e deslize: o navio toma esse rumo. Quanto mais o polegar se afasta, mais pano: velas recolhidas, meia vela, todo o pano. Ao levantar o polegar, o navio mantém o rumo e o pano.',
   // Feu !
   'aides.mer.feu.t': 'Fogo!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -81250,14 +81293,10 @@ Lang.ui('de', {
   'mer.btPiloteTitre': 'Autopilot (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Zeitraffer (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Ruder Backbord',
-  // Plus de voile
-  'tactile.plusVoile': 'Mehr Segel',
-  // Moins de voile
-  'tactile.moinsVoile': 'Weniger Segel',
-  // Barre à tribord
-  'tactile.barreTribord': 'Ruder Steuerbord',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Ruder: Daumen auflegen und ziehen',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Daumen auflegen und ziehen, um zu steuern',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Feuer<small>Backbord</small>',
   // Feu<small>tribord</small>
@@ -82606,8 +82645,8 @@ Lang.ui('de', {
   'aides.mer.temps.d': 'Die Zeit vergeht schneller, außer im Gefecht und im Sturm.',
   // La barre et la toile
   'aides.mer.barre.t': 'Ruder und Segel',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Nach links oder rechts drehen, Segel setzen oder reffen.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Leg den Daumen irgendwo auf die linke Bildschirmhälfte und zieh: Das Schiff dreht auf diesen Kurs. Je weiter der Daumen wandert, desto mehr Segel: Segel geborgen, halbe Segel, volle Segel. Nimmst du den Daumen weg, hält das Schiff Kurs und Segel.',
   // Feu !
   'aides.mer.feu.t': 'Feuer!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -91015,14 +91054,10 @@ Lang.ui('it', {
   'mer.btPiloteTitre': 'Pilota automatico (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Accelera il tempo (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Barra a babordo',
-  // Plus de voile
-  'tactile.plusVoile': 'Più vela',
-  // Moins de voile
-  'tactile.moinsVoile': 'Meno vela',
-  // Barre à tribord
-  'tactile.barreTribord': 'Barra a tribordo',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Timone: appoggia il pollice e trascina',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Appoggia il pollice e trascina per governare',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Fuoco<small>babordo</small>',
   // Feu<small>tribord</small>
@@ -92371,8 +92406,8 @@ Lang.ui('it', {
   'aides.mer.temps.d': 'Il tempo scorre più in fretta, tranne in combattimento e nella tempesta.',
   // La barre et la toile
   'aides.mer.barre.t': 'Timone e vele',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Vira a sinistra o a destra, spiega o riduci la vela.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Appoggia il pollice in un punto qualsiasi della metà sinistra dello schermo e trascina: la nave si porta su quella rotta. Più il pollice si allontana, più vela: vele serrate, mezza vela, tutta vela. Sollevato il pollice, la nave mantiene rotta e vele.',
   // Feu !
   'aides.mer.feu.t': 'Fuoco!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -100783,14 +100818,10 @@ Lang.ui('pl', {
   'mer.btPiloteTitre': 'Autopilot (R)',
   // Accélérer le temps (F)
   'mer.btVitesseTitre': 'Przyspiesz czas (F)',
-  // Barre à bâbord
-  'tactile.barreBabord': 'Ster w lewo',
-  // Plus de voile
-  'tactile.plusVoile': 'Więcej żagli',
-  // Moins de voile
-  'tactile.moinsVoile': 'Mniej żagli',
-  // Barre à tribord
-  'tactile.barreTribord': 'Ster w prawo',
+  // La barre : posez le pouce et glissez
+  'tactile.barre': 'Ster: połóż kciuk i przesuń',
+  // Posez le pouce et glissez pour barrer
+  'tactile.barreAide': 'Połóż kciuk i przesuń, by sterować',
   // Feu<small>bâbord</small>
   'tactile.feuBabord': 'Ognia<small>z lewej burty</small>',
   // Feu<small>tribord</small>
@@ -102139,8 +102170,8 @@ Lang.ui('pl', {
   'aides.mer.temps.d': 'Czas płynie szybciej, z wyjątkiem walki i sztormu.',
   // La barre et la toile
   'aides.mer.barre.t': 'Ster i żagle',
-  // Tourner à gauche ou à droite, envoyer ou réduire la toile.
-  'aides.mer.barre.d': 'Skręt w lewo lub w prawo, stawianie lub zwijanie żagli.',
+  // Posez le pouce n'importe où sur la moitié gauche de l'écran et glissez : le navire prend ce cap. Plus le pouce s'éloigne, plus il y a de toile : voiles ferlées, mi-voile, toute voile. Pouce levé, le navire garde son cap et sa toile.
+  'aides.mer.barre.d': 'Połóż kciuk w dowolnym miejscu lewej połowy ekranu i przesuń: statek obierze ten kurs. Im dalej kciuk, tym więcej żagli: żagle zwinięte, pół żagli, pełne żagle. Po uniesieniu kciuka statek trzyma kurs i żagle.',
   // Feu !
   'aides.mer.feu.t': 'Ognia!',
   // Tirer à gauche (bâbord) ou à droite (tribord).
@@ -116782,6 +116813,7 @@ const SeaScene = {
     if (this.over || !p) return;
     if (Input.hit('up')) p.sail = Math.min(2, p.sail + 1);
     if (Input.hit('down')) p.sail = Math.max(0, p.sail - 1);
+    if (Input.sailTo != null && !Input.blocked) { p.sail = Input.sailTo; Input.sailTo = null; }   // (la barre au pouce, js/stick.js)
     if (Input.hit('auto')) this.toggleAuto();
     if (Input.hit('fast')) this.fast = !this.fast;
     // (une mer sans canons a ses propres armes : l'éperon et les archers de la Phénicie)
@@ -116851,6 +116883,9 @@ const SeaScene = {
     if (Input.down('left')) turn -= 1;
     if (Input.down('right')) turn += 1;
     if (!Input.blocked && Input.steer) turn = U.clamp(turn + Input.steer, -1, 1);   // (le stick de la manette, en douceur)
+    // (la barre au pouce, js/stick.js : le navire vient au cap montré, comme le pilote vers son prochain point ; le pouce
+    //  qui tient la barre coupe le pilote, même au bon cap)
+    if (!Input.blocked && Input.aim != null) { turn = U.clamp(U.angDiff(p.a, Input.aim) * 2.4, -1, 1); this.auto = false; }
     if (turn && this.auto) { this.auto = false; }
     if (this.auto && this.path) {
       const w = this.path[Math.min(this.wp, this.path.length - 1)];
@@ -116988,7 +117023,7 @@ const SeaScene = {
     const p = this.player, r = Game.run;
     let pr = null;
     const bt = this.boardTarget();
-    if (bt) pr = { kind: 'board', text: T('mer.aborder', { cible: bt.surrendered ? T('mer.navireRendu') : bt.name }), key: 'B' };
+    if (bt) pr = { kind: 'board', tgt: bt, text: T('mer.aborder', { cible: bt.surrendered ? T('mer.navireRendu') : bt.name }), key: 'B' };
     if (!pr) for (const port of World.ports) {
       const d = Math.hypot(port.x - p.x, port.y - p.y);
       if ((port.id === r.lastPort && this.voyageT < 8) || Game.portDormant(port.id)) continue;
@@ -117526,6 +117561,18 @@ const SeaScene = {
     }
     this.fx.draw(ctx, 0, 0, 'fx');
     this.fx.draw(ctx, 0, 0, 'smoke');
+    // le cap montré au pouce (js/stick.js), tant qu'il tient la barre : un trait doré devant le navire, vers où il vient
+    const aim = Input.aim, pl = this.player;
+    if (aim != null && pl && !pl.dead) {
+      const ca = Math.cos(aim), sa = Math.sin(aim), r0 = pl.len * 0.7, r1 = r0 + 26, tx = pl.x + ca * (r1 + 5), ty = pl.y + sa * (r1 + 5);
+      ctx.save();
+      ctx.strokeStyle = 'rgba(247,213,138,0.8)'; ctx.lineWidth = 1.1; ctx.setLineDash([2.6, 2.4]);
+      ctx.beginPath(); ctx.moveTo(pl.x + ca * r0, pl.y + sa * r0); ctx.lineTo(pl.x + ca * r1, pl.y + sa * r1); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#f7d58a'; ctx.shadowColor = 'rgba(4,10,20,0.5)'; ctx.shadowBlur = 3;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx - ca * 6 - sa * 3.6, ty - sa * 6 + ca * 3.6); ctx.lineTo(tx - ca * 6 + sa * 3.6, ty - sa * 6 - ca * 3.6); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
     if (SEA.rules && SEA.rules.seaDraw) SEA.rules.seaDraw(ctx, this, t);   // (dessins propres à la mer, dans le repère du monde)
     ctx.restore();
     if (this.fogs.length) this.drawFog(ctx, cx, cy, W, H);
@@ -117934,6 +117981,7 @@ const UI = {
       const off = e => { e.preventDefault(); Input.release(act); b.classList.remove('on'); };
       b.addEventListener('pointerdown', on); b.addEventListener('pointerup', off); b.addEventListener('pointerleave', off); b.addEventListener('pointercancel', off);
     }
+    Stick.init();   // (la barre au pouce, js/stick.js)
     document.getElementById('bt-map').onclick = () => { Sound.sfxPlay('click'); this.chart(false); };
     document.getElementById('bt-auto').onclick = () => { Sound.sfxPlay('click'); SeaScene.toggleAuto(); };
     document.getElementById('bt-fast').onclick = () => { Sound.sfxPlay('click'); SeaScene.fast = !SeaScene.fast; };
@@ -118026,7 +118074,25 @@ const UI = {
   touchControls() {
     const on = this.mode === 'sea' && this.touchOn();
     this.el.touch.hidden = !on;
+    if (Stick.el) { if (!on) { Stick.reset(); Input.sailTo = null; } Stick.el.hidden = !on; }
     document.body.classList.toggle('touch-sea', on);
+  },
+  // l'abordage, au doigt : le bouton se pose sur le navire à aborder et le suit (07/10/2026, demande d'Adrien : en
+  // apparaissant à côté des boutons de feu, il les décalait) ; au-dessus de son nom, ou dessous s'il n'y a plus la place
+  boardSpot() {
+    const bt = this.boardBt || (this.boardBt = document.getElementById('tc-board'));
+    const pr = SeaScene.prompt, tg = !this.el.touch.hidden && pr && pr.kind === 'board' ? pr.tgt : null;
+    if (bt.hidden !== !tg) bt.hidden = !tg;
+    if (!tg) return;
+    const k = Main.S / (Main.dpr || 1), vx = SeaScene.viewX != null ? SeaScene.viewX : SeaScene.camX, vy = SeaScene.viewY != null ? SeaScene.viewY : SeaScene.camY;
+    const x = (tg.x - vx) * k, y = (tg.y - vy) * k, w = bt.offsetWidth, hgt = bt.offsetHeight;
+    const cx = U.clamp(x, w / 2 + 8, innerWidth - w / 2 - 8);
+    let top = y - (tg.len * 0.8 + 4) * k - 9 - hgt;
+    const below = top < this.el.hud.offsetHeight + 8;   // (jamais sous le bandeau : deux lignes en portrait)
+    if (below) top = y + (tg.len * 0.5 + 2) * k + 9;
+    bt.classList.toggle('below', below);
+    bt.style.left = Math.round(cx) + 'px'; bt.style.top = Math.round(top) + 'px';
+    bt.style.setProperty('--tail', Math.round(U.clamp(x - cx, -w / 2 + 16, w / 2 - 16)) + 'px');
   },
 
   // ════════════ Modales ════════════
@@ -118176,7 +118242,8 @@ const UI = {
       kids.push(it('hull', h('span', { class: 'bar' }, h('i', { class: hp < 0.3 ? 'crit' : hp < 0.6 ? 'warn' : '', style: { width: Math.round(hp * 100) + '%' } })), '', T('hud.coque', { coque: Math.round(s.hull), max: st.hullMax }), 'hud-hull'));
       kids.push(it('crew', h('b', { class: 'num' + (s.crew < st.crewMin ? ' neg' : '') }, s.crew), '', T('hud.equipage', { min: st.crewMin }), 'hud-crew'));
       const fd = Game.foodDays();
-      kids.push(it('food', h('b', { class: 'num' + (fd < 4 ? ' neg' : '') }, T('commun.jours', { n: Math.floor(fd) })), 'hide-sm', T('hud.vivres'), 'hud-food'));
+      // (les vivres : aussi sur téléphone, classe food ; seule une fenêtre étroite sur ordinateur les cache)
+      kids.push(it('food', h('b', { class: 'num' + (fd < 4 ? ' neg' : '') }, T('commun.jours', { n: Math.floor(fd) })), 'hide-sm food', T('hud.vivres'), 'hud-food'));
     }
     if (SEA.rules && SEA.rules.hud) kids.push(...SEA.rules.hud(it));   // états propres à la mer (patente de santé…)
     put(this.el.hud,
@@ -118244,7 +118311,9 @@ const UI = {
         this.fireBt[0].style.setProperty('--p', gl.style.getPropertyValue('--p')); this.fireBt[0].classList.toggle('ready', p.rl <= 0);
         this.fireBt[1].style.setProperty('--p', gr.style.getPropertyValue('--p')); this.fireBt[1].classList.toggle('ready', p.rr <= 0);
         if ((this.hudTick || 0) % 15 === 0) this.el.touch.style.bottom = document.body.classList.contains('portrait') ? (this.el.seahud.offsetHeight + 14) + 'px' : '';
+        Stick.frame(p, this.hudTick || 0);
       }
+      this.boardSpot();
       const dest = SeaScene.dest ? PORT[SeaScene.dest] : null;
       let dtxt = '';
       if (dest) {
@@ -118258,9 +118327,10 @@ const UI = {
       if (de.textContent !== dtxt) de.textContent = dtxt;
       document.getElementById('bt-auto').classList.toggle('on', SeaScene.auto);
       document.getElementById('bt-fast').classList.toggle('on', SeaScene.fast);
-      document.getElementById('tc-board').hidden = !(SeaScene.prompt && SeaScene.prompt.kind === 'board');
       const pr = SeaScene.prompt;
-      this.setPrompt(pr ? `${pr.text}` : null, pr && !Input.touch ? pr.key : null, () => {
+      // (au doigt, l'abordage a son bouton sur le navire même : pas d'invite en haut)
+      const onShip = pr && pr.kind === 'board' && !this.el.touch.hidden;
+      this.setPrompt(pr && !onShip ? `${pr.text}` : null, pr && !Input.touch ? pr.key : null, () => {
         if (!pr) return;
         if (pr.kind === 'board') { const t = SeaScene.boardTarget(); if (t) Bus.emit('board', t); }
         else if (pr.kind === 'dock') SeaScene.dock(pr.pid);
@@ -120306,7 +120376,7 @@ const Help = {
   active: null,   // { id, items, open, forced }
   SCREENS: {
     port: [['hud-date', 'date'], ['hud-cash', 'argent'], ['hud-bank', 'banque'], ['hud-debt', 'dette'], ['hud-cargo', 'cale'], ['hud-hull', 'coque'], ['hud-crew', 'equipage'], ['hud-food', 'vivres'], ['hud-title', 'titre'], ['hud-journal', 'journal'], ['hud-menu', 'menu'], ['#objectives', 'objectifs'], ['#portbar', 'batiments', 'left'], ['bar-quai', 'quai']],
-    mer: [['#compass', 'boussole'], ['.sh-speed', 'vitesse'], ['.sh-guns', 'armes'], ['#radar', 'radar'], ['#sh-dest', 'cap'], ['#bt-map', 'carte'], ['#bt-auto', 'pilote'], ['#bt-fast', 'temps'], ['#touch .tc-left', 'barre'], ['#touch .tc-right', 'feu']],
+    mer: [['#compass', 'boussole'], ['.sh-speed', 'vitesse'], ['.sh-guns', 'armes'], ['#radar', 'radar'], ['#sh-dest', 'cap'], ['#bt-map', 'carte'], ['#bt-auto', 'pilote'], ['#bt-fast', 'temps'], ['#stick .st-base', 'barre'], ['#touch .tc-right', 'feu']],
     marche: [['mk-tabs', 'onglets'], ['mk-pills', 'bourse'], ['mk-map', 'carte'], ['mk-food', 'vivres'], ['.mk > .mk-row:first-child', 'ligne'], ['.mk > .mk-row:first-child .sl', 'quantite']],
     usurier: [['us-dette', 'dette'], ['us-credit', 'credit'], ['us-emprunt', 'emprunter'], ['us-rembourser', 'rembourser']],
     chantier: [['cy-ship', 'navire'], ['cy-actions', 'reparer'], ['cy-upg', 'ameliorations'], ['cy-sale', 'vente']],
@@ -121077,6 +121147,93 @@ const Pad = {
       if (/(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 2) return el;
     }
     return scope.root ? scope.root.querySelector('.panel-body') : null;
+  },
+};
+
+</script>
+<script>
+'use strict';
+// ─── Silk & Cannons · la barre au pouce (téléphone, tablette : commandes tactiles en mer) ───
+// On pose le pouce n'importe où sur la moitié gauche de l'écran : la barre vient sous lui. En glissant, le navire prend le
+// cap que montre le pouce (Input.aim, en radians comme le monde : la caméra ne tourne pas, le haut de l'écran est le nord) ;
+// la distance au point de départ règle la toile : près du centre voiles ferlées, plus loin mi-voile, au bord toute voile
+// (Input.sailTo). Pouce levé, le navire garde son cap et sa toile. Un toucher sans glisser ne change rien (le pilote reste
+// engagé). Au repos, la barre attend en bas à gauche, à demi effacée, avec la toile envoyée.
+// (07/10/2026, demande d'Adrien : les quatre flèches n'étaient pas intuitives ; seulement là où sont les commandes tactiles)
+const STICK = { dead: 10, z1: 28, z2: 48, r: 60 };   // en pixels CSS : zone morte, bords des zones de toile, course du pouce
+
+const Stick = {
+  el: null, base: null, knob: null, lbl: null,
+  id: null,       // le doigt qui tient la barre (pointerId)
+  ox: 0, oy: 0,   // où il s'est posé, dans la zone
+  live: false,    // sorti de la zone morte : il commande
+  want: null,     // la toile demandée par le pouce
+  shown: -1,      // la toile affichée
+  tip: null,      // l'invite affichée (barre jamais encore utilisée)
+
+  init() {
+    const el = this.el = document.getElementById('stick');
+    this.base = el.querySelector('.st-base'); this.knob = el.querySelector('.st-knob'); this.lbl = el.querySelector('.st-lbl');
+    el.addEventListener('pointerdown', e => this.down(e));
+    el.addEventListener('pointermove', e => this.move(e));
+    // (lostpointercapture : le doigt levé pendant qu'une étape du guide arrête les clics)
+    for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) el.addEventListener(ev, e => { if (e.pointerId === this.id) this.reset(); });
+  },
+  down(e) {
+    // (un doigt perdu sans qu'on l'apprenne ne bloque pas la barre)
+    if (this.id != null && !this.el.hasPointerCapture(this.id)) this.reset();
+    if (this.id != null) return;
+    e.preventDefault();
+    this.id = e.pointerId;
+    try { this.el.setPointerCapture(e.pointerId); } catch (err) { /* doigt déjà levé */ }
+    const z = this.el.getBoundingClientRect();
+    this.ox = e.clientX - z.left; this.oy = e.clientY - z.top; this.live = false;
+    this.base.style.setProperty('--x', this.ox + 'px'); this.base.style.setProperty('--y', this.oy + 'px');
+    this.knobAt(0, 0);
+    this.el.classList.add('held');
+    Bus.emit('audio-unlock');
+  },
+  move(e) {
+    if (e.pointerId !== this.id) return;
+    const z = this.el.getBoundingClientRect();
+    const dx = e.clientX - z.left - this.ox, dy = e.clientY - z.top - this.oy, d = Math.hypot(dx, dy);
+    const k = d > STICK.r ? STICK.r / d : 1;
+    this.knobAt(dx * k, dy * k);
+    if (!this.live && d < STICK.dead) return;
+    if (!this.live && !Game.global.stickUsed) { Game.global.stickUsed = 1; Game.saveGlobal(); }   // (l'invite au repos s'efface pour de bon)
+    this.live = true;
+    this.el.classList.add('live');
+    // (revenu tout près du centre : voiles ferlées, le cap reste le dernier montré)
+    if (d >= STICK.dead) { Input.aim = Math.atan2(dy, dx); this.knob.style.setProperty('--a', Input.aim + 'rad'); }
+    const sail = d < STICK.z1 ? 0 : d < STICK.z2 ? 1 : 2;
+    if (sail !== this.want) { this.want = sail; Input.sailTo = sail; UI.buzz(8); }
+  },
+  knobAt(x, y) { this.knob.style.setProperty('--kx', x.toFixed(1) + 'px'); this.knob.style.setProperty('--ky', y.toFixed(1) + 'px'); },
+  reset() {
+    if (this.id != null) { try { this.el.releasePointerCapture(this.id); } catch (err) { /* déjà relâché */ } }
+    this.id = null; this.live = false; this.want = null; this.shown = -1;
+    Input.aim = null;
+    this.base.style.removeProperty('--x'); this.base.style.removeProperty('--y');
+    this.knobAt(0, 0);
+    this.el.classList.remove('held', 'live');
+  },
+  // à chaque image en mer : la toile envoyée sur la barre ; tant qu'on ne s'en est jamais servi, une invite au repos
+  frame(p, tick) {
+    const tip = !Game.global.stickUsed && this.id == null;
+    if (p.sail !== this.shown || tip !== this.tip) {
+      this.shown = p.sail; this.tip = tip;
+      this.base.dataset.z = p.sail;
+      this.lbl.textContent = tip ? T('tactile.barreAide') : T('mer.voiles.' + p.sail);
+      this.el.classList.toggle('invite', tip);
+    }
+    // (au-dessus de ce que le HUD de mer pose en bas à gauche : tout le HUD en portrait, la boussole sur tablette ; rien en
+    //  paysage sur téléphone, où la boussole est en haut)
+    if (tick % 15 === 0) {
+      const sh = UI.el.seahud, sl = this.sl || (this.sl = sh.querySelector('.sh-left'));
+      const top = (document.body.classList.contains('portrait') ? sh : sl).getBoundingClientRect().top;
+      if (!sh.hidden && top > innerHeight * 0.5) this.el.style.setProperty('--st-bot', Math.round(innerHeight - top + 12) + 'px');
+      else this.el.style.removeProperty('--st-bot');
+    }
   },
 };
 
@@ -134373,7 +134530,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen):not(:has(#loading)) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 06/10/2026 à 23:31</div>
+<div id="maj">Mise à jour : 07/10/2026 à 10:44</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
