@@ -4,11 +4,11 @@ Les fichiers livrés sont des sous-ensembles (seuls les caractères du jeu), obt
 The files are subsets (only the characters the game displays), made with the Google Fonts API.
 
 Manrope : 5 fichier(s)
-Shippori Mincho B1 : 28 fichier(s)
+Shippori Mincho B1 : 47 fichier(s)
 Noto Serif : 2 fichier(s)
-Noto Sans SC, Noto Sans TC, Noto Sans JP, Noto Sans KR (Noto Sans CJK) : 29 fichier(s)
-Noto Serif SC, Noto Serif TC, Noto Serif KR (Noto Serif CJK) : 22 fichier(s)
-Noto Sans Symbols 2 : 1 fichier(s)
+Noto Sans SC, Noto Sans TC, Noto Sans JP, Noto Sans KR (Noto Sans CJK) : 48 fichier(s)
+Noto Serif SC, Noto Serif TC, Noto Serif KR (Noto Serif CJK) : 36 fichier(s)
+Noto Sans Symbols 2 : 4 fichier(s)
 Noto Sans Math : 1 fichier(s)
 
 ==================== Manrope ====================
