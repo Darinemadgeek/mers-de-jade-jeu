@@ -115894,7 +115894,7 @@ const Sound = {
   play(name) {
     if (!this.ctx) { this.pending = name; return; }
     const key = THEME_OF[name], sea = typeof MUSIC_SONGS !== 'undefined' && MUSIC_SONGS[Seas.current];
-    if (sea && sea.songs[key]) return this.playTheme(name, sea.songs[key], key);
+    if (sea && sea.songs[key]) return this.playTheme(name, key, sea);
     if (this.themeId) { Music.stop(); this.themeId = null; }
     if (name === 'boss') name = 'battle';
     if (this.songName === name && this.song && this.song.loop) return;
@@ -115909,19 +115909,39 @@ const Sound = {
     this.step = 0;
     this.nextTime = this.ctx.currentTime + 0.12;
   },
-  playTheme(name, def, key) {
-    const style = (Game.global && Game.global.settings.musicStyle) || 'moderne', id = Seas.current + ':' + key + ':' + style;
-    if (this.themeId === id && def.loop) return;
+  // Les variantes d'un thème : même clé, ou la clé suivie d'un suffixe (ex. « port » → port, portA, portB, portC).
+  variantsOf(sea, key) {
+    return Object.keys(sea.songs).filter(id => id === key || (id.indexOf(key) === 0 && /[A-Z0-9]/.test(id[key.length] || '')));
+  },
+  // Thèmes des mers. Pour un thème en boucle à plusieurs variantes (« Au port »…), on en tire une au hasard à chaque arrivée,
+  // sans rejouer celle de l'escale précédente, pour que la musique change d'une escale à l'autre ; on ne redémarre pas tant qu'on reste.
+  playTheme(name, key, sea) {
+    const style = (Game.global && Game.global.settings.musicStyle) || 'moderne';
+    const group = Seas.current + ':' + key, groupId = group + ':' + style, base = sea.songs[key];
+    if (this.themeId === groupId && base.loop) return;   // déjà en cours : on garde la piste en place
+    let songId = key;
+    if (base.loop) {
+      const vars = this.variantsOf(sea, key);
+      if (this.themeGroup === group && vars.indexOf(this.themeVar) >= 0) songId = this.themeVar;   // simple changement de style : on garde la même piste
+      else {
+        this.lastVar = this.lastVar || {};
+        let pool = vars;
+        if (vars.length > 1 && this.lastVar[group]) pool = vars.filter(v => v !== this.lastVar[group]);   // pas deux fois de suite la même
+        songId = pool[Math.floor(Math.random() * pool.length)];
+      }
+    }
+    const def = sea.songs[songId];
     this.song = null;
-    // un jingle interrompt la boucle en cours, qui reprend ensuite
+    // un jingle (victoire/défaite) interrompt la boucle en cours, qui reprend ensuite
     if (!def.loop && this.themeId && this.themeLoop) this.resume = this.themeLoop;
     else if (def.loop) { this.resume = null; this.themeLoop = name; }
-    this.songName = name; this.themeId = id;
-    Music.play(Seas.current, key, style);
+    this.songName = name; this.themeGroup = group; this.themeVar = songId; this.themeId = groupId;
+    (this.lastVar = this.lastVar || {})[group] = songId;
+    Music.play(Seas.current, songId, style);
     clearTimeout(this.resumeT);
     if (!def.loop) {
       const secs = Music.steps(def.ch[0]) * 60 / def.bpm / (def.beat || 4);
-      this.resumeT = setTimeout(() => { if (this.themeId === id) { this.themeId = null; const n = this.resume; this.resume = null; if (n) this.play(n); } }, (secs + 0.6) * 1000);
+      this.resumeT = setTimeout(() => { if (this.themeId === groupId) { this.themeId = null; const n = this.resume; this.resume = null; if (n) this.play(n); } }, (secs + 0.6) * 1000);
     }
   },
   // le style a changé dans les Options : la musique en cours repart dans le nouveau style
@@ -116151,28 +116171,36 @@ const MUSIC_SONGS = {
     kit: { k: 'taikoS', t: 'taiko', s: 'rim', w: 'wood', g: 'gong', h: 'shaker', x: 'gong' },
     songs: {
       title: { label: 'Titre', bpm: 76, loop: true, ch: [
-        { i: 'dizi', role: 'mel', v: 0.8, rev: 0.35, n: 'A4:4 C5:4 D5:4 E5:4 | G5:6 E5:2 D5:8 | E5:4 D5:2 C5:2 A4:8 | G4:4 A4:4 C5:8 | A5:6 G5:2 E5:4 D5:4 | E5:4 G5:4 A5:8 | G5:4 E5:2 D5:2 C5:4 D5:4 | A4:16' },
+        { i: 'dizi', role: 'mel', v: 0.8, rev: 0.35, n: 'A4:4 C5:4 D5:4 E5:4 | G5:6 E5:2 D5:8 | E5:4 D5:2 C5:2 A4:8 | G4:4 A4:4 C5:8 | A5:6 G5:2 E5:4 D5:4 | E5:4 G5:4 A5:8 | G5:4 E5:2 D5:2 C5:4 D5:4 | A4:16',
+          alt: ['E5:8 A5:4 G5:4 | D5:8 G5:8 | E5:4 G5:4 C6:4 G5:4 | A5:4 G5:4 D5:8 | C6:4 A5:4 E5:4 C5:4 | G5:8 E5:4 C5:4 | D5:8 G4:4 D5:4 | A4:12 E5:4'] },
         { i: 'guzheng', role: 'harm', v: 0.55, rev: 0.3, n: 'A3:2 E4:2 A4:2 C5:2 E5:2 C5:2 A4:2 E4:2 | G3:2 D4:2 G4:2 A4:2 D5:2 A4:2 G4:2 D4:2 | C4:2 G4:2 C5:2 E5:2 G5:2 E5:2 C5:2 G4:2 | G3:2 D4:2 G4:2 D5:2 G4:2 D4:2 G3:2 D4:2 | A3:2 E4:2 A4:2 C5:2 E5:2 C5:2 A4:2 E4:2 | C4:2 G4:2 C5:2 E5:2 G5:2 E5:2 C5:2 G4:2 | G3:2 D4:2 G4:2 A4:2 D5:2 A4:2 G4:2 D4:2 | A3:2 E4:2 A4:2 C5:2 E5:4 r:4' },
         { i: 'gbass', role: 'bass', v: 0.7, n: 'A2:16 | G2:16 | C3:16 | G2:16 | A2:16 | C3:16 | G2:16 | A2:16' },
         { i: 'drums', role: 'drum', v: 0.6, n: 'g.......w.......k.......w...w...k.......w.......k.......w...w.w.g.......w.......k.......w...w...k.......w.......k.......k...w...' },
       ] },
       port: { label: 'Au port', bpm: 108, loop: true, ch: [
-        { i: 'dizi', role: 'mel', v: 0.75, rev: 0.25, n: 'C5:2 D5:2 E5:2 G5:2 A5:4 G5:4 | E5:2 D5:2 C5:2 D5:2 E5:8 | G5:2 A5:2 G5:2 E5:2 D5:4 C5:4 | D5:2 E5:2 D5:2 C5:2 A4:8 | C5:2 D5:2 E5:2 G5:2 A5:4 C6:4 | D6:2 C6:2 A5:2 G5:2 A5:8 | G5:2 E5:2 D5:2 E5:2 G5:4 D5:4 | C5:12 r:4' },
+        { i: 'dizi', role: 'mel', v: 0.75, rev: 0.25, n: 'C5:2 D5:2 E5:2 G5:2 A5:4 G5:4 | E5:2 D5:2 C5:2 D5:2 E5:8 | G5:2 A5:2 G5:2 E5:2 D5:4 C5:4 | D5:2 E5:2 D5:2 C5:2 A4:8 | C5:2 D5:2 E5:2 G5:2 A5:4 C6:4 | D6:2 C6:2 A5:2 G5:2 A5:8 | G5:2 E5:2 D5:2 E5:2 G5:4 D5:4 | C5:12 r:4',
+          alt: ['G5:4 E5:4 C5:4 E5:4 | G5:6 A5:2 C6:8 | A5:4 G5:4 E5:4 C5:4 | E5:8 A4:4 C5:4 | C5:4 E5:4 G5:4 C6:4 | A5:6 E5:2 C5:8 | D5:4 G5:4 D5:4 G4:4 | E5:4 C5:4 G4:4 C5:4'] },
         { i: 'guzheng', role: 'harm', v: 0.45, rev: 0.2, n: 'r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 | r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 | r:2 D4+G4:2 r:2 D4+G4:2 r:2 D4+G4:2 r:2 D4+G4:2 | r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 C4+G4:2' },
         { i: 'gbass', role: 'bass', v: 0.65, n: 'C3:4 G3:4 C3:4 G3:4 | C3:4 G3:4 C3:4 G3:4 | C3:4 G3:4 C3:4 G3:4 | A2:4 E3:4 A2:4 E3:4 | C3:4 G3:4 C3:4 G3:4 | A2:4 E3:4 A2:4 E3:4 | G2:4 D3:4 G2:4 D3:4 | C3:4 G3:4 C3:8' },
-        { i: 'drums', role: 'drum', v: 0.5, n: 'k...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.wwk...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.ww' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'k...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.wwk...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.ww',
+          alt: ['k.w.h.w.k.w.w...k.w.h.w.k.w.w...k.w.h.w.k.w.w...k.w.h.w.k.w.hwhhk.w.h.w.k.w.w...k.w.h.w.k.w.w...k.w.h.w.k.w.w...k.w.h.w.k.w.hwhh'] },
       ] },
       sea: { label: 'En mer', bpm: 66, loop: true, ch: [
-        { i: 'erhu', role: 'mel', v: 0.7, rev: 0.45, n: 'A4:8 C5:4 D5:4 | E5:12 D5:4 | C5:8 A4:4 G4:4 | A4:16 | E5:8 G5:4 A5:4 | G5:12 E5:4 | D5:8 E5:4 D5:2 C5:2 | A4:16' },
+        { i: 'erhu', role: 'mel', v: 0.7, rev: 0.45, n: 'A4:8 C5:4 D5:4 | E5:12 D5:4 | C5:8 A4:4 G4:4 | A4:16 | E5:8 G5:4 A5:4 | G5:12 E5:4 | D5:8 E5:4 D5:2 C5:2 | A4:16',
+          alt: ['A4:4 A4:4 C5:4 E5:4 | G5:8 E5:4 C5:4 | D5:4 D5:4 G4:4 D5:4 | E5:8 C5:4 A4:4 | C5:4 E5:4 G5:4 A5:4 | G5:8 D5:4 G4:4 | D5:4 E5:4 D5:4 C5:4 | A4:16',
+            'E5:12 A5:4 | G5:12 E5:4 | D5:12 G5:4 | A5:8 E5:8 | C6:8 G5:8 | A5:8 D5:8 | G5:8 D5:8 | E5:8 A4:8'] },
         { i: 'pad', role: 'pad', v: 0.5, rev: 0.5, n: 'A3+E4:16 | C4+G4:16 | G3+D4:16 | A3+E4:16 | C4+G4:16 | G3+D4:16 | G3+D4:16 | A3+E4:16' },
         { i: 'guzheng', role: 'harm', v: 0.4, rev: 0.4, n: 'A3:4 E4:4 A4:8 | C4:4 G4:4 C5:8 | G3:4 D4:4 G4:8 | A3:4 E4:4 A4:8 | C4:4 G4:4 C5:8 | G3:4 D4:4 G4:8 | G3:4 D4:4 G4:8 | A3:4 E4:4 A4:8' },
-        { i: 'drums', role: 'drum', v: 0.35, n: 'g.......................w...............................w.......g...............................w...............................' },
+        { i: 'drums', role: 'drum', v: 0.35, n: 'g.......................w...............................w.......g...............................w...............................',
+          alt: ['g...............t.......w.......g...............t.......w.......g...............t.......w.......g...............t.......w.......'] },
       ] },
       battle: { label: 'Combat', bpm: 144, loop: true, ch: [
-        { i: 'erhu', role: 'mel', v: 0.75, rev: 0.2, n: 'E5:2 E5:2 D5:2 E5:2 G5:4 E5:4 | D5:2 D5:2 B4:2 D5:2 E5:4 B4:4 | G4:2 A4:2 B4:2 D5:2 E5:4 D5:2 B4:2 | A4:4 B4:2 A4:2 G4:4 E4:4 | E5:2 E5:2 G5:2 A5:2 B5:4 A5:4 | G5:2 A5:2 G5:2 E5:2 D5:4 E5:4 | B4:2 D5:2 E5:2 G5:2 A5:2 G5:2 E5:2 D5:2 | E5:8 E4:8' },
+        { i: 'erhu', role: 'mel', v: 0.75, rev: 0.2, n: 'E5:2 E5:2 D5:2 E5:2 G5:4 E5:4 | D5:2 D5:2 B4:2 D5:2 E5:4 B4:4 | G4:2 A4:2 B4:2 D5:2 E5:4 D5:2 B4:2 | A4:4 B4:2 A4:2 G4:4 E4:4 | E5:2 E5:2 G5:2 A5:2 B5:4 A5:4 | G5:2 A5:2 G5:2 E5:2 D5:4 E5:4 | B4:2 D5:2 E5:2 G5:2 A5:2 G5:2 E5:2 D5:2 | E5:8 E4:8',
+          alt: ['E5:4 B4:4 E5:4 G5:4 | D5:8 A4:4 D5:4 | B5:4 G5:4 E5:4 B4:4 | A5:4 E5:4 A4:4 E5:4 | B5:4 G5:4 E5:4 B4:4 | D5:4 G5:4 D5:4 B4:4 | A5:4 D5:4 A4:4 D5:4 | E5:8 E4:8'] },
         { i: 'guzheng', role: 'harm', v: 0.4, rev: 0.15, n: 'E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 | D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 | G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 | A3:1 E4:1 A4:1 E4:1 A3:1 E4:1 A4:1 E4:1 A3:1 E4:1 A4:1 E4:1 A3:1 E4:1 A4:1 E4:1 | E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 | G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 G4:1 D5:1 G5:1 D5:1 | D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 D4:1 A4:1 D5:1 A4:1 | E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1 E4:1 B4:1 E5:1 B4:1' },
         { i: 'gbass', role: 'bass', v: 0.7, n: 'E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 | A2:2 A3:2 A2:2 A3:2 A2:2 A3:2 A2:2 A3:2 | E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | E2:2 E3:2 E2:2 E3:2 E2:8' },
-        { i: 'drums', role: 'drum', v: 0.65, n: 't.k.s.k.t.k.s.k.t.k.s.k.t.t.s.k.t.k.s.k.t.k.s.k.t.k.s.k.t.t.s.s.t.k.s.k.t.k.s.k.t.k.s.k.t.t.s.k.t.k.s.k.t.k.s.k.t.k.t.k.t.t.t.t.' },
+        { i: 'drums', role: 'drum', v: 0.65, n: 't.k.s.k.t.k.s.k.t.k.s.k.t.t.s.k.t.k.s.k.t.k.s.k.t.k.s.k.t.t.s.s.t.k.s.k.t.k.s.k.t.k.s.k.t.t.s.k.t.k.s.k.t.k.s.k.t.k.t.k.t.t.t.t.',
+          alt: ['t.k.t.k.s.k.s.kkt.k.t.k.s.k.s.kkt.k.s.k.t.ks.ksst.k.t.k.s.k.s.kkt.k.t.k.s.k.s.kkt.k.t.k.s.k.s.kkt.k.s.k.t.ks.ksst.k.s.k.t.ks.kss'] },
       ] },
       boss: { label: 'Boss : le Dragon Écarlate', bpm: 152, loop: true, ch: [
         { i: 'erhu', role: 'mel', v: 0.8, rev: 0.25, n: 'E4:4 F4:4 E4:4 r:4 | B4:4 C5:2 B4:2 A4:8 | E4:4 F4:4 A4:4 B4:4 | C5:4 B4:2 A4:2 F4:4 E4:4 | E5:4 F5:4 E5:2 D5:2 C5:4 | B4:4 C5:2 B4:2 A4:4 F4:4 | E4:2 F4:2 A4:2 B4:2 C5:2 B4:2 A4:2 F4:2 | E4:16' },
@@ -116200,27 +116228,36 @@ const MUSIC_SONGS = {
     kit: { k: 'bodhran', s: 'snare', h: 'shaker', t: 'tom', x: 'crash', b: 'tamb' },
     songs: {
       title: { label: 'Titre', bpm: 96, loop: true, ch: [
-        { i: 'fiddle', role: 'mel', v: 0.75, rev: 0.25, n: 'A4:2 D5:2 D5:2 E5:2 F5:4 E5:2 D5:2 | C5:4 A4:4 C5:4 E5:4 | D5:2 F5:2 A5:2 G5:2 F5:4 E5:2 D5:2 | E5:8 A4:8 | A4:2 D5:2 D5:2 E5:2 F5:4 G5:2 A5:2 | C6:4 A5:4 G5:4 E5:4 | F5:2 E5:2 D5:2 C5:2 E5:4 C5:4 | D5:12 r:4' },
+        { i: 'fiddle', role: 'mel', v: 0.75, rev: 0.25, n: 'A4:2 D5:2 D5:2 E5:2 F5:4 E5:2 D5:2 | C5:4 A4:4 C5:4 E5:4 | D5:2 F5:2 A5:2 G5:2 F5:4 E5:2 D5:2 | E5:8 A4:8 | A4:2 D5:2 D5:2 E5:2 F5:4 G5:2 A5:2 | C6:4 A5:4 G5:4 E5:4 | F5:2 E5:2 D5:2 C5:2 E5:4 C5:4 | D5:12 r:4',
+          alt: ['D5:4 F5:4 A5:4 F5:4 | E5:8 G5:4 E5:4 | A5:4 F5:4 D5:4 A4:4 | E5:8 C5:4 A4:4 | D5:4 A4:4 D5:4 F5:4 | G5:8 E5:4 C5:4 | E5:4 G5:4 C6:4 G5:4 | A5:4 F5:4 D5:8'] },
         { i: 'guitar', role: 'harm', v: 0.5, rev: 0.2, n: 'D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:4 D3+A3+D4+F4:4 | C3+G3+C4+E4:4 C3+G3+C4+E4:2 C3+G3+C4+E4:2 C3+G3+C4+E4:4 C3+G3+C4+E4:4 | D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:4 D3+A3+D4+F4:4 | A2+E3+A3+C4:4 A2+E3+A3+C4:2 A2+E3+A3+C4:2 A2+E3+A3+C4:4 A2+E3+A3+C4:4 | D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:4 D3+A3+D4+F4:4 | C3+G3+C4+E4:4 C3+G3+C4+E4:2 C3+G3+C4+E4:2 C3+G3+C4+E4:4 C3+G3+C4+E4:4 | C3+G3+C4+E4:4 C3+G3+C4+E4:2 C3+G3+C4+E4:2 C3+G3+C4+E4:4 C3+G3+C4+E4:4 | D3+A3+D4+F4:4 D3+A3+D4+F4:2 D3+A3+D4+F4:2 D3+A3+D4+F4:8' },
         { i: 'bass', role: 'bass', v: 0.65, n: 'D2:4 A2:4 D2:4 A2:4 | C2:4 G2:4 C2:4 G2:4 | D2:4 A2:4 D2:4 A2:4 | A1:4 E2:4 A1:4 E2:4 | D2:4 A2:4 D2:4 A2:4 | C2:4 G2:4 C2:4 G2:4 | C2:4 G2:4 C2:4 G2:4 | D2:4 A2:4 D2:8' },
-        { i: 'drums', role: 'drum', v: 0.55, n: 'x...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s.s.k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.s.s.s.' },
+        { i: 'drums', role: 'drum', v: 0.55, n: 'x...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s.s.k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.k.s...k...h.s.k.s.s.s.',
+          alt: ['x.s.h.s.k.k.s...k.s.h.s.k.k.s...k.s.h.s.k.k.s...k.s.h.s.k.s.ssssx.s.h.s.k.k.s...k.s.h.s.k.k.s...k.s.h.s.k.k.s...k.s.h.s.k.s.ssss'] },
       ] },
       port: { label: 'Au port (gigue)', bpm: 116, beat: 3, loop: true, ch: [
-        { i: 'fiddle', role: 'mel', v: 0.7, rev: 0.2, n: 'G4:1 B4:1 D5:1 G5:2 D5:1 | E5:1 D5:1 B4:1 D5:3 | C5:1 E5:1 G5:1 E5:2 C5:1 | B4:1 D5:1 G4:1 B4:3 | A4:1 B4:1 C5:1 D5:2 B4:1 | C5:1 A4:1 F#4:1 A4:3 | G4:1 B4:1 D5:1 E5:1 D5:1 B4:1 | A4:3 D4:3 | G5:1 F#5:1 E5:1 D5:2 B4:1 | C5:1 E5:1 G5:1 E5:3 | D5:1 B4:1 G4:1 B4:2 D5:1 | E5:1 D5:1 C5:1 B4:3 | C5:1 B4:1 A4:1 B4:2 G4:1 | A4:1 B4:1 C5:1 D5:3 | E5:1 D5:1 B4:1 A4:1 B4:1 A4:1 | G4:6' },
+        { i: 'fiddle', role: 'mel', v: 0.7, rev: 0.2, n: 'G4:1 B4:1 D5:1 G5:2 D5:1 | E5:1 D5:1 B4:1 D5:3 | C5:1 E5:1 G5:1 E5:2 C5:1 | B4:1 D5:1 G4:1 B4:3 | A4:1 B4:1 C5:1 D5:2 B4:1 | C5:1 A4:1 F#4:1 A4:3 | G4:1 B4:1 D5:1 E5:1 D5:1 B4:1 | A4:3 D4:3 | G5:1 F#5:1 E5:1 D5:2 B4:1 | C5:1 E5:1 G5:1 E5:3 | D5:1 B4:1 G4:1 B4:2 D5:1 | E5:1 D5:1 C5:1 B4:3 | C5:1 B4:1 A4:1 B4:2 G4:1 | A4:1 B4:1 C5:1 D5:3 | E5:1 D5:1 B4:1 A4:1 B4:1 A4:1 | G4:6',
+          alt: ['G4:2 B4:2 D5:2 | G5:3 D5:3 | E5:3 C5:3 | D5:3 B4:3 | A5:3 F#5:3 | D5:3 A4:3 | B4:3 G4:3 | A4:3 D5:3 | G5:3 B4:3 | E5:3 G5:3 | D5:3 G4:3 | C5:3 E5:3 | A4:3 C5:3 | F#5:3 A5:3 | A4:3 D5:3 | G4:6'] },
         { i: 'guitar', role: 'harm', v: 0.4, rev: 0.15, n: 'r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 C4+E4+G4:2 r:1 C4+E4+G4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 C4+E4+G4:2 r:1 C4+E4+G4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2 | r:1 C4+E4+G4:2 r:1 C4+E4+G4:2 | r:1 A3+C4+E4:2 r:1 A3+C4+E4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 D4+F#4+A4:2 r:1 D4+F#4+A4:2 | r:1 G3+B3+D4:2 r:1 G3+B3+D4:2' },
         { i: 'bass', role: 'bass', v: 0.6, n: 'G2:3 D3:3 | G2:3 D3:3 | C3:3 G2:3 | G2:3 D3:3 | D3:3 A2:3 | D3:3 A2:3 | G2:3 D3:3 | D3:3 A2:3 | G2:3 D3:3 | C3:3 G2:3 | G2:3 D3:3 | C3:3 G2:3 | A2:3 E3:3 | D3:3 A2:3 | D3:3 A2:3 | G2:3 G2:3' },
-        { i: 'drums', role: 'drum', v: 0.5, n: 'k.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hsbhk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.sbsb' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'k.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hsbhk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.hs.hk.sbsb',
+          alt: ['k.sh.bk.hb.bk.sh.bk.hb.bk.sh.bk.hb.bk.sh.bk.bbbbk.sh.bk.hb.bk.sh.bk.hb.bk.sh.bk.hb.bk.sh.bk.bsbb'] },
       ] },
       sea: { label: 'En mer (valse de marins)', bpm: 84, beat: 2, loop: true, ch: [
-        { i: 'whistle', role: 'mel', v: 0.65, rev: 0.4, n: 'E5:2 G5:2 A5:2 | B5:4 A5:2 | G5:2 E5:2 D5:2 | E5:6 | G5:2 A5:2 B5:2 | D6:4 B5:2 | A5:2 G5:2 F#5:2 | E5:6 | B4:2 E5:2 F#5:2 | G5:4 F#5:2 | E5:2 D5:2 B4:2 | A4:6 | B4:2 D5:2 E5:2 | G5:4 F#5:2 | E5:2 D5:2 F#5:2 | E5:6' },
+        { i: 'whistle', role: 'mel', v: 0.65, rev: 0.4, n: 'E5:2 G5:2 A5:2 | B5:4 A5:2 | G5:2 E5:2 D5:2 | E5:6 | G5:2 A5:2 B5:2 | D6:4 B5:2 | A5:2 G5:2 F#5:2 | E5:6 | B4:2 E5:2 F#5:2 | G5:4 F#5:2 | E5:2 D5:2 B4:2 | A4:6 | B4:2 D5:2 E5:2 | G5:4 F#5:2 | E5:2 D5:2 F#5:2 | E5:6',
+          alt: ['E5:2 G5:2 B5:2 | B5:4 G5:2 | D5:2 G5:2 D5:2 | E5:4 B4:2 | G5:2 B5:2 D6:2 | B5:6 | A5:2 F#5:2 D5:2 | E5:6 | G5:2 E5:2 B4:2 | C5:2 E5:2 G5:2 | D5:2 B4:2 G4:2 | A4:2 D5:2 F#5:2 | G5:4 D5:2 | E5:2 G5:2 C5:2 | F#5:2 A5:2 D5:2 | E5:6',
+            'E5:6 | G5:4 E5:2 | D5:6 | E5:4 G4:2 | G5:6 | D5:4 B4:2 | A4:6 | B4:4 E5:2 | E5:6 | G5:4 E5:2 | D5:6 | F#5:4 A4:2 | G5:6 | E5:4 C5:2 | D5:4 A4:2 | E5:6'] },
         { i: 'guitar', role: 'harm', v: 0.4, rev: 0.3, n: 'E2:2 B3+E4+G4:2 B3+E4+G4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | D3:2 A3+D4+F#4:2 A3+D4+F#4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2 | C3:2 C4+E4+G4:2 C4+E4+G4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | D3:2 A3+D4+F#4:2 A3+D4+F#4:2 | G2:2 B3+D4+G4:2 B3+D4+G4:2 | C3:2 C4+E4+G4:2 C4+E4+G4:2 | D3:2 A3+D4+F#4:2 A3+D4+F#4:2 | E2:2 B3+E4+G4:2 B3+E4+G4:2' },
-        { i: 'drums', role: 'drum', v: 0.3, n: 'k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....' },
+        { i: 'drums', role: 'drum', v: 0.3, n: 'k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....k.h.h.k.....',
+          alt: ['k.h.s.h.k...k.h.s.h.k...k.h.s.h.k...k.h.s.h.khh.k.h.s.h.k...k.h.s.h.k...k.h.s.h.k...k.h.s.h.khh.'] },
       ] },
       battle: { label: 'Combat', bpm: 152, loop: true, ch: [
-        { i: 'fiddle', role: 'mel', v: 0.75, rev: 0.15, n: 'E5:2 B4:2 E5:2 F#5:2 G5:2 F#5:2 E5:2 D5:2 | B4:2 A4:2 B4:2 D5:2 E5:4 B4:4 | E5:2 B4:2 E5:2 G5:2 A5:2 G5:2 F#5:2 E5:2 | D5:2 B4:2 A4:2 F#4:2 E4:8 | G5:2 F#5:2 G5:2 A5:2 B5:4 A5:2 G5:2 | F#5:2 E5:2 D5:2 F#5:2 A5:4 F#5:4 | G5:2 E5:2 B4:2 E5:2 F#5:2 D5:2 A4:2 D5:2 | E5:4 B4:2 G4:2 E4:8' },
+        { i: 'fiddle', role: 'mel', v: 0.75, rev: 0.15, n: 'E5:2 B4:2 E5:2 F#5:2 G5:2 F#5:2 E5:2 D5:2 | B4:2 A4:2 B4:2 D5:2 E5:4 B4:4 | E5:2 B4:2 E5:2 G5:2 A5:2 G5:2 F#5:2 E5:2 | D5:2 B4:2 A4:2 F#4:2 E4:8 | G5:2 F#5:2 G5:2 A5:2 B5:4 A5:2 G5:2 | F#5:2 E5:2 D5:2 F#5:2 A5:4 F#5:4 | G5:2 E5:2 B4:2 E5:2 F#5:2 D5:2 A4:2 D5:2 | E5:4 B4:2 G4:2 E4:8',
+          alt: ['E5:4 G5:4 B5:4 G5:4 | E5:4 B4:4 E5:8 | B5:4 G5:4 E5:4 B4:4 | A5:4 F#5:4 D5:8 | G5:4 D5:4 B4:4 G5:4 | F#5:4 A5:4 D5:4 A4:4 | E5:4 G5:4 C6:4 G5:4 | E5:8 E4:8'] },
         { i: 'guitar', role: 'harm', v: 0.4, rev: 0.1, n: 'r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 | r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 | r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 | r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 | r:2 G3+B3+D4+G4:2 r:2 G3+B3+D4+G4:2 r:2 G3+B3+D4+G4:2 r:2 G3+B3+D4+G4:2 | r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 r:2 D3+A3+D4+F#4:2 | r:2 C3+G3+C4+E4:2 r:2 C3+G3+C4+E4:2 r:2 C3+G3+C4+E4:2 r:2 C3+G3+C4+E4:2 | r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2 r:2 E3+B3+E4+G4:2' },
         { i: 'bass', role: 'bass', v: 0.7, n: 'E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 E2:2 E3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 G2:2 G3:2 | D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 D2:2 D3:2 | C2:2 C3:2 C2:2 C3:2 C2:2 C3:2 C2:2 C3:2 | E2:2 E3:2 E2:2 E3:2 E2:8' },
-        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.k.ssk.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.k.s.s.k.k.ssss' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.k.ssk.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.s.k.s.k.s.kks.k.k.s.s.k.k.ssss',
+          alt: ['k.k.s...k.k.s...k.k.s...k.k.s...k.k.s...k.k.s...k.k.s...k.s.ssssk.k.s...k.k.s...k.k.s...k.k.s...k.k.s...k.k.s...k.k.s...k.s.ssss'] },
       ] },
       boss: { label: 'Boss : Sans-Visage / l\'Almirante', bpm: 132, loop: true, ch: [
         { i: 'cello', role: 'mel', v: 0.8, rev: 0.25, n: 'D4:4 A4:4 F4:4 D4:4 | C#4:4 E4:4 A3:8 | D4:2 E4:2 F4:2 G4:2 A4:4 Bb4:4 | A4:8 C#4:8 | D5:4 C#5:2 Bb4:2 A4:4 F4:4 | G4:4 F4:2 E4:2 F4:4 D4:4 | Bb3:4 C#4:4 E4:4 G4:4 | D4:16' },
@@ -116248,28 +116285,36 @@ const MUSIC_SONGS = {
     kit: { k: 'tabor', b: 'tamb', s: 'snare', t: 'doum', h: 'shaker', x: 'crash' },
     songs: {
       title: { label: 'Titre (pavane)', bpm: 66, loop: true, ch: [
-        { i: 'recorder', role: 'mel', v: 0.75, rev: 0.45, n: 'D5:8 E5:4 F5:4 | G5:6 F5:2 E5:8 | D5:4 C5:4 D5:4 A4:4 | B4:4 C5:4 A4:8 | F5:8 G5:4 A5:4 | G5:6 F5:2 E5:4 D5:4 | C5:4 E5:4 D5:4 C#5:4 | D5:16' },
+        { i: 'recorder', role: 'mel', v: 0.75, rev: 0.45, n: 'D5:8 E5:4 F5:4 | G5:6 F5:2 E5:8 | D5:4 C5:4 D5:4 A4:4 | B4:4 C5:4 A4:8 | F5:8 G5:4 A5:4 | G5:6 F5:2 E5:4 D5:4 | C5:4 E5:4 D5:4 C#5:4 | D5:16',
+          alt: ['A4:4 D5:4 F5:4 A5:4 | G5:8 E5:4 C5:4 | A5:4 F5:4 D5:4 A4:4 | B4:4 D5:4 G5:4 D5:4 | A5:4 F5:4 C5:4 A4:4 | C5:4 E5:4 G5:4 E5:4 | E5:4 C#5:4 A4:4 E5:4 | F5:4 D5:4 A4:4 D5:4'] },
         { i: 'lute', role: 'harm', v: 0.55, rev: 0.35, n: 'D3:2 A3:2 D4:2 F4:2 A4:2 F4:2 D4:2 A3:2 | C3:2 G3:2 C4:2 E4:2 G4:2 E4:2 C4:2 G3:2 | D3:2 A3:2 D4:2 F4:2 A4:2 F4:2 D4:2 A3:2 | G2:2 D3:2 G3:2 B3:2 D4:2 B3:2 G3:2 D3:2 | F2:2 C3:2 F3:2 A3:2 C4:2 A3:2 F3:2 C3:2 | C3:2 G3:2 C4:2 E4:2 G4:2 E4:2 C4:2 G3:2 | A2:2 E3:2 A3:2 C#4:2 E4:2 C#4:2 A3:2 E3:2 | D3:2 A3:2 D4:2 F4:2 A4:4 r:4' },
         { i: 'drone', role: 'pad', v: 0.45, rev: 0.4, n: 'D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16' },
         { i: 'drums', role: 'drum', v: 0.45, n: 'k...............k.......k...k...k.......k.......k.......k...k...k.......k...k...k.......k...k...k.......k...k...k.......k.......' },
       ] },
       port: { label: 'Au port (saltarello)', bpm: 120, beat: 3, loop: true, ch: [
-        { i: 'recorder', role: 'mel', v: 0.7, rev: 0.3, n: 'D5:2 E5:1 F5:2 E5:1 | D5:2 C5:1 A4:3 | C5:2 D5:1 E5:2 F5:1 | G5:3 E5:3 | F5:2 G5:1 A5:2 G5:1 | F5:2 E5:1 D5:3 | C5:2 A4:1 C5:2 E5:1 | D5:6 | A5:2 G5:1 F5:2 E5:1 | F5:2 G5:1 A5:3 | G5:2 F5:1 E5:2 D5:1 | C5:3 E5:3 | D5:2 F5:1 A5:2 F5:1 | G5:2 E5:1 C5:3 | D5:2 C5:1 A4:2 C#5:1 | D5:6' },
+        { i: 'recorder', role: 'mel', v: 0.7, rev: 0.3, n: 'D5:2 E5:1 F5:2 E5:1 | D5:2 C5:1 A4:3 | C5:2 D5:1 E5:2 F5:1 | G5:3 E5:3 | F5:2 G5:1 A5:2 G5:1 | F5:2 E5:1 D5:3 | C5:2 A4:1 C5:2 E5:1 | D5:6 | A5:2 G5:1 F5:2 E5:1 | F5:2 G5:1 A5:3 | G5:2 F5:1 E5:2 D5:1 | C5:3 E5:3 | D5:2 F5:1 A5:2 F5:1 | G5:2 E5:1 C5:3 | D5:2 C5:1 A4:2 C#5:1 | D5:6',
+          alt: ['D5:3 A5:3 | F5:3 D5:3 | E5:3 C5:3 | G5:3 E5:3 | A5:3 F5:3 | D5:3 A4:3 | C5:3 A4:3 | D5:3 F5:3 | A5:3 D5:3 | F5:3 C5:3 | E5:3 G5:3 | C5:3 E5:3 | D5:3 F5:3 | G5:3 E5:3 | E5:3 C#5:3 | D5:6'] },
         { i: 'lute', role: 'harm', v: 0.45, rev: 0.25, n: 'D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | F3+A3+C4:2 F3+A3+C4:1 F3+A3+C4:2 F3+A3+C4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | A3+C4+E4:2 A3+C4+E4:1 A3+C4+E4:2 A3+C4+E4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | F3+A3+C4:2 F3+A3+C4:1 F3+A3+C4:2 F3+A3+C4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:2 D4+F4+A4:1 | C4+E4+G4:2 C4+E4+G4:1 C4+E4+G4:2 C4+E4+G4:1 | A3+C#4+E4:2 A3+C#4+E4:1 A3+C#4+E4:2 A3+C#4+E4:1 | D4+F4+A4:2 D4+F4+A4:1 D4+F4+A4:3' },
         { i: 'drone', role: 'pad', v: 0.35, rev: 0.3, n: 'D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6 | D3+A3:6' },
-        { i: 'drums', role: 'drum', v: 0.5, n: 'k.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bkbbk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bbbb' },
+        { i: 'drums', role: 'drum', v: 0.5, n: 'k.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bkbbk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bk.bbbb',
+          alt: ['k.bk.tk.bk.tk.bk.tk.bk.tk.bk.tk.bk.tk.bk.tkbt.bbk.bk.tk.bk.tk.bk.tk.bk.tk.bk.tk.bk.tk.bk.tkbt.bb'] },
       ] },
       sea: { label: 'En mer', bpm: 60, loop: true, ch: [
-        { i: 'vielle', role: 'mel', v: 0.65, rev: 0.45, n: 'A4:8 D5:8 | C5:4 B4:4 A4:8 | G4:4 A4:4 B4:4 C5:4 | D5:16 | F5:8 E5:4 D5:4 | E5:8 C5:8 | D5:4 C5:4 B4:4 G4:4 | A4:16' },
+        { i: 'vielle', role: 'mel', v: 0.65, rev: 0.45, n: 'A4:8 D5:8 | C5:4 B4:4 A4:8 | G4:4 A4:4 B4:4 C5:4 | D5:16 | F5:8 E5:4 D5:4 | E5:8 C5:8 | D5:4 C5:4 B4:4 G4:4 | A4:16',
+          alt: ['D5:4 F5:4 A5:4 F5:4 | E5:8 A4:4 E5:4 | G5:4 D5:4 B4:4 G4:4 | F5:4 D5:4 A4:4 D5:4 | A5:4 F5:4 C5:4 A4:4 | C5:4 E5:4 G5:4 E5:4 | D5:4 G5:4 D5:4 B4:4 | A4:8 E5:8',
+            'A5:8 F5:8 | E5:16 | G5:8 D5:8 | F5:8 D5:8 | C6:8 A5:8 | G5:8 E5:8 | D5:8 B4:8 | A4:16'] },
         { i: 'lute', role: 'harm', v: 0.4, rev: 0.4, n: 'D3:8 A3:8 | A2:8 E3:8 | G2:8 D3:8 | D3:8 A3:8 | F2:8 C3:8 | C3:8 G3:8 | G2:8 D3:8 | A2:8 E3:8' },
         { i: 'drone', role: 'pad', v: 0.4, rev: 0.45, n: 'D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16 | D3+A3:16' },
-        { i: 'drums', role: 'drum', v: 0.3, n: 'k...............................................................k...............................................................' },
+        { i: 'drums', role: 'drum', v: 0.3, n: 'k...............................................................k...............................................................',
+          alt: ['k...............t...............k...............b...............k...............t...............k...............b...............'] },
       ] },
       battle: { label: 'Combat', bpm: 138, loop: true, ch: [
-        { i: 'vielle', role: 'mel', v: 0.75, rev: 0.2, n: 'A4:2 Bb4:2 A4:2 G4:2 A4:4 E4:4 | F4:2 G4:2 A4:2 Bb4:2 C5:4 A4:4 | D5:2 C5:2 Bb4:2 A4:2 G4:4 F4:4 | E4:4 F4:2 G4:2 A4:8 | A5:2 G5:2 F5:2 E5:2 F5:4 D5:4 | E5:2 D5:2 C5:2 Bb4:2 A4:4 G4:4 | F4:2 G4:2 A4:2 Bb4:2 C5:2 Bb4:2 A4:2 G4:2 | A4:8 A3:8' },
+        { i: 'vielle', role: 'mel', v: 0.75, rev: 0.2, n: 'A4:2 Bb4:2 A4:2 G4:2 A4:4 E4:4 | F4:2 G4:2 A4:2 Bb4:2 C5:4 A4:4 | D5:2 C5:2 Bb4:2 A4:2 G4:4 F4:4 | E4:4 F4:2 G4:2 A4:8 | A5:2 G5:2 F5:2 E5:2 F5:4 D5:4 | E5:2 D5:2 C5:2 Bb4:2 A4:4 G4:4 | F4:2 G4:2 A4:2 Bb4:2 C5:2 Bb4:2 A4:2 G4:2 | A4:8 A3:8',
+          alt: ['A4:4 C5:4 E5:4 C5:4 | F5:4 A5:4 C6:4 A5:4 | G5:4 D5:4 G4:4 D5:4 | E5:8 C5:4 A4:4 | A5:4 F5:4 D5:4 A4:4 | C5:4 E5:4 G5:4 E5:4 | Bb4:4 D5:4 F5:4 D5:4 | A4:8 A3:8'] },
         { i: 'lute', role: 'harm', v: 0.4, rev: 0.15, n: 'A3:2 E4:2 A4:2 E4:2 A3:2 E4:2 A4:2 E4:2 | F3:2 C4:2 F4:2 C4:2 F3:2 C4:2 F4:2 C4:2 | G3:2 D4:2 G4:2 D4:2 G3:2 D4:2 G4:2 D4:2 | A3:2 E4:2 A4:2 E4:2 A3:2 E4:2 A4:2 E4:2 | D3:2 A3:2 D4:2 A3:2 D3:2 A3:2 D4:2 A3:2 | C4:2 G4:2 C5:2 G4:2 C4:2 G4:2 C5:2 G4:2 | Bb3:2 F4:2 Bb4:2 F4:2 Bb3:2 F4:2 Bb4:2 F4:2 | A3:2 E4:2 A4:2 E4:2 A3:8' },
         { i: 'drone', role: 'pad', v: 0.45, rev: 0.2, n: 'A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16 | A2+E3:16' },
-        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.ssssk.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.k.s.s.k.k.ssss' },
+        { i: 'drums', role: 'drum', v: 0.6, n: 'k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.ssssk.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.s.s.k.k.s.s.s.k.k.s.s.k.k.ssss',
+          alt: ['t.k.s.k.t.k.s.sst.k.s.k.t.k.s.sst.k.s.k.t.k.s.sst.k.s.k.s.k.sbsbt.k.s.k.t.k.s.sst.k.s.k.t.k.s.sst.k.s.k.t.k.s.sst.k.s.k.s.k.sbsb'] },
       ] },
       boss: { label: 'Boss : Barberousse', bpm: 144, loop: true, ch: [
         { i: 'shawm', role: 'mel', v: 0.7, rev: 0.25, n: 'A4:2 Bb4:2 C#5:2 D5:2 E5:4 D5:2 C#5:2 | D5:2 C#5:2 Bb4:2 A4:2 Bb4:4 A4:4 | E5:2 F5:2 E5:2 D5:2 C#5:2 D5:2 Bb4:2 C#5:2 | A4:8 r:4 A4:2 A4:2 | A5:4 G5:2 F5:2 E5:4 F5:2 E5:2 | D5:2 E5:2 F5:2 E5:2 D5:4 C#5:4 | Bb4:2 C#5:2 D5:2 E5:2 F5:2 E5:2 D5:2 C#5:2 | A4:16' },
@@ -116291,6 +116336,88 @@ const MUSIC_SONGS = {
     },
   },
 };
+
+// ─── « Au port » (Mer de Chine) : trois variantes longues de 16 mesures qui s'ajoutent au thème d'origine ───
+// À chaque escale, Sound.playTheme en tire une au hasard parmi les quatre (voir js/audio.js), pour varier d'une ville à l'autre.
+// L'accompagnement est construit depuis une suite d'accords (pentatonique de La) ; seule la mélodie du dizi est écrite à la main.
+(function () {
+  const BAR = {
+    C:  { bass: 'C3:4 G3:4 C3:4 G3:4', harm: 'r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2 r:2 E4+G4:2' },
+    Am: { bass: 'A2:4 E3:4 A2:4 E3:4', harm: 'r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2 r:2 E4+A4:2' },
+    G:  { bass: 'G2:4 D3:4 G2:4 D3:4', harm: 'r:2 D4+G4:2 r:2 D4+G4:2 r:2 D4+G4:2 r:2 D4+G4:2' },
+  };
+  const DR = 'k...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.wwk...w.w.k...w...k...w.w.k...w...k...w.w.k...w...k...w.w.k.w.w.ww';
+  const port = (bpm, chords, mel) => ({
+    label: 'Au port', bpm, loop: true, ch: [
+      { i: 'dizi', role: 'mel', v: 0.75, rev: 0.25, n: mel.join(' | ') },
+      { i: 'guzheng', role: 'harm', v: 0.45, rev: 0.2, n: chords.map(c => BAR[c].harm).join(' | ') },
+      { i: 'gbass', role: 'bass', v: 0.65, n: chords.map(c => BAR[c].bass).join(' | ') },
+      { i: 'drums', role: 'drum', v: 0.5, n: DR + DR },
+    ],
+  });
+  if (!MUSIC_SONGS.chine) return;   // (build d'une démo dans une autre mer : la Mer de Chine en est retirée)
+  Object.assign(MUSIC_SONGS.chine.songs, {
+    // A — « Flânerie » : prolonge le thème connu d'une seconde partie, allure posée
+    portA: port(100,
+      ['C', 'C', 'Am', 'G', 'C', 'Am', 'G', 'C', 'Am', 'Am', 'C', 'G', 'Am', 'C', 'G', 'C'],
+      ['G4:4 C5:4 E5:4 G5:4', 'E5:4 G5:4 C6:8', 'A5:4 G5:4 E5:4 C5:4', 'D5:8 G5:4 D5:4',
+        'E5:4 G5:4 C5:4 E5:4', 'A4:8 C5:4 E5:4', 'D5:4 E5:4 G5:4 D5:4', 'C5:16',
+        'E5:4 A5:4 E5:4 C5:4', 'A5:8 G5:4 E5:4', 'G5:4 E5:4 C5:4 G4:4', 'D5:8 G4:4 D5:4',
+        'E5:4 C5:4 A4:4 E5:4', 'G5:4 E5:4 C5:4 E5:4', 'D5:4 G5:4 D5:4 A4:4', 'C5:12 E5:4']),
+    // B — « Marché animé » : plus vif et affairé, mélodie haute et syncopée
+    portB: port(116,
+      ['C', 'G', 'Am', 'C', 'G', 'Am', 'C', 'G', 'C', 'G', 'Am', 'C', 'G', 'C', 'G', 'C'],
+      ['C5:2 E5:2 G5:2 C6:2 G5:4 E5:4', 'D5:2 G5:2 D5:2 G5:2 A5:4 G5:4', 'E5:2 A5:2 E5:2 C5:2 A4:8', 'C5:2 D5:2 E5:2 G5:2 A5:4 C6:4',
+        'D6:2 C6:2 A5:2 G5:2 D5:8', 'A5:2 G5:2 E5:2 C5:2 A4:8', 'C5:2 E5:2 G5:2 A5:2 G5:4 E5:4', 'D5:4 G5:4 D5:8',
+        'E5:2 G5:2 C6:2 G5:2 E5:4 C5:4', 'D5:2 G5:2 A5:2 G5:2 D5:4 G5:4', 'E5:2 A5:2 C6:2 A5:2 E5:8', 'C5:2 E5:2 G5:2 C6:2 A5:4 G5:4',
+        'D5:2 E5:2 G5:2 D5:2 G5:4 D5:4', 'E5:2 G5:2 A5:2 C6:2 G5:4 E5:4', 'D5:2 G5:2 D5:2 A5:2 G5:4 D5:4', 'C5:4 G4:4 C5:8']),
+    // C — « Au fil de l'eau » : spacieuse, notes tenues, pour s'attarder sur le quai
+    portC: port(92,
+      ['Am', 'C', 'G', 'Am', 'C', 'G', 'C', 'Am', 'C', 'G', 'Am', 'C', 'G', 'Am', 'G', 'Am'],
+      ['A4:8 E5:8', 'G5:8 E5:8', 'D5:12 G5:4', 'E5:8 A4:8', 'C5:8 G5:8', 'D5:8 G5:4 D5:4', 'E5:12 C5:4', 'A4:16',
+        'E5:8 G5:8', 'D5:8 A4:4 D5:4', 'C5:8 E5:8', 'G5:12 E5:4', 'D5:8 G5:8', 'E5:8 C5:8', 'D5:8 G4:8', 'A4:16']),
+  });
+})();
+
+// ─── « En mer » (Mer de Chine) : trois variantes longues de 16 mesures, calmes, tirées au hasard comme « Au port » ───
+// Nappe + guzheng + erhu, percussions très douces ; accompagnement construit depuis les accords (pentatonique de La).
+(function () {
+  const BAR = {
+    Am: { pad: 'A3+E4:16', harm: 'A3:4 E4:4 A4:8' },
+    C:  { pad: 'C4+G4:16', harm: 'C4:4 G4:4 C5:8' },
+    G:  { pad: 'G3+D4:16', harm: 'G3:4 D4:4 G4:8' },
+  };
+  const rep = s => s.repeat(8);   // motif de 32 pas (2 mesures) répété sur les 16 mesures
+  const sea = (bpm, chords, mel, drum) => ({
+    label: 'En mer', bpm, loop: true, ch: [
+      { i: 'erhu', role: 'mel', v: 0.7, rev: 0.45, n: mel.join(' | ') },
+      { i: 'pad', role: 'pad', v: 0.5, rev: 0.5, n: chords.map(c => BAR[c].pad).join(' | ') },
+      { i: 'guzheng', role: 'harm', v: 0.4, rev: 0.4, n: chords.map(c => BAR[c].harm).join(' | ') },
+      { i: 'drums', role: 'drum', v: 0.35, n: rep(drum) },
+    ],
+  });
+  if (!MUSIC_SONGS.chine) return;
+  Object.assign(MUSIC_SONGS.chine.songs, {
+    // A — « Houle lente » : grandes arches qui montent et retombent, notes tenues
+    seaA: sea(63,
+      ['Am', 'C', 'G', 'Am', 'C', 'G', 'G', 'Am', 'Am', 'C', 'G', 'C', 'G', 'Am', 'G', 'Am'],
+      ['A4:8 C5:4 E5:4', 'G5:8 E5:8', 'D5:12 G5:4', 'E5:8 A4:8', 'C5:4 E5:4 G5:8', 'D5:8 G5:4 D5:4', 'G5:8 D5:8', 'A4:16',
+        'E5:8 C5:4 A4:4', 'G5:8 E5:8', 'D5:8 G5:8', 'E5:12 C5:4', 'D5:8 G5:4 A4:4', 'C5:8 A4:8', 'D5:8 G4:8', 'A4:16'],
+      'g...............w...............'),
+    // B — « Brume » : ligne qui chemine doucement, registre médian
+    seaB: sea(66,
+      ['Am', 'Am', 'C', 'G', 'Am', 'C', 'G', 'Am', 'C', 'G', 'Am', 'C', 'G', 'C', 'G', 'Am'],
+      ['A4:4 C5:4 E5:4 C5:4', 'A4:8 E5:8', 'G5:4 E5:4 C5:8', 'D5:8 G5:4 D5:4', 'E5:4 A4:4 C5:4 E5:4', 'G5:8 E5:8', 'D5:4 G5:4 D5:8', 'A4:8 C5:4 A4:4',
+        'C5:4 E5:4 G5:4 E5:4', 'D5:8 G5:8', 'E5:4 C5:4 A4:8', 'G5:4 E5:4 C5:4 G4:4', 'D5:8 G5:4 D5:4', 'E5:4 G5:4 E5:4 C5:4', 'D5:8 G4:8', 'A4:16'],
+      'g...............t...............'),
+    // C — « Grand large » : spacieuse, notes hautes et tenues, contemplative
+    seaC: sea(58,
+      ['Am', 'C', 'Am', 'G', 'C', 'G', 'C', 'Am', 'Am', 'C', 'G', 'Am', 'C', 'G', 'G', 'Am'],
+      ['E5:16', 'G5:8 E5:8', 'A5:8 E5:8', 'D5:16', 'C6:8 G5:8', 'D5:8 G5:8', 'E5:12 G5:4', 'A4:16',
+        'C5:8 E5:8', 'G5:8 C6:8', 'A5:8 D5:8', 'E5:8 A4:8', 'G5:8 E5:8', 'D5:12 G5:4', 'G5:8 D5:8', 'A4:16'],
+      'g...............................'),
+  });
+})();
 
 // ════════════ Le moteur ════════════
 const NOTE_SEMI = { C: -9, D: -7, E: -5, F: -4, G: -2, A: 0, B: 2 };
@@ -116335,6 +116462,25 @@ const CHIP = {
   pad: { wave: 'p50', g: 0.06, vib: 0 },
 };
 
+// ─── Variation : chaque passage d'une boucle change un peu, pour qu'on n'entende jamais deux fois exactement la même chose ───
+// « robe » d'un passage : à quel niveau joue chaque rôle (0 = muet) ; mélodie (mel) et basse jouent toujours. oct : mélodie doublée à l'octave grave.
+// La mélodie garde toujours son dessin ; ce sont l'accompagnement, la nuance et l'épaisseur qui tournent — donc jamais de fausse note.
+const TEXTURES = [
+  { harm: 1, pad: 1, drum: 1 },            // plein
+  { harm: 0, pad: 0.85, drum: 0.5 },       // épuré : la mélodie respire, peu d'accompagnement
+  { harm: 1, pad: 1, drum: 1, oct: 1 },    // relance : la mélodie doublée à l'octave grave, plus pleine
+  { harm: 0.8, pad: 0, drum: 0.35 },       // accalmie
+];
+// Planchers : un morceau sans basse ni nappe garde ses accords (sinon la mélodie resterait seule) ; un combat garde son élan.
+const FLOOR = { bare: { harm: 0.6 }, fight: { harm: 0.6, drum: 0.75 } };
+// Phrases alternées : si un canal a des variantes (ch.alt), la mélodie alterne A B A C A B… d'un passage à l'autre.
+// Toutes les variantes font la même longueur que la phrase d'origine (mêmes accords dessous), elles ne peuvent donc pas décaler les voix.
+function variantOf(c) {
+  if (!c.vars || c.vars.length < 2) return c.vars ? c.vars[0] : c.ev;
+  if (c.pass % 2 === 0) return c.vars[0];
+  return c.vars[1 + (Math.floor(c.pass / 2) % (c.vars.length - 1))];
+}
+
 const Music = {
   ctx: null, out: null, revIn: null, style: 'moderne', song: null, timer: null, ks: new Map(),
   init(ctx, dest) {
@@ -116369,12 +116515,16 @@ const Music = {
     const spb = 60 / def.bpm / (def.beat || 4), t0 = this.ctx.currentTime + 0.08;
     // (la puce sonne plus maigre que les instruments : on la remonte un peu)
     const bus = this.ctx.createGain(); bus.gain.value = this.style === 'retro' ? 1.5 : 0.8; bus.connect(this.out);
+    const floor = /^(battle|boss)/.test(songId) ? FLOOR.fight : def.ch.some(c => c.role === 'bass' || c.role === 'pad') ? null : FLOOR.bare;
     this.song = {
-      seaId, songId, def, spb, bus, t0,
+      seaId, songId, def, spb, bus, t0, floor,
       chans: def.ch.map(ch => {
         const g = this.ctx.createGain(); g.connect(bus);
         const s = this.ctx.createGain(); s.gain.value = this.style === 'moderne' ? (ch.rev || 0) : 0.08; g.connect(s); s.connect(this.revIn);
-        return { ch, node: g, kit: Object.assign({}, sea.kit, ch.kit || {}), ev: ch.role === 'drum' ? ch.n.replace(/\s|\|/g, '') : parseVoice(ch.n), i: 0, t: t0, done: false };
+        const drum = ch.role === 'drum';
+        const base = drum ? ch.n.replace(/\s|\|/g, '') : parseVoice(ch.n);
+        const vars = drum ? [base, ...((ch.alt || []).map(a => a.replace(/\s|\|/g, '')))] : [base, ...((ch.alt || []).map(parseVoice))];
+        return { ch, role: ch.role, node: g, kit: Object.assign({}, sea.kit, ch.kit || {}), ev: base, vars, pass: 0, i: 0, t: t0, done: false };
       }),
     };
     this.timer = setInterval(() => this.tick(), 25);
@@ -116392,31 +116542,47 @@ const Music = {
   tick() {
     const S = this.song;
     if (!S) return;
+    const loop = S.def.loop, nT = TEXTURES.length;
     const ahead = this.ctx.currentTime + (this.lookahead || 0.15);   // (lookahead : rendu hors ligne de la planche)
     for (const c of S.chans) {
       while (!c.done && c.t < ahead) {
+        const tex = loop ? TEXTURES[c.pass % nT] : TEXTURES[0];   // la robe du passage en cours
+        const level = r => Math.max(tex[r] != null ? tex[r] : 1, (S.floor && S.floor[r]) || 0);
         if (typeof c.ev === 'string') {
           const k = c.ev[c.i];
-          if (k !== '.') this.drum(c.kit[k] || k, k, c.t, c.ch.v, c.node);
+          if (k !== '.') {
+            const dmul = level('drum') * (1 + (Math.random() * 2 - 1) * 0.08);   // nuance vivante
+            if (dmul > 0.02) this.drum(c.kit[k] || k, k, c.t, c.ch.v * dmul, c.node);
+          }
           c.t += S.spb;
         } else {
           const e = c.ev[c.i], dur = e.d * S.spb;
-          e.f.forEach((f, j) => this.voice(c.ch, f, c.t, dur, e.f.length, j, c.node));
+          let vmul = (c.role === 'mel' || c.role === 'bass') ? 1 : level(c.role);
+          vmul *= 1 + (Math.random() * 2 - 1) * 0.07;   // nuance vivante
+          if (vmul > 0.01 && e.f.length) {
+            const jit = (c.role === 'mel' || c.role === 'harm') ? (Math.random() * 2 - 1) * 0.010 : 0;   // le jeu n'est jamais pile sur le temps
+            const dbl = tex.oct && c.role === 'mel';   // relance : toute la phrase doublée à l'octave grave (le dessin reste intact)
+            e.f.forEach((f, j) => {
+              this.voice(c.ch, f, c.t + jit, dur, e.f.length, j, c.node, vmul);
+              if (dbl) this.voice(c.ch, f / 2, c.t + jit, dur, e.f.length, j, c.node, vmul * 0.45);
+            });
+          }
           c.t += dur;
         }
-        if (++c.i >= c.ev.length) { c.i = 0; if (!S.def.loop) c.done = true; }
+        if (++c.i >= c.ev.length) { c.i = 0; if (!loop) c.done = true; else { c.pass++; if (c.vars.length > 1) c.ev = variantOf(c); } }
       }
     }
-    if (!S.def.loop && S.chans.every(c => c.done) && this.ctx.currentTime > Math.max(...S.chans.map(c => c.t)) + 2) this.stop();
+    if (!loop && S.chans.every(c => c.done) && this.ctx.currentTime > Math.max(...S.chans.map(c => c.t)) + 2) this.stop();
   },
   // longueur d'une voix en pas (pour vérifier que les voix d'un morceau bouclent ensemble)
   steps(ch) { return ch.role === 'drum' ? ch.n.replace(/\s|\|/g, '').length : parseVoice(ch.n).reduce((a, e) => a + e.d, 0); },
 
   // ── Voix mélodiques ──
-  voice(ch, f, t, dur, n, j, dst) {
-    if (this.style === 'retro') return this.chip(ch, f, t, dur, n, dst);
+  voice(ch, f, t, dur, n, j, dst, vmul) {
+    vmul = vmul == null ? 1 : vmul;
+    if (this.style === 'retro') return this.chip(ch, f, t, dur, n, dst, vmul);
     const p = INSTR[ch.i];
-    const v = ch.v * (n > 1 ? 1 / Math.sqrt(n) : 1);
+    const v = ch.v * vmul * (n > 1 ? 1 / Math.sqrt(n) : 1);
     if (p.kind === 'pluck') return this.pluck(p, f, t + j * (p.strum || 0), dur, v, dst);
     if (p.kind === 'blow') return this.blow(p, f, t, dur, v, dst);
     if (p.kind === 'bow') return this.bow(p, f, t, dur, v, dst);
@@ -116508,11 +116674,11 @@ const Music = {
     }
   },
   // la puce : onde carrée à rapport cyclique (12,5 %, 25 %, 50 %) ou triangle, enveloppe sèche
-  chip(ch, f, t, dur, n, dst) {
+  chip(ch, f, t, dur, n, dst, vmul) {
     const c = this.ctx, r = CHIP[ch.role] || CHIP.harm, o = c.createOscillator(), g = c.createGain();
     if (r.wave === 'tri') o.type = 'triangle'; else o.setPeriodicWave(this.waves[r.wave]);
     o.frequency.value = f;
-    const end = t + Math.max(0.04, dur - 0.015), peak = r.g * ch.v / (n > 1 ? n * 0.7 : 1);
+    const end = t + Math.max(0.04, dur - 0.015), peak = r.g * ch.v * (vmul == null ? 1 : vmul) / (n > 1 ? n * 0.7 : 1);
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + 0.004);
     g.gain.linearRampToValueAtTime(peak * 0.7, t + Math.min(0.12, dur * 0.5)); g.gain.setValueAtTime(peak * 0.7, end); g.gain.linearRampToValueAtTime(0, end + 0.03);
     if (r.vib && dur > 0.25) this.vibrato(o.frequency, f, r.vib, t, 0.12, end + 0.03);
@@ -139112,7 +139278,7 @@ const Main = {
 
 </script>
 <style>#maj { position: fixed; z-index: 21; top: max(6px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); display: none; padding: 3px 9px; border-radius: 8px; background: rgba(11, 18, 32, 0.6); color: rgba(239, 226, 192, 0.85); font: 600 11px/1.3 Manrope, system-ui, sans-serif; letter-spacing: 0.02em; pointer-events: none; } body:has(.title-screen):not(:has(#loading)) #maj { display: block; }</style>
-<div id="maj">Mise à jour : 08/10/2026 à 16:07</div>
+<div id="maj">Mise à jour : 10/10/2026 à 00:02</div>
 <script>if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 </body>
 </html>
