@@ -215,6 +215,9 @@ b { font-weight: 800; }
 
 /* ── Notifications et bannières ── */
 .toasts { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); z-index: 60; display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; width: min(540px, 94vw); }
+/* (10/10/2026, partie d'un débutant : en haut, les messages cachaient l'en-tête et les onglets de la fenêtre ouverte ; sur
+   ordinateur, ils passent en bas tant qu'une fenêtre est ouverte, le plus récent en bas) */
+body:not(.mobile) .toasts.win-open { top: auto; bottom: 14px; }
 .toast {
   display: flex; align-items: center; gap: 10px; max-width: 100%;
   background: var(--glass-2); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
@@ -233,7 +236,7 @@ b { font-weight: 800; }
 .toast.out { animation: toastOut 0.4s ease-in forwards; }
 @keyframes toastIn { from { transform: translateY(-10px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes toastOut { to { transform: translateY(-8px); opacity: 0; } }
-.banner { position: absolute; left: 0; right: 0; top: 30%; z-index: 55; text-align: center; pointer-events: none; }
+.banner { position: absolute; left: 0; right: 0; top: 30%; z-index: 55; text-align: center; pointer-events: none; transition: top 0.25s ease-out; }
 .banner .b-in {
   display: inline-flex; flex-direction: column; align-items: center; gap: 8px; padding: 22px 64px 20px;
   background: radial-gradient(closest-side, rgba(9, 15, 26, 0.86), rgba(9, 15, 26, 0.62) 65%, rgba(9, 15, 26, 0));
@@ -1211,6 +1214,13 @@ body.guide-top:not(.mobile) .chart-cv { height: min(calc(100vh - 150px - var(--g
 .wt-note { margin: 4px 0 0; font-size: 12px; color: var(--text-3); line-height: 1.4; }
 .wt-next { margin-top: 6px; display: grid; gap: 5px; }
 .wt-next .wt-row span { color: var(--gold-hi); }
+.tp-fx { margin: 4px 0 2px; padding-left: 18px; font-size: 12.5px; color: var(--text-2); line-height: 1.4; }
+.tp-fx b { color: var(--text); font-weight: 700; }
+.jr-gn { display: block; margin-top: 2px; font: 700 10.5px var(--font-ui); color: var(--text-3); white-space: nowrap; }
+.mobile .jr-gn { display: none; }
+.wt-title { display: grid; gap: 2px; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--line-2); }
+.wt-title b { font-size: 14px; color: var(--gold-hi); }
+.wt-title small { font-size: 12px; color: var(--text-2); line-height: 1.4; }
 .wt .nowrap { white-space: nowrap; }
 .wt-bar { display: block; height: 6px; border-radius: 3px; background: rgba(243, 235, 218, 0.12); overflow: hidden; }
 .wt-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold-lo), var(--gold)); }
@@ -1402,6 +1412,7 @@ body.guide-top:not(.mobile) .chart-cv { height: min(calc(100vh - 150px - var(--g
 .sea-syn { position: absolute; z-index: 5; pointer-events: none !important; width: min(600px, calc(100vw - 32px)); margin: 0; padding: 11px 16px 12px; border-radius: 14px; background: rgba(14, 22, 38, 0.95); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); border: 1px solid var(--line-2); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4); display: grid; gap: 6px; text-align: left; pointer-events: auto; }
 .sea-syn::before { content: ""; position: absolute; top: -7px; left: var(--ax, 50%); width: 12px; height: 12px; margin-left: -6px; background: rgba(14, 22, 38, 0.95); border-left: 1px solid rgba(232, 181, 74, 0.5); border-top: 1px solid rgba(232, 181, 74, 0.5); transform: rotate(45deg); }
 .sea-syn { border-color: rgba(232, 181, 74, 0.5); animation: tipIn 0.14s ease-out; }
+.sea-syn.up::before { top: auto; bottom: -7px; transform: rotate(225deg); }
 .sea-syn-k { font: 800 11px var(--font-ui); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-hi); }
 .sea-syn-lock { font-size: 12.5px; color: var(--text-3); }
 .sea-syn p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--text-2); }
@@ -1568,6 +1579,58 @@ body:not(.pad):not(.mobile) #seahud .btn.on[data-key]::after { background: rgba(
 .jr-prices .jr-mk { display: block; line-height: 1; height: 11px; }
 .ch-etal { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
+/* ── La nouvelle lune (10/10/2026, Mer de Chine) : écran du 1er du mois, jeu en pause jusqu'au clic ── */
+.moon { position: absolute; inset: 0; z-index: 70; display: flex; align-items: safe center; justify-content: center; overflow-y: auto; padding: 18px 16px; cursor: pointer; animation: mnIn 0.5s ease-out;
+  --mn-sky: #0b1e33; --mn-hi: #1b3c5e; --mn-ink: #f3ebda; --mn-acc: #f7d58a; --mn-moon: #f3ebda; --mn-glow: rgba(243, 235, 218, 0.25); }
+.moon.ocre { --mn-sky: #241708; --mn-hi: #4a3214; --mn-acc: #f0b860; --mn-moon: #f0d29a; --mn-glow: rgba(240, 184, 96, 0.3); }
+.moon.red { --mn-sky: #2a0d09; --mn-hi: #5c1d14; --mn-ink: #f6e3cf; --mn-acc: #ff9a86; --mn-moon: #f0c48a; --mn-glow: rgba(240, 196, 138, 0.5); }
+.moon .mn-sky { position: fixed; inset: 0; background: repeating-linear-gradient(170deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 9px), radial-gradient(ellipse at 50% 8%, var(--mn-hi), var(--mn-sky) 72%); opacity: 0.97; }
+.moon .mn-in { position: relative; width: min(560px, 100%); margin: auto; text-align: center; color: var(--mn-ink); }
+.moon .mn-moon { width: 46px; height: 46px; margin: 0 auto 4px; border-radius: 50%; background: var(--mn-moon); position: relative; overflow: hidden; box-shadow: 0 0 calc(34px * var(--f)) var(--mn-glow); }
+.moon .mn-moon::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; background: var(--mn-sky); transform: translateX(calc(var(--f) * 104%)); }
+.moon .mn-zh { font: 400 clamp(68px, 11vw, 108px)/1.05 'Silk Pinceau', var(--font-title); color: var(--mn-ink); animation: mnInk 1.5s ease-out both; }
+.moon.red .mn-zh { color: #ffb8a0; }
+.moon .mn-m { font: 700 15px var(--font-title); letter-spacing: 0.35em; text-transform: uppercase; margin-top: 6px; opacity: 0.9; }
+.moon .mn-left { font: 700 17px var(--font-ui); color: var(--mn-acc); margin-top: 10px; }
+.moon .mn-pay { font: 600 14px var(--font-ui); margin-top: 5px; opacity: 0.95; display: flex; justify-content: center; align-items: center; gap: 6px; }
+.moon .mn-pay b { color: #ff9a86; display: inline-flex; align-items: center; gap: 4px; }
+.moon .mn-pay.bad { color: #ff9a86; font-weight: 700; }
+.moon .mn-g { margin: 34px 3% 0; }
+.moon .mn-bar { position: relative; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.14); }
+.moon .mn-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--mn-acc); }
+.moon .mn-tick { position: absolute; top: -4px; width: 2px; height: 16px; margin-left: -1px; background: rgba(243, 235, 218, 0.5); }
+.moon .mn-tick small { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font: 600 10.5px var(--font-ui); white-space: nowrap; opacity: 0.7; }
+.moon .mn-tick.on small { opacity: 1; color: var(--mn-acc); }
+.moon .mn-tick.up small { top: auto; bottom: 18px; }
+.moon .mn-seal { position: absolute; right: -13px; top: -9px; width: 26px; height: 26px; background: #b3261e; color: #fff3ea; border-radius: 4px; font: 800 13px/26px var(--font-title); transform: rotate(-5deg); }
+.moon .mn-gl { margin-top: 28px; font: 600 12.5px var(--font-ui); opacity: 0.95; display: flex; justify-content: center; align-items: center; gap: 4px; flex-wrap: wrap; }
+.moon .mn-next { color: var(--mn-acc); }
+.mn-page { margin: 20px auto 0; width: min(430px, 100%); background: #efe6d2; color: #2a2418; border-radius: 4px; padding: 12px 18px; text-align: left; box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35); cursor: default; }
+.mn-ph { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; border-bottom: 1.5px solid #2a2418; padding-bottom: 4px; margin-bottom: 4px; font: 700 17px var(--font-title); }
+.mn-ln { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font: 500 13.5px var(--font-ui); padding: 3px 0; border-bottom: 1px dotted #cdbf9f; }
+.mn-ln > span { color: #4a4232; }
+.mn-ln b, .mn-ph b, .mn-best { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; }
+.mn-page .nowrap, .moon .nowrap { white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
+.mn-page .pos { color: #1f7a57; }
+.mn-page .neg { color: #9e2f1c; }
+.mn-best { display: block; margin: 8px 0 0; text-align: center; font: 600 13.5px/1.4 var(--font-title); color: #4a4232; }
+.moon .mn-go { margin-top: 14px; font: 600 12px var(--font-ui); opacity: 0.7; animation: mnBlink 2.2s ease-in-out infinite; }
+.moon.out { animation: mnOut 0.35s ease-in forwards; }
+.jr-month summary { display: flex; justify-content: space-between; gap: 10px; cursor: pointer; list-style: none; }
+.jr-month summary::-webkit-details-marker { display: none; }
+.jr-month summary span::before { content: "▾"; display: inline-block; margin-right: 5px; color: var(--gold-hi); transform: rotate(-90deg); transition: transform 0.15s; }
+.jr-month[open] summary span::before { transform: none; }
+.jr-month { display: block; }
+.jr-month .mn-page { margin: 6px 0 4px; width: 100%; box-shadow: none; }
+@keyframes mnIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mnOut { to { opacity: 0; } }
+@keyframes mnInk { 0% { clip-path: inset(0 100% 0 0); filter: blur(9px); opacity: 0.15; } 55% { filter: blur(2px); opacity: 0.9; } 100% { clip-path: inset(0 -5% 0 0); filter: blur(0); opacity: 1; } }
+@keyframes mnBlink { 50% { opacity: 0.35; } }
+@media (max-height: 760px) { .moon .mn-zh { font-size: 72px; } .moon .mn-g { margin-top: 28px; } .mn-page { margin-top: 14px; padding: 9px 16px; } .mn-ln { padding: 2px 0; } }
+@media (prefers-reduced-motion: reduce) { .moon .mn-zh, .moon .mn-go { animation: none; } }
+.mobile .moon .mn-tick small { display: none; }
+.mobile .moon .mn-zh { font-size: 64px; }
+
 </style>
 </head>
 <body>
@@ -1636,7 +1699,7 @@ const STUDIO_LOGO = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 120
 </script>
 <script>
 'use strict';
-// ─── Silk & Cannons · écran de démarrage : logo du studio, puis l'écran d'accueil (sauvegarde, son, « Cliquez pour commencer ») ───
+// ─── Silk & Cannons · écran de démarrage : logo du studio, puis l'écran d'accueil (sauvegarde, « Cliquez pour commencer » ; « Meilleur avec le son » retiré le 10/10/2026, choix d'Adrien : on s'attendait à une merveille sonore) ───
 // Lancé dès l'ouverture de la page, avant le reste du jeu : le logo passe pendant que le jeu charge (aucune attente en plus).
 // Le calque est #loading, passé au noir. Main.boot appelle Splash.booted() (ou Splash.cancel() quand une partie reprend à chaud) ;
 // l'écran titre est déjà prêt dessous, sa musique en attente (Sound.pending) jusqu'au clic qui débloque le son.
@@ -1690,7 +1753,6 @@ const Splash = {
     box.className = 'sp-home';
     box.innerHTML =
       line('<path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4"/><rect x="8" y="13" width="8" height="5"/>', T('demarrage.sauvegarde')) +
-      line('<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>', T('demarrage.son')) +
       `<div class="sp-go">${esc(T(touch ? 'demarrage.toucher' : 'demarrage.cliquer'))}</div>`;
     this.el.append(box);
     this.box = box;
@@ -2398,7 +2460,6 @@ Lang.ui('fr', {
 
   // ── Écran de démarrage (js/splash.js) : après le logo du studio, avant l'écran titre ──
   'demarrage.sauvegarde': 'Votre partie est sauvegardée automatiquement.',
-  'demarrage.son': 'Meilleur avec le son.',
   'demarrage.cliquer': 'Cliquez pour commencer',
   'demarrage.toucher': 'Touchez l\'écran pour commencer',
 
@@ -2443,6 +2504,32 @@ Lang.ui('fr', {
   'mois.reste': 'Encore {n, plural, one {# mois} other {# mois}}',   // la feuille du mois (08/10/2026), sous le nom du mois : combien de mois il reste, celui-ci compris
   'mois.dernier': 'Dernier mois de l\'année',   // la feuille du dernier mois (la démo dit « de la saison »)
   'mois.solde': 'Solde de l\'équipage : −{somme} {monnaie}',   // la solde payée le 1er du mois, au bas de la feuille
+  'mois.journal': 'Bilan du mois {demois} : {signe}{somme} {monnaie}',   // au journal, le 1er du mois (10/10/2026) ; demois : « d'octobre », « de février » ; la ligne se déplie sur la page du mois
+
+  // ── La nouvelle lune (Mer de Chine, 10/10/2026) : l'écran du 1er du mois, jeu en pause ──
+  'lune.encore': 'Encore {n} lunes pour devenir {titre}',   // plus de 2 lunes restantes ; titre : le titre visé (Taï-pan)
+  'lune.plusQue': 'Plus que {n} lunes pour devenir {titre}',   // 2 lunes restantes
+  'lune.derniere': 'Dernière lune pour devenir {titre} !',
+  'lune.resteFin': 'Encore {n, plural, one {# lune} other {# lunes}} avant la fin de l\'année',   // tous les titres déjà atteints
+  'lune.paye': 'Vous payez votre équipage :',   // suivi du montant et de l'icône du tael
+  'lune.desertent': 'Caisse vide : {n, plural, one {# marin déserte} other {# marins désertent}}',
+  'lune.prochain': '{titre} dans {somme}',   // sous la jauge : le prochain grade et ce qu'il manque (suivi de l'icône du tael)
+  'lune.bilanTitre': 'Le mois {demois}',   // la page du mois écoulé ; demois : « d'octobre »
+  'lune.ventes': 'Bénéfice des ventes',
+  'lune.rumeurs': '· dont grâce aux rumeurs',   // ventes faites dans une pénurie annoncée par une rumeur
+  'lune.escales': 'Escales',
+  'lune.contrats': 'Contrats livrés',
+  'lune.contratsPour': '{n} pour',   // « 2 pour +4 400 » (suivi de la prime et de l'icône du tael)
+  'lune.coules': 'Pirates coulés',
+  'lune.abordes': 'Navires abordés',
+  'lune.butin': 'Butin',
+  'lune.typhons': 'Typhons traversés',
+  'lune.perdus': 'Marins perdus',
+  'lune.meilleure': 'Meilleure affaire : {n} {unites} {demarchandise} vendus à {port},',   // suivi du bénéfice ; demarchandise : « de jade », « d'épices »
+  'lune.cliquerMer': 'Cliquez pour reprendre la mer',
+  'lune.cliquerPort': 'Cliquez pour continuer',
+  'lune.toucherMer': 'Touchez pour reprendre la mer',
+  'lune.toucherPort': 'Touchez pour continuer',
   'hud.jMoins': 'J−{n}',   // à côté de la date, les 7 derniers jours de la partie
   'hud.cale': 'Cale ({unites})',   // unites : l'unité de cale de la mer, au pluriel (piculs, tonneaux…)
   'cale.titre': 'Cale ({unites}) : {occupe} / {cale}',   // le détail de la cale (bandeau, marché) : son titre, puis canons, colis, place libre, et les vivres
@@ -2677,6 +2764,7 @@ Lang.ui('fr', {
   'benediction.effet.paix': 'Deux fois moins de pirates croisent votre route.',
   'benediction.effet.protection': 'Les pirates vous laissent presque toujours passer.',
   'temple.offrandes': 'OFFRANDES',
+  'temple.pendant': '({n, plural, one {# jour} other {# jours}})',   // sous une offrande, après chacune de ses bénédictions (benediction.effet.*) : sa durée
   'temple.actives': 'BÉNÉDICTIONS ACTIVES',
 
   // ── Maison de jeu ──
@@ -2966,6 +3054,7 @@ Lang.ui('fr', {
   'heritage.ongletVoiles': 'Voiles',
   'heritage.investis': '{n} / {total} investis',
   'heritage.niv': 'Niv. {n}',
+  'heritage.acheterNiv': 'Acheter le niv. {n}',   // bouton d'achat d'une amélioration de l'Héritage, suivi du prix en jetons
   'heritage.nivSur': 'niv. {n} / {max}',
   'heritage.nivBride': 'niv. {n} utilisé sur {own} acquis',
   'heritage.pasAcquis': 'pas encore acquise',
@@ -3149,8 +3238,8 @@ Lang.ui('fr', {
   'mer.aborder': 'Aborder {cible}',
   'mer.navireRendu': 'le navire rendu',
   'mer.accoster': 'Accoster à {port}',
-  'mer.deterrer': 'Déterrer le trésor',
-  'mer.ralentir': 'Ralentissez pour déterrer le trésor',
+  'mer.deterrer': 'Remonter le trésor',   // (10/10/2026 : le coffre est en mer, on le remonte depuis le navire)
+  'mer.ralentir': 'Ralentissez pour remonter le trésor',
   'mer.piloteEngage': 'Pilote automatique engagé.',
   'mer.echoue': 'Échoué !',
   'mer.recif': 'Récif !',
@@ -3169,8 +3258,8 @@ Lang.ui('fr', {
   'journal.casse': 'Pendant la traversée : {lots} brisés.',   // lots : « 2 piculs de porcelaine »
   'journal.hommesALaMer': 'Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.',
   'journal.abordeCargaison': 'Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.',
-  'journal.tresor': 'Trésor déterré : {somme} {monnaie}.',
-  'journal.tresorJade': 'Trésor déterré : {somme} {monnaie} et {n} {marchandise}.',
+  'journal.tresor': 'Trésor remonté : {somme} {monnaie}.',
+  'journal.tresorJade': 'Trésor remonté : {somme} {monnaie} et {n} {marchandise}.',
 
   // ── Débuts et astuces ──
   'titre.merVerrouillee': 'Cette mer n\'est pas encore débloquée.',
@@ -3204,7 +3293,7 @@ Lang.ui('fr', {
   'marche.marchandises': 'Marchandises à négocier',
   'marche.vivresNom': 'Vivres',
   'marche.parJour': ' /j',   // prix d'une journée de vivres pour tout l'équipage
-  'marche.vivresInfo': 'Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas',
+  'marche.vivresInfo': 'Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas',
   'marche.vivresSansMarins': 'Engagez d\'abord des marins à la taverne.',
   'marche.vivresJours': 'Jours de vivres',
   'marche.vivresTotal': '→ {n} j = {cout}',   // jusqu'à n jours de vivres, pour ce prix
@@ -3499,6 +3588,7 @@ Lang.ui('fr', {
   'credits.steam.chromium': 'licences libres (LICENSES.chromium.html)',
   'credits.merci': 'Remerciements',
   'credits.merci.texte': 'Merci à nos testeurs : {noms}.',
+  'credits.merci.mention': 'Mention honorable à {nom}, qui a coulé.',   // sous les testeurs (10/10/2026)
 });
 
 </script>
@@ -3546,8 +3636,6 @@ Lang.ui('en', {
   'page.chargement': 'Charting the China Seas…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'Your game is saved automatically.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Best with sound.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Click to start',
   // Touchez l'écran pour commencer
@@ -4027,6 +4115,8 @@ Lang.ui('en', {
   'benediction.effet.protection': 'Pirates almost always let you pass.',
   // OFFRANDES
   'temple.offrandes': 'OFFERINGS',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# day} other {# days}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'ACTIVE BLESSINGS',
   // Mise
@@ -4548,6 +4638,8 @@ Lang.ui('en', {
   'heritage.investis': '{n} / {total} invested',
   // Niv. {n}
   'heritage.niv': 'Lv. {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Buy lv. {n}',
   // niv. {n} / {max}
   'heritage.nivSur': 'lv. {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -4951,8 +5043,8 @@ Lang.ui('en', {
   'marche.vivresNom': 'Provisions',
   //  /j
   'marche.parJour': ' /day',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
-  'marche.vivresInfo': 'For your {n, plural, one {lone sailor} other {# sailors}} · takes no hold space · can\'t be resold',
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  'marche.vivresInfo': 'For {n, plural, one {# sailor} other {# sailors}} · takes no hold space · can\'t be resold',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Hire sailors at the tavern first.',
   // Jours de vivres
@@ -5509,6 +5601,8 @@ Lang.ui('en', {
   'credits.merci': 'Thanks',
   // Merci à nos testeurs : {noms}.
   'credits.merci.texte': 'Thanks to our testers: {noms}.',
+  // Mention honorable à {nom}, qui a coulé.
+  'credits.merci.mention': 'Honorable mention to {nom}, who sank.',
 });
 
 </script>
@@ -5597,8 +5691,8 @@ Lang.sea('en', 'chine', {
   'festivals/1/name': 'Mid-Autumn Festival',
   // Marché
   'buildings/marche/name': 'Market',
-  // Commercer
-  'buildings/marche/verb': 'Trade',
+  // Marché
+  'buildings/marche/verb': 'Market',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Buy and sell goods, take on provisions.',
   // Chantier naval
@@ -5621,8 +5715,8 @@ Lang.sea('en', 'chine', {
   'buildings/banque/desc': 'Keep your taels safe from pirates.',
   // Maison Wang
   'buildings/usurier/name': 'House of Wang',
-  // Usurier
-  'buildings/usurier/verb': 'Lender',
+  // Maison Wang
+  'buildings/usurier/verb': 'House of Wang',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Wang lends to anyone. On his terms.',
   // Entrepôt
@@ -5639,8 +5733,8 @@ Lang.sea('en', 'chine', {
   'buildings/temple/desc': 'The goddess of the sea watches over pious sailors.',
   // Maison de jeu
   'buildings/jeu/name': 'Gambling house',
-  // Fan-tan
-  'buildings/jeu/verb': 'Fan-tan',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Gambling house',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'Fan-tan: bet on how many beans are left.',
   // Quai
@@ -6405,8 +6499,8 @@ Lang.sea('en', 'chine', {
   'text/prologue/fin1': 'For this first voyage, here are <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'Jade tokens are earned at the end of each career, from the fortune you built during it and through achievements. You spend them on the <b>Legacy</b> screen: each upgrade helps every career that follows.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'This trial voyage doesn\'t count toward your records. There\'s so much left to discover: contracts, battles, boarding, typhoons, smuggling…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'This trial voyage doesn\'t count: your real career starts from scratch, with the starting purse. You keep what you\'ve learned, and your jade tokens. There\'s so much left to discover: contracts, battles, boarding, typhoons, smuggling…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'My advice: <b>{nom}</b>, so you start out with more money. But they\'re your tokens: pick another upgrade, or keep them for later.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -6429,6 +6523,14 @@ Lang.sea('en', 'chine', {
   'text/hints/solde': 'Start of the month: <b>wages</b> for the crew. Always keep enough to pay them, or some will desert.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne c
   'text/hints/leconCombat': 'Did those pirates give you a hard time? I\'ll teach you to fight: the <b>combat lesson</b> is waiting for you in <b>Help</b>, from the title screen. It doesn\'t count toward your career.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'You have enough to pay <b>Wang</b> back, and his house is right here. Don\'t dawdle: your debt grows by <b>{taux}% a month</b>, and in {jours, plural, one {# day} other {# days}} his men will come to collect.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'A word before you head out: on the 1st of the month, {marins, plural, one {your sailor expects} other {your # sailors expect}} <b>{somme}</b> in wages. Always keep enough to pay them, or some will desert.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'There\'s a <b>bank</b> here: your taels are safe from pirates there, and they earn a little, 0.5% a month.{dette, select, oui { But as long as you owe Wang money, pay him back first: that debt costs far more.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>Arms</b>? In Chinese ports, in Japan and in Annam, they\'re <b>contraband</b>: customs search you on arrival. You can slip them a few taels, or risk the fine and seizure. In Hong Kong and Singapore, both free ports, nobody searches.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -13659,8 +13761,6 @@ Lang.ui('zh', {
   'page.chargement': '正在绘制中国海海图……',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': '游戏进度会自动保存。',
-  // Meilleur avec le son.
-  'demarrage.son': '开启声音，体验更佳。',
   // Cliquez pour commencer
   'demarrage.cliquer': '点击开始',
   // Touchez l'écran pour commencer
@@ -14136,6 +14236,8 @@ Lang.ui('zh', {
   'benediction.effet.protection': '海盗几乎总会放你过去。',
   // OFFRANDES
   'temple.offrandes': '供奉',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '（{n, plural, other {#天}}）',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': '生效中的庇佑',
   // Mise
@@ -14657,6 +14759,8 @@ Lang.ui('zh', {
   'heritage.investis': '已投入 {n} / {total}',
   // Niv. {n}
   'heritage.niv': '{n}级',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': '购买{n}级',
   // niv. {n} / {max}
   'heritage.nivSur': '{n} / {max}级',
   // niv. {n} utilisé sur {own} acquis
@@ -15060,7 +15164,7 @@ Lang.ui('zh', {
   'marche.vivresNom': '粮水',
   //  /j
   'marche.parJour': '/天',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': '供{n, plural, other {#名水手}}食用 · 不占舱位 · 不能转卖',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': '先去酒馆雇些水手。',
@@ -15706,8 +15810,8 @@ Lang.sea('zh', 'chine', {
   'festivals/1/name': '中秋节',
   // Marché
   'buildings/marche/name': '市场',
-  // Commercer
-  'buildings/marche/verb': '交易',
+  // Marché
+  'buildings/marche/verb': '市场',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': '买卖货物，补充粮水。',
   // Chantier naval
@@ -15730,8 +15834,8 @@ Lang.sea('zh', 'chine', {
   'buildings/banque/desc': '把银两存起来，不让海盗劫了去。',
   // Maison Wang
   'buildings/usurier/name': '王记钱庄',
-  // Usurier
-  'buildings/usurier/verb': '借贷',
+  // Maison Wang
+  'buildings/usurier/verb': '王记钱庄',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': '王老板谁都肯借。条件由他定。',
   // Entrepôt
@@ -15748,8 +15852,8 @@ Lang.sea('zh', 'chine', {
   'buildings/temple/desc': '海上女神护佑虔诚的水手。',
   // Maison de jeu
   'buildings/jeu/name': '赌坊',
-  // Fan-tan
-  'buildings/jeu/verb': '番摊',
+  // Maison de jeu
+  'buildings/jeu/verb': '赌坊',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': '番摊：押最后剩下几颗豆子。',
   // Quai
@@ -16514,8 +16618,8 @@ Lang.sea('zh', 'chine', {
   'text/prologue/fin1': '这趟首航，送你<b>{n}枚{jetons}</b>。',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': '每段生涯结束时，按你这段生涯挣下的身家，能换到玉牌；达成成就也有。玉牌在<b>传承</b>里花：每买一项，往后的每段生涯都受用。',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': '这趟试航不计入你的纪录。往后要见识的还多着呢：合约、海战、接舷、台风、走私……',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': '这趟试航不算数：你真正的生涯从零开始，本钱还是开局那一份。学到的本事和玉牌，都留在你手里。往后要见识的还多着呢：合约、海战、接舷、台风、走私……',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': '依我看，选“<b>{nom}</b>”，开局多带些钱。不过玉牌是你的：挑别的也行，留着以后用也行。',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -16538,6 +16642,14 @@ Lang.sea('zh', 'chine', {
   'text/hints/solde': '月初了：该给水手发<b>薪饷</b>了。手头总要留够这笔钱，不然有人会开小差。',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': '这些海盗让你吃了不少苦头吧？我来教你怎么打：<b>海战课</b>就在标题画面的<b>帮助</b>里等着你。这堂课不计入你的生涯。',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': '你手头的钱够还清<b>王老板</b>的债了，他的钱庄就在这里。别拖着：这笔债<b>每月涨{taux}%</b>，再过{jours, plural, other {#天}}，他的打手就要上门来拿了。',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': '出海前给你个忠告：每月1日，{marins, plural, other {你的#名水手}}等着领<b>{somme}</b>薪饷。手头总要留够这笔钱，不然有人会开小差。',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': '这里有<b>银行</b>：银两存进去，就不怕海盗抢了，还能生点利息，每月0.5%。{dette, select, oui {不过只要还欠着王老板的钱，就先还他：他那笔债的利息高得多。} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>军火</b>？在中国各港、日本和安南，这可是<b>走私货</b>：一靠岸，海关就会搜船。到时你可以塞几两银子，或者冒罚款和没收的风险。香港和新加坡是自由港，没人来搜。',
 });
 
 </script>
@@ -23738,8 +23850,6 @@ Lang.ui('zht', {
   'page.chargement': '正在繪製中國海海圖……',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': '遊戲進度會自動儲存。',
-  // Meilleur avec le son.
-  'demarrage.son': '開啟聲音，體驗更佳。',
   // Cliquez pour commencer
   'demarrage.cliquer': '點擊開始',
   // Touchez l'écran pour commencer
@@ -24215,6 +24325,8 @@ Lang.ui('zht', {
   'benediction.effet.protection': '海盜幾乎總會放你過去。',
   // OFFRANDES
   'temple.offrandes': '供奉',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '（{n, plural, other {#天}}）',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': '生效中的庇佑',
   // Mise
@@ -24736,6 +24848,8 @@ Lang.ui('zht', {
   'heritage.investis': '已投入 {n} / {total}',
   // Niv. {n}
   'heritage.niv': '{n}級',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': '購買{n}級',
   // niv. {n} / {max}
   'heritage.nivSur': '{n} / {max}級',
   // niv. {n} utilisé sur {own} acquis
@@ -25139,7 +25253,7 @@ Lang.ui('zht', {
   'marche.vivresNom': '糧水',
   //  /j
   'marche.parJour': '/天',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': '供{n, plural, other {#名水手}}食用 · 不佔艙位 · 不能轉賣',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': '請先到酒館僱用水手。',
@@ -25785,8 +25899,8 @@ Lang.sea('zht', 'chine', {
   'festivals/1/name': '中秋節',
   // Marché
   'buildings/marche/name': '市場',
-  // Commercer
-  'buildings/marche/verb': '交易',
+  // Marché
+  'buildings/marche/verb': '市場',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': '買賣貨物，補充糧水。',
   // Chantier naval
@@ -25809,8 +25923,8 @@ Lang.sea('zht', 'chine', {
   'buildings/banque/desc': '把銀兩存起來，不讓海盜劫了去。',
   // Maison Wang
   'buildings/usurier/name': '王記錢莊',
-  // Usurier
-  'buildings/usurier/verb': '借貸',
+  // Maison Wang
+  'buildings/usurier/verb': '王記錢莊',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': '王老闆誰都肯借。條件由他定。',
   // Entrepôt
@@ -25827,8 +25941,8 @@ Lang.sea('zht', 'chine', {
   'buildings/temple/desc': '海上女神護佑虔誠的水手。',
   // Maison de jeu
   'buildings/jeu/name': '賭坊',
-  // Fan-tan
-  'buildings/jeu/verb': '番攤',
+  // Maison de jeu
+  'buildings/jeu/verb': '賭坊',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': '番攤：押最後剩下幾顆豆子。',
   // Quai
@@ -26593,8 +26707,8 @@ Lang.sea('zht', 'chine', {
   'text/prologue/fin1': '這趟初航，給你<b>{n}塊{jetons}</b>。',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': '每段生涯結束時，看你在那段生涯裡掙下多少家業，發給玉牌；達成成就也有。玉牌在<b>傳承</b>裡花用：每項升級，都能幫到你往後的每一段生涯。',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': '這趟試航不算進你的紀錄。還有好多事等著你去闖：合約、海戰、接舷、颱風、走私……',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': '這趟試航不算數：你真正的生涯從零開始，本錢還是起步時那一份。學到的本事和玉牌，都留在你手裡。還有好多事等著你去闖：合約、海戰、接舷、颱風、走私……',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': '依我看，就選「<b>{nom}</b>」，往後起步時本錢多些。不過玉牌是你的：另選一項升級，或先留著以後用，都隨你。',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -26617,6 +26731,14 @@ Lang.sea('zht', 'chine', {
   'text/hints/solde': '月初了：該發水手的<b>薪餉</b>了。手頭總要留夠這筆錢，不然有人會開小差。',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': '這些海盜讓你吃了不少苦頭吧？我來教你怎麼打：<b>海戰課</b>就在標題畫面的<b>說明</b>裡等著你。這堂課不計入你的生涯。',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': '你手頭的錢夠還清<b>王老闆</b>的債了，他的錢莊就在這裡。別拖著：這筆債<b>每月漲{taux}%</b>，再過{jours, plural, other {#天}}，他的打手就要上門討債。',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': '出海前給你個忠告：每月1日，{marins, plural, other {你的#名水手}}等著領<b>{somme}</b>薪餉。手頭總要留夠這筆錢，不然有人會開小差。',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': '這裡有<b>銀行</b>：銀兩存進去，就不怕海盜搶了，還能生點利息，每月0.5%。{dette, select, oui {不過只要還欠著王老闆的錢，就先還他：他那筆債的利息高得多。} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>軍火</b>？在中國各港、日本和安南，這可是<b>走私貨</b>：一靠岸，海關就會搜船。到時你可以塞幾兩銀子，或者冒著罰款和沒收的風險。香港和新加坡是自由港，沒人來搜。',
 });
 
 </script>
@@ -33819,8 +33941,6 @@ Lang.ui('ja', {
   'page.chargement': 'シナ海の海図を作成中……',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'ゲームは自動で保存されます。',
-  // Meilleur avec le son.
-  'demarrage.son': 'サウンドをオンにしてお楽しみください。',
   // Cliquez pour commencer
   'demarrage.cliquer': 'クリックしてはじめる',
   // Touchez l'écran pour commencer
@@ -34300,6 +34420,8 @@ Lang.ui('ja', {
   'benediction.effet.protection': '海賊はほとんど見逃してくれる。',
   // OFFRANDES
   'temple.offrandes': '奉納',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '（{n, plural, other {#日間}}）',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': '授かった加護',
   // Mise
@@ -34821,6 +34943,8 @@ Lang.ui('ja', {
   'heritage.investis': '投資 {n} / {total}',
   // Niv. {n}
   'heritage.niv': 'Lv.{n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Lv.{n}を購入',
   // niv. {n} / {max}
   'heritage.nivSur': 'Lv.{n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -35224,7 +35348,7 @@ Lang.ui('ja', {
   'marche.vivresNom': '食糧',
   //  /j
   'marche.parJour': '／日',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': '{n, plural, other {水夫#人}}分 · 船倉を占めない · 売却不可',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'まずは酒場で水夫を雇いましょう。',
@@ -35870,8 +35994,8 @@ Lang.sea('ja', 'chine', {
   'festivals/1/name': '中秋節',
   // Marché
   'buildings/marche/name': '市場',
-  // Commercer
-  'buildings/marche/verb': '取引',
+  // Marché
+  'buildings/marche/verb': '市場',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': '商品の売買と食糧の補給。',
   // Chantier naval
@@ -35894,8 +36018,8 @@ Lang.sea('ja', 'chine', {
   'buildings/banque/desc': '銀両を預けて、海賊の手から守る。',
   // Maison Wang
   'buildings/usurier/name': '王記銭荘',
-  // Usurier
-  'buildings/usurier/verb': '金貸し',
+  // Maison Wang
+  'buildings/usurier/verb': '王記銭荘',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': '王大人は誰にでも金を貸す。ただし、王大人の条件で。',
   // Entrepôt
@@ -35912,8 +36036,8 @@ Lang.sea('ja', 'chine', {
   'buildings/temple/desc': '海の女神は、信心深い船乗りを守る。',
   // Maison de jeu
   'buildings/jeu/name': '賭博場',
-  // Fan-tan
-  'buildings/jeu/verb': 'ファンタン',
+  // Maison de jeu
+  'buildings/jeu/verb': '賭博場',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'ファンタン：残る豆の数に賭ける。',
   // Quai
@@ -36678,8 +36802,8 @@ Lang.sea('ja', 'chine', {
   'text/prologue/fin1': '最初の航海の褒美だ。<b>{jetons}{n}枚</b>を受け取れ。',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': '翡翠牌は航海を終えるたびに、その航海でお前さんが築いた財に応じて手に入る。実績でももらえる。使い道は<b>遺産</b>だ。どの強化も、次からの航海すべてに効く。',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'この試しの航海は記録には残らん。まだ知らんことは山ほどある。依頼、戦い、接舷戦、台風、抜け荷……',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'この試しの航海は数に入らん。本番の航海は、最初の元手で一からやり直しだ。覚えたことと翡翠牌は手元に残る。まだ知らんことは山ほどある。依頼、戦い、接舷戦、台風、抜け荷……',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'わしのおすすめは<b>「{nom}」</b>だ。元手を増やして船出できる。だが、牌はお前さんのものだ。ほかの強化を選ぶもよし、取っておくもよし。',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -36702,6 +36826,14 @@ Lang.sea('ja', 'chine', {
   'text/hints/solde': '月の初めは、水夫に<b>給金</b>を払う日だ。払えるだけの金は常に残しておけ。でなきゃ逃げ出す奴が出る。',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': 'あの海賊どもに手こずったか？　戦い方を教えてやろう。<b>戦いの講義</b>はタイトル画面の<b>手引き</b>にある。航海には数えられんぞ。',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': '<b>王大人</b>に返すだけの金ができたな。王記銭荘もこの港にある。ぐずぐずするな。借金は<b>月{taux}%</b>ずつ増えていくし、あと{jours, plural, other {#日}}で手下が取り立てに来るぞ。',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': '沖に出る前にひとつ忠告だ。毎月1日には、{marins, plural, other {お前さんの水夫#人}}が<b>{somme}</b>の給金を待っとる。払えるだけの金は常に残しておけ。でなきゃ逃げ出す奴が出る。',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'ここには<b>銀行</b>がある。銀両を預ければ海賊に奪われる心配はないし、月0.5%とわずかだが利息もつく。{dette, select, oui {だが王大人への借金が残っているうちは、まずそれを返せ。あっちのほうがずっと高くつく。} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>武器</b>か？　清国の港、日本、安南では、そいつは<b>禁制品</b>だ。入港すれば税関が船を調べる。銀両を少し握らせるか、罰金と没収を覚悟するかだ。自由港の香港とシンガポールなら、誰も調べやしない。',
 });
 
 </script>
@@ -43936,8 +44068,6 @@ Lang.ui('ko', {
   'page.chargement': '중국해의 해도를 그리는 중…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': '게임은 자동으로 저장됩니다.',
-  // Meilleur avec le son.
-  'demarrage.son': '소리를 켜고 즐기세요.',
   // Cliquez pour commencer
   'demarrage.cliquer': '클릭하여 시작',
   // Touchez l'écran pour commencer
@@ -44417,6 +44547,8 @@ Lang.ui('ko', {
   'benediction.effet.protection': '해적이 거의 언제나 길을 비켜 줍니다.',
   // OFFRANDES
   'temple.offrandes': '봉헌',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, other {#일간}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': '받은 가호',
   // Mise
@@ -44938,6 +45070,8 @@ Lang.ui('ko', {
   'heritage.investis': '투자 {n} / {total}',
   // Niv. {n}
   'heritage.niv': '{n}단계',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': '{n}단계 구매',
   // niv. {n} / {max}
   'heritage.nivSur': '{n} / {max}단계',
   // niv. {n} utilisé sur {own} acquis
@@ -45341,7 +45475,7 @@ Lang.ui('ko', {
   'marche.vivresNom': '식량',
   //  /j
   'marche.parJour': '/일',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': '선원 {n, plural, other {#명}}분 · 화물칸 차지 안 함 · 되팔 수 없음',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': '먼저 주점에서 선원을 고용하십시오.',
@@ -45987,8 +46121,8 @@ Lang.sea('ko', 'chine', {
   'festivals/1/name': '중추절',
   // Marché
   'buildings/marche/name': '교역소',
-  // Commercer
-  'buildings/marche/verb': '교역',
+  // Marché
+  'buildings/marche/verb': '교역소',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': '교역품을 사고팔고 식량을 싣습니다.',
   // Chantier naval
@@ -46011,8 +46145,8 @@ Lang.sea('ko', 'chine', {
   'buildings/banque/desc': '냥을 맡겨 해적에게서 지키십시오.',
   // Maison Wang
   'buildings/usurier/name': '왕씨 전장',
-  // Usurier
-  'buildings/usurier/verb': '대부',
+  // Maison Wang
+  'buildings/usurier/verb': '왕씨 전장',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': '왕 대인은 누구에게나 돈을 빌려줍니다. 자기 조건으로.',
   // Entrepôt
@@ -46029,8 +46163,8 @@ Lang.sea('ko', 'chine', {
   'buildings/temple/desc': '바다의 여신이 독실한 뱃사람을 지켜 줍니다.',
   // Maison de jeu
   'buildings/jeu/name': '도박장',
-  // Fan-tan
-  'buildings/jeu/verb': '판탄',
+  // Maison de jeu
+  'buildings/jeu/verb': '도박장',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': '판탄: 남는 콩의 수에 돈을 거십시오.',
   // Quai
@@ -46795,8 +46929,8 @@ Lang.sea('ko', 'chine', {
   'text/prologue/fin1': '첫 항해 기념으로 <b>{jetons} {n}개</b>를 주마.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': '옥패는 항해를 마칠 때마다 그 항해에서 네가 일군 재산에 따라 받고, 업적으로도 받는다. <b>유산</b>에서 쓰는데, 강화 하나하나가 다음 항해 모두에 힘이 된다.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': '이번 연습 항해는 기록에 남지 않는다. 아직 겪어 볼 게 많다. 계약, 전투, 백병전, 태풍, 밀수…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': '이번 연습 항해는 없던 걸로 친다. 진짜 항해는 출발 자금을 들고 처음부터 다시 시작한다. 배운 것과 옥패는 그대로 네 것이다. 아직 겪어 볼 게 많다. 계약, 전투, 백병전, 태풍, 밀수…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': '내 생각엔 <b>{nom}</b>이(가) 좋겠다. 더 많은 돈을 들고 출발할 수 있지. 하지만 네 옥패다. 다른 강화를 골라도 되고, 아껴 둬도 된다.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -46819,6 +46953,14 @@ Lang.sea('ko', 'chine', {
   'text/hints/solde': '달이 바뀌었다. 선원들 <b>급료</b> 날이다. 줄 돈은 늘 남겨 둬라. 안 그러면 몇 놈은 달아난다.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': '그 해적들한테 애먹었나? 싸우는 법을 가르쳐 주마. <b>전투 수업</b>은 타이틀 화면의 <b>도움말</b>에 있다. 네 경력에는 셈하지 않는다.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': '<b>왕 대인</b>에게 진 빚을 다 갚을 돈이 있구나. 마침 왕씨 전장도 여기 있다. 꾸물대지 마라. 그 빚은 <b>달마다 {taux}%씩</b> 불어나고, {jours, plural, other {#일}} 뒤면 수하들이 들이닥친다.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': '출항하기 전에 한마디 해 두마. 매달 1일엔 선원 {marins, plural, other {#명}}에게 급료 <b>{somme}</b>을(를) 치러야 한다. 그 돈은 늘 남겨 둬라. 안 그러면 몇 놈은 달아난다.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': '여기엔 <b>은행</b>이 있다. 네 돈을 맡겨 두면 해적한테 털릴 걱정이 없고, 월 0.5%씩 조금이나마 불어난다.{dette, select, oui { 하지만 왕 대인에게 빚이 남아 있는 동안은 그것부터 갚아라. 그쪽 이자가 훨씬 비싸다.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>무기</b>라고? 중국 항구와 일본, 안남에선 그게 <b>밀수품</b>이다. 입항하면 세관이 배를 뒤진다. 몇 냥 쥐여 줄 수도 있고, 벌금과 압수를 무릅쓸 수도 있다. 자유항인 홍콩과 싱가포르에선 아무도 뒤지지 않는다.',
 });
 
 </script>
@@ -54018,8 +54160,6 @@ Lang.ui('ru', {
   'page.chargement': 'Наносим на карту Китайское море…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'Игра сохраняется автоматически.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Лучше со звуком.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Нажмите, чтобы начать',
   // Touchez l'écran pour commencer
@@ -54499,6 +54639,8 @@ Lang.ui('ru', {
   'benediction.effet.protection': 'Пираты почти всегда пропускают вас.',
   // OFFRANDES
   'temple.offrandes': 'ПОДНОШЕНИЯ',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# день} few {# дня} many {# дней} other {# дня}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'ДЕЙСТВУЮЩИЕ БЛАГОСЛОВЕНИЯ',
   // Mise
@@ -55020,6 +55162,8 @@ Lang.ui('ru', {
   'heritage.investis': 'Вложено: {n} / {total}',
   // Niv. {n}
   'heritage.niv': 'Ур. {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Купить ур. {n}',
   // niv. {n} / {max}
   'heritage.nivSur': 'ур. {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -55423,7 +55567,7 @@ Lang.ui('ru', {
   'marche.vivresNom': 'Провиант',
   //  /j
   'marche.parJour': ' /день',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': 'На {n, plural, one {# моряка} few {# моряков} many {# моряков} other {# моряков}} · места в трюме не занимает · не перепродаётся',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Сначала наймите моряков в таверне.',
@@ -56069,8 +56213,8 @@ Lang.sea('ru', 'chine', {
   'festivals/1/name': 'Праздник середины осени',
   // Marché
   'buildings/marche/name': 'Рынок',
-  // Commercer
-  'buildings/marche/verb': 'Торговать',
+  // Marché
+  'buildings/marche/verb': 'Рынок',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Покупать и продавать товары, запасаться провиантом.',
   // Chantier naval
@@ -56093,8 +56237,8 @@ Lang.sea('ru', 'chine', {
   'buildings/banque/desc': 'Храните таэли подальше от пиратов.',
   // Maison Wang
   'buildings/usurier/name': 'Дом Вана',
-  // Usurier
-  'buildings/usurier/verb': 'Заимодавец',
+  // Maison Wang
+  'buildings/usurier/verb': 'Дом Вана',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Ван даёт в долг любому. На своих условиях.',
   // Entrepôt
@@ -56111,8 +56255,8 @@ Lang.sea('ru', 'chine', {
   'buildings/temple/desc': 'Богиня моря хранит благочестивых моряков.',
   // Maison de jeu
   'buildings/jeu/name': 'Игорный дом',
-  // Fan-tan
-  'buildings/jeu/verb': 'Фань-тань',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Игорный дом',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'Фань-тань: ставьте на остаток бобов.',
   // Quai
@@ -56877,8 +57021,8 @@ Lang.sea('ru', 'chine', {
   'text/prologue/fin1': 'За это первое плавание — вот тебе <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'Нефритовые жетоны даются в конце каждой карьеры — за нажитое в ней состояние, а ещё за достижения. Тратят их в разделе <b>«Наследие»</b>: каждое улучшение помогает во всех следующих карьерах.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'Это пробное плавание не идёт в твои рекорды. А впереди ещё столько всего: контракты, бои, абордажи, тайфуны, контрабанда…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'Это пробное плавание не в счёт: твоя настоящая карьера начнётся с нуля, со стартовыми деньгами. Всё, чему ты научился, останется при тебе, как и твои нефритовые жетоны. А впереди ещё столько всего: контракты, бои, абордажи, тайфуны, контрабанда…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'Мой совет — <b>«{nom}»</b>: выйдешь в море с деньгами побольше. Но жетоны твои: выбери другое улучшение или прибереги их на потом.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -56901,6 +57045,14 @@ Lang.sea('ru', 'chine', {
   'text/hints/solde': 'Начало месяца: <b>жалованье</b> морякам. Всегда держи на него деньги, иначе кое-кто дезертирует.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': 'Туго пришлось с этими пиратами? Я научу тебя драться: <b>урок боя</b> ждёт в <b>Справке</b> на титульном экране. В карьеру он не засчитывается.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'Тебе хватит денег, чтобы расплатиться с <b>Ваном</b>, а его дом как раз здесь. Не тяни: долг растёт на <b>{taux} % в месяц</b>, а через {jours, plural, one {# день} few {# дня} many {# дней} other {# дня}} его люди придут за долгом.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'Совет перед выходом в море: первого числа {marins, plural, one {# моряк ждёт} few {# моряка ждут} many {# моряков ждут} other {# моряка ждут}} <b>{somme}</b> жалованья. Всегда держи на него деньги, иначе кое-кто дезертирует.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'Здесь есть <b>банк</b>: в нём твои таэли укрыты от пиратов и приносят немного, 0,5 % в месяц.{dette, select, oui { Но пока ты должен Вану, сперва верни долг: он обходится куда дороже.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>Оружие</b>? В портах Китая, Японии и Аннама это <b>контрабанда</b>: по прибытии таможня обыскивает корабль. Сможешь сунуть таможенникам несколько таэлей или рискнуть штрафом и конфискацией. В Гонконге и Сингапуре, вольных портах, никто не обыскивает.',
   // piculs
   'text/unitMany': 'пикулей',
   // piculs
@@ -64240,8 +64392,6 @@ Lang.ui('es', {
   'page.chargement': 'Cartografiando los mares de la China…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'Tu partida se guarda automáticamente.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Mejor con sonido.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Haz clic para empezar',
   // Touchez l'écran pour commencer
@@ -64721,6 +64871,8 @@ Lang.ui('es', {
   'benediction.effet.protection': 'Los piratas casi siempre te dejan pasar.',
   // OFFRANDES
   'temple.offrandes': 'OFRENDAS',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# día} other {# días}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'BENDICIONES ACTIVAS',
   // Mise
@@ -65242,6 +65394,8 @@ Lang.ui('es', {
   'heritage.investis': '{n} / {total} invertidas',
   // Niv. {n}
   'heritage.niv': 'Niv. {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Comprar niv. {n}',
   // niv. {n} / {max}
   'heritage.nivSur': 'niv. {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -65645,8 +65799,8 @@ Lang.ui('es', {
   'marche.vivresNom': 'Víveres',
   //  /j
   'marche.parJour': ' /día',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
-  'marche.vivresInfo': '{n, plural, one {Para tu único marinero} other {Para tus # marineros}} · no ocupan sitio en la bodega · no se revenden',
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  'marche.vivresInfo': 'Para {n, plural, one {# marinero} other {# marineros}} · no ocupan sitio en la bodega · no se revenden',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Contrata primero marineros en la taberna.',
   // Jours de vivres
@@ -66291,8 +66445,8 @@ Lang.sea('es', 'chine', {
   'festivals/1/name': 'Fiesta del Medio Otoño',
   // Marché
   'buildings/marche/name': 'Mercado',
-  // Commercer
-  'buildings/marche/verb': 'Comerciar',
+  // Marché
+  'buildings/marche/verb': 'Mercado',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Comprar y vender mercancías, cargar víveres.',
   // Chantier naval
@@ -66315,8 +66469,8 @@ Lang.sea('es', 'chine', {
   'buildings/banque/desc': 'Deposita tus taeles a salvo de los piratas.',
   // Maison Wang
   'buildings/usurier/name': 'Casa Wang',
-  // Usurier
-  'buildings/usurier/verb': 'Prestamista',
+  // Maison Wang
+  'buildings/usurier/verb': 'Casa Wang',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Wang le presta a cualquiera. Con sus condiciones.',
   // Entrepôt
@@ -66333,8 +66487,8 @@ Lang.sea('es', 'chine', {
   'buildings/temple/desc': 'La diosa del mar protege a los marinos piadosos.',
   // Maison de jeu
   'buildings/jeu/name': 'Casa de juego',
-  // Fan-tan
-  'buildings/jeu/verb': 'Fan-tan',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Casa de juego',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'El fan-tan: apuesta a cuántos frijoles quedan.',
   // Quai
@@ -67099,8 +67253,8 @@ Lang.sea('es', 'chine', {
   'text/prologue/fin1': 'Por este primer viaje, aquí tienes <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'Las fichas de jade se ganan al final de cada carrera, según la fortuna que hayas amasado en ella, y con las hazañas. Se gastan en el <b>Legado</b>: cada mejora ayuda en todas tus carreras siguientes.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'Este viaje de prueba no cuenta para tus récords. Te queda tanto por descubrir: contratos, combates, abordajes, tifones, contrabando…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'Este viaje de prueba no cuenta: tu verdadera carrera empieza de cero, con la bolsa inicial. Conservas lo que has aprendido, y tus fichas de jade. Te queda tanto por descubrir: contratos, combates, abordajes, tifones, contrabando…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'Mi consejo: <b>{nom}</b>, para zarpar con más dinero. Pero las fichas son tuyas: elige otra mejora, o guárdalas para más adelante.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -67123,6 +67277,14 @@ Lang.sea('es', 'chine', {
   'text/hints/solde': 'Principio de mes: <b>la soldada</b> de los marineros. Guarda siempre con qué pagarla, o algunos desertarán.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne c
   'text/hints/leconCombat': '¿Esos piratas te han dado guerra? Te enseñaré a pelear: la <b>lección de combate</b> te espera en la <b>Ayuda</b>, desde la pantalla de título. No cuenta para tu carrera.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'Tienes con qué devolverle todo a <b>Wang</b>, y su casa está aquí. No te entretengas: tu deuda crece un <b>{taux}% al mes</b>, y dentro de {jours, plural, one {# día} other {# días}} sus hombres vendrán a cobrarse lo suyo.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'Antes de hacerte a la mar, un consejo: el día 1 de cada mes, {marins, plural, one {tu marinero espera} other {tus # marineros esperan}} <b>{somme}</b> de soldada. Guarda siempre con qué pagarla, o algunos desertarán.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'Aquí hay un <b>banco</b>: tus taeles están a salvo de los piratas y rinden un poco, un 0,5% al mes.{dette, select, oui { Pero mientras le debas dinero a Wang, devuélveselo primero: esa deuda cuesta mucho más.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '¿<b>Armas</b>? En los puertos chinos, en Japón y en Annam son <b>contrabando</b>: la aduana registra a la llegada. Podrás pasar unos taeles bajo cuerda, o arriesgarte a la multa y al decomiso. En Hong Kong y en Singapur, puertos francos, nadie registra nada.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -74348,8 +74510,6 @@ Lang.ui('pt', {
   'page.chargement': 'Cartografando os mares da China…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'Sua partida é salva automaticamente.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Melhor com som.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Clique para começar',
   // Touchez l'écran pour commencer
@@ -74829,6 +74989,8 @@ Lang.ui('pt', {
   'benediction.effet.protection': 'Os piratas quase sempre deixam você passar.',
   // OFFRANDES
   'temple.offrandes': 'OFERENDAS',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# dia} other {# dias}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'BÊNÇÃOS ATIVAS',
   // Mise
@@ -75350,6 +75512,8 @@ Lang.ui('pt', {
   'heritage.investis': '{n} / {total} investidos',
   // Niv. {n}
   'heritage.niv': 'Nív. {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Comprar nív. {n}',
   // niv. {n} / {max}
   'heritage.nivSur': 'nív. {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -75753,7 +75917,7 @@ Lang.ui('pt', {
   'marche.vivresNom': 'Víveres',
   //  /j
   'marche.parJour': ' /dia',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': 'Para {n, plural, =1 {# marinheiro} other {# marinheiros}} · não ocupa o porão · não se revende',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Primeiro, contrate marinheiros na taverna.',
@@ -76399,8 +76563,8 @@ Lang.sea('pt', 'chine', {
   'festivals/1/name': 'Festa do Meio do Outono',
   // Marché
   'buildings/marche/name': 'Mercado',
-  // Commercer
-  'buildings/marche/verb': 'Negociar',
+  // Marché
+  'buildings/marche/verb': 'Mercado',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Comprar e vender mercadorias, abastecer-se de víveres.',
   // Chantier naval
@@ -76423,8 +76587,8 @@ Lang.sea('pt', 'chine', {
   'buildings/banque/desc': 'Deposite seus taéis a salvo dos piratas.',
   // Maison Wang
   'buildings/usurier/name': 'Casa Wang',
-  // Usurier
-  'buildings/usurier/verb': 'Agiota',
+  // Maison Wang
+  'buildings/usurier/verb': 'Casa Wang',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Wang empresta a qualquer um. Nas condições dele.',
   // Entrepôt
@@ -76441,8 +76605,8 @@ Lang.sea('pt', 'chine', {
   'buildings/temple/desc': 'A deusa do mar protege os marinheiros devotos.',
   // Maison de jeu
   'buildings/jeu/name': 'Casa de jogo',
-  // Fan-tan
-  'buildings/jeu/verb': 'Fan-tan',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Casa de jogo',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'O fan-tan: aposte no resto dos feijões.',
   // Quai
@@ -77207,8 +77371,8 @@ Lang.sea('pt', 'chine', {
   'text/prologue/fin1': 'Por esta primeira viagem, aqui estão <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'As fichas de jade se ganham no fim de cada carreira, conforme a fortuna que você fez nela, e com as conquistas. E se gastam na <b>Herança</b>: cada melhoria ajuda todas as suas próximas carreiras.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'Esta viagem de treino não conta para os seus recordes. Ainda há tanto para descobrir: contratos, combates, abordagens, tufões, contrabando…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'Esta viagem de treino não conta: a sua carreira de verdade recomeça do zero, com a bolsa inicial. Você guarda o que aprendeu, e as suas fichas de jade. Ainda há tanto para descobrir: contratos, combates, abordagens, tufões, contrabando…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'Meu conselho: o <b>{nom}</b>, para começar com mais dinheiro. Mas as fichas são suas: escolha outra melhoria, ou guarde-as para mais tarde.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -77231,6 +77395,14 @@ Lang.sea('pt', 'chine', {
   'text/hints/solde': 'Início do mês: <b>o soldo</b> dos marinheiros. Guarde sempre o bastante para pagá-los, senão alguns vão desertar.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': 'Esses piratas te deram trabalho? Eu te ensino a lutar: a <b>lição de combate</b> te espera na <b>Ajuda</b>, na tela inicial. Ela não conta na sua carreira.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'Você já pode quitar a dívida com <b>Wang</b>, e a casa dele é aqui. Não demore: ela cresce <b>{taux}% ao mês</b>, e em {jours, plural, =1 {# dia} other {# dias}} os homens dele virão cobrar à força.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'Antes de zarpar, um conselho: no dia 1º do mês, {marins, plural, one {seu marinheiro espera} other {seus # marinheiros esperam}} <b>{somme}</b> de soldo. Guarde sempre o bastante para pagá-lo, senão alguns vão desertar.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'Aqui há um <b>banco</b>: seus taéis ficam a salvo dos piratas e rendem um pouco, 0,5% ao mês.{dette, select, oui { Mas, enquanto dever dinheiro a Wang, quite a dívida primeiro: ela custa bem mais.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>Armas</b>? Nos portos chineses, no Japão e em Anam, são <b>contrabando</b>: a alfândega revista na chegada. Você pode molhar a mão dos guardas com alguns taéis, ou arriscar a multa e a apreensão. Em Hong Kong e em Singapura, portos francos, ninguém revista nada.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -84454,8 +84626,6 @@ Lang.ui('de', {
   'page.chargement': 'Das Chinesische Meer wird kartiert …',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'Dein Spielstand wird automatisch gespeichert.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Am besten mit Ton.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Klicke zum Starten',
   // Touchez l'écran pour commencer
@@ -84935,6 +85105,8 @@ Lang.ui('de', {
   'benediction.effet.protection': 'Piraten lassen dich fast immer passieren.',
   // OFFRANDES
   'temple.offrandes': 'OPFERGABEN',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# Tag} other {# Tage}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'AKTIVE SEGNUNGEN',
   // Mise
@@ -85456,6 +85628,8 @@ Lang.ui('de', {
   'heritage.investis': '{n} / {total} investiert',
   // Niv. {n}
   'heritage.niv': 'Stufe {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Stufe {n} kaufen',
   // niv. {n} / {max}
   'heritage.nivSur': 'Stufe {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -85859,7 +86033,7 @@ Lang.ui('de', {
   'marche.vivresNom': 'Proviant',
   //  /j
   'marche.parJour': ' /Tg.',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': 'Für {n, plural, one {# Mann} other {# Mann}} · braucht keinen Laderaum · nicht verkäuflich',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Heuere zuerst in der Schenke Seeleute an.',
@@ -86505,8 +86679,8 @@ Lang.sea('de', 'chine', {
   'festivals/1/name': 'Mondfest',
   // Marché
   'buildings/marche/name': 'Markt',
-  // Commercer
-  'buildings/marche/verb': 'Handeln',
+  // Marché
+  'buildings/marche/verb': 'Markt',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Waren kaufen und verkaufen, Proviant fassen.',
   // Chantier naval
@@ -86529,8 +86703,8 @@ Lang.sea('de', 'chine', {
   'buildings/banque/desc': 'Bring deine Tael vor den Piraten in Sicherheit.',
   // Maison Wang
   'buildings/usurier/name': 'Haus Wang',
-  // Usurier
-  'buildings/usurier/verb': 'Darlehen',
+  // Maison Wang
+  'buildings/usurier/verb': 'Haus Wang',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Wang leiht jedem. Zu seinen Bedingungen.',
   // Entrepôt
@@ -86547,8 +86721,8 @@ Lang.sea('de', 'chine', {
   'buildings/temple/desc': 'Die Göttin des Meeres beschützt fromme Seeleute.',
   // Maison de jeu
   'buildings/jeu/name': 'Spielhaus',
-  // Fan-tan
-  'buildings/jeu/verb': 'Fan-Tan',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Spielhaus',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'Fan-Tan: Wette darauf, wie viele Bohnen übrig bleiben.',
   // Quai
@@ -87313,8 +87487,8 @@ Lang.sea('de', 'chine', {
   'text/prologue/fin1': 'Für diese erste Fahrt bekommst du <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'Jademarken verdienst du am Ende jeder Laufbahn, je nach dem Vermögen, das du darin aufgebaut hast, und durch Ruhmestaten. Ausgegeben werden sie im <b>Erbe</b>: Jede Verbesserung hilft all deinen folgenden Laufbahnen.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'Diese Probefahrt zählt nicht für deine Rekorde. Es gibt noch so viel zu entdecken: Aufträge, Gefechte, Enterungen, Taifune, Schmuggel …',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'Diese Probefahrt zählt nicht: Deine richtige Laufbahn beginnt bei null, mit dem Startgeld. Was du gelernt hast, behältst du, und deine Jademarken auch. Es gibt noch so viel zu entdecken: Aufträge, Gefechte, Enterungen, Taifune, Schmuggel …',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'Mein Rat: <b>{nom}</b> – damit startest du mit mehr Geld. Aber es sind deine Jademarken: Wähl eine andere Verbesserung oder heb sie dir auf.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -87337,6 +87511,14 @@ Lang.sea('de', 'chine', {
   'text/hints/solde': 'Monatsanfang: <b>die Heuer</b> der Seeleute. Hab immer genug, um sie zu zahlen, sonst desertieren einige.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne c
   'text/hints/leconCombat': 'Haben dir diese Piraten zu schaffen gemacht? Ich bring dir das Kämpfen bei: Die <b>Lektion zum Gefecht</b> wartet in der <b>Hilfe</b>, auf dem Titelbildschirm. Sie zählt nicht für deine Laufbahn.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'Du hast genug, um <b>Wang</b> alles zurückzuzahlen, und sein Haus ist hier. Trödle nicht: Deine Schulden wachsen um <b>{taux} % pro Monat</b>, und in {jours, plural, one {# Tag} other {# Tagen}} bedienen sich seine Leute selbst.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'Bevor du ausläufst, noch ein Rat: Am 1. des Monats {marins, plural, one {erwartet dein Seemann} other {erwarten deine # Seeleute}} <b>{somme}</b> Heuer. Hab immer genug, um sie zu zahlen, sonst desertieren einige.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'Hier gibt es eine <b>Bank</b>: Deine Tael sind dort vor Piraten sicher und bringen ein wenig ein, 0,5 % pro Monat.{dette, select, oui { Aber solange du Wang Geld schuldest, zahl ihm zuerst alles zurück: Die Schulden bei ihm kosten weit mehr.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>Waffen</b>? In chinesischen Häfen, in Japan und in Annam sind sie <b>Schmuggelware</b>: Der Zoll durchsucht dein Schiff bei der Ankunft. Du kannst den Zöllnern ein paar Tael zustecken oder Strafe und Beschlagnahme riskieren. In Hongkong und Singapur, beides Freihäfen, kontrolliert niemand.',
   // taels
   'text/moneyOne': 'Tael',
   // jetons de jade
@@ -94560,8 +94742,6 @@ Lang.ui('it', {
   'page.chargement': 'Si tracciano le carte dei mari della Cina…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'La partita viene salvata automaticamente.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Meglio con l\'audio.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Clicca per iniziare',
   // Touchez l'écran pour commencer
@@ -95041,6 +95221,8 @@ Lang.ui('it', {
   'benediction.effet.protection': 'I pirati ti lasciano quasi sempre passare.',
   // OFFRANDES
   'temple.offrandes': 'OFFERTE',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# giorno} other {# giorni}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'BENEDIZIONI ATTIVE',
   // Mise
@@ -95562,6 +95744,8 @@ Lang.ui('it', {
   'heritage.investis': '{n} / {total} investiti',
   // Niv. {n}
   'heritage.niv': 'Liv. {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Compra liv. {n}',
   // niv. {n} / {max}
   'heritage.nivSur': 'liv. {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -95965,7 +96149,7 @@ Lang.ui('it', {
   'marche.vivresNom': 'Viveri',
   //  /j
   'marche.parJour': ' /g',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': 'Per {n, plural, one {# marinaio} other {# marinai}} · non occupano spazio in stiva · non si rivendono',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Prima ingaggia dei marinai alla taverna.',
@@ -96611,8 +96795,8 @@ Lang.sea('it', 'chine', {
   'festivals/1/name': 'Festa di metà autunno',
   // Marché
   'buildings/marche/name': 'Mercato',
-  // Commercer
-  'buildings/marche/verb': 'Commercia',
+  // Marché
+  'buildings/marche/verb': 'Mercato',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Compra e vendi merci, fai scorta di viveri.',
   // Chantier naval
@@ -96635,8 +96819,8 @@ Lang.sea('it', 'chine', {
   'buildings/banque/desc': 'Deposita i tuoi tael al riparo dai pirati.',
   // Maison Wang
   'buildings/usurier/name': 'Casa Wang',
-  // Usurier
-  'buildings/usurier/verb': 'Prestatore',
+  // Maison Wang
+  'buildings/usurier/verb': 'Casa Wang',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Wang presta a tutti. Alle sue condizioni.',
   // Entrepôt
@@ -96653,8 +96837,8 @@ Lang.sea('it', 'chine', {
   'buildings/temple/desc': 'La dea del mare protegge i marinai devoti.',
   // Maison de jeu
   'buildings/jeu/name': 'Casa da gioco',
-  // Fan-tan
-  'buildings/jeu/verb': 'Fan-tan',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Casa da gioco',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'Il fan-tan: punta sul resto dei fagioli.',
   // Quai
@@ -97419,8 +97603,8 @@ Lang.sea('it', 'chine', {
   'text/prologue/fin1': 'Per questo primo viaggio, eccoti <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'I gettoni di giada si guadagnano alla fine di ogni carriera, in base a quanto ti sei arricchito, e con le imprese. Si spendono nell\'<b>Eredità</b>: ogni miglioria aiuta tutte le tue carriere successive.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'Questo viaggio di prova non conta per i tuoi record. Hai ancora tanto da scoprire: contratti, battaglie, arrembaggi, tifoni, contrabbando…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'Questo viaggio di prova non conta: la tua vera carriera riparte da zero, con la borsa di partenza. Conservi quello che hai imparato, e i tuoi gettoni di giada. Hai ancora tanto da scoprire: contratti, battaglie, arrembaggi, tifoni, contrabbando…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'Il mio consiglio: il <b>{nom}</b>, per partire con più denaro. Ma i gettoni sono tuoi: scegli un\'altra miglioria, o tienili per dopo.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -97443,6 +97627,14 @@ Lang.sea('it', 'chine', {
   'text/hints/solde': 'Inizio del mese: <b>la paga</b> dei marinai. Tieni sempre da parte il denaro per pagarli, o qualcuno diserterà.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': 'Quei pirati ti hanno dato del filo da torcere? Ti insegnerò a combattere: la <b>lezione di combattimento</b> ti aspetta nell\'<b>Aiuto</b>, dalla schermata iniziale. Non conta per la tua carriera.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'Hai di che restituire tutto a <b>Wang</b>, e la sua casa è qui. Non perdere tempo: il tuo debito cresce del <b>{taux}% al mese</b>, e tra {jours, plural, one {# giorno} other {# giorni}} i suoi uomini verranno a prendersi il dovuto.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'Prima di prendere il largo, un consiglio: il primo del mese {marins, plural, one {il tuo marinaio aspetta} other {i tuoi # marinai aspettano}} <b>{somme}</b> di paga. Tieni sempre da parte il denaro per pagarla, o qualcuno diserterà.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'Qui c\'è una <b>banca</b>: i tuoi tael sono al riparo dai pirati e rendono qualcosa, lo 0,5% al mese.{dette, select, oui { Ma finché devi denaro a Wang, prima restituiscigli il dovuto: quel debito costa molto di più.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>Armi</b>? Nei porti cinesi, in Giappone e in Annam sono <b>contrabbando</b>: la dogana perquisisce all\'arrivo. Potrai allungare qualche tael, o rischiare la multa e il sequestro. A Hong Kong e a Singapore, porti franchi, nessuno perquisisce.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -104669,8 +104861,6 @@ Lang.ui('pl', {
   'page.chargement': 'Kreślenie map mórz chińskich…',
   // Votre partie est sauvegardée automatiquement.
   'demarrage.sauvegarde': 'Gra zapisuje się automatycznie.',
-  // Meilleur avec le son.
-  'demarrage.son': 'Najlepiej z dźwiękiem.',
   // Cliquez pour commencer
   'demarrage.cliquer': 'Kliknij, aby zacząć',
   // Touchez l'écran pour commencer
@@ -105150,6 +105340,8 @@ Lang.ui('pl', {
   'benediction.effet.protection': 'Piraci prawie zawsze puszczają cię wolno.',
   // OFFRANDES
   'temple.offrandes': 'OFIARY',
+  // ({n, plural, one {# jour} other {# jours}})
+  'temple.pendant': '({n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}})',
   // BÉNÉDICTIONS ACTIVES
   'temple.actives': 'AKTYWNE BŁOGOSŁAWIEŃSTWA',
   // Mise
@@ -105671,6 +105863,8 @@ Lang.ui('pl', {
   'heritage.investis': '{n} / {total} zainwestowane',
   // Niv. {n}
   'heritage.niv': 'Poz. {n}',
+  // Acheter le niv. {n}
+  'heritage.acheterNiv': 'Kup poz. {n}',
   // niv. {n} / {max}
   'heritage.nivSur': 'poz. {n} / {max}',
   // niv. {n} utilisé sur {own} acquis
@@ -106074,7 +106268,7 @@ Lang.ui('pl', {
   'marche.vivresNom': 'Prowiant',
   //  /j
   'marche.parJour': ' /dzień',
-  // Pour vos {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
+  // Pour {n, plural, one {# marin} other {# marins}} · ne prend pas de place en cale · ne se revend pas
   'marche.vivresInfo': 'Dla {n, plural, one {# marynarza} few {# marynarzy} many {# marynarzy} other {# marynarza}} · nie zajmuje miejsca w ładowni · nie do odsprzedania',
   // Engagez d'abord des marins à la taverne.
   'marche.vivresSansMarins': 'Najpierw najmij marynarzy w tawernie.',
@@ -106720,8 +106914,8 @@ Lang.sea('pl', 'chine', {
   'festivals/1/name': 'Święto Środka Jesieni',
   // Marché
   'buildings/marche/name': 'Targ',
-  // Commercer
-  'buildings/marche/verb': 'Handluj',
+  // Marché
+  'buildings/marche/verb': 'Targ',
   // Acheter et vendre des marchandises, faire des vivres.
   'buildings/marche/desc': 'Kupuj i sprzedawaj towary, zaopatrz się w prowiant.',
   // Chantier naval
@@ -106744,8 +106938,8 @@ Lang.sea('pl', 'chine', {
   'buildings/banque/desc': 'Trzymaj taele z dala od piratów.',
   // Maison Wang
   'buildings/usurier/name': 'Dom Wanga',
-  // Usurier
-  'buildings/usurier/verb': 'Lichwiarz',
+  // Maison Wang
+  'buildings/usurier/verb': 'Dom Wanga',
   // Wang prête à tout le monde. À ses conditions.
   'buildings/usurier/desc': 'Wang pożycza każdemu. Na swoich warunkach.',
   // Entrepôt
@@ -106762,8 +106956,8 @@ Lang.sea('pl', 'chine', {
   'buildings/temple/desc': 'Bogini morza strzeże pobożnych marynarzy.',
   // Maison de jeu
   'buildings/jeu/name': 'Dom gry',
-  // Fan-tan
-  'buildings/jeu/verb': 'Fan-tan',
+  // Maison de jeu
+  'buildings/jeu/verb': 'Dom gry',
   // Le fan-tan : pariez sur le reste des haricots.
   'buildings/jeu/desc': 'Fan-tan: obstaw, ile fasolek zostanie.',
   // Quai
@@ -107528,8 +107722,8 @@ Lang.sea('pl', 'chine', {
   'text/prologue/fin1': 'Za ten pierwszy rejs masz tu <b>{n} {jetons}</b>.',
   // Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l'<b>Héritage</b> : 
   'text/prologue/fin2': 'Jadeitowe żetony dostajesz na koniec każdej kariery, zależnie od majątku, jaki w niej zbijesz, a także za osiągnięcia. Wydaje się je w <b>Dziedzictwie</b>: każde ulepszenie pomaga we wszystkich twoich kolejnych karierach.',
-  // Ce voyage d'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…
-  'text/prologue/fin3': 'Ten rejs próbny nie liczy się do twoich rekordów. Tyle jeszcze przed tobą: kontrakty, bitwy, abordaże, tajfuny, kontrabanda…',
+  // Ce voyage d'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à d
+  'text/prologue/fin3': 'Ten rejs próbny się nie liczy: twoja prawdziwa kariera zaczyna się od zera, z początkową sakiewką. Zachowujesz zdobytą wiedzę i swoje jadeitowe żetony. Tyle jeszcze przed tobą: kontrakty, bitwy, abordaże, tajfuny, kontrabanda…',
   // Mon conseil : le <b>{nom}</b>, pour partir avec plus d'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.
   'text/prologue/heritage': 'Moja rada: <b>{nom}</b>, żeby zacząć z grubszą sakiewką. Ale to twoje żetony: wybierz inne ulepszenie albo zachowaj je na później.',
   // Les mers de Chine t'attendent. Bon vent, capitaine.
@@ -107552,6 +107746,14 @@ Lang.sea('pl', 'chine', {
   'text/hints/solde': 'Początek miesiąca: <b>żołd</b> dla marynarzy. Zawsze miej czym im zapłacić, inaczej część zdezerteruje.',
   // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
   'text/hints/leconCombat': 'Ci piraci dali ci w kość? Nauczę cię walczyć: <b>lekcja walki</b> czeka w <b>Pomocy</b>, na ekranie tytułowym. Nie liczy się do twojej kariery.',
+  // Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} o
+  'text/hints/rembourser': 'Masz czym spłacić <b>Wanga</b>, a jego dom jest tutaj. Nie zwlekaj: twój dług rośnie o <b>{taux}% miesięcznie</b>, a za {jours, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} jego ludzie przyjdą po swoje.',
+  // Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de 
+  'text/hints/soldeAvance': 'Zanim wypłyniesz, mała rada: pierwszego dnia miesiąca {marins, plural, one {twój marynarz czeka} few {twoich # marynarzy czeka} many {twoich # marynarzy czeka} other {twoich # marynarzy czeka}} na <b>{somme}</b> żołdu. Zawsze miej z czego go wypłacić, inaczej część załogi zdezerteruje.',
+  // Ici, il y a une <b>banque</b> : tes taels y sont à l'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l'arg
+  'text/hints/banque': 'Tu jest <b>bank</b>: twoje taele są tam bezpieczne przed piratami i trochę przynoszą, 0,5% miesięcznie.{dette, select, oui { Ale dopóki masz dług u Wanga, najpierw go spłać: kosztuje cię znacznie więcej.} other {}}',
+  // Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c'est de la <b>contrebande</b> : la douane fouille à l'arrivée. Tu pourras glisser quelques tae
+  'text/hints/contrebande': '<b>Broń</b>? W portach chińskich, w Japonii i w Annamie to <b>kontrabanda</b>: celnicy przeszukują statek po przybyciu. Możesz wsunąć im parę taeli albo zaryzykować karę i konfiskatę. W Hongkongu i w Singapurze, portach wolnocłowych, nikt cię nie przeszukuje.',
   // piculs
   'text/unitMany': 'pikuli',
   // piculs
@@ -118516,6 +118718,7 @@ const Game = {
     }
     // la fortune de départ (navire de famille et coffre compris) : les jetons ne paient que ce qui est gagné ensuite
     run.worth0 = this.worth();
+    this.monthSnap();
     this.log(TXT.startLog, 'career');
     if (o.mode === 'lecon' && typeof Lessons !== 'undefined') Lessons.setup(run, o.lecon);
     this.checkTitle(true);
@@ -118822,6 +119025,10 @@ const Game = {
     this.tradeNote(gi, n, rev, 's', profit);
     if (profit > 0) { r.stats.profitSales++; this.unlock('profit'); }
     if (profit > r.stats.bestSale) r.stats.bestSale = profit;
+    // (10/10/2026, bilan du mois) une vente dans une pénurie qu'une rumeur avait annoncée ; la meilleure affaire du mois
+    const ev = this.activeEvent(pid, gi);
+    if (profit > 0 && ev && ev.shortage && r.rumors.includes(ev.id)) r.stats.rumorProfit = (r.stats.rumorProfit || 0) + profit;
+    if (profit > 0 && (!r.monthBest || profit > r.monthBest.profit)) r.monthBest = { profit, n, g: gi, p: pid };
     if (profit >= 20000) this.unlock('coup');
     if (GOODS[gi].contraband && PORT[pid].customs > 0.15) {
       r.stats.contraband += n;
@@ -118918,7 +119125,15 @@ const Game = {
   onNewDay(d) {
     const t = dateOf(d);
     // (08/10/2026) le 1er du mois : la solde, puis la feuille du mois à l'écran (UI.monthLeaf), qui dit aussi la solde payée
-    if (t.d === 1) { const w = this.payWages(); Bus.emit('month', { d, w: w || 0 }); }
+    // (10/10/2026, Mer de Chine : l'écran de la nouvelle lune) le bilan du mois écoulé, pris avant la paye ; la paye ; la photo
+    // des compteurs pour le mois qui commence (la paye du 1er compte donc dans le mois qui commence, pas dans le bilan)
+    if (t.d === 1) {
+      const recap = this.monthRecap(d);
+      const pay = this.payWages() || {};
+      this.monthSnap();
+      if (recap) this.log(T('mois.journal', { demois: deLieu(recap.mois), signe: recap.worth < 0 ? '−' : '+', somme: fmt(Math.abs(recap.worth)), monnaie: motMonnaie(recap.worth) }), 'career', null, { month: recap });
+      Bus.emit('month', { d, w: pay.w || 0, left: pay.left || 0, recap });
+    }
     for (const f of SEA.festivals) if (f.announce && d === f.from) Bus.emit('toast', { t: f.announce, k: 'gold' });
     if (SEA.rules && SEA.rules.onNewDay) SEA.rules.onNewDay(d);
     Bus.emit('day', d);
@@ -118935,13 +119150,32 @@ const Game = {
     if (SEA.rules && SEA.rules.wages && SEA.rules.wages() === false) return;   // équipage payé à la part (les flibustiers)
     const w = r.ship.crew * CREW_WAGE;
     Bus.emit('hint', { id: 'solde' });   // (la première solde : un conseil du mentor)
-    if (r.cash >= w) { r.cash -= w; return w; }   // (la solde payée s'écrit sur la feuille du mois)
+    if (r.cash >= w) { r.cash -= w; return { w }; }   // (la solde payée s'écrit sur la feuille du mois)
     else {
       const leave = Math.max(1, Math.ceil(r.ship.crew * 0.3));
       r.cash = 0; r.ship.crew = Math.max(0, r.ship.crew - leave);
       Bus.emit('toast', { t: T('equipage.desertent', { n: leave }), k: 'bad' });
       this.log(T('journal.desertion', { n: leave }), 'voyage');
+      return { left: leave };
     }
+  },
+  // ── Le bilan du mois (10/10/2026) : une photo des compteurs au début de chaque mois, et la différence à la fin ──
+  monthCounters() {
+    const r = this.run, s = r.stats;
+    return { worth: this.worth(), profit: s.profit, voyages: s.voyages, contracts: s.contracts, contractCash: s.contractCash || 0, sunk: s.sunk, boarded: s.boarded,
+      loot: s.loot, storms: s.storms, rumorProfit: s.rumorProfit || 0, crew: r.ship ? r.ship.crew : 0, hired: s.hired || 0, dismissed: s.dismissed || 0 };
+  },
+  monthSnap() { const r = this.run; r.monthSnap = this.monthCounters(); r.monthBest = null; },
+  // le mois écoulé (d : le 1er du mois qui commence) ; rien sans photo (une ancienne sauvegarde)
+  monthRecap(d) {
+    const r = this.run, a = r.monthSnap;
+    if (!a) return null;
+    const b = this.monthCounters(), D = k => Math.round((b[k] || 0) - (a[k] || 0));
+    const prev = dateOf(d - 1), best = r.monthBest;
+    return { m: prev.m, y: prev.y, mois: LOC.months[prev.m], worth: D('worth'), profit: D('profit'), rumor: D('rumorProfit'), voyages: D('voyages'),
+      contracts: D('contracts'), contractCash: D('contractCash'), sunk: D('sunk'), boarded: D('boarded'), loot: D('loot'), storms: D('storms'),
+      lost: Math.max(0, (a.crew + D('hired') - D('dismissed')) - b.crew),
+      best: best ? { profit: best.profit, n: best.n, g: best.g, p: best.p } : null };
   },
   daysLeft() { return Math.max(0, this.run.endDay - this.run.day); },
   isYearOver() { return this.run && this.run.day >= this.run.endDay; },
@@ -119026,16 +119260,17 @@ const Game = {
     n = Math.min(n, st.crewMax - r.ship.crew, Math.floor(r.cash / this.hireCost()));
     if (n <= 0) return 0;
     r.cash -= n * this.hireCost(); r.ship.crew += n;
+    r.stats.hired = (r.stats.hired || 0) + n;
     return n;
   },
-  dismiss(n) { const s = this.run.ship; n = Math.min(n, s.crew); s.crew -= n; return n; },
+  dismiss(n) { const r = this.run, s = r.ship; n = Math.min(n, s.crew); s.crew -= n; r.stats.dismissed = (r.stats.dismissed || 0) + n; return n; },
   shanghai() {
     const r = this.run, st = this.stats();
     if (!st || r.ship.crew >= st.crewMax) return { ok: false, full: true };
     r.flags.shanghaiDay = r.day;
     if (R.chance(0.62)) {
       const n = Math.min(st.crewMax - r.ship.crew, R.int(2, 5));
-      r.ship.crew += n;
+      r.ship.crew += n; r.stats.hired = (r.stats.hired || 0) + n;
       this.unlock('shanghai');
       return { ok: true, n };
     }
@@ -119126,12 +119361,14 @@ const Game = {
   unstore(gi, n) { const r = this.run, w = this.ware(r.port); n = Math.min(n, w[gi], this.free()); if (n <= 0) return 0; w[gi] -= n; r.cargo[gi] += n; return n; },
 
   // ════════════ Temple ════════════
+  // les bénédictions d'une offrande au temple : [nom, jours] (la fenêtre du temple les affiche, 10/10/2026)
+  offeringBuffs(amount) {
+    return amount >= 1000 ? [['calme', 60], ['vent', 20], ['paix', 20]] : amount >= 200 ? [['calme', 35], ['vent', 10]] : [['calme', 18]];
+  },
   offering(amount) {
     const r = this.run; if (r.cash < amount) return false;
     r.cash -= amount; r.stats.offerings++;
-    if (amount >= 1000) { this.addBuff('calme', 60); this.addBuff('vent', 20); this.addBuff('paix', 20); }
-    else if (amount >= 200) { this.addBuff('calme', 35); this.addBuff('vent', 10); }
-    else this.addBuff('calme', 18);
+    for (const [k, d] of this.offeringBuffs(amount)) this.addBuff(k, d);
     if (SEA.rules && SEA.rules.onOffering) SEA.rules.onOffering(amount);   // (la faveur du dieu de la mer : Melqart)
     if (r.stats.offerings >= 5) this.unlock('mazu');
     return true;
@@ -119295,7 +119532,7 @@ const Game = {
   completeContract(c) {
     const r = this.run;
     r.contracts = r.contracts.filter(x => x !== c && x.id !== c.id);
-    r.stats.contracts++;
+    r.stats.contracts++; r.stats.contractCash = (r.stats.contractCash || 0) + (c.reward || 0);
     if (r.stats.contracts >= 5) this.unlock('contrats');
     this.log(T('journal.contratHonore', { contrat: this.contractText(c), prime: fmt(c.reward), monnaie: motMonnaie(c.reward) }), 'career');
     (r.contractLog || (r.contractLog = [])).push({ d: r.day, t: this.contractText(c), ok: true, reward: c.reward });
@@ -120966,8 +121203,10 @@ const SeaScene = {
     const m = monthOf(r.day), p = SEA.rules && SEA.rules.stormChance ? SEA.rules.stormChance(this.path, m) : TYPHOON_SEASON[m];
     // (le prologue : une traversée sans tempête ni pirate)
     const calm = r.mode === 'prologue' || r.mode === 'lecon';
-    if (!calm && this.path && R.chance(p)) this.spawnStorm(true);
-    if (!calm && R.chance(0.25)) this.spawnStorm(false);
+    // (10/10/2026, partie d'un débutant : au tout premier voyage, un typhon tombait en même temps que les aides ; on le lui épargne)
+    const firstTrip = r.stats.voyages === 0 && Game.meta.runs < 2;
+    if (!calm && !firstTrip && this.path && R.chance(p)) this.spawnStorm(true);
+    if (!calm && !firstTrip && R.chance(0.25)) this.spawnStorm(false);
     // quelques marchands
     for (let i = 0; i < 2; i++) if (R.chance(0.6)) this.spawnMerchant(true);
     // (brouillard : un banc de brume peut déjà traîner au départ)
@@ -122452,6 +122691,7 @@ const CREDITS = {
     { k: 'polices', lines: [
       { name: 'Manrope', by: 'The Manrope Project Authors' },
       { name: 'Shippori Mincho B1', by: 'The Shippori Mincho Project Authors' },
+      { name: 'Ma Shan Zheng', by: 'The MaShanZheng Project Authors' },   // (le pinceau des mois, Mer de Chine, 10/10/2026)
       { name: 'Noto Serif · Noto Sans Symbols 2 · Noto Sans Math', by: 'The Noto Project Authors' },
       { name: 'Noto Sans SC, TC, JP, KR · Noto Serif SC, TC, KR', by: 'Adobe · The Noto Project Authors' },
       { t: 'licence' },
@@ -122459,7 +122699,8 @@ const CREDITS = {
     // (la version Steam seulement : Electron et Chromium, dont elle livre les licences)
     { k: 'steam', steam: true, lines: [{ name: 'Electron', t: 'mit' }, { name: 'Chromium', t: 'chromium' }] },
     // testeurs nommés, seulement avec leur accord (la rubrique se cache si la liste est vide)
-    { k: 'merci', names: ['Mazazou', 'Yersinia'] },
+    // (mention : une ligne à part, sous les testeurs ; 10/10/2026, demande d'Adrien)
+    { k: 'merci', names: ['Mazazou', 'Yersinia', 'Mystyx'], mention: 'Aelynn' },
   ],
 };
 
@@ -122526,7 +122767,8 @@ const UI = {
       for (const k of this.BUFFS) if (r.buffs[k] > d - 1 && r.buffs[k] <= d) this.toast(T('benediction.fin', { nom: this.buffName(k) }), '');
       this.refresh();
     });
-    Bus.on('month', o => this.monthLeaf(o));
+    // (Mer de Chine, hors démo : l'écran de la nouvelle lune ; ailleurs, la feuille du mois, en attendant le passage aux autres mers)
+    Bus.on('month', o => (Seas.current === 'chine' && !DEMO ? this.monthMoon(o) : this.monthLeaf(o)));
     Bus.on('title', ti => { this.banner(TITLES[ti].name.toUpperCase(), TXT.titleUp, 'jade'); Sound.play('fanfare'); });
     // commandes tactiles
     for (const b of this.el.touch.querySelectorAll('[data-act]')) {
@@ -122680,7 +122922,7 @@ const UI = {
       h('div', { class: 'grow' }, h('h3', null, o.title), o.sub ? h('div', { class: 'sub' }, o.sub) : null),
       o.head || null,
       help ? h('button', { class: 'x q', type: 'button', 'data-g': 'help', 'aria-label': T('aides.bouton'), title: T('aides.bouton'), onclick: () => { Help.show(o.id, true); } }, '?') : null,
-      o.closable === false ? null : h('button', { class: 'x exit', type: 'button', 'data-g': 'x-' + (o.id || 'win'), onclick: () => { Sound.sfxPlay('click'); this.close(); } }, T(leave ? 'commun.sortir' : 'commun.fermer')));
+      o.closable === false ? null : h('button', { class: 'x exit', type: 'button', 'data-g': 'x-' + (o.id || 'win'), onclick: () => { Sound.sfxPlay('click'); this.close(); } }, o.closeLabel || T(leave ? 'commun.sortir' : 'commun.fermer')));
     const body = h('div', { class: 'panel-body' });
     if (o.body) body.append(o.body);
     inner.append(head, body);
@@ -122693,6 +122935,7 @@ const UI = {
     this.stack.push(entry);
     this.swipeToClose(entry);
     Input.blocked = true;
+    this.el.toasts.classList.add('win-open');   // (les messages passent en bas, voir .toasts.win-open)
     setTimeout(() => { const f = panel.querySelector('button.btn:not(:disabled), input'); if (f && !Input.touch) f.focus({ preventScroll: true }); }, 30);
     if (help) setTimeout(() => Help.auto(o.id), 420);   // (les aides de l'écran, la première fois, une fois la fenêtre posée)
     return entry;
@@ -122708,6 +122951,7 @@ const UI = {
     entry.ov.remove();
     this.holdClose();
     Input.blocked = this.stack.length > 0;
+    this.el.toasts.classList.toggle('win-open', this.stack.length > 0);
     // la touche ou le clic qui a fermé la fenêtre ne doit pas agir aussi sur la scène
     Input.hits = Object.create(null);
     Input.virtHits = Object.create(null);
@@ -122741,15 +122985,34 @@ const UI = {
     const t = h('div', { class: 'toast ' + (kind || '') }, icon ? ico(icon) : null, h('span', null, text));
     this.el.toasts.append(t);
     while (this.el.toasts.children.length > (this.isMobile() ? 2 : 4)) this.el.toasts.firstChild.remove();
+    requestAnimationFrame(() => this.bannerAvoid());
     // (2 s de plus le 06/10/2026, à la demande d'Adrien : on n'avait pas le temps de les lire)
     setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 420); }, 5600 + Math.min(3000, text.length * 25));
   },
+  // (09/10/2026, partie d'un débutant : au retour au quai, le nom de la ville passait sur les messages et la bulle du mentor)
+  // le bandeau s'écarte de ce qui est déjà à l'écran : sous les messages du haut, au-dessus d'une bulle qu'il toucherait
+  bannerAvoid() {
+    const b = this.el.banner;
+    if (!b || b.hidden || b.classList.contains('out')) return;
+    const inner = b.firstChild; if (!inner) return;
+    const H = innerHeight, bh = inner.offsetHeight, hit = (r, top) => r.width && top < r.bottom + 10 && top + bh > r.top - 10;
+    const tops = [...this.el.toasts.children].map(t => t.getBoundingClientRect()).filter(r => r.width);
+    const bubbles = [...document.querySelectorAll('.g-bubble, .g-hint')].map(e => e.getBoundingClientRect()).filter(r => r.width);
+    let top = H * (this.isMobile() ? 0.24 : 0.3);
+    for (const r of tops) if (hit(r, top)) top = r.bottom + 14;
+    for (const r of bubbles) if (hit(r, top)) top = Math.max(8, r.top - bh - 14);
+    b.style.top = Math.round(Math.min(top, H - bh - 8)) + 'px';
+  },
   banner(title, sub, kind, zh) {
+    // (09/10/2026, partie d'un débutant : « JONQUE DE CABOTAGE » passait sur l'en-tête du chantier) une fenêtre ouverte : le
+    // grand titre devient un message, en haut, qui ne cache rien
+    if (this.isOpen()) { this.toast(sub ? title + ' · ' + sub : title, kind === 'red' ? 'bad' : 'gold'); if (kind === 'red') Sound.sfxPlay('gong'); return; }
     const b = this.el.banner;
     b.hidden = false;
     b.className = 'banner ' + (kind || '');
     b.innerHTML = '';
     b.append(h('div', { class: 'b-in' }, zh ? h('span', { class: 'b-seal' }, zh) : null, h('h2', null, title), sub ? h('p', null, sub) : null));
+    b.style.top = ''; this.bannerAvoid();
     clearTimeout(this.bannerT); clearTimeout(this.bannerT2);
     this.bannerT = setTimeout(() => { b.classList.add('out'); this.bannerT2 = setTimeout(() => { b.hidden = true; }, 500); }, 2600);
     if (kind === 'red') Sound.sfxPlay('gong');
@@ -122823,7 +123086,7 @@ const UI = {
       h('span', { class: 'sp' }),
       // (07/10/2026) au port, le nom de la ville et sa description, centrés sous le bandeau : on revient d'une pause, on sait où l'on est
       this.mode === 'port' && r.port && PORT[r.port] ? [h('span', { class: 'it hud-port hide-sm', 'data-g': 'hud-port' }, h('b', null, PORT[r.port].name), PORT[r.port].desc ? h('small', null, PORT[r.port].desc) : null)] : null,
-      h('span', { class: 'it title hide-sm', 'data-g': 'hud-title' }, TITLES[titleIndex(Game.worth())].name),
+      this.titleChip(),
       // (les aides « ? » de l'écran : le port, ou la mer)
       btn('?', () => Help.show(this.mode === 'sea' ? 'mer' : 'port', true), 'sm glass menu-btn q', { 'aria-label': T('aides.bouton'), title: T('aides.bouton'), 'data-g': 'hud-help' }),
       btn([ico('scroll', 'sm'), h('span', { class: 'hide-xs' }, T('hud.journal')), padGlyph('view', 'pk')], () => this.journal(), 'sm glass menu-btn', { 'aria-label': T('pause.journal'), 'data-g': 'hud-journal' }),
@@ -122858,6 +123121,94 @@ const UI = {
     document.getElementById('app').append(el);
     Sound.sfxPlay('bell');
     setTimeout(() => el.remove(), 4300);
+  },
+  // ── La nouvelle lune (10/10/2026, Mer de Chine, choix d'Adrien) : à chaque 1er du mois, un écran plein, jeu en pause jusqu'au
+  //    clic ou à la touche : le mois peint au pinceau, les lunes qui restent pour le titre, la paye, la jauge des grades, et la
+  //    page du mois écoulé (aussi consignée au journal). La nuit vire du bleu à l'ocre (6 lunes ou moins) puis au vermillon (2)
+  moonOpen() { return !!this.moonEl; },
+  monthMoon(o, tries) {
+    const r = Game.run;
+    if (!r || (this.mode !== 'sea' && this.mode !== 'port')) return;
+    // (en combat, ou derrière une fenêtre : on attend)
+    if (((this.mode === 'sea' && SeaScene.combat) || this.isOpen()) && (tries || 0) < 120) { setTimeout(() => this.monthMoon(o, (tries || 0) + 1), 1000); return; }
+    const t = dateOf(o.d), e = dateOf(r.endDay - 0.01), left = (e.y - t.y) * 12 + e.m - t.m + 1;
+    if (left < 1) return;
+    const tone = left <= 2 ? 'red' : left <= 6 ? 'ocre' : 'calm';
+    const w = Game.worth(), ti = titleIndex(w), sup = TITLES.findIndex(x => x.supreme);
+    // le titre visé : le titre suprême, puis le suivant une fois atteint
+    const goal = ti < sup ? TITLES[sup] : TITLES[Math.min(TITLES.length - 1, ti + 1)];
+    const done = ti >= TITLES.length - 1;
+    const lune = done ? T('lune.resteFin', { n: left }) : left === 1 ? T('lune.derniere', { titre: goal.name }) : T(left <= 2 ? 'lune.plusQue' : 'lune.encore', { n: left, titre: goal.name });
+    const coin = () => ico('coin', 'xs');
+    const pay = o.left ? h('div', { class: 'mn-pay bad' }, T('lune.desertent', { n: o.left }))
+      : o.w ? h('div', { class: 'mn-pay' }, T('lune.paye'), ' ', h('b', null, '−' + fmt(o.w), coin())) : null;
+    const zh = this.MONTHS_ZH[t.m];
+    const el = h('div', { class: 'moon ' + tone, role: 'dialog', 'aria-label': LOC.months[t.m] + ' ' + t.y },
+      h('div', { class: 'mn-sky', 'aria-hidden': 'true' }),
+      h('div', { class: 'mn-in' },
+        (() => { const mo = h('div', { class: 'mn-moon', 'aria-hidden': 'true' }); mo.style.setProperty('--f', ((t.m + 1) / 12).toFixed(3)); return mo; })(),
+        /月/.test(LOC.months[t.m]) ? null : h('div', { class: 'mn-zh', 'aria-hidden': 'true' }, zh),
+        h('div', { class: 'mn-m' }, LOC.months[t.m] + ' ' + t.y + CAL.era),
+        h('div', { class: 'mn-left' }, lune),
+        pay,
+        this.moonGauge(w, ti, goal),
+        o.recap ? this.monthPage(o.recap) : null,
+        h('div', { class: 'mn-go' }, T(Input.touch ? (this.mode === 'sea' ? 'lune.toucherMer' : 'lune.toucherPort') : (this.mode === 'sea' ? 'lune.cliquerMer' : 'lune.cliquerPort')))));
+    if (this.moonEl) this.moonEl.remove();
+    this.moonEl = el;
+    document.getElementById('app').append(el);
+    Input.blocked = true;
+    Sound.sfxPlay('gong');
+    if (tone === 'red') setTimeout(() => Sound.sfxPlay('gong'), 700);
+    // (on ne ferme qu'après un court instant : le clic qui tombait pendant la navigation ne doit pas l'avaler)
+    const born = performance.now();
+    const close = ev => {
+      if (performance.now() - born < 600) return;
+      if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+      removeEventListener('keydown', close, true); el.removeEventListener('pointerdown', close);
+      el.classList.add('out');
+      setTimeout(() => el.remove(), 350);
+      this.moonEl = null;
+      Input.blocked = this.stack.length > 0;
+      Input.hits = Object.create(null);
+    };
+    el.addEventListener('pointerdown', close);
+    addEventListener('keydown', close, true);
+  },
+  // la jauge des grades jusqu'au titre visé (échelle resserrée vers le haut : log de 1 000 au titre visé)
+  moonGauge(w, ti, goal) {
+    const top = goal.min, lo = 1000, pos = v => U.clamp(Math.log(Math.max(lo, v) / lo) / Math.log(top / lo), 0, 1);
+    const ticks = TITLES.filter(x => x.min > 0 && x.min < top);
+    const next = TITLES[Math.min(TITLES.length - 1, ti + 1)];
+    const bar = h('div', { class: 'mn-bar' },
+      h('i', { class: 'mn-fill', style: { width: (pos(w) * 100).toFixed(1) + '%' } }),
+      ...ticks.map((x, i) => h('span', { class: 'mn-tick' + (w >= x.min ? ' on' : '') + (i % 2 ? ' up' : ''), style: { left: (pos(x.min) * 100).toFixed(1) + '%' } }, h('small', null, x.name))),
+      h('span', { class: 'mn-seal', title: goal.name }, '大'));
+    const line = w < 0 ? [TITLES[ti].name, ' · ', T('objectif.sortirRouge', { valeur: fmt(w) })]
+      : [TITLES[ti].name, ' · ', fmt(w), ico('coin', 'xs'), next.min > w ? [' · ', h('span', { class: 'mn-next' }, T('lune.prochain', { titre: next.name, somme: fmt(next.min - w) }), ico('coin', 'xs'))] : null];
+    return h('div', { class: 'mn-g' }, bar, h('div', { class: 'mn-gl' }, ...line.flat()));
+  },
+  // la page du mois écoulé : un fait par ligne, au passé ; les lignes à zéro ne s'affichent pas (sur l'écran et au journal)
+  monthPage(m) {
+    const coin = () => ico('coin', 'xs');
+    const sum = v => [h('span', { class: 'nowrap' }, (v > 0 ? '+' : v < 0 ? '−' : '') + fmt(Math.abs(v)), coin())];
+    const ln = (label, val, cls) => h('div', { class: 'mn-ln' }, h('span', null, label), h('b', { class: cls || '' }, ...[].concat(val)));
+    const rows = [
+      ln(T('lune.ventes'), sum(m.profit), m.profit >= 0 ? 'pos' : 'neg'),
+      m.rumor > 0 ? ln(T('lune.rumeurs'), sum(m.rumor), 'pos') : null,
+      ln(T('lune.escales'), String(m.voyages)),
+      m.contracts > 0 ? ln(T('lune.contrats'), [T('lune.contratsPour', { n: m.contracts }), ' ', ...sum(m.contractCash)], 'pos') : null,
+      m.sunk > 0 ? ln(T('lune.coules'), String(m.sunk)) : null,
+      m.boarded > 0 ? ln(T('lune.abordes'), String(m.boarded)) : null,
+      m.loot > 0 ? ln(T('lune.butin'), sum(m.loot), 'pos') : null,
+      m.storms > 0 ? ln(T('lune.typhons'), String(m.storms)) : null,
+      m.lost > 0 ? ln(T('lune.perdus'), String(m.lost), 'neg') : null,
+    ];
+    const b = m.best && GOODS[m.best.g] && PORT[m.best.p];
+    return h('div', { class: 'mn-page' },
+      h('div', { class: 'mn-ph' }, h('span', null, T('lune.bilanTitre', { demois: deLieu(m.mois) })), h('b', { class: m.worth >= 0 ? 'pos' : 'neg' }, ...sum(m.worth))),
+      ...rows,
+      b ? h('p', { class: 'mn-best' }, T('lune.meilleure', { n: m.best.n, unites: motUnites(m.best.n, GOODS[m.best.g]), demarchandise: deLieu(lower(GOODS[m.best.g].name)), port: PORT[m.best.p].name }), ' ', ...sum(m.best.profit)) : null);
   },
   BUFFS: ['calme', 'vent', 'vigie', 'commerce', 'paix', 'protection'],
   buffName(k) { return k === 'protection' ? (TXT.emissary && TXT.emissary.buff) || T('benediction.protection') : T('temple.benediction.' + k); },
@@ -122920,6 +123271,7 @@ const UI = {
   frame(dt) {
     if (this.anims.length) this.anims = this.anims.filter(fn => { try { return !fn(dt || 1 / 60); } catch (e) { console.error(e); return false; } });
     if (this.tipCur && !this.tipCur.isConnected) this.tipRearm();
+    if (!this.el.banner.hidden && (this.bannerTick = (this.bannerTick || 0) + 1) % 6 === 0) this.bannerAvoid();   // (une bulle ou un message arrivé après le bandeau)
     // le guide : l'étape du prologue ou de la présentation de la mer, puis les éléments montrés suivis à l'écran
     Prologue.tick();
     Lessons.tick();
@@ -123212,7 +123564,7 @@ const UI = {
       if (n <= 0) return;
       if (buy) {
         const c = Game.buy(gi, n);
-        if (c) { this.slipFly(Game.lastReceipt); this.after('coin'); }   // (le billet de l'achat, à la place du message, 08/10/2026)
+        if (c) { this.slipFly(Game.lastReceipt); this.after('coin'); if (g.contraband) Bus.emit('hint', { id: 'contrebande' }); }   // (le billet de l'achat, à la place du message, 08/10/2026)
       } else {
         const res = Game.sell(gi, n);
         if (res) { this.slipFly(Game.lastReceipt); this.after('cash'); }
@@ -123604,7 +123956,10 @@ const UI = {
         h('div', { class: 'stack', 'data-g': 'tp-offrandes' },
           [50, 200, 1000].map((amt, i) => {
             const o = TT.offerings[i], big = i === 2;
-            return btn(`${o.label} · ${monnaie(amt)}`, () => { if (Game.offering(amt)) { this.toast(o.toast, big ? 'gold' : 'good'); this.after('gong'); } render(); }, big ? 'gold wide' : 'wide', r.cash < amt ? { disabled: true } : null);
+            // (09/10/2026, partie d'un débutant : « mer plus calme, vent favorable… » ne disait pas si ça valait le prix) ; sous
+            // chaque offrande, ses bénédictions et leur durée
+            const fx = Game.offeringBuffs(amt).map(([k, d]) => h('li', null, T('benediction.effet.' + k), ' ', h('b', { class: 'nowrap' }, T('temple.pendant', { n: d }))));
+            return h('div', { class: 'tp-off' }, btn(`${o.label} · ${monnaie(amt)}`, () => { if (Game.offering(amt)) { this.toast(o.toast, big ? 'gold' : 'good'); this.after('gong'); } render(); }, big ? 'gold wide' : 'wide', r.cash < amt ? { disabled: true } : null), h('ul', { class: 'tp-fx' }, fx));
           })),
         h('h4', null, TT.fortuneTitle),
         h('div', { class: 'row', 'data-g': 'tp-fortune' }, btn(TT.fortuneBtn, () => { const f = Game.fortune(); fortune = f ? f.t : TT.fortuneAgain; if (f) Sound.sfxPlay('bean'); this.after(); render(); }, 'jade')),
@@ -124157,7 +124512,9 @@ const UI = {
       h('span', { class: 'pill big', 'data-g': 'jr-pills', title: T('hud.aBord', { Monnaie: TXT.Money }) }, ico('coin'), money(r.cash), ' ' + motMonnaie(r.cash)),
       r.ship ? this.holdPill('jr-pills') : null);
     const wrap = h('div', { class: 'jr' });
-    const entry = this.open({ id: 'journal', title: T('pause.journal'), sub: r.captain + ' · ' + r.shipName, icon: 'scroll', cls: 'wide', top: true, head: top, body: wrap });
+    // (09/10/2026, partie d'un débutant : au prologue, le capitaine portait un nom tiré au sort qu'il n'avait pas choisi ; le navire seul)
+    const who = r.mode === 'prologue' ? r.shipName : r.captain + ' · ' + r.shipName;
+    const entry = this.open({ id: 'journal', title: T('pause.journal'), sub: who, icon: 'scroll', cls: 'wide', top: true, head: top, body: wrap });
     const render = () => {
       const tabs = [['prix', 'coin', T('journal.onglet.prix')], ['registre', 'cargo', T('journal.onglet.registre')], ['contrats', 'scroll', T('journal.onglet.contrats')], ['carnet', 'anchor', T('journal.onglet.carnet')], ['mer', 'map', capFirst(TXT.seaName)], ['rumeurs', 'wind', T('journal.onglet.rumeurs')]];
       const bar = h('div', { class: 'tabs onglets jr-tabs', role: 'tablist', 'data-g': 'jr-tabs' }, tabs.map(([id, ic, l]) => btn([ico(ic), l], () => { if (id === tab) return; tab = this.journalTab = id; render(); entry.body.scrollTop = 0; }, 'sm' + (id === tab ? ' on' : ''), { role: 'tab', 'aria-selected': id === tab ? 'true' : 'false' })));
@@ -124165,7 +124522,10 @@ const UI = {
         h('span', { class: 'pill' }, ico('date', 'sm'), fmtDate(r.day)),
         this.worthPill(),
         h('span', { class: 'pill gold' }, TITLES[titleIndex(Game.worth())].name));
-      const list = (rows, empty) => rows.length ? rows.slice().reverse().map(e => h('div', { class: 'stat' }, h('span', null, e.t), h('b', { class: 'hint' }, fmtDate(e.d, true)))) : [h('p', { class: 'hint' }, empty || T('journal.vide'))];
+      // (10/10/2026) le bilan d'un mois : sa ligne se déplie sur la page du mois, la même qu'à l'écran de la nouvelle lune
+      const list = (rows, empty) => rows.length ? rows.slice().reverse().map(e => e.month
+        ? h('details', { class: 'stat jr-month' }, h('summary', null, h('span', null, e.t), h('b', { class: 'hint' }, fmtDate(e.d, true))), this.monthPage(e.month))
+        : h('div', { class: 'stat' }, h('span', null, e.t), h('b', { class: 'hint' }, fmtDate(e.d, true)))) : [h('p', { class: 'hint' }, empty || T('journal.vide'))];
       let body;
       if (tab === 'prix') body = this.journalPrices();
       else if (tab === 'registre') body = this.journalRegister();
@@ -124184,7 +124544,7 @@ const UI = {
           h('div', { class: 'tabs jr-filter' }, ['tout', 'commerce', 'voyages', 'combats', 'carriere'].map(f => btn(T('journal.filtre.' + f), () => { this.journalFilter = f; render(); }, 'sm' + (f === F ? ' on' : '')))),
           ...list(rows),
           h('details', { class: 'jr-faits' }, h('summary', null, T('journal.faits')),
-            stat(T('journal.capitaine'), r.captain + ' · ' + r.shipName),
+            r.mode === 'prologue' ? null : stat(T('journal.capitaine'), r.captain + ' · ' + r.shipName),
             stat(T('journal.mode'), r.mode === 'daily' ? T('journal.modeDefi', { jour: r.dailyKey }) : T('journal.modeCarriere')),
             stat(T('journal.escales'), st.voyages), stat(T('journal.benefices'), monnaie(st.profit)), stat(T('journal.meilleureVente'), monnaie(st.bestSale)),
             stat(T('journal.pirates'), st.sunk), stat(T('journal.abordages'), st.boarded), stat(T('journal.butin'), monnaie(st.loot)),
@@ -124354,6 +124714,14 @@ const UI = {
     el._tip = () => this.worthTip();
     return el;
   },
+  // le titre, en haut à droite (09/10/2026, partie d'un débutant : rien ne disait que c'est un rang) : au survol ou au toucher,
+  // ce qu'il est (le texte de l'aide « ? ») puis la bulle de la valeur nette, avec le prochain titre et sa jauge
+  titleChip() {
+    const name = TITLES[titleIndex(Game.worth())].name;
+    const el = h('span', { class: 'it title hide-sm', tabindex: 0, 'data-tip': name, 'data-tiptap': '1', 'data-g': 'hud-title' }, name);
+    el._tip = () => h('div', null, h('div', { class: 'wt-title' }, h('b', null, name), h('small', null, T('aides.port.titre.d'))), this.worthTip());
+    return el;
+  },
   worthTip() {
     const r = Game.run, w = Game.worth(), cargo = U.sum(r.cargo);
     let wares = 0; for (const k in r.ware) wares += Game.cargoValue(r.ware[k]);
@@ -124394,7 +124762,7 @@ const UI = {
     const line = (t, cls) => h('span', { class: cls }, h('b', null, fmt(t.p1)), h('small', null, (t.approx ? '≈' : '') + t.q1));
     const table = h('table', { class: 'ledger jr-prices' },
       // (en-têtes : l'icône de la marchandise, comme au marché ; son nom au survol et pour les lecteurs d'écran)
-      h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id))))),
+      h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id), h('small', { class: 'jr-gn', 'aria-hidden': 'true' }, g.name))))),   // (le nom sous l'icône, 09/10/2026 : on ne reconnaissait pas toutes les icônes)
       h('tbody', null, rows.map((x, ri) => h('tr', { class: ageCls(x.k) + (x.k.here ? ' here' : '') },   // (le port où l'on est : légèrement doré)
         h('td', null, h('b', null, x.p.name), h('small', { class: 'hint' }, ' · ' + age(x.k))),
         ...GOODS.map((g, i) => {
@@ -124554,7 +124922,7 @@ const UI = {
     for (const s of CREDITS.sections) {
       if ((s.steam && !steam) || (s.names && !s.names.length)) continue;
       out.push(h('h4', null, T('credits.' + s.k)));
-      if (s.names) { out.push(h('p', null, T('credits.' + s.k + '.texte', { noms: andList(s.names) }))); continue; }
+      if (s.names) { out.push(h('p', null, T('credits.' + s.k + '.texte', { noms: andList(s.names) }))); if (s.mention) out.push(h('p', null, T('credits.' + s.k + '.mention', { nom: s.mention }))); continue; }
       for (const l of s.lines) {
         if (!l.name) out.push(h('p', null, ...Tn('credits.' + s.k + '.' + l.t, { jeu: h('b', null, CREDITS.game), studio: link(CREDITS.studio.name, CREDITS.studio.url), source: l.source ? link(l.source.name, l.source.url) : '' })));
         else out.push(h('p', { class: 'credit-line' }, h('b', null, l.name), ' · ', l.by || T('credits.' + s.k + '.' + l.t)));
@@ -124608,7 +124976,10 @@ const UI = {
         traits ? h('div', { class: 'sea-syn-chips' }, traits.split(' · ').map(c => h('span', { class: 'chip' }, c))) : null);
       const r = b.getBoundingClientRect(), R = root.getBoundingClientRect(), sw = syn.offsetWidth;
       const x = U.clamp(r.left + r.width / 2 - sw / 2 - R.left, 8, Math.max(8, R.width - sw - 8));
-      syn.style.left = Math.round(x) + 'px'; syn.style.top = Math.round(r.bottom - R.top + 12) + 'px';
+      // (09/10/2026, partie d'un débutant : dessous, elle cachait « Nouvelle carrière » ; au-dessus quand il y a la place)
+      const above = r.top - R.top - 12 - syn.offsetHeight, up = above >= 8;
+      syn.classList.toggle('up', up);
+      syn.style.left = Math.round(x) + 'px'; syn.style.top = Math.round(up ? above : r.bottom - R.top + 12) + 'px';
       syn.style.setProperty('--ax', Math.round(U.clamp(r.left + r.width / 2 - R.left - x, 16, sw - 16)) + 'px');
     };
     if (pick) for (const b of pick.children) {
@@ -124773,7 +125144,8 @@ const UI = {
       // (démo : une amélioration, ou des niveaux, du jeu complet seulement)
       const shut = x.demoLock || (cost == null && x.demoMore);
       const buy = shut ? h('span', { class: 'pill demo-tag' }, this.lockIco(), T('demo.verrou')) : cost == null ? h('span', { class: 'pill jade' }, T('heritage.complet'))
-        : btn([h('span', { class: 'her-nv' }, T('heritage.niv', { n: own + 1 })), ico('jade', 'sm'), ' ' + cost], () => { if (Game.buyHeritage(x.id)) { Sound.sfxPlay('levelup'); render(); } }, 'sm jade', Object.assign({ 'data-g': 'hr-buy' }, m.jade < cost ? { disabled: true } : {}));
+        // (09/10/2026, partie d'un débutant : « Niv. 1 · 10 » ne disait pas qu'on achetait)
+        : btn([h('span', { class: 'her-nv' }, T('heritage.acheterNiv', { n: own + 1 })), ico('jade', 'sm'), ' ' + cost], () => { if (Game.buyHeritage(x.id)) { Sound.sfxPlay('levelup'); render(); } }, 'sm jade', Object.assign({ 'data-g': 'hr-buy' }, m.jade < cost ? { disabled: true } : {}));
       const sheet = h('div', { class: 'her-sheet', 'data-g': 'hr-fiche' },
         h('div', { class: 'her-sheet-hd' }, this.herSeal(x, 'lg'), h('div', null,
           h('div', { class: 'her-fam-sm' }, T('heritage.fam.' + this.herFam(x))), h('h5', null, x.name),
@@ -125195,6 +125567,10 @@ const Guide = {
     this.placedKey = key;
     const cx = A ? A.x + A.w / 2 - bw / 2 : (W - bw) / 2, top = mob ? m : 54;
     let cands = [];
+    // (over : un élément dont le bas peut porter la bulle sans gêne ; 10/10/2026, la carte d'appareillage du prologue, où la
+    //  bulle cachait les prix : elle se pose sur le bas de la carte, loin de Hong Kong)
+    const O = B.over && !mob ? this.rect(B.over, 0) : null;
+    if (O) cands.push([O.x + (O.w - bw) / 2, O.y + O.h - bh - 10]);
     if (B.dock === 'center') cands.push([(W - bw) / 2, (H - bh) / 2]);
     else if (B.dock === 'top') cands.push([(W - bw) / 2, top]);
     else if (B.dock === 'bottom') cands.push([(W - bw) / 2, H - bh - m]);
@@ -125211,7 +125587,7 @@ const Guide = {
       const x = U.clamp(x0, m, Math.max(m, W - bw - m)), y = U.clamp(y0, m, Math.max(m, H - bh - m));
       let s = (Math.abs(x - x0) + Math.abs(y - y0)) * 2 + i * 40;
       if (A) s += area(x, y, A) * 40;   // (ne jamais cacher ce qu'on désigne, s'il y a une autre place)
-      for (const r of others) s += area(x, y, r) * 2;
+      for (const r of others) if (!(O && Math.abs(r.x - O.x) < 8 && Math.abs(r.y - O.y) < 8)) s += area(x, y, r) * 2;
       if (s < bs) { bs = s; best = [x, y]; }
     });
     b.style.left = Math.round(best[0]) + 'px'; b.style.top = Math.round(best[1]) + 'px';
@@ -125297,7 +125673,8 @@ const Help = {
     if (!s || s.helps === false || !this.has(id) || this.seen(id) || this.active || Prologue.busy() || Lessons.busy() || SeaIntro.busy()) return;
     // (un fondu, ou une autre explication à l'écran : on réessaie un peu plus tard)
     tries = tries == null ? 8 : tries;
-    if (Guide.owner || Main.fadeDir) { if (tries > 0) setTimeout(() => this.auto(id, tries - 1), 500); return; }
+    // (10/10/2026 : au premier départ, l'aide « Première visite » et la bulle de Chen arrivaient ensemble ; l'aide attend la bulle)
+    if (Guide.owner || Main.fadeDir || Guide.hintEl) { if (tries > 0) setTimeout(() => this.auto(id, tries - 1), 500); return; }
     const top = UI.top();
     const here = id === 'port' ? Main.sceneName === 'port' && !UI.isOpen() : id === 'mer' ? Main.sceneName === 'sea' && !UI.isOpen() : top === id;
     if (here) this.show(id, false);
@@ -125346,6 +125723,7 @@ const Help = {
     this.markSeen([A.id]);
     if (never) { Game.global.settings.helps = false; Game.saveGlobal(); }
     Guide.hide('help');
+    setTimeout(() => Hints.next(), 600);   // (le conseil qui attendait la fin de l'aide)
   },
 };
 
@@ -125358,14 +125736,15 @@ const Hints = {
   say(id, p) {
     const g = Game.global, s = g && g.settings;
     if (!s || s.chen === false || !SEA.mentorSeal || !TXT.hints || !TXT.hints[id] || !Game.run) return false;
-    if (Prologue.busy() || Lessons.busy() || SeaIntro.busy() || Help.active) return false;
+    if (Prologue.busy() || Lessons.busy() || SeaIntro.busy()) return false;
     const seen = g.hintsSeen || (g.hintsSeen = {});
     if (seen[id]) return false;
-    if (Guide.hintEl) { if (!this.wait.some(w => w.id === id)) this.wait.push({ id, p }); return false; }
+    // (un conseil arrivé pendant une aide « ? » ou un autre conseil : il passe après, au lieu d'être perdu)
+    if (Guide.hintEl || Help.active) { if (!this.wait.some(w => w.id === id)) this.wait.push({ id, p }); return false; }
     seen[id] = 1; Game.saveGlobal();
     let text = Lang.fmt(TXT.hints[id], p || {});
     // (09/10/2026, partie d'un débutant : « présente-leur le flanc », mais rien ne disait comment on tourne)
-    if (id === 'pirates' && !TXT.firstFight) text += '<br>' + (Pad.active ? T('mer.barreManette') : Input.touch ? T('mer.barreTactile') : T('mer.barreClavier', { g: Input.label('KeyA'), d: Input.label('KeyD') }));
+    if ((id === 'pirates' || id === 'tempete') && !TXT.firstFight) text += '<br>' + (Pad.active ? T('mer.barreManette') : Input.touch ? T('mer.barreTactile') : T('mer.barreClavier', { g: Input.label('KeyA'), d: Input.label('KeyD') }));
     Guide.hint(text, TXT.mentorName, SEA.mentorSeal);
     return true;
   },
@@ -125505,7 +125884,8 @@ const Prologue = {
       h('label', { class: 'chk' }, never, T('prologue.offre.jamais')));
     const keep = () => { if (never.checked) { Game.meta.prologueNever = true; Game.saveMeta(); } };
     const entry = UI.open({
-      title: T('prologue.offre.titre'), icon: 'scroll', cls: 'narrow', body, help: false,
+      // (« Fermer » : annulait-on la carrière, ou partait-on seul ? 09/10/2026, partie d'un débutant : c'est « Annuler »)
+      title: T('prologue.offre.titre'), icon: 'scroll', cls: 'narrow', body, help: false, closeLabel: T('commun.annuler'),
       foot: [btn(T('prologue.offre.seul'), () => { keep(); UI.close(entry); go(); }), btn(T('prologue.offre.suivre'), () => { UI.close(entry); this.start(true); }, 'jade big')],
     });
   },
@@ -125625,7 +126005,7 @@ const Prologue = {
     return {
       key: 'carte', spot: z, badges: z.map((sel, i) => ({ sel, n: String(i + 1) })), lock: [gSel('ch-go')],
       // (la carte garde toute sa hauteur : la bulle se met à côté, pas au-dessus)
-      bubble: this.bub([this.X('carte')], { list: ['carte1', 'carte2', 'carte3', 'carte4'].map(k => this.X(k)), anchor: 'ch-go', cls: 'narrow', top: false }),
+      bubble: this.bub([this.X('carte')], { list: ['carte1', 'carte2', 'carte3', 'carte4'].map(k => this.X(k)), anchor: 'ch-go', over: 'ch-map', cls: 'narrow', top: false }),
     };
   },
 
@@ -126518,7 +126898,7 @@ Seas.register({
   worthAch: [[10000, 'dixmille'], [100000, 'centmille'], [1000000, 'taipan']],
   // voleurs sur les quais quand on a plus de 6 000 à bord (probabilité par escale, sauf exception du port)
   thieves: 0.11,
-  // la marchandise précieuse des trésors enfouis
+  // la marchandise précieuse des trésors engloutis
   treasureGood: 'jade',
 
   // ── Marchandises et ports (facteurs de prix par port : riz, thé, épices, porcelaine, soie, armes, jade) ──
@@ -126640,14 +127020,15 @@ Seas.register({
     },
   ],
   buildings: {
-    marche: { name: 'Marché', verb: 'Commercer', desc: 'Acheter et vendre des marchandises, faire des vivres.' },
+    // (10/10/2026, partie d'un débutant : les boutons de la barre portent le nom de l'enseigne)
+    marche: { name: 'Marché', verb: 'Marché', desc: 'Acheter et vendre des marchandises, faire des vivres.' },
     chantier: { name: 'Chantier naval', verb: 'Chantier', desc: 'Navires, réparations, canons et améliorations.' },
     taverne: { name: 'Taverne', verb: 'Taverne', desc: 'Marins, rumeurs et contrats.' },
     banque: { name: 'Banque', verb: 'Banque', desc: 'Déposez vos taels à l\'abri des pirates.' },
-    usurier: { name: 'Maison Wang', verb: 'Usurier', desc: 'Wang prête à tout le monde. À ses conditions.' },
+    usurier: { name: 'Maison Wang', verb: 'Maison Wang', desc: 'Wang prête à tout le monde. À ses conditions.' },
     entrepot: { name: 'Entrepôt', verb: 'Entrepôt', desc: 'Stockez des marchandises en attendant le bon prix.' },
     temple: { name: 'Temple de Mazu', verb: 'Temple', desc: 'La déesse de la mer protège les marins pieux.' },
-    jeu: { name: 'Maison de jeu', verb: 'Fan-tan', desc: 'Le fan-tan : pariez sur le reste des haricots.' },
+    jeu: { name: 'Maison de jeu', verb: 'Maison de jeu', desc: 'Le fan-tan : pariez sur le reste des haricots.' },
     quai: { name: 'Quai', verb: 'Appareiller', desc: 'Prendre la mer.' },
   },
 
@@ -126782,7 +127163,8 @@ Seas.register({
     { id: 'flambeur', name: 'Flambeur', desc: 'Gagner 3 fois de suite au fan-tan.', jade: 10 },
     { id: 'contrats', name: 'Parole de marchand', desc: 'Honorer 5 contrats en une partie.', jade: 10 },
     { id: 'fuite', name: 'Insaisissable', desc: 'Semer des pirates 5 fois en une partie.', jade: 10 },
-    { id: 'tresor', name: 'Trésor enfoui', desc: 'Déterrer un trésor.', jade: 15 },
+    // (10/10/2026, retour d'Adrien : on ne sort jamais du navire, le trésor est en mer, près d'une côte)
+    { id: 'tresor', name: 'Trésor englouti', desc: 'Remonter le coffre d\'une carte au trésor.', jade: 15 },
     { id: 'shanghai', name: 'Shanghaié !', desc: 'Enrôler de force des marins à la taverne.', jade: 5 },
     { id: 'flotte', name: 'Flotte de guerre', desc: 'Armer un navire de 20 canons ou plus.', jade: 10 },
   ],
@@ -127982,7 +128364,7 @@ Seas.register({
       finTitre: 'Tu es prêt, capitaine.',
       fin1: 'Pour ce premier voyage, voici <b>{n} {jetons}</b>.',
       fin2: 'Les jetons de jade se gagnent à la fin de chaque carrière, selon la fortune que tu y as bâtie, et avec les hauts faits. On les dépense dans l\'<b>Héritage</b> : chaque amélioration aide toutes tes carrières suivantes.',
-      fin3: 'Ce voyage d\'essai ne compte pas dans tes records. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…',
+      fin3: 'Ce voyage d\'essai ne compte pas : ta vraie carrière repart de zéro, avec la bourse du départ. Tu gardes ce que tu as appris, et tes jetons. Il te reste tant à découvrir : contrats, combats, abordages, typhons, contrebande…',
       heritage: 'Mon conseil : le <b>{nom}</b>, pour partir avec plus d\'argent. Mais ce sont tes jetons : choisis une autre amélioration, ou garde-les pour plus tard.',
       pret: 'Les mers de Chine t\'attendent. Bon vent, capitaine.',
       fermer: 'Ferme cette fenêtre : le bouton « {sortir} », en haut à droite.',
@@ -128029,6 +128411,11 @@ Seas.register({
       coque: 'La coque a souffert. Passe au <b>chantier naval</b> : un navire abîmé coule vite au prochain coup dur.',
       solde: 'Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.',
       leconCombat: 'Ces pirates t\'ont donné du fil à retordre ? Je t\'apprendrai à te battre : la <b>leçon de combat</b> t\'attend dans l\'<b>Aide</b>, depuis l\'écran titre. Elle ne compte pas dans ta carrière.',
+      // (10/10/2026, partie d'un débutant : ce que le prologue n'explique pas) ; taux : la dette de Wang, en % par mois
+      rembourser: 'Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} other {# jours}}, ses hommes viendront se servir.',
+      soldeAvance: 'Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de quoi la payer, sinon certains déserteront.',
+      banque: 'Ici, il y a une <b>banque</b> : tes taels y sont à l\'abri des pirates, et rapportent un peu, 0,5 % par mois.{dette, select, oui { Mais tant que tu dois de l\'argent à Wang, rembourse-le d\'abord : sa dette coûte bien plus.} other {}}',
+      contrebande: 'Des <b>armes</b> ? Dans les ports chinois, au Japon et en Annam, c\'est de la <b>contrebande</b> : la douane fouille à l\'arrivée. Tu pourras glisser quelques taels, ou risquer l\'amende et la saisie. À Hong Kong et à Singapour, ports francs, personne ne fouille.',
     },
   },
 
@@ -139673,9 +140060,16 @@ const Main = {
       else if (r.ship && st && r.ship.hull < st.hullMax * 0.5) Bus.emit('hint', { id: 'coque' });
       // (après le premier combat, la leçon de combat, si on ne l'a pas faite : 09/10/2026, partie d'un débutant)
       if (r.flags.metPirates && !Lessons.done('combat')) Bus.emit('hint', { id: 'leconCombat' });
+      // (10/10/2026, partie d'un débutant : ce que le prologue n'explique pas) rembourser Wang chez lui, la banque
+      const P = PORT[pid];
+      if (r.debt > 0 && r.cash >= r.debt && P.buildings.includes('usurier')) Bus.emit('hint', { id: 'rembourser', p: { taux: String(+(Game.debtRate() * 100).toFixed(1)).replace('.', LOC.decimal), jours: Math.max(0, due != null ? due : Game.debtTerm()) } });
+      if (P.buildings.includes('banque')) Bus.emit('hint', { id: 'banque', p: { dette: r.debt > 0 ? 'oui' : 'non' } });
     }, 1100);
   },
   setSail(dest) {
+    // (10/10/2026, partie d'un débutant : il partait sans de quoi payer la solde du mois)
+    const rs = Game.run, crew = rs.ship ? rs.ship.crew : 0;
+    if (crew > 0 && rs.cash < crew * CREW_WAGE && !(SEA.rules && SEA.rules.wages && SEA.rules.wages() === false)) Bus.emit('hint', { id: 'soldeAvance', p: { marins: crew, somme: monnaie(crew * CREW_WAGE) } });
     PortScene.talkEnd();
     Game.depart(dest);
     this.transition(() => {
@@ -139745,7 +140139,7 @@ const Main = {
     this.last = ts; this.lastReal = ts;
     try {
       Pad.poll(dt);   // (la manette : commandes du port et de la mer, ou repère dans les fenêtres)
-      const paused = this.sceneName === 'sea' && (UI.isOpen() || Guide.pausing || (Guide.hintEl && Guide.hintPause));   // (une fenêtre, une explication du guide, un conseil du mentor)
+      const paused = this.sceneName === 'sea' && (UI.isOpen() || UI.moonEl || Guide.pausing || (Guide.hintEl && Guide.hintPause));   // (une fenêtre, une explication du guide, un conseil du mentor)
       if (this.scene && !paused) this.scene.update(dt);
       if (this.sceneName === 'port' && !this.fadeDir && !UI.isOpen() && Game.isYearOver() && !Game.run.over) this.seasonEnd();
       if (this.fadeDir === 1) {
@@ -139830,19 +140224,26 @@ body:has(.title-screen):not(:has(#loading)) #majb { display: inline-flex; }
 #majn .majn-e:last-child { border-bottom: 0; }
 #majn .majn-d { color: #e8b54a; font: 700 12px var(--font-ui, system-ui, sans-serif); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
 #majn h3 { margin: 2px 0 6px; font: 800 18px/1.25 var(--font-title, 'Shippori Mincho B1', Georgia, serif); color: #efe6d2; }
-#majn h4 { margin: 8px 0 2px; color: #4fc29c; font: 700 11.5px var(--font-ui, system-ui, sans-serif); letter-spacing: 0.08em; text-transform: uppercase; }
+#majn h4 { margin: 10px 0 2px; color: #4fc29c; font: 700 11.5px var(--font-ui, system-ui, sans-serif); letter-spacing: 0.08em; text-transform: uppercase; }
 #majn ul { margin: 0; padding-left: 1.15em; display: grid; gap: 4px; }
-#majn .majn-tag { display: inline-block; margin-bottom: 4px; padding: 1px 9px; border-radius: 999px; font: 700 11px var(--font-ui, system-ui, sans-serif); border: 1px solid; }
+#majn .majn-tag { display: inline-block; margin: 0 6px 4px 0; padding: 1px 9px; border-radius: 999px; font: 700 11px var(--font-ui, system-ui, sans-serif); border: 1px solid; }
 #majn .majn-tel { color: #4fc29c; border-color: #4fc29c; }
 #majn .majn-chine { color: #e2553f; border-color: #e2553f; }
-#majn .majn-pv { margin: 9px 0 0; padding: 8px 12px; border-radius: 9px; background: rgba(232, 181, 74, 0.1); }
-#majn .majn-pv b { display: block; color: #e8b54a; font: 800 11px var(--font-ui, system-ui, sans-serif); letter-spacing: 0.09em; text-transform: uppercase; }
+#majn .majn-pv { margin: 6px 0 0; padding: 9px 12px 10px; border-radius: 9px; background: rgba(232, 181, 74, 0.1); }
+#majn .majn-pv b { display: block; margin-bottom: 3px; color: #e8b54a; font: 800 11px var(--font-ui, system-ui, sans-serif); letter-spacing: 0.09em; text-transform: uppercase; }
+#majn .majn-more { margin-top: 8px; color: #b8c1d1; font-size: 13.5px; }
+#majn .majn-more summary { display: inline-flex; align-items: center; gap: 6px; padding: 3px 0; color: #8d98ad; font: 700 12.5px var(--font-ui, system-ui, sans-serif); cursor: pointer; list-style: none; user-select: none; }
+#majn .majn-more summary::-webkit-details-marker { display: none; }
+#majn .majn-more summary::before { content: '▸'; font-size: 11px; transition: transform 0.15s; }
+#majn .majn-more[open] summary::before { transform: rotate(90deg); }
+#majn .majn-more summary:hover { color: #c9d1de; }
+#majn .majn-more summary:focus-visible { outline: 2px solid #e8b54a; outline-offset: 2px; border-radius: 4px; }
 @media (max-width: 520px) { #majb { padding: 6px 11px; font-size: 11.5px; } #majn .majn-h { padding: 12px 14px 10px; } #majn .majn-b { padding: 4px 14px 14px; } #majn h2 { font-size: 19px; } }
 </style>
 <button type="button" id="majb"><span class="majb-p" aria-hidden="true"></span><span class="majb-t">Mises à jour</span><span class="majb-d"></span></button>
-<div id="majn" role="dialog" aria-modal="true" aria-labelledby="majn-t"><div class="majn-box"><div class="majn-h"><div><h2 id="majn-t">Dernières mises à jour</h2><p class="majn-l" hidden></p></div><button type="button" class="majn-x">×</button></div><div class="majn-b" lang="fr"><article class="majn-e"><div class="majn-d">10 octobre 2026 · 15 h 15</div><h3>Pour mieux démarrer</h3><span class="majn-tag majn-chine">Mer de Chine</span><h4>Le but et la dette</h4><ul><li>Le but est écrit dès le début et reste en bas des objectifs : un million de taels de valeur nette avant le 31 décembre.</li><li>Endetté, l’objectif dit « Sortir du rouge » au lieu d’un titre incompréhensible.</li><li>La dette de Wang dit où la rembourser : à Canton ou à Macao.</li></ul><h4>En mer</h4><ul><li>Au premier pirate, Chen dit comment tourner (Q/D ou les flèches au clavier, la barre au doigt, le stick à la manette) ; le message de combat aussi.</li><li>Abordé, un bilan reste à l’écran jusqu’à « Compris » ; le journal note l’argent, la cargaison et les marins perdus.</li><li>Après le premier combat, Chen propose la leçon de combat (dans l’Aide, depuis l’écran titre).</li><li>La porcelaine brisée et les hommes tombés à la mer pendant la traversée sont notés à l’arrivée. Le nombre de jours de mer suit le calendrier.</li></ul><h4>Marché et carte</h4><ul><li>Chen conseille le port qui rapporte le plus par jour de mer, et plus seulement le meilleur prix ; il dit quand un voyage ne vaut pas la peine.</li><li>Les quantités se lisent mieux : « En rayon : 61 · puis 61 de réserve à 85 ».</li><li>Quand c’est l’argent qui arrête la réglette, le jeu le dit (et plus « place pour… »).</li><li>Le marché s’ouvre toutes rubriques fermées : vous ouvrez celle que vous voulez.</li><li>Les contrats disent à combien de jours de mer est le port de livraison.</li><li>Sur la carte, on choisit un port en touchant son nom (Hong Kong et Macao se distinguent enfin) ; les zones de pirates sont plus visibles.</li></ul><p class="majn-pv"><b>Pour vous</b>Une première partie plus claire : vous savez où aller, ce que vous risquez et ce que vous avez perdu.</p></article><article class="majn-e"><div class="majn-d">10 octobre 2026 · 00 h 25</div><h3>Les mises à jour en un coup d’œil</h3><ul><li>Sur l’écran titre, en bas à droite, le bouton « Mises à jour » donne la date de la dernière. Il ouvre les dix dernières, de la plus récente à la plus ancienne, avec ce qu’elles changent pour vous.</li></ul><p class="majn-pv"><b>Pour vous</b>Vous savez tout de suite si votre version est à jour, et ce qui a changé depuis votre dernière partie.</p></article><article class="majn-e"><div class="majn-d">10 octobre 2026 · 00 h 02</div><h3>Une musique qui se renouvelle</h3><span class="majn-tag majn-chine">Mer de Chine</span><ul><li>Chaque musique change d’un passage à l’autre : des instruments entrent et sortent, une deuxième (parfois une troisième) mélodie prend le relais, les percussions changent de rythme. Rien de plus à télécharger : le jeu joue sa musique lui-même.</li><li>Mer de Chine : au port et en mer, quatre morceaux au lieu d’un, dont trois nouveaux deux fois plus longs. L’un d’eux est tiré au hasard à chaque arrivée, jamais le même deux fois de suite.</li></ul><p class="majn-pv"><b>Pour vous</b>On peut rester longtemps au port ou en mer sans réentendre la même boucle. Les nouveaux morceaux viendront ensuite pour les Caraïbes et la Méditerranée.</p></article><article class="majn-e"><div class="majn-d">8 octobre 2026 · 16 h 07</div><h3>Les retours du 8 octobre</h3><h4>Lisibilité</h4><ul><li>Journal des prix en deux bandes par port : en haut, en jade, ce que le port vous vend (prix et quantité en rayon) ; en bas, en or, ce qu’il vous achète (prix et commande). Le meilleur prix est encadré.</li><li>Pénuries toujours en or, surplus toujours en bleu, partout dans le jeu.</li><li>La valeur nette se détaille dans une bulle : argent, banque, navire, cargaison, dette, prochain titre.</li><li>Le conseil de Chen à l’achat devient concret : combien le port en prend et à quel prix, l’âge du relevé, les jours de mer, la saison ou la fête à l’arrivée.</li><li>Les fausses rumeurs et les bavardages de la rue ne sont plus notés au journal.</li><li>Les bénédictions du temple s’affichent en cercles à minuteur sous le bandeau ; la cale a une jauge, rouge quand elle est pleine.</li></ul><h4>Le rythme de l’année</h4><ul><li>Une page d’éphéméride à chaque 1er du mois (mois restants, solde de l’équipage), « J−7 » à côté de la date les sept derniers jours, et un bandeau avant le bilan de fin d’année.</li></ul><h4>La vente</h4><ul><li>Au-delà de ce que le port commande, on brade : le premier picul part 20 % sous le prix ferme, puis un peu moins à chaque unité, et le jeu vous prévient.</li><li>Mer de Chine : les entrepôts sont retirés. Ce qui y était laissé est revenu à bord, le reste a été racheté.</li></ul><h4>Le registre</h4><ul><li>Chaque achat et chaque vente laisse un billet numéroté dans le nouvel onglet « Registre » du journal, rangé par escale : les quantités à chaque prix, ce qui a fait le prix (pénurie, saison, fête, marge du marchand, Sens des affaires, présage du temple), le bénéfice et ce que vos bonus ont rapporté.</li></ul><h4>Les rumeurs (Mer de Chine)</h4><ul><li>Chaque pénurie ou surplus a sa cause, dite à la taverne : grève des mineurs de jade, fours de Jingdezhen éteints…</li><li>Au journal, une fiche par rumeur : la cause, l’effet sur l’étal, une frise du début à la fin, la source et la durée. Nouvelle section « Saisons et fêtes ».</li></ul><h4>Les leçons de Chen</h4><ul><li>Deux leçons guidées, le marché et le combat, à part de la carrière : rien ne compte, votre partie est mise de côté puis rendue, 5 jetons de jade la première fois. Dans l’Aide de l’écran titre et à la fin du prologue.</li></ul><p class="majn-pv"><b>Pour vous</b>On voit d’où vient chaque prix et ce qu’il vous a rapporté. Vendre trop d’un coup coûte moins cher qu’avant, et le jeu vous prévient avant. Si vous aviez des marchandises en entrepôt en mer de Chine, vérifiez votre cale.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 20 h 38</div><h3>Le marché à l’étal</h3><ul><li>Chaque marchand annonce ses prix et combien il en prend. À l’achat : son rayon au prix affiché, puis une réserve 25 % plus chère, puis plus rien. À la vente : sa commande au prix affiché ; au-delà, on brade (voir le 8 octobre).</li><li>Vos achats et vos ventes ne font plus bouger le prix : ce sont les quantités qui s’épuisent, puis se refont en 4 à 18 jours selon la marchandise et la taille du port.</li><li>En pénurie, le port vous achète davantage ; en surplus, il vous vend davantage, et moins cher.</li><li>Hors pénuries, surplus, saisons et fêtes, les prix ne bougent plus : un prix noté au journal reste juste.</li><li>Au marché, chaque marchandise se déroule d’un clic : la barre des paliers, le détail de ce que vous payez ou recevez, et un conseil de Chen.</li><li>Le journal donne, pour chaque port, le prix d’achat, le prix de vente et la quantité à ce prix. Le prologue a été réécrit pour l’expliquer.</li></ul><p class="majn-pv"><b>Pour vous</b>On sait à l’avance ce qu’on paiera et ce qu’on touchera. Une fois un rayon vidé ou une commande remplie, il faut attendre quelques jours ou aller ailleurs.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 16 h 59</div><h3>Téléphone : avancer au pouce</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><ul><li>Deux boutons au-dessus des canons choisissent la toile : toute voile en haut, mi-voile en dessous. Le choix est gardé d’un voyage à l’autre.</li><li>La barre au pouce fait avancer le navire tant que le pouce la pousse. Pouce levé ou ramené au centre, les voiles se ferlent et le navire s’arrête en gardant son cap (sauf sous le pilote automatique).</li></ul><p class="majn-pv"><b>Pour vous</b>Au téléphone, on avance en poussant le pouce et on s’arrête en le levant.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 10 h 44</div><h3>Jouer au téléphone</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><ul><li>En mer, une barre au pouce remplace les quatre flèches : posez le pouce n’importe où sur la moitié gauche de l’écran, le navire suit.</li><li>Le bouton d’abordage se pose sur le navire à aborder et le suit ; les boutons de feu ne bougent plus.</li><li>Les vivres s’affichent dans le bandeau ; en portrait, le bandeau prend toute la largeur.</li><li>Fenêtres plus ramassées : boutons, marché, taverne.</li></ul><p class="majn-pv"><b>Pour vous</b>La partie se joue au doigt, sans flèches à l’écran. Rien ne change à l’ordinateur ni à la manette.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 23 h 31</div><h3>Écran de démarrage</h3><ul><li>Au lancement, le logo de Besenet Studio (un clic l’écourte), puis un accueil : sauvegarde automatique, « Meilleur avec le son », « Cliquez pour commencer ».</li></ul><p class="majn-pv"><b>Pour vous</b>Le son se débloque au premier clic et la musique du titre démarre aussitôt.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 23 h 06</div><h3>Nouveau logo</h3><ul><li>Le logo de l’écran titre est désormais dessiné à la main (essai).</li></ul><p class="majn-pv"><b>Pour vous</b>Rien ne change dans la partie.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 22 h 52</div><h3>Onglets, contrats et rumeurs rangées</h3><ul><li>Taverne, journal et marché ont des onglets en classeur doré. Les fenêtres s’ouvrent en haut de l’écran et ne grandissent que vers le bas : les onglets ne sautent plus sous la souris. Le journal reste ouvert d’un onglet à l’autre.</li><li>Au port, le nom et la description de la ville s’affichent sous le bandeau.</li><li>Contrats : la prime est affichée, avec « à bord : 3 / 10 ». En arrivant avec la marchandise, « Livrer » ou « Plus tard », puis des rappels au marché, à la taverne et à l’appareillage. « Tout vendre » garde la marchandise promise.</li><li>Le journal des rumeurs est rangé : en ce moment, à venir, prix rapportés, autres nouvelles, passées.</li></ul><p class="majn-pv"><b>Pour vous</b>Plus de livraison oubliée, ni vendue par erreur avec « Tout vendre ».</p></article></div></div></div>
+<div id="majn" role="dialog" aria-modal="true" aria-labelledby="majn-t"><div class="majn-box"><div class="majn-h"><div><h2 id="majn-t">Dernières mises à jour</h2><p class="majn-l" hidden></p></div><button type="button" class="majn-x">×</button></div><div class="majn-b" lang="fr"><article class="majn-e"><div class="majn-d">10 octobre 2026</div><h3>Une première partie plus claire</h3><span class="majn-tag majn-chine">Mer de Chine</span><div class="majn-pv"><b>Pour vous</b><ul><li>Le but est écrit dès le départ : un million de taels de valeur nette avant le 31 décembre. Et la dette de Wang dit où la rembourser, et ce qu’elle coûte.</li><li>Chen vous prévient au bon moment : premier pirate, premier typhon, banque, solde du mois, contrebande. Il vous conseille le port qui rapporte le plus par jour de mer.</li><li>Chaque nouvelle lune, le jeu s’arrête un instant : le mois peint au pinceau, les lunes qui restent pour devenir Taï-pan, la paye de l’équipage, votre progression vers le titre, et le bilan du mois écoulé (aussi gardé dans le journal).</li><li>Les messages ne cachent plus les fenêtres, et la musique change d’un passage à l’autre.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>La nouvelle lune</h4><ul><li>Le 1er de chaque mois, un écran plein, jeu en pause jusqu’au clic : le mois en calligraphie, « Encore 11 lunes pour devenir Taï-pan », « Vous payez votre équipage » (ou les marins qui désertent si la caisse est vide).</li><li>Une jauge de votre valeur nette, jalonnée des grades jusqu’au sceau du Taï-pan.</li><li>La page du mois écoulé : bénéfice des ventes (dont grâce aux rumeurs), escales, contrats livrés, pirates coulés, navires abordés, butin, typhons, marins perdus, et la meilleure affaire. Elle est gardée dans le journal, onglet Carnet.</li><li>La nuit vire du bleu à l’ocre quand il reste 6 lunes ou moins, puis au vermillon pour les deux dernières.</li></ul><h4>Le but et la dette</h4><ul><li>Le but est écrit dès l’introduction et reste en dernière ligne des objectifs : 1 000 000 taels de valeur nette avant le 31 décembre.</li><li>Endetté, l’objectif dit « Sortir du rouge » au lieu de viser un titre.</li><li>La dette de Wang dit où la rembourser : à Canton ou à Macao.</li><li>Le titre en haut à droite s’explique au survol : votre rang, le détail de votre valeur nette et le prochain titre.</li></ul><h4>En mer</h4><ul><li>Au premier pirate et au premier typhon, Chen dit comment tourner (Q/D ou les flèches au clavier, la barre au doigt, le stick à la manette). Le message de combat le rappelle.</li><li>Abordé, un bilan reste à l’écran jusqu’à « Compris ». Le journal note l’argent, la cargaison et les marins perdus.</li><li>Après le premier combat, Chen propose la leçon de combat (dans l’Aide, depuis l’écran titre).</li><li>Le trésor d’une carte se remonte depuis le navire : « Trésor englouti », et plus « déterrer ».</li><li>La porcelaine brisée et les hommes tombés à la mer pendant la traversée sont notés à l’arrivée. Les jours de mer suivent le calendrier.</li><li>Pas de typhon au tout premier voyage, et l’aide « Première visite » attend que Chen ait fini de parler.</li></ul><h4>Les conseils de Chen</h4><ul><li>À l’achat, Chen choisit le port qui rapporte le plus par jour de mer, un peu moins sur une route à pirates, et dit quand un voyage ne vaut pas la peine.</li><li>Il prévient quand vous avez de quoi rembourser Wang, devant votre première banque, quand vous partez sans de quoi payer la solde, et à votre premier achat d’armes (la contrebande, les ports sans douane).</li><li>Au temple, chaque offrande dit ce qu’elle fait et pendant combien de jours.</li></ul><h4>Marché, carte et contrats</h4><ul><li>Les quantités se lisent mieux : « En rayon : 61 · puis 61 de réserve à 85 ».</li><li>Quand c’est l’argent, et non la cale, qui arrête la réglette, le jeu le dit.</li><li>Le marché s’ouvre toutes rubriques fermées.</li><li>Les contrats disent à combien de jours de mer est le port de livraison.</li><li>Sur la carte, on choisit un port en touchant son nom (Hong Kong et Macao se distinguent enfin) ; les zones de pirates se voient mieux.</li></ul><h4>À l’écran</h4><ul><li>Quand une fenêtre est ouverte, les messages s’affichent en bas et ne cachent plus son en-tête. À l’arrivée, le nom de la ville s’écarte des messages.</li><li>Les boutons du port portent le nom des enseignes : Maison Wang, Marché, Maison de jeu.</li><li>Journal des prix : le nom des marchandises sous leurs icônes. Héritage : « Acheter le niv. 1 ».</li><li>Écran titre : la présentation d’une mer s’ouvre au-dessus des boutons et ne cache plus « Nouvelle carrière ». L’accueil ne dit plus « Meilleur avec le son ».</li><li>Le bouton « Mises à jour », en bas à droite de l’écran titre, ouvre les dix derniers jours de mise à jour : ce qui change pour vous, puis le détail dans « En savoir plus ».</li></ul><h4>Musique</h4><ul><li>Chaque musique change d’un passage à l’autre : des instruments entrent et sortent, une autre mélodie prend le relais, les percussions changent de rythme.</li><li>Mer de Chine : au port et en mer, quatre morceaux au lieu d’un, tirés au hasard à chaque arrivée, jamais le même deux fois de suite. Les Caraïbes et la Méditerranée suivront.</li></ul></details></article><article class="majn-e"><div class="majn-d">8 octobre 2026</div><h3>Des prix qui s’expliquent</h3><div class="majn-pv"><b>Pour vous</b><ul><li>On voit d’où vient chaque prix et ce qu’il vous a rapporté.</li><li>Vendre trop d’un coup coûte moins cher qu’avant, et le jeu vous prévient.</li><li>Deux leçons de Chen, le marché et le combat, pour apprendre sans risque.</li><li>Si vous aviez des marchandises en entrepôt en Mer de Chine, vérifiez votre cale.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Lisibilité</h4><ul><li>Journal des prix en deux bandes par port : en haut, en jade, ce que le port vous vend (prix et quantité en rayon) ; en bas, en or, ce qu’il vous achète (prix et commande). Le meilleur prix est encadré.</li><li>Pénuries toujours en or, surplus toujours en bleu, partout dans le jeu.</li><li>La valeur nette se détaille dans une bulle : argent, banque, navire, cargaison, dette, prochain titre.</li><li>Le conseil de Chen à l’achat est chiffré : combien le port en prend et à quel prix, l’âge du relevé, les jours de mer, la saison ou la fête à l’arrivée.</li><li>Les fausses rumeurs et les bavardages de la rue ne sont plus notés au journal.</li><li>Les bénédictions du temple s’affichent en cercles à minuteur sous le bandeau ; la cale a une jauge, rouge quand elle est pleine.</li></ul><h4>Le rythme de l’année</h4><ul><li>Une page d’éphéméride à chaque 1er du mois (mois restants, solde de l’équipage), « J−7 » à côté de la date les sept derniers jours, et un bandeau avant le bilan de fin d’année.</li></ul><h4>La vente</h4><ul><li>Au-delà de ce que le port commande, on brade : le premier picul part 20 % sous le prix ferme, puis un peu moins à chaque unité, et le jeu vous prévient.</li><li>Mer de Chine : les entrepôts sont retirés. Ce qui y était laissé est revenu à bord, le reste a été racheté.</li></ul><h4>Le registre</h4><ul><li>Chaque achat et chaque vente laisse un billet numéroté dans l’onglet « Registre » du journal, rangé par escale : les quantités à chaque prix, ce qui a fait le prix (pénurie, saison, fête, marge du marchand, Sens des affaires, présage du temple), le bénéfice et ce que vos bonus ont rapporté.</li></ul><h4>Les rumeurs (Mer de Chine)</h4><ul><li>Chaque pénurie ou surplus a sa cause, dite à la taverne : grève des mineurs de jade, fours de Jingdezhen éteints…</li><li>Au journal, une fiche par rumeur : la cause, l’effet sur l’étal, une frise du début à la fin, la source et la durée. Nouvelle section « Saisons et fêtes ».</li></ul><h4>Les leçons de Chen</h4><ul><li>Deux leçons guidées, le marché et le combat, à part de la carrière : rien ne compte, votre partie est mise de côté puis rendue, 5 jetons de jade la première fois. Dans l’Aide de l’écran titre et à la fin du prologue.</li></ul></details></article><article class="majn-e"><div class="majn-d">7 octobre 2026</div><h3>Le marché à l’étal, et le jeu au téléphone</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><div class="majn-pv"><b>Pour vous</b><ul><li>On sait à l’avance ce qu’on paiera et ce qu’on touchera. Un rayon vidé ou une commande remplie se refait en quelques jours : en attendant, allez ailleurs.</li><li>Au téléphone, on avance en poussant le pouce et on s’arrête en le levant. Rien ne change à l’ordinateur ni à la manette.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Le marché à l’étal</h4><ul><li>Chaque marchand annonce ses prix et combien il en prend. À l’achat : son rayon au prix affiché, puis une réserve 25 % plus chère, puis plus rien. À la vente : sa commande au prix affiché ; au-delà, on brade.</li><li>Vos achats et vos ventes ne font plus bouger le prix : ce sont les quantités qui s’épuisent, puis se refont en 4 à 18 jours selon la marchandise et la taille du port.</li><li>En pénurie, le port vous achète davantage ; en surplus, il vous vend davantage, et moins cher.</li><li>Hors pénuries, surplus, saisons et fêtes, les prix ne bougent plus : un prix noté au journal reste juste.</li><li>Au marché, chaque marchandise se déroule d’un clic : la barre des paliers, le détail de ce que vous payez ou recevez, et un conseil de Chen.</li><li>Le journal donne, pour chaque port, le prix d’achat, le prix de vente et la quantité à ce prix. Le prologue l’explique.</li></ul><h4>Téléphone et tablette</h4><ul><li>En mer, une barre au pouce remplace les quatre flèches : posez le pouce sur la moitié gauche de l’écran et poussez, le navire avance dans cette direction. Pouce levé ou ramené au centre, les voiles se ferlent et le navire s’arrête en gardant son cap (sauf sous le pilote automatique).</li><li>Deux boutons au-dessus des canons choisissent la toile : toute voile en haut, mi-voile en dessous. Le choix est gardé d’un voyage à l’autre.</li><li>Le bouton d’abordage se pose sur le navire à aborder et le suit ; les boutons de feu ne bougent plus.</li><li>Les vivres s’affichent dans le bandeau ; en portrait, le bandeau prend toute la largeur. Fenêtres plus ramassées : boutons, marché, taverne.</li></ul></details></article><article class="majn-e"><div class="majn-d">6 octobre 2026</div><h3>Rumeurs, contrats et premier écran</h3><div class="majn-pv"><b>Pour vous</b><ul><li>Le prix noté au journal correspond à celui que vous trouverez en revenant, et les rumeurs disent clairement quoi, où et quand.</li><li>Plus de livraison oubliée, ni vendue par erreur avec « Tout vendre ».</li><li>On distingue un prix passager d’un prix qui dure.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Rumeurs et prix</h4><ul><li>À la taverne, les rumeurs sont datées et chiffrées : quand, pour combien de temps, de combien. Quand il n’y a rien à dire, la tournée est gratuite. Un capitaine rapporte parfois les prix d’un port lointain.</li><li>Au marché, sous chaque marchandise : ce qu’en disent les rumeurs. Sur la carte, les rumeurs ont une pastille avec l’icône de la marchandise, et la fiche d’un port liste ses rumeurs.</li><li>Le journal note aussi les prix au départ du port, après vos échanges, et un sablier marque un prix vu pendant une pénurie ou un surplus : il ne durera pas.</li><li>Au journal, « Pour votre cargaison » : les trois meilleurs ports où vendre toute votre cargaison. Le journal des rumeurs est rangé : en ce moment, à venir, prix rapportés, autres nouvelles, passées.</li></ul><h4>Contrats et fenêtres</h4><ul><li>Contrats : la prime est affichée, avec « à bord : 3 / 10 ». En arrivant avec la marchandise, « Livrer » ou « Plus tard », puis des rappels au marché, à la taverne et à l’appareillage. « Tout vendre » garde la marchandise promise.</li><li>Taverne, journal et marché ont des onglets en classeur doré. Les fenêtres s’ouvrent en haut de l’écran et ne grandissent que vers le bas : les onglets ne sautent plus sous la souris.</li><li>Au port, le nom et la description de la ville s’affichent sous le bandeau. Les messages restent deux secondes de plus à l’écran.</li></ul><h4>Démarrage</h4><ul><li>Au lancement, le logo de Besenet Studio (un clic l’écourte), puis un accueil : sauvegarde automatique, « Meilleur avec le son », « Cliquez pour commencer ». Le son se débloque à ce premier clic.</li><li>Le logo de l’écran titre est désormais dessiné à la main.</li></ul></details></article></div></div></div>
 <script>(() => {
-  const last = "2026-10-10 15:15";
+  const last = "2026-10-10 16:20";
   const btn = document.getElementById('majb'), pan = document.getElementById('majn');
   const code = () => (typeof Lang !== 'undefined' && Lang.code) || 'fr';
   const tr = (k, fb) => { try { const s = T(k); return s && s !== k && s.indexOf(k) < 0 ? s : fb; } catch (e) { return fb; } };
@@ -139860,6 +140261,7 @@ body:has(.title-screen):not(:has(#loading)) #majb { display: inline-flex; }
     pan.querySelector('h2').textContent = tr('maj.titre', 'Dernières mises à jour');
     const l = pan.querySelector('.majn-l'); l.textContent = code() === 'fr' ? '' : tr('maj.langue', ''); l.hidden = !l.textContent;
     pan.querySelector('.majn-x').setAttribute('aria-label', tr('commun.fermer', 'Fermer'));
+    pan.querySelectorAll('.majn-more').forEach(d => { d.open = false; });   // (à chaque ouverture : « Pour vous » seul, le détail replié)
     pan.classList.add('on'); pan.querySelector('.majn-b').scrollTop = 0;
     addEventListener('keydown', keys, true); addEventListener('keyup', keys, true);
     pan.querySelector('.majn-x').focus();
