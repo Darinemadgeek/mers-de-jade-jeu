@@ -2468,7 +2468,7 @@ Lang.ui('fr', {
   'mer.ventFavorable': ' · vent favorable',   // ajouté après l'état des voiles
   'mer.cap': 'Cap sur {port} · ~{jours} j · {auto, select, oui {pilote auto} other {barre manuelle}}',
   'mer.combatTactile': 'Combat ! Visez de flanc et tirez.',
-  'mer.combatClavier': 'Combat ! {q}/{e} ou clic : bordées · Espace : feu',   // q, e : touches du clavier
+  'mer.combatClavier': 'Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu',   // g, d : touches pour tourner ; q, e : touches des bordées
   'mer.combatManette': 'Combat ! {lt} / {rt} : bordées · {a} : aborder',   // lt, rt, a : boutons de la manette (LT, RT, A)
 
   'commun.citation': '« {texte} »',   // une réplique entre guillemets
@@ -2486,6 +2486,8 @@ Lang.ui('fr', {
   'marche.caleComble': 'Cale pleine : {cale} / {cale}',   // la pastille de la cale quand elle est pleine (en rouge)
   'marche.caleLimite': 'Il reste de la place pour {n} {unites} : la réglette s\'arrête là.',   // au marché, à l'achat, quand la cale ne peut pas tout prendre
   'marche.calePleine': 'Cale pleine : vendez d\'abord.',
+  'marche.argentLimite': 'Vous pouvez en payer {n} {unites} : la réglette s\'arrête là.',   // au marché, à l'achat, quand c'est l'argent (pas la cale) qui limite
+  'marche.argentManque': 'Pas assez d\'argent pour en acheter.',
   'marche.pasDeNavire': 'Pas de navire',
   'marche.sansNavire': 'Il vous faut un navire pour charger des marchandises. Passez au chantier naval.',
   'marche.enDirect': ' · en direct',
@@ -2509,15 +2511,15 @@ Lang.ui('fr', {
   'marche.completer': 'Compléter à 40 j ({cout})',
   'marche.vivresComplet': 'Vivres au complet',
   'marche.conseil': 'Chaque marchand annonce son prix et combien il en prend ; au-delà, il en a moins ou paie moins. Répartissez vos cargaisons entre plusieurs ports : ce qu\'il a pris se refait en quelques jours.',
-  'marche.etal.rayon': 'En rayon : {n} · réserve {m} à {prix}',   // le marché à l'étal (07/10/2026) : sous le nom d'une marchandise, ligne fermée, à l'achat ; n : le rayon (au prix affiché), m : la réserve, prix : son prix
-  'marche.etal.rayonVide': 'Rayon vide · réserve {m} à {prix}',
+  'marche.etal.rayon': 'En rayon : {n} · puis {m} de réserve à {prix}',   // le marché à l'étal (07/10/2026) : sous le nom d'une marchandise, ligne fermée, à l'achat ; n : le rayon (au prix affiché), m : la réserve, prix : son prix
+  'marche.etal.rayonVide': 'Rayon vide · {m} de réserve à {prix}',
   'marche.etal.plusRien': 'Plus rien : le rayon se refait peu à peu',
   'marche.etal.commande': 'Commande : {n} · puis bradé dès {prix}',   // (à la vente) n : la commande (au prix affiché) ; prix : le premier prix bradé, au-delà
   'marche.etal.commandeRemplie': 'Commande remplie : bradé dès {prix}',
-  'marche.etal.ligneRayon': 'En rayon : {n} à {prix}',   // le détail, ligne ouverte : un palier par ligne
-  'marche.etal.ligneReserve': 'Réserve : {n} à {prix}',
+  'marche.etal.ligneRayon': 'En rayon : {n} au prix de {prix}',   // le détail, ligne ouverte : un palier par ligne
+  'marche.etal.ligneReserve': 'Réserve : {n} au prix de {prix}',
   'marche.etal.ligneRien': 'Ensuite : plus rien',
-  'marche.etal.ligneCommande': 'Commande : {n} à {prix}',
+  'marche.etal.ligneCommande': 'Commande : {n} au prix de {prix}',
   'marche.etal.ligneBrade': 'Au-delà : bradé dès {prix}, de moins en moins',   // le détail, ligne ouverte, à la vente : la zone bradée (de l'orange au rouge)
   'marche.etal.ligneBradeDe': 'Bradé : de {de} à {a}',   // de, a : le premier et le dernier prix bradés
   'marche.etal.avertBrade': '{port} n\'en demande pas plus de {n}. Au-delà, vous bradez : gardez le reste pour un autre acheteur, ou acceptez de le vendre moins cher.',   // avertissement quand la réglette entre dans la zone bradée
@@ -2533,11 +2535,12 @@ Lang.ui('fr', {
   'marche.chen.revente': 'D\'après ton journal, le mieux est <b>{port}</b> : ils t\'en prennent <b>{q} {unites} à {prix} {monnaie}</b>, en direct ! Pour tes {n} : <b>{benefice}</b>.',   // conseil du mentor à l'achat (08/10/2026), prix en direct (informateurs) ; q : ce que ce port prend au prix ferme ; benefice : « +1 960 taels » ; balises <b> gardées
   'marche.chen.reventeNote': 'D\'après ton journal, le mieux est <b>{port}</b> : ils t\'en prenaient <b>{q} {unites} à {prix} {monnaie}</b> {age}. Pour tes {n} : <b>{benefice}</b>.',   // le même, d'après un relevé du journal ; age : « il y a 12 jours », « aujourd'hui »
   'marche.chen.reventeVieux': 'D\'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c\'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.',   // le même, relevé de 15 jours ou plus
-  'marche.chen.jours': 'À {n, plural, one {# jour} other {# jours}} de mer.',   // en petit sous le conseil : la route jusqu'à ce port, avec votre navire
+  'marche.chen.joursGain': 'À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.',   // en petit sous le conseil : la route jusqu'à ce port, avec votre navire, et le gain par jour de mer (« 140 taels ») ; le port conseillé est celui qui rapporte le plus par jour
   'marche.chen.saisonHausse': 'Et d\'ici ton arrivée, la saison y fera monter ce prix.',
   'marche.chen.saisonBaisse': 'Mais d\'ici ton arrivée, la saison y fera baisser ce prix.',
   'marche.chen.feteHausse': 'Et à ton arrivée, ce sera {fete} : le prix y sera plus haut.',   // fete : le nom de la fête (le Nouvel An chinois…)
   'marche.chen.feteBaisse': 'Mais la fête sera finie à ton arrivée : le prix y sera plus bas.',
+  'marche.chen.maigre': 'Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.',   // conseil du mentor à l'achat quand le meilleur port rapporte moins de 10 % ; benefice : « +54 taels »
   'marche.chen.aucun': 'Aucun port de ton journal ne la paie plus cher : garde-la pour une pénurie annoncée, ou va voir ailleurs.',
   'marche.chen.mauvaisPort': 'À {port}, tu ne gagnerais rien ou presque : vise un autre port, si tu as le choix.',
   'marche.chen.ferme': 'Tout part au prix ferme.',   // conseils du mentor à la vente, selon la quantité choisie
@@ -2610,6 +2613,7 @@ Lang.ui('fr', {
   'taverne.evenementQuand': '{port} : {marchandise} {fleche} {quand}',   // quand : « dès le 14 mars » ou « en ce moment »
   'taverne.contrats': 'CONTRATS PROPOSÉS',
   'taverne.recompense': 'Récompense {prime} · avant le {date}',
+  'taverne.joursDIci': '≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire',   // sur une carte de contrat : la route jusqu'au port de livraison
   'taverne.prixIci': 'Prix actuel ici : {prix} / {unite}',
   'taverne.accepter': 'Accepter',
   'taverne.contratAccepte': 'Contrat accepté.',
@@ -3098,11 +3102,19 @@ Lang.ui('fr', {
   'objectif.rembourser': 'Rembourser {preteur} : {somme} {monnaie}',
   'objectif.patience': ' (patience : {jours} j)',
   'objectif.enRetard': ' (EN RETARD !)',
+  'objectif.chez1': ' · à {a}',   // le port où l'on rembourse le prêteur
+  'objectif.chez2': ' · à {a} ou {b}',   // les ports où l'on rembourse le prêteur
+  'objectif.sortirRouge': 'Sortir du rouge : valeur nette {valeur}',   // en valeur nette négative, au lieu du titre suivant
+  'objectif.but': 'But : {seuil} {monnaie} de valeur nette avant le {date}',   // le titre suprême, toujours en dernier
   'objectif.avantLe': ' · avant le {date}',
 
   // ── En mer : alertes, invites et notifications ──
   'mer.conseilTactile': 'Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.',
-  'mer.conseilClavier': 'Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.',
+  'mer.conseilClavier': 'Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.',   // g, d : touches pour tourner
+  // la façon de tourner, ajoutée au premier conseil du mentor sur les pirates, selon l'appareil
+  'mer.barreClavier': 'Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.',   // g, d : touches du clavier
+  'mer.barreTactile': 'Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.',
+  'mer.barreManette': 'Pour tourner : le stick gauche.',
   'mer.voilesPirates': 'VOILES PIRATES !',
   'mer.unPirate': 'UN PIRATE !',
   'mer.brumePlusieurs': '{n} navires surgissent de la brume',
@@ -3153,7 +3165,10 @@ Lang.ui('fr', {
   'mer.hommeALaMer': 'Un homme à la mer !',
   'mer.autreDestination': 'Choisissez une autre destination sur la carte.',
   'touche.entree': 'Entrée',   // la touche Entrée du clavier
-  'journal.aborde': 'Abordé par des pirates : {somme} {monnaie} volés.',
+  'journal.aborde': 'Abordé par des pirates : {somme} {monnaie} volés. {pertes}.',
+  'journal.casse': 'Pendant la traversée : {lots} brisés.',   // lots : « 2 piculs de porcelaine »
+  'journal.hommesALaMer': 'Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.',
+  'journal.abordeCargaison': 'Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.',
   'journal.tresor': 'Trésor déterré : {somme} {monnaie}.',
   'journal.tresorJade': 'Trésor déterré : {somme} {monnaie} et {n} {marchandise}.',
 
@@ -3166,7 +3181,7 @@ Lang.ui('fr', {
   'titre.merApres': 'Ouvrez d\'abord {mer}.',   // mer : « la mer des Caraïbes », nom : « Caraïbes »
   'fin.merOuverte': 'Nouvelle mer ouverte : {mer} !',   // mer : le nom court de la mer ouverte (« Caraïbes »)
   'tuto.tactile': 'Suivez l\'objectif en haut de l\'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.',
-  'tuto.clavier': 'Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.',
+  'tuto.clavier': 'Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.',
   'tuto.manette': 'Suivez les objectifs en haut à gauche. {lb} {rb} : aller d\'un bâtiment à l\'autre, {a} : entrer.',   // lb, rb, a : boutons de la manette
   'manette.connectee': 'Manette connectée',
   'tuto.paysage': 'Astuce : tournez votre téléphone en paysage pour mieux voir la mer.',
@@ -3639,8 +3654,8 @@ Lang.ui('en', {
   'mer.cap': 'Bound for {port} · ~{jours} d · {auto, select, oui {autopilot} other {manual helm}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': 'Combat! Turn broadside-on and fire.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': 'Combat! {q}/{e} or click: broadsides · Space: fire',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': 'Combat! {g}/{d}: helm · {q}/{e} or click: broadsides · Space: fire',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': 'Combat! {lt} / {rt}: broadsides · {a}: board',
   // « {texte} »
@@ -3668,6 +3683,10 @@ Lang.ui('en', {
   'marche.caleLimite': 'There is room for {n} {unites}: the slider stops there.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Hold full: sell first.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'You can afford {n} {unites}: the slider stops there.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'Not enough money to buy any.',
   // Pas de navire
   'marche.pasDeNavire': 'No ship',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -3720,16 +3739,21 @@ Lang.ui('en', {
   'marche.vivresComplet': 'Provisions full',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Each merchant announces his price and how much he takes; beyond that, he has less or pays less. Spread your cargoes across several ports: what he took fills up again in a few days.',
-  'marche.etal.rayon': 'On the stall: {n} · reserve {m} at {prix}',
-  'marche.etal.rayonVide': 'Stall empty · reserve {m} at {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'On the stall: {n} · then {m} in reserve at {prix}',
+  // Rayon vide · {m} de réserve à {prix}
+  'marche.etal.rayonVide': 'Stall empty · {m} in reserve at {prix}',
   'marche.etal.plusRien': 'Nothing left: the stall fills up again little by little',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Order: {n} · then sold off from {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Order filled: sold off from {prix}',
+  // En rayon : {n} au prix de {prix}
   'marche.etal.ligneRayon': 'On the stall: {n} at {prix}',
+  // Réserve : {n} au prix de {prix}
   'marche.etal.ligneReserve': 'Reserve: {n} at {prix}',
   'marche.etal.ligneRien': 'Then: nothing left',
+  // Commande : {n} au prix de {prix}
   'marche.etal.ligneCommande': 'Order: {n} at {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Beyond: sold off from {prix}, less and less',
@@ -3753,8 +3777,8 @@ Lang.ui('en', {
   'marche.chen.reventeNote': 'By your logbook, the best is <b>{port}</b>: they were taking <b>{q} {unites} at {prix} {monnaie}</b> {age}. For your {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'By your logbook, the best is <b>{port}</b>: <b>≈ {q} {unites} at {prix} {monnaie}</b>, but that was {age}: the quantity may have changed. For your {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '{n, plural, one {# day} other {# days}} at sea from here.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '{n, plural, one {# day} other {# days}} at sea: ≈ {gain} per day.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'And by the time you arrive, the season will push that price up.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -3763,6 +3787,8 @@ Lang.ui('en', {
   'marche.chen.feteHausse': 'And when you arrive it will be {fete}: the price there will be higher.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'But the festival will be over when you arrive: the price there will be lower.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt u
+  'marche.chen.maigre': 'The best would be <b>{port}</b>, {n, plural, one {# day} other {# days}} at sea, for just <b>{benefice}</b>: not worth the trip. Look for another good instead.',
   'marche.chen.aucun': 'No port in your logbook pays more for it: keep it for an announced shortage, or look elsewhere.',
   'marche.chen.mauvaisPort': 'At {port}, you would make little or nothing: try another port, if you have the choice.',
   'marche.chen.ferme': 'It all goes at the firm price.',
@@ -3896,6 +3922,8 @@ Lang.ui('en', {
   'taverne.contrats': 'CONTRACTS ON OFFER',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Reward {prime} · by {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# day} other {# days}} at sea from here, with your ship',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Current price here: {prix}/{unite}',
   // Accepter
@@ -4741,12 +4769,26 @@ Lang.ui('en', {
   'objectif.patience': ' (patience: {jours} d)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (OVERDUE!)',
+  //  · à {a}
+  'objectif.chez1': ' · at {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · at {a} or {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Get out of the red: net worth {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Goal: {seuil} {monnaie} net worth by {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · by {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'Your guns fire to the sides: turn your flank to the pirate, then tap “Fire” on that side.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'Your guns fire to the sides: turn your flank to the pirate, then press {q} (port) or {e} (starboard), or click on that side.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'Your guns fire to the sides: turn with {g}/{d} or ← → to show the pirate your flank, then press {q} (port) or {e} (starboard), or click on that side.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'To turn: <b>{g}</b> / <b>{d}</b> or the ← → arrows.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'To turn: rest your thumb on the helm, bottom left, and point the course.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'To turn: the left stick.',
   // VOILES PIRATES !
   'mer.voilesPirates': 'PIRATE SAILS!',
   // UN PIRATE !
@@ -4847,8 +4889,14 @@ Lang.ui('en', {
   'mer.autreDestination': 'Choose another destination on the map.',
   // Entrée
   'touche.entree': 'Enter',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'Boarded by pirates: {somme} {monnaie} stolen.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'Boarded by pirates: {somme} {monnaie} stolen. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'During the crossing: {lots} broken.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'During the crossing: {n, plural, one {# man} other {# men}} overboard.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'Boarded by pirates: they carry off {somme} {monnaie} and {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Treasure dug up: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -4869,7 +4917,7 @@ Lang.ui('en', {
   'fin.merOuverte': 'New sea unlocked: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Follow the objective at the top of the screen. Tap a building, or a shortcut at the bottom, to go there.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Follow the objectives at the top left. Click a building or use the number keys 1 to 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Follow the objectives at the top left. {lb} / {rb}: move between buildings, {a}: go in.',
@@ -5937,8 +5985,8 @@ Lang.sea('en', 'chine', {
   'intro/2': 'In the alleys of the Thirteen Factories, they whisper that a bold merchant can make a fortune in a single season. The English call these giants of trade “taipans”: the big bosses.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'You have one year. Borrow, fit out a ship, play cat and mouse with the customs, defy pirates and typhoons.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'By December 31, the China Sea will know your name.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Amass a million taels by December 31, and the China Sea will know your name.',
   // Jeanne Kerbrat
   'captainNames/0': 'Jeanne Kerbrat',
   // Li Wei
@@ -6321,8 +6369,8 @@ Lang.sea('en', 'chine', {
   'text/prologue/carte2': '<b>The voyage:</b> how long, and how dangerous. Hong Kong is close by, and safe.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>Known prices</b> for this port, and their age: they may have changed since.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>Set sail!</b> Your men are fed, your hold is full.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>Set sail!</b> Your men are fed, your hold is loaded.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': 'At sea! The <b>autopilot</b> follows the plotted course and docks by itself. Take the helm yourself and it switches off; the “Autopilot” button turns it back on. Every day at sea eats into your provisions.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -6379,6 +6427,8 @@ Lang.sea('en', 'chine', {
   'text/hints/coque': 'The hull has taken a beating. Stop by the <b>shipyard</b>: a damaged ship goes down fast at the next blow.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Start of the month: <b>wages</b> for the crew. Always keep enough to pay them, or some will desert.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne c
+  'text/hints/leconCombat': 'Did those pirates give you a hard time? I\'ll teach you to fight: the <b>combat lesson</b> is waiting for you in <b>Help</b>, from the title screen. It doesn\'t count toward your career.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -13717,8 +13767,8 @@ Lang.ui('zh', {
   'mer.cap': '驶往{port} · 约{jours}天 · {auto, select, oui {自动航行} other {手动操舵}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': '交战！侧舷对敌，开火。',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': '交战！{q}/{e}或点击：舷炮齐射 · 空格：开火',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': '交战！{g}/{d}：转舵 · {q}/{e}或点击：舷炮齐射 · 空格：开火',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': '交战！{lt}/{rt}：舷炮齐射 · {a}：接舷',
   // « {texte} »
@@ -13746,6 +13796,10 @@ Lang.ui('zh', {
   'marche.caleLimite': '还能装{n}{unites}：滑块停在那里。',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': '船舱已满：先卖掉一些。',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': '你的钱只够买{n}{unites}：滑块停在那里。',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': '钱不够，买不起。',
   // Pas de navire
   'marche.pasDeNavire': '尚无船只',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -13798,7 +13852,8 @@ Lang.ui('zh', {
   'marche.vivresComplet': '粮水已满',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': '每个商人都报出价钱和数量；超过了，要么没货，要么压价。货物宜分散到几个港口出手：被你买走或卖进的，几天后会慢慢补回来。',
-  'marche.etal.rayon': '摊上有{n} · 另有存货{m}，价{prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': '摊上有{n} · 之后存货{m}，价{prix}',
   'marche.etal.rayonVide': '摊上已空 · 存货{m}，价{prix}',
   'marche.etal.plusRien': '已经卖空：摊上会慢慢补货',
   // Commande : {n} · puis bradé dès {prix}
@@ -13831,8 +13886,8 @@ Lang.ui('zh', {
   'marche.chen.reventeNote': '照你的日志，最好是<b>{port}</b>：{age}他们收<b>{q}{unites}，价{prix}{monnaie}</b>。你这{n}：<b>{benefice}</b>。',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': '照你的日志，最好是<b>{port}</b>：<b>≈{q}{unites}，价{prix}{monnaie}</b>，不过那是{age}的事，数量可能有变。你这{n}：<b>{benefice}</b>。',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '从这里航行{n, plural, other {#天}}。',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '航行{n, plural, other {#天}}：每天约赚{gain}。',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': '而且等你到时，时令会让那里的价钱上涨。',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -13841,6 +13896,8 @@ Lang.ui('zh', {
   'marche.chen.feteHausse': '而且你到的时候正逢{fete}：那里的价钱会更高。',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': '不过你到的时候节庆已过：那里的价钱会低一些。',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': '最好的是<b>{port}</b>，航行{n, plural, other {#天}}，却只赚<b>{benefice}</b>：不值得跑这一趟。还是找别的货吧。',
   'marche.chen.aucun': '你日志里没有哪个港口出价更高：留着等传闻里的短缺，或者去别处看看。',
   'marche.chen.mauvaisPort': '在{port}，你几乎赚不到钱：能选的话，换个港口。',
   'marche.chen.ferme': '全按定价成交。',
@@ -13974,6 +14031,8 @@ Lang.ui('zh', {
   'taverne.contrats': '可接合约',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': '酬金{prime} · {date}前',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '你的船从这里航行约{n, plural, other {#天}}',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': '此地现价：{prix}/{unite}',
   // Accepter
@@ -14819,12 +14878,26 @@ Lang.ui('zh', {
   'objectif.patience': '（宽限：{jours}天）',
   //  (EN RETARD !)
   'objectif.enRetard': '（已逾期！）',
+  //  · à {a}
+  'objectif.chez1': ' · 在{a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · 在{a}或{b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': '走出赤字：身家{valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': '终极目标：{date}前身家达{seuil}{monnaie}',
   //  · avant le {date}
   'objectif.avantLe': ' · {date}前',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': '火炮朝两舷开火：把侧舷对准海盗，再按那一侧的“开火”。',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': '火炮朝两舷开火：把侧舷对准海盗，再按{q}（左舷）或{e}（右舷），或在那一侧点击。',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': '火炮朝两舷开火：用{g}/{d}或← →转舵，把侧舷对准海盗，再按{q}（左舷）或{e}（右舷），或在那一侧点击。',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': '转舵：<b>{g}</b> / <b>{d}</b>或方向键← →。',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': '转舵：拇指按住左下角的舵，指向要去的方向。',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': '转舵：左摇杆。',
   // VOILES PIRATES !
   'mer.voilesPirates': '海盗帆影！',
   // UN PIRATE !
@@ -14925,8 +14998,14 @@ Lang.ui('zh', {
   'mer.autreDestination': '在地图上另选目的地。',
   // Entrée
   'touche.entree': '回车',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': '遭海盗登船：被抢走{somme}{monnaie}。',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': '遭海盗登船：被抢走{somme}{monnaie}。{pertes}。',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': '航行途中：打碎了{lots}。',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': '航行途中：{n, plural, other {#名水手}}落海。',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': '遭海盗登船：被抢走{somme}{monnaie}和{cargaison}。{pertes}。',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': '挖出宝藏：{somme}{monnaie}。',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -14947,7 +15026,7 @@ Lang.ui('zh', {
   'fin.merOuverte': '新海域已解锁：{mer}！',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '跟着屏幕上方的目标走。点按建筑或下方的快捷按钮即可前往。',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '跟着左上角的目标走。点击建筑，或用数字键1至9。',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': '跟着左上角的目标走。按{lb}/{rb}走到相邻建筑，按{a}进入。',
@@ -16015,8 +16094,8 @@ Lang.sea('zh', 'chine', {
   'intro/2': '十三行的街巷里，人们私下传说：胆大的商人，一季之间便能挣下万贯家财。这些商界巨子，广州人称之为“大班”，洋人也跟着这么叫。',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': '你只有一年。借钱、置船、与海关周旋，同海盗和台风较量。',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': '到12月31日，整个中国海都将知道你的名字。',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': '在12月31日前赚足一百万两，整个中国海都将知道你的名字。',
   // Jeanne Kerbrat
   'captainNames/0': '让娜·凯尔布拉',
   // Li Wei
@@ -16399,8 +16478,8 @@ Lang.sea('zh', 'chine', {
   'text/prologue/carte2': '<b>航程：</b>要走多久，有多危险。香港近在眼前，没什么风险。',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '这个港口<b>已知的行情</b>，以及是多久前记下的：之后可能变了。',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>出发！</b>人吃饱了，舱也装满了。',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>出发！</b>人吃饱了，货也装好了。',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': '出海了！<b>自动航行</b>会沿着航线走，到了自己靠岸。你一动舵，它就关了；按“自动”按钮能重新打开。海上每过一天，都要吃掉粮水。',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -16457,6 +16536,8 @@ Lang.sea('zh', 'chine', {
   'text/hints/coque': '船体伤得不轻。去趟<b>船厂</b>吧：破船再挨一下，说沉就沉。',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': '月初了：该给水手发<b>薪饷</b>了。手头总要留够这笔钱，不然有人会开小差。',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': '这些海盗让你吃了不少苦头吧？我来教你怎么打：<b>海战课</b>就在标题画面的<b>帮助</b>里等着你。这堂课不计入你的生涯。',
 });
 
 </script>
@@ -23765,8 +23846,8 @@ Lang.ui('zht', {
   'mer.cap': '駛往{port} · 約{jours}天 · {auto, select, oui {自動航行} other {手動操舵}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': '交戰！側舷對敵，開火。',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': '交戰！{q}/{e}或點擊：舷砲齊射 · 空白鍵：開火',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': '交戰！{g}/{d}：轉舵 · {q}/{e}或點擊：舷砲齊射 · 空白鍵：開火',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': '交戰！{lt}/{rt}：舷砲齊射 · {a}：接舷',
   // « {texte} »
@@ -23794,6 +23875,10 @@ Lang.ui('zht', {
   'marche.caleLimite': '還能裝{n}{unites}：滑塊停在那裡。',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': '船艙已滿：先賣掉一些。',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': '你的錢只夠買{n}{unites}：滑塊停在那裡。',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': '錢不夠，買不起。',
   // Pas de navire
   'marche.pasDeNavire': '尚無船隻',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -23846,7 +23931,8 @@ Lang.ui('zht', {
   'marche.vivresComplet': '糧水已滿',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': '每個商人都報出價錢和數量；超過了，要麼沒貨，要麼壓價。貨物宜分散到幾個港口出手：被你買走或賣進的，幾天後會慢慢補回來。',
-  'marche.etal.rayon': '攤上有{n} · 另有存貨{m}，價{prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': '攤上有{n} · 之後存貨{m}，價{prix}',
   'marche.etal.rayonVide': '攤上已空 · 存貨{m}，價{prix}',
   'marche.etal.plusRien': '已經賣空：攤上會慢慢補貨',
   // Commande : {n} · puis bradé dès {prix}
@@ -23879,8 +23965,8 @@ Lang.ui('zht', {
   'marche.chen.reventeNote': '照你的日誌，最好是<b>{port}</b>：{age}他們收<b>{q}{unites}，價{prix}{monnaie}</b>。你這{n}：<b>{benefice}</b>。',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': '照你的日誌，最好是<b>{port}</b>：<b>≈{q}{unites}，價{prix}{monnaie}</b>，不過那是{age}的事，數量可能有變。你這{n}：<b>{benefice}</b>。',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '從這裡航行{n, plural, other {#天}}。',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '航行{n, plural, other {#天}}：每天約賺{gain}。',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': '而且等你到時，時令會讓那裡的價錢上漲。',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -23889,6 +23975,8 @@ Lang.ui('zht', {
   'marche.chen.feteHausse': '而且你到的時候正逢{fete}：那裡的價錢會更高。',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': '不過你到的時候節慶已過：那裡的價錢會低一些。',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': '最好的是<b>{port}</b>，航行{n, plural, other {#天}}，卻只賺<b>{benefice}</b>：不值得跑這一趟。還是找別的貨吧。',
   'marche.chen.aucun': '你日誌裡沒有哪個港口出價更高：留著等傳聞裡的短缺，或者去別處看看。',
   'marche.chen.mauvaisPort': '在{port}，你幾乎賺不到錢：能選的話，換個港口。',
   'marche.chen.ferme': '全按定價成交。',
@@ -24022,6 +24110,8 @@ Lang.ui('zht', {
   'taverne.contrats': '可接合約',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': '酬金{prime} · {date}前',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '你的船從這裡航行約{n, plural, other {#天}}',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': '此地現價：{prix}/{unite}',
   // Accepter
@@ -24867,12 +24957,26 @@ Lang.ui('zht', {
   'objectif.patience': '（寬限：{jours}天）',
   //  (EN RETARD !)
   'objectif.enRetard': '（已逾期！）',
+  //  · à {a}
+  'objectif.chez1': ' · 在{a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · 在{a}或{b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': '走出赤字：身家{valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': '終極目標：{date}前身家達{seuil}{monnaie}',
   //  · avant le {date}
   'objectif.avantLe': ' · {date}前',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': '火砲朝兩舷開火：把側舷對準海盜，再按那一側的「開火」。',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': '火砲朝兩舷開火：把側舷對準海盜，再按{q}（左舷）或{e}（右舷），或在那一側點擊。',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': '火砲朝兩舷開火：用{g}/{d}或← →轉舵，把側舷對準海盜，再按{q}（左舷）或{e}（右舷），或在那一側點擊。',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': '轉舵：<b>{g}</b> / <b>{d}</b>或方向鍵← →。',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': '轉舵：拇指按住左下角的舵，指向要去的方向。',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': '轉舵：左搖桿。',
   // VOILES PIRATES !
   'mer.voilesPirates': '海盜帆影！',
   // UN PIRATE !
@@ -24973,8 +25077,14 @@ Lang.ui('zht', {
   'mer.autreDestination': '在地圖上另選目的地。',
   // Entrée
   'touche.entree': 'Enter',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': '遭海盜登船：被搶走{somme}{monnaie}。',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': '遭海盜登船：被搶走{somme}{monnaie}。{pertes}。',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': '航行途中：打碎了{lots}。',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': '航行途中：{n, plural, other {#名水手}}落海。',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': '遭海盜登船：被搶走{somme}{monnaie}和{cargaison}。{pertes}。',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': '挖出寶藏：{somme}{monnaie}。',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -24995,7 +25105,7 @@ Lang.ui('zht', {
   'fin.merOuverte': '新海域已解鎖：{mer}！',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '跟著螢幕上方的目標走。點選建築或下方的快捷按鈕即可前往。',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '跟著左上角的目標走。點擊建築，或用數字鍵1至9。',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': '跟著左上角的目標走。按{lb}/{rb}在建築間移動，按{a}進入。',
@@ -26063,8 +26173,8 @@ Lang.sea('zht', 'chine', {
   'intro/2': '十三行的街巷裡，人們私下傳說：膽大的商人，一季之間便能掙下萬貫家財。這些商界巨子，廣州人稱之為「大班」，洋人也跟著這麼叫。',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': '你只有一年。借錢、置船、與海關周旋，同海盜和颱風較量。',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': '到12月31日，整個中國海都將知道你的名字。',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': '在12月31日前賺足一百萬兩，整個中國海都將知道你的名字。',
   // Jeanne Kerbrat
   'captainNames/0': '珍妮·凱爾布拉',
   // Li Wei
@@ -26447,8 +26557,8 @@ Lang.sea('zht', 'chine', {
   'text/prologue/carte2': '<b>航程：</b>要走幾天、有多危險。香港近得很，一路平安。',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '此港的<b>已知行情</b>，以及是多久以前記下的：價格可能早就變了。',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>出發！</b>人都吃飽了，貨艙也滿了。',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>出發！</b>人都吃飽了，貨也裝好了。',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': '出海了！<b>自動航行</b>會沿著畫好的航線走，到了港口自己靠岸。你一動舵，它就停；按「自動」按鈕就能重新開啟。在海上每過一天，都要吃掉糧水。',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -26505,6 +26615,8 @@ Lang.sea('zht', 'chine', {
   'text/hints/coque': '船體傷得不輕。去一趟<b>船廠</b>吧：破了的船再有個閃失，轉眼就沉。',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': '月初了：該發水手的<b>薪餉</b>了。手頭總要留夠這筆錢，不然有人會開小差。',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': '這些海盜讓你吃了不少苦頭吧？我來教你怎麼打：<b>海戰課</b>就在標題畫面的<b>說明</b>裡等著你。這堂課不計入你的生涯。',
 });
 
 </script>
@@ -33815,8 +33927,8 @@ Lang.ui('ja', {
   'mer.cap': '{port}へ · 約{jours}日 · {auto, select, oui {自動航行} other {手動操舵}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': '戦闘！　舷側を敵に向けて砲撃',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': '戦闘！　{q}/{e}またはクリック：舷側斉射 · スペース：砲撃',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': '戦闘！　{g}/{d}：舵 · {q}/{e}またはクリック：舷側斉射 · スペース：砲撃',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': '戦闘！　{lt}/{rt}：舷側斉射 · {a}：接舷',
   // « {texte} »
@@ -33844,6 +33956,10 @@ Lang.ui('ja', {
   'marche.caleLimite': '残りの空きは{n}{unites}。つまみはそこで止まる。',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': '船倉が満杯。先に売ろう。',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': '払えるのは{n}{unites}まで。つまみはそこで止まる。',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': '買うだけの金がない。',
   // Pas de navire
   'marche.pasDeNavire': '船なし',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -33896,17 +34012,22 @@ Lang.ui('ja', {
   'marche.vivresComplet': '食糧は満載',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': '商人はそれぞれ値段と数量を示す。それを超えると、品がないか、値が下がる。積荷はいくつもの港に振り分けるのが得策。取った分は数日で戻る。',
-  'marche.etal.rayon': '店頭に{n} · 在庫{m}は{prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': '店頭に{n} · 続いて在庫{m}は{prix}',
+  // Rayon vide · {m} de réserve à {prix}
   'marche.etal.rayonVide': '店頭は空 · 在庫{m}は{prix}',
   'marche.etal.plusRien': '品切れ：店頭は少しずつ補充される',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': '注文：{n} · 以降は{prix}から投げ売り',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': '注文は満杯：{prix}から投げ売り',
-  'marche.etal.ligneRayon': '店頭：{n}を{prix}',
-  'marche.etal.ligneReserve': '在庫：{n}を{prix}',
+  // En rayon : {n} au prix de {prix}
+  'marche.etal.ligneRayon': '店頭：{n}を{prix}で',
+  // Réserve : {n} au prix de {prix}
+  'marche.etal.ligneReserve': '在庫：{n}を{prix}で',
   'marche.etal.ligneRien': 'その後：品切れ',
-  'marche.etal.ligneCommande': '注文：{n}を{prix}',
+  // Commande : {n} au prix de {prix}
+  'marche.etal.ligneCommande': '注文：{n}を{prix}で',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'それ以上：{prix}から投げ売り、だんだん安く',
   // Bradé : de {de} à {a}
@@ -33929,8 +34050,8 @@ Lang.ui('ja', {
   'marche.chen.reventeNote': '日誌によれば、一番いいのは<b>{port}</b>だ。{age}は<b>{q}{unites}を{prix}{monnaie}</b>で買っていた。お前の{n}なら<b>{benefice}</b>。',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': '日誌によれば、一番いいのは<b>{port}</b>だ。<b>≈{q}{unites}を{prix}{monnaie}</b>、ただし{age}の話で、数量は変わっているかもしれん。お前の{n}なら<b>{benefice}</b>。',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': 'ここから海路{n, plural, other {#日}}。',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': 'ここから海路{n, plural, other {#日}}：1日あたり≈{gain}。',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'それに、着く頃には季節でその値は上がる。',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -33939,6 +34060,8 @@ Lang.ui('ja', {
   'marche.chen.feteHausse': 'それに着く頃は{fete}だ。値は上がっている。',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'だが着く頃には祭りは終わっている。値は下がっているぞ。',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': '一番ましなのは<b>{port}</b>だが、海路{n, plural, other {#日}}かけて<b>{benefice}</b>にしかならん。行くだけ無駄だ。ほかの品を探せ。',
   'marche.chen.aucun': '日誌のどの港も、これより高くは買わん。噂の品薄に備えて取っておくか、よそを当たれ。',
   'marche.chen.mauvaisPort': '{port}では儲けはほとんど出ん。選べるなら、よその港を目指せ。',
   'marche.chen.ferme': '全部定価で売れる。',
@@ -34072,6 +34195,8 @@ Lang.ui('ja', {
   'taverne.contrats': '受けられる依頼',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': '報酬{prime} · {date}まで',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': 'あなたの船で、ここから海路≈{n, plural, other {#日}}',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': '当地の現在値：{prix}／{unite}',
   // Accepter
@@ -34917,12 +35042,26 @@ Lang.ui('ja', {
   'objectif.patience': '（猶予{jours}日）',
   //  (EN RETARD !)
   'objectif.enRetard': '（期限切れ！）',
+  //  · à {a}
+  'objectif.chez1': ' · {a}で',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · {a}か{b}で',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': '赤字脱出：総資産{valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': '目標：{date}までに総資産{seuil}{monnaie}',
   //  · avant le {date}
   'objectif.avantLe': ' · {date}まで',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': '大砲は舷側から撃ちます。海賊に船腹を向け、その側の「砲撃」を押しましょう。',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': '大砲は舷側から撃ちます。海賊に船腹を向け、{q}（左舷）か{e}（右舷）を押すか、その側をクリックしましょう。',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': '大砲は舷側から撃ちます。{g}/{d}か← →で旋回して海賊に船腹を向け、{q}（左舷）か{e}（右舷）を押すか、その側をクリックしましょう。',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': '旋回：<b>{g}</b> / <b>{d}</b>か矢印キー← →。',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': '旋回：左下の舵に親指を置き、進む方向を示します。',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': '旋回：左スティック。',
   // VOILES PIRATES !
   'mer.voilesPirates': '海賊の帆だ！',
   // UN PIRATE !
@@ -35023,8 +35162,14 @@ Lang.ui('ja', {
   'mer.autreDestination': '地図でほかの行き先を選びましょう。',
   // Entrée
   'touche.entree': 'Enter',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': '海賊に乗り込まれ、{somme}{monnaie}を奪われた。',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': '海賊に乗り込まれ、{somme}{monnaie}を奪われた。{pertes}。',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': '航海中、{lots}が壊れた。',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': '航海中、{n, plural, other {#人}}が海に落ちた。',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': '海賊に乗り込まれ、{somme}{monnaie}と{cargaison}を奪われた。{pertes}。',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': '宝を掘り出した：{somme}{monnaie}。',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -35045,7 +35190,7 @@ Lang.ui('ja', {
   'fin.merOuverte': '新たな海が解放されました：{mer}！',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '画面上部の目標に従いましょう。建物か、下のショートカットに触れると、そこへ向かいます。',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '左上の目標に従いましょう。建物をクリックするか、数字キー1〜9を使います。',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': '左上の目標に従いましょう。{lb}/{rb}ボタンで建物から建物へ移り、{a}ボタンで入ります。',
@@ -36113,8 +36258,8 @@ Lang.sea('ja', 'chine', {
   'intro/2': '十三行の路地では、度胸ある商人ならひと季節で財を成せると囁かれている。英国人はこうした商いの巨人を「タイパン」——大班、すなわち大旦那と呼ぶ。',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': '期限は一年。金を借り、船を仕立て、税関の目をかいくぐり、海賊と台風に挑め。',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': '12月31日、シナ海はあなたの名を知るだろう。',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': '12月31日までに百万両を築け。そうすれば、シナ海はあなたの名を知るだろう。',
   // Jeanne Kerbrat
   'captainNames/0': 'ジャンヌ・ケルブラ',
   // Li Wei
@@ -36497,8 +36642,8 @@ Lang.sea('ja', 'chine', {
   'text/prologue/carte2': '<b>航海：</b>日数と危険度だ。香港はすぐそこで、危険もない。',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': 'その港の<b>既知の相場</b>と、何日前のものか。そのあと変わっとるかもしれん。',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>さあ出港だ！</b>　水夫の腹は満ち、船倉もいっぱいだ。',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>さあ出港だ！</b>　水夫の腹は満ち、船倉には荷を積んだ。',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': '海に出たぞ！　<b>自動航行</b>なら、引いた航路をたどって勝手に入港してくれる。自分で舵を取れば切れるが、「自動」ボタンでまた入る。海の上では、一日ごとに食糧が減っていく。',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -36555,6 +36700,8 @@ Lang.sea('ja', 'chine', {
   'text/hints/coque': '船体がだいぶやられたな。<b>造船所</b>に寄れ。傷んだ船は、次にひどい目にあえばすぐ沈む。',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': '月の初めは、水夫に<b>給金</b>を払う日だ。払えるだけの金は常に残しておけ。でなきゃ逃げ出す奴が出る。',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': 'あの海賊どもに手こずったか？　戦い方を教えてやろう。<b>戦いの講義</b>はタイトル画面の<b>手引き</b>にある。航海には数えられんぞ。',
 });
 
 </script>
@@ -43897,8 +44044,8 @@ Lang.ui('ko', {
   'mer.cap': '{port}행 · ~{jours}일 · {auto, select, oui {자동 항해} other {수동 조타}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': '전투! 적에게 뱃전을 돌리고 쏘십시오.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': '전투! {q}/{e} 또는 클릭: 일제 사격 · 스페이스: 발사',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': '전투! {g}/{d}: 조타 · {q}/{e} 또는 클릭: 일제 사격 · 스페이스: 발사',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': '전투! {lt}/{rt}: 일제 사격 · {a}: 백병전',
   // « {texte} »
@@ -43926,6 +44073,10 @@ Lang.ui('ko', {
   'marche.caleLimite': '남은 공간은 {n}{unites}. 슬라이더는 거기서 멈춥니다.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': '선창이 가득 찼습니다. 먼저 파세요.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': '{n}{unites}까지만 살 수 있습니다. 슬라이더는 거기서 멈춥니다.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': '살 돈이 모자랍니다.',
   // Pas de navire
   'marche.pasDeNavire': '배 없음',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -43978,17 +44129,22 @@ Lang.ui('ko', {
   'marche.vivresComplet': '식량 가득',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': '상인마다 값과 수량을 내겁니다. 그보다 많으면 물건이 없거나 값이 내려갑니다. 화물을 여러 항구에 나눠 파십시오. 가져간 만큼은 며칠이면 다시 채워집니다.',
-  'marche.etal.rayon': '매대: {n} · 재고 {m}, {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': '매대: {n} · 이어서 재고 {m}, {prix}',
+  // Rayon vide · {m} de réserve à {prix}
   'marche.etal.rayonVide': '매대 비었음 · 재고 {m}, {prix}',
   'marche.etal.plusRien': '품절: 매대는 조금씩 다시 채워집니다',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': '주문: {n} · 그다음은 {prix}부터 헐값',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': '주문 마감: {prix}부터 헐값',
-  'marche.etal.ligneRayon': '매대: {n}, {prix}',
-  'marche.etal.ligneReserve': '재고: {n}, {prix}',
+  // En rayon : {n} au prix de {prix}
+  'marche.etal.ligneRayon': '매대: {n}, 값 {prix}',
+  // Réserve : {n} au prix de {prix}
+  'marche.etal.ligneReserve': '재고: {n}, 값 {prix}',
   'marche.etal.ligneRien': '그다음: 품절',
-  'marche.etal.ligneCommande': '주문: {n}, {prix}',
+  // Commande : {n} au prix de {prix}
+  'marche.etal.ligneCommande': '주문: {n}, 값 {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': '그 이상: {prix}부터 헐값, 점점 싸게',
   // Bradé : de {de} à {a}
@@ -44011,8 +44167,8 @@ Lang.ui('ko', {
   'marche.chen.reventeNote': '네 일지대로라면 <b>{port}</b>이(가) 제일 낫다. {age} <b>{q}{unites}를 {prix}{monnaie}</b>에 사 줬다. 네 {n}이면 <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': '네 일지대로라면 <b>{port}</b>이(가) 제일 낫다. <b>≈{q}{unites}, {prix}{monnaie}</b>. 하지만 {age} 이야기라 수량은 바뀌었을 수 있다. 네 {n}이면 <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '여기서 뱃길로 {n, plural, other {#일}}.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '여기서 뱃길로 {n, plural, other {#일}}: 하루 ≈ {gain}.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': '게다가 네가 도착할 즈음엔 철이 바뀌어 그 값이 오를 거다.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -44021,6 +44177,8 @@ Lang.ui('ko', {
   'marche.chen.feteHausse': '게다가 네가 도착할 때는 {fete}이다. 값이 더 오를 거다.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': '하지만 네가 도착할 때면 축제가 끝나 값이 내려가 있을 거다.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': '그나마 나은 곳이 <b>{port}</b>, 뱃길로 {n, plural, other {#일}}에 <b>{benefice}</b>뿐이다. 갈 가치가 없다. 다른 물건을 찾아봐라.',
   'marche.chen.aucun': '네 일지 속 어느 항구도 이보다 비싸게 사 주지 않는다. 소문난 품귀에 대비해 두든지, 다른 데를 알아봐라.',
   'marche.chen.mauvaisPort': '{port}에서는 거의 남는 게 없다. 고를 수 있으면 다른 항구로 가라.',
   'marche.chen.ferme': '전부 정가에 팔린다.',
@@ -44154,6 +44312,8 @@ Lang.ui('ko', {
   'taverne.contrats': '제안된 계약',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': '보수 {prime} · {date}까지',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '이 배로 여기서 뱃길 ≈ {n, plural, other {#일}}',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': '이곳 현재 시세: {prix}/{unite}',
   // Accepter
@@ -44999,12 +45159,26 @@ Lang.ui('ko', {
   'objectif.patience': ' (유예: {jours}일)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (기한 초과!)',
+  //  · à {a}
+  'objectif.chez1': ' · {a}에서',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · {a} 또는 {b}에서',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': '적자 탈출: 순자산 {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': '목표: {date}까지 순자산 {seuil}{monnaie}',
   //  · avant le {date}
   'objectif.avantLe': ' · {date}까지',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': '대포는 옆으로 쏩니다. 해적에게 뱃전을 돌린 뒤, 그쪽 “발사” 버튼을 누르십시오.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': '대포는 옆으로 쏩니다. 해적에게 뱃전을 돌린 뒤 {q} (좌현) 또는 {e} (우현) 키를 누르거나, 그쪽을 클릭하십시오.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': '대포는 옆으로 쏩니다. {g}/{d} 또는 ← →로 돌아 해적에게 뱃전을 돌린 뒤 {q} (좌현) 또는 {e} (우현) 키를 누르거나, 그쪽을 클릭하십시오.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': '방향 전환: <b>{g}</b> / <b>{d}</b> 또는 화살표 ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': '방향 전환: 왼쪽 아래 키에 엄지를 대고 갈 방향을 가리키십시오.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': '방향 전환: 왼쪽 스틱.',
   // VOILES PIRATES !
   'mer.voilesPirates': '해적 돛이다!',
   // UN PIRATE !
@@ -45105,8 +45279,14 @@ Lang.ui('ko', {
   'mer.autreDestination': '지도에서 다른 목적지를 고르십시오.',
   // Entrée
   'touche.entree': '엔터',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': '해적의 습격: {somme}{monnaie}을(를) 빼앗겼다.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': '해적의 습격: {somme}{monnaie}을(를) 빼앗겼다. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': '항해 중 {lots}이(가) 깨졌다.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': '항해 중 선원 {n, plural, other {#명}}이 바다에 빠졌다.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': '해적의 습격: {somme}{monnaie}와(과) {cargaison}을(를) 빼앗겼다. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': '보물 발굴: {somme}{monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -45127,7 +45307,7 @@ Lang.ui('ko', {
   'fin.merOuverte': '새 바다가 열렸습니다: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': '화면 위쪽의 목표를 따르십시오. 건물이나 아래쪽 바로 가기를 누르면 그리로 갑니다.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': '왼쪽 위의 목표를 따르십시오. 건물을 클릭하거나 숫자 1~9를 누르십시오.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': '왼쪽 위의 목표를 따르십시오. {lb} {rb}: 건물 사이 이동, {a}: 들어가기.',
@@ -46195,8 +46375,8 @@ Lang.sea('ko', 'chine', {
   'intro/2': '광저우 13행의 골목에서는 배짱 있는 상인이라면 한 철 만에 큰 재산을 모을 수 있다는 말이 오갑니다. 영국인들은 이런 교역의 거인들을 “타이판”이라 부릅니다. 큰 우두머리라는 뜻입니다.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': '기한은 1년입니다. 돈을 빌리고, 배를 무장하고, 세관과 숨바꼭질하며, 해적과 태풍에 맞서십시오.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': '12월 31일이 오면, 중국해 전체가 선장의 이름을 알게 될 것입니다.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': '12월 31일까지 백만 냥을 모으십시오. 그러면 중국해 전체가 선장의 이름을 알게 될 것입니다.',
   // Jeanne Kerbrat
   'captainNames/0': '잔 케르브라',
   // Li Wei
@@ -46579,8 +46759,8 @@ Lang.sea('ko', 'chine', {
   'text/prologue/carte2': '<b>뱃길:</b> 걸리는 날수와 위험. 홍콩은 코앞이라 위험할 것 없다.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '그 항구의 <b>알려진 시세</b>와 언제 본 건지. 그새 바뀌었을 수도 있다.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>출발!</b> 선원들 먹을 것도 실었고, 화물칸도 꽉 찼다.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>출발!</b> 선원들 배도 채웠고, 화물칸에 짐도 실었다.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': '바다로 나왔다! <b>자동 항해</b>는 정해 둔 항로를 따라가 알아서 입항한다. 직접 키를 잡으면 꺼지고, “자동” 버튼을 누르면 다시 켜진다. 바다에선 하루하루 식량이 줄어든다.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -46637,6 +46817,8 @@ Lang.sea('ko', 'chine', {
   'text/hints/coque': '선체가 많이 상했다. <b>조선소</b>에 들러라. 부서진 배는 다음 한 방에 금세 가라앉는다.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': '달이 바뀌었다. 선원들 <b>급료</b> 날이다. 줄 돈은 늘 남겨 둬라. 안 그러면 몇 놈은 달아난다.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': '그 해적들한테 애먹었나? 싸우는 법을 가르쳐 주마. <b>전투 수업</b>은 타이틀 화면의 <b>도움말</b>에 있다. 네 경력에는 셈하지 않는다.',
 });
 
 </script>
@@ -53944,8 +54126,8 @@ Lang.ui('ru', {
   'mer.cap': 'Курс: {port} · ~{jours} дн. · {auto, select, oui {автопилот} other {ручное управление}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': 'Бой! Развернитесь бортом к врагу и стреляйте.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': 'Бой! {q}/{e} или щелчок: залп с борта · Пробел: огонь',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': 'Бой! {g}/{d}: руль · {q}/{e} или щелчок: залп с борта · Пробел: огонь',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': 'Бой! {lt} / {rt}: залп с борта · {a}: абордаж',
   // « {texte} »
@@ -53973,6 +54155,10 @@ Lang.ui('ru', {
   'marche.caleLimite': 'Места осталось на {n} {unites}: ползунок остановится там.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Трюм полон: сначала продайте.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'Денег хватит на {n} {unites}: ползунок остановится там.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'Не хватает денег на покупку.',
   // Pas de navire
   'marche.pasDeNavire': 'Нет корабля',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -54025,17 +54211,22 @@ Lang.ui('ru', {
   'marche.vivresComplet': 'Запас провианта полон',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Каждый торговец называет свою цену и сколько возьмёт; сверх того у него меньше товара или он платит меньше. Развозите грузы по разным портам: взятое восполняется за несколько дней.',
-  'marche.etal.rayon': 'На прилавке: {n} · запас {m} по {prix}',
-  'marche.etal.rayonVide': 'Прилавок пуст · запас {m} по {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'На прилавке: {n} · затем {m} из запаса по {prix}',
+  // Rayon vide · {m} de réserve à {prix}
+  'marche.etal.rayonVide': 'Прилавок пуст · {m} из запаса по {prix}',
   'marche.etal.plusRien': 'Ничего не осталось: прилавок понемногу пополняется',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Заказ: {n} · дальше за бесценок, от {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Заказ выполнен: за бесценок, от {prix}',
-  'marche.etal.ligneRayon': 'На прилавке: {n} по {prix}',
-  'marche.etal.ligneReserve': 'Запас: {n} по {prix}',
+  // En rayon : {n} au prix de {prix}
+  'marche.etal.ligneRayon': 'На прилавке: {n} по цене {prix}',
+  // Réserve : {n} au prix de {prix}
+  'marche.etal.ligneReserve': 'Запас: {n} по цене {prix}',
   'marche.etal.ligneRien': 'Дальше: больше ничего',
-  'marche.etal.ligneCommande': 'Заказ: {n} по {prix}',
+  // Commande : {n} au prix de {prix}
+  'marche.etal.ligneCommande': 'Заказ: {n} по цене {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Сверх того: за бесценок, от {prix}, всё дешевле',
   // Bradé : de {de} à {a}
@@ -54058,8 +54249,8 @@ Lang.ui('ru', {
   'marche.chen.reventeNote': 'По твоему журналу, лучше всего <b>{port}</b>: там брали <b>{q} {unites} по {prix} {monnaie}</b> {age}. За твои {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'По твоему журналу, лучше всего <b>{port}</b>: <b>≈ {q} {unites} по {prix} {monnaie}</b>, но это было {age}: количество могло измениться. За твои {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '{n, plural, one {# день} few {# дня} many {# дней} other {# дня}} пути морем.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '{n, plural, one {# день} few {# дня} many {# дней} other {# дня}} пути морем: ≈ {gain} в день.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'А к твоему приходу сезон поднимет там эту цену.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -54068,6 +54259,8 @@ Lang.ui('ru', {
   'marche.chen.feteHausse': 'А к твоему приходу будет {fete}: цена там будет выше.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'Но к твоему приходу праздник кончится: цена там будет ниже.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': 'Лучше всего было бы <b>{port}</b>, {n, plural, one {# день} few {# дня} many {# дней} other {# дня}} пути морем, но всего <b>{benefice}</b>: плавание того не стоит. Поищи лучше другой товар.',
   'marche.chen.aucun': 'Ни один порт из твоего журнала не платит за неё больше: придержи её для объявленной нехватки или поищи в другом месте.',
   'marche.chen.mauvaisPort': 'В порту {port} ты почти ничего не заработаешь: иди в другой порт, если есть выбор.',
   'marche.chen.ferme': 'Всё уходит по твёрдой цене.',
@@ -54201,6 +54394,8 @@ Lang.ui('ru', {
   'taverne.contrats': 'КОНТРАКТЫ НА ВЫБОР',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Награда {prime} · до {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# день} few {# дня} many {# дней} other {# дня}} пути морем отсюда на вашем корабле',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Цена здесь сейчас: {prix} / {unite}',
   // Accepter
@@ -55046,12 +55241,26 @@ Lang.ui('ru', {
   'objectif.patience': ' (терпение: {jours} дн.)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (ПРОСРОЧЕНО!)',
+  //  · à {a}
+  'objectif.chez1': ' · {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · {a} или {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Выйти из минуса: состояние {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Цель: состояние {seuil} {monnaie} до {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · до {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'Пушки бьют только вбок: развернитесь к пирату бортом и нажмите «Огонь» с нужной стороны.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'Пушки бьют только вбок: развернитесь к пирату бортом и жмите {q} (левый борт) или {e} (правый), либо щёлкните с его стороны.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'Пушки бьют только вбок: поворачивайте {g}/{d} или ← →, чтобы встать к пирату бортом, затем жмите {q} (левый борт) или {e} (правый), либо щёлкните с его стороны.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'Поворот: <b>{g}</b> / <b>{d}</b> или стрелки ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'Поворот: положите палец на руль внизу слева и укажите курс.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'Поворот: левый стик.',
   // VOILES PIRATES !
   'mer.voilesPirates': 'ПИРАТСКИЕ ПАРУСА!',
   // UN PIRATE !
@@ -55152,8 +55361,14 @@ Lang.ui('ru', {
   'mer.autreDestination': 'Выберите на карте другой пункт назначения.',
   // Entrée
   'touche.entree': 'Enter',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'На нас напали пираты: похищено {somme} {monnaie}.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'На нас напали пираты: похищено {somme} {monnaie}. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'В пути разбито: {lots}.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'В пути за бортом: {n, plural, one {# человек} few {# человека} many {# человек} other {# человека}}.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'На нас напали пираты: унесли {somme} {monnaie} и {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Выкопан клад: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -55174,7 +55389,7 @@ Lang.ui('ru', {
   'fin.merOuverte': 'Открыто новое море: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Следуйте цели вверху экрана. Коснитесь здания или ярлыка внизу, чтобы пройти туда.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Следуйте целям вверху слева. Щёлкните по зданию или нажмите цифру от 1 до 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Следуйте целям вверху слева. {lb} {rb}: идти от здания к зданию, {a}: войти.',
@@ -56242,8 +56457,8 @@ Lang.sea('ru', 'chine', {
   'intro/2': 'В переулках Тринадцати факторий шепчутся, что смелый купец может сколотить состояние за один сезон. Таких исполинов торговли англичане зовут «тайпанами» — большими хозяевами.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'У вас один год. Берите в долг, снаряжайте корабль, играйте в прятки с таможней, бросайте вызов пиратам и тайфунам.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'К 31 декабря Китайское море узнает ваше имя.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Сколотите миллион таэлей до 31 декабря — и Китайское море узнает ваше имя.',
   // Jeanne Kerbrat
   'captainNames/0': 'Жанна Кербрат',
   // Li Wei
@@ -56626,8 +56841,8 @@ Lang.sea('ru', 'chine', {
   'text/prologue/carte2': '<b>Плавание:</b> сколько идти и насколько опасно. Гонконг совсем рядом, и путь безопасен.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>Известные цены</b> этого порта и их давность: с тех пор они могли измениться.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>В путь!</b> Люди сыты, трюм полон.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>В путь!</b> Люди сыты, трюм загружен.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': 'Мы в море! <b>Автопилот</b> ведёт корабль проложенным курсом и сам причаливает. Возьмёшься за руль — он отключится; кнопка «Пилот» включит его снова. Каждый день в море съедает провиант.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -56684,6 +56899,8 @@ Lang.sea('ru', 'chine', {
   'text/hints/coque': 'Корпус потрёпан. Загляни на <b>верфь</b>: побитый корабль быстро тонет при первой же беде.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Начало месяца: <b>жалованье</b> морякам. Всегда держи на него деньги, иначе кое-кто дезертирует.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': 'Туго пришлось с этими пиратами? Я научу тебя драться: <b>урок боя</b> ждёт в <b>Справке</b> на титульном экране. В карьеру он не засчитывается.',
   // piculs
   'text/unitMany': 'пикулей',
   // piculs
@@ -64131,8 +64348,8 @@ Lang.ui('es', {
   'mer.cap': 'Rumbo a {port} · ~{jours} d · {auto, select, oui {piloto automático} other {timón a mano}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': '¡Combate! Ponte de costado y dispara.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': '¡Combate! {q}/{e} o clic: andanadas · Espacio: fuego',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': '¡Combate! {g}/{d}: timón · {q}/{e} o clic: andanadas · Espacio: fuego',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': '¡Combate! {lt} / {rt}: andanadas · {a}: abordar',
   // « {texte} »
@@ -64160,6 +64377,10 @@ Lang.ui('es', {
   'marche.caleLimite': 'Queda sitio para {n} {unites}: el control se detiene ahí.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Bodega llena: vende primero.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'Puedes pagar {n} {unites}: el control se detiene ahí.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'No tienes dinero suficiente para comprar.',
   // Pas de navire
   'marche.pasDeNavire': 'Sin barco',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -64212,16 +64433,21 @@ Lang.ui('es', {
   'marche.vivresComplet': 'Víveres al completo',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Cada comerciante anuncia su precio y cuánto acepta; más allá, tiene menos o paga menos. Reparte tus cargamentos entre varios puertos: lo que se llevó se repone en unos días.',
-  'marche.etal.rayon': 'En el puesto: {n} · reserva {m} a {prix}',
-  'marche.etal.rayonVide': 'Puesto vacío · reserva {m} a {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'En el puesto: {n} · luego {m} de reserva a {prix}',
+  // Rayon vide · {m} de réserve à {prix}
+  'marche.etal.rayonVide': 'Puesto vacío · {m} de reserva a {prix}',
   'marche.etal.plusRien': 'No queda nada: el puesto se repone poco a poco',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Pedido: {n} · luego malvendido desde {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Pedido cubierto: malvendido desde {prix}',
+  // En rayon : {n} au prix de {prix}
   'marche.etal.ligneRayon': 'En el puesto: {n} a {prix}',
+  // Réserve : {n} au prix de {prix}
   'marche.etal.ligneReserve': 'Reserva: {n} a {prix}',
   'marche.etal.ligneRien': 'Después: nada más',
+  // Commande : {n} au prix de {prix}
   'marche.etal.ligneCommande': 'Pedido: {n} a {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Más allá: malvendido desde {prix}, cada vez menos',
@@ -64245,8 +64471,8 @@ Lang.ui('es', {
   'marche.chen.reventeNote': 'Según tu diario, lo mejor es <b>{port}</b>: compraban <b>{q} {unites} a {prix} {monnaie}</b> {age}. Por tus {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'Según tu diario, lo mejor es <b>{port}</b>: <b>≈ {q} {unites} a {prix} {monnaie}</b>, pero eso fue {age}: la cantidad puede haber cambiado. Por tus {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': 'A {n, plural, one {# día} other {# días}} de mar.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': 'A {n, plural, one {# día} other {# días}} de mar: ≈ {gain} por día.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'Y para cuando llegues, la temporada habrá subido ese precio.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -64255,6 +64481,8 @@ Lang.ui('es', {
   'marche.chen.feteHausse': 'Y a tu llegada será {fete}: el precio allí será más alto.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'Pero la fiesta habrá terminado cuando llegues: el precio allí será más bajo.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt u
+  'marche.chen.maigre': 'Lo mejor sería <b>{port}</b>, a {n, plural, one {# día} other {# días}} de mar, por solo <b>{benefice}</b>: no vale el viaje. Mejor busca otra mercancía.',
   'marche.chen.aucun': 'Ningún puerto de tu diario la paga más cara: guárdala para una escasez anunciada, o busca en otra parte.',
   'marche.chen.mauvaisPort': 'En {port} no ganarías nada o casi nada: busca otro puerto, si puedes elegir.',
   'marche.chen.ferme': 'Todo sale a precio fijo.',
@@ -64388,6 +64616,8 @@ Lang.ui('es', {
   'taverne.contrats': 'CONTRATOS OFRECIDOS',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Recompensa {prime} · antes del {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# día} other {# días}} de mar desde aquí, con tu barco',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Precio actual aquí: {prix} el {unite}',
   // Accepter
@@ -65233,12 +65463,26 @@ Lang.ui('es', {
   'objectif.patience': ' (paciencia: {jours} d)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (¡FUERA DE PLAZO!)',
+  //  · à {a}
+  'objectif.chez1': ' · en {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · en {a} o {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Salir de los números rojos: patrimonio {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Meta: {seuil} {monnaie} de patrimonio antes del {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · antes del {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'Tus cañones disparan por los costados: presenta el flanco al pirata y toca «Fuego» del lado correcto.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'Tus cañones disparan por los costados: presenta el flanco al pirata y pulsa {q} (babor) o {e} (estribor), o haz clic por su lado.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'Tus cañones disparan por los costados: gira con {g}/{d} o ← → para presentar el flanco al pirata y pulsa {q} (babor) o {e} (estribor), o haz clic por su lado.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'Para girar: <b>{g}</b> / <b>{d}</b> o las flechas ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'Para girar: pon el pulgar en el timón, abajo a la izquierda, y señala el rumbo.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'Para girar: el stick izquierdo.',
   // VOILES PIRATES !
   'mer.voilesPirates': '¡VELAS PIRATAS!',
   // UN PIRATE !
@@ -65339,8 +65583,14 @@ Lang.ui('es', {
   'mer.autreDestination': 'Elige otro destino en el mapa.',
   // Entrée
   'touche.entree': 'Intro',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'Abordaje pirata: te robaron {somme} {monnaie}.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'Abordaje pirata: te robaron {somme} {monnaie}. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'Durante la travesía se rompieron {lots}.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'Durante la travesía: {n, plural, one {# hombre} other {# hombres}} al agua.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'Abordaje pirata: se llevaron {somme} {monnaie} y {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Tesoro desenterrado: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -65361,7 +65611,7 @@ Lang.ui('es', {
   'fin.merOuverte': '¡Nuevo mar desbloqueado: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Sigue el objetivo de la parte superior de la pantalla. Toca un edificio, o un atajo de la parte inferior, para ir allí.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Sigue los objetivos de arriba a la izquierda. Haz clic en un edificio o usa las teclas 1 a 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Sigue los objetivos de arriba a la izquierda. {lb} {rb}: ir de un edificio a otro, {a}: entrar.',
@@ -66429,8 +66679,8 @@ Lang.sea('es', 'chine', {
   'intro/2': 'En los callejones de las Trece Factorías se murmura que un mercader audaz puede amasar una fortuna en una sola temporada. Los ingleses llaman «taipanes» a estos gigantes del comercio: los grandes patrones.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'Tienes un año. Pide prestado, arma un barco, juega al gato y al ratón con la aduana, desafía a piratas y tifones.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'El 31 de diciembre, todo el mar de la China sabrá tu nombre.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Reúne un millón de taeles antes del 31 de diciembre, y todo el mar de la China sabrá tu nombre.',
   // Jeanne Kerbrat
   'captainNames/0': 'Jeanne Kerbrat',
   // Li Wei
@@ -66813,8 +67063,8 @@ Lang.sea('es', 'chine', {
   'text/prologue/carte2': '<b>El viaje:</b> su duración y su peligro. Hong Kong está muy cerca, y sin riesgo.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>Los precios conocidos</b> de ese puerto, y su antigüedad: pueden haber cambiado desde entonces.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>¡A la mar!</b> Tus hombres tienen comida y tu bodega va llena.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>¡A la mar!</b> Tus hombres tienen comida y tu bodega va cargada.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': '¡Ya estamos en el mar! El <b>piloto automático</b> sigue la ruta trazada y atraca solo. Si tomas el timón, se desactiva; el botón «Piloto» lo vuelve a activar. Cada día de mar se come parte de los víveres.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -66871,6 +67121,8 @@ Lang.sea('es', 'chine', {
   'text/hints/coque': 'El casco ha sufrido. Pasa por el <b>astillero</b>: un barco dañado se hunde rápido al siguiente golpe.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Principio de mes: <b>la soldada</b> de los marineros. Guarda siempre con qué pagarla, o algunos desertarán.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne c
+  'text/hints/leconCombat': '¿Esos piratas te han dado guerra? Te enseñaré a pelear: la <b>lección de combate</b> te espera en la <b>Ayuda</b>, desde la pantalla de título. No cuenta para tu carrera.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -74204,8 +74456,8 @@ Lang.ui('pt', {
   'mer.cap': 'Rumo a {port} · ~{jours} d · {auto, select, oui {piloto automático} other {leme manual}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': 'Combate! Mostre o costado e atire.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': 'Combate! {q}/{e} ou clique: bordadas · Espaço: fogo',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': 'Combate! {g}/{d}: leme · {q}/{e} ou clique: bordadas · Espaço: fogo',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': 'Combate! {lt} / {rt}: bordadas · {a}: abordar',
   // « {texte} »
@@ -74233,6 +74485,10 @@ Lang.ui('pt', {
   'marche.caleLimite': 'Há espaço para {n} {unites}: o controle para aí.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Porão cheio: venda primeiro.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'Você pode pagar {n} {unites}: o controle para aí.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'Dinheiro insuficiente para comprar.',
   // Pas de navire
   'marche.pasDeNavire': 'Sem navio',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -74285,17 +74541,22 @@ Lang.ui('pt', {
   'marche.vivresComplet': 'Víveres completos',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Cada comerciante anuncia seu preço e quanto aceita; além disso, tem menos ou paga menos. Distribua suas cargas entre vários portos: o que ele levou se repõe em poucos dias.',
-  'marche.etal.rayon': 'Na banca: {n} · reserva {m} a {prix}',
-  'marche.etal.rayonVide': 'Banca vazia · reserva {m} a {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'Na banca: {n} · depois {m} de reserva a {prix}',
+  // Rayon vide · {m} de réserve à {prix}
+  'marche.etal.rayonVide': 'Banca vazia · {m} de reserva a {prix}',
   'marche.etal.plusRien': 'Não sobrou nada: a banca se reabastece aos poucos',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Encomenda: {n} · depois liquidado a partir de {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Encomenda cumprida: liquidado a partir de {prix}',
-  'marche.etal.ligneRayon': 'Na banca: {n} a {prix}',
-  'marche.etal.ligneReserve': 'Reserva: {n} a {prix}',
+  // En rayon : {n} au prix de {prix}
+  'marche.etal.ligneRayon': 'Na banca: {n} ao preço de {prix}',
+  // Réserve : {n} au prix de {prix}
+  'marche.etal.ligneReserve': 'Reserva: {n} ao preço de {prix}',
   'marche.etal.ligneRien': 'Depois: mais nada',
-  'marche.etal.ligneCommande': 'Encomenda: {n} a {prix}',
+  // Commande : {n} au prix de {prix}
+  'marche.etal.ligneCommande': 'Encomenda: {n} ao preço de {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Além disso: liquidado a partir de {prix}, cada vez menos',
   // Bradé : de {de} à {a}
@@ -74318,8 +74579,8 @@ Lang.ui('pt', {
   'marche.chen.reventeNote': 'Pelo seu diário, o melhor é <b>{port}</b>: compravam <b>{q} {unites} a {prix} {monnaie}</b> {age}. Pelos seus {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'Pelo seu diário, o melhor é <b>{port}</b>: <b>≈ {q} {unites} a {prix} {monnaie}</b>, mas isso foi {age}: a quantidade pode ter mudado. Pelos seus {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': 'A {n, plural, one {# dia} other {# dias}} de mar.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': 'A {n, plural, one {# dia} other {# dias}} de mar: ≈ {gain} por dia.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'E até você chegar, a estação vai fazer esse preço subir.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -74328,6 +74589,8 @@ Lang.ui('pt', {
   'marche.chen.feteHausse': 'E na sua chegada será {fete}: o preço lá estará mais alto.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'Mas a festa terá acabado quando você chegar: o preço lá estará mais baixo.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': 'O melhor seria <b>{port}</b>, a {n, plural, one {# dia} other {# dias}} de mar, por apenas <b>{benefice}</b>: não vale a viagem. Procure outra mercadoria.',
   'marche.chen.aucun': 'Nenhum porto do seu diário paga mais por ela: guarde-a para uma escassez anunciada, ou procure em outro lugar.',
   'marche.chen.mauvaisPort': 'Em {port} você não ganharia nada ou quase nada: tente outro porto, se puder escolher.',
   'marche.chen.ferme': 'Tudo sai a preço fixo.',
@@ -74461,6 +74724,8 @@ Lang.ui('pt', {
   'taverne.contrats': 'CONTRATOS OFERECIDOS',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Recompensa {prime} · até {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# dia} other {# dias}} de mar daqui, com o seu navio',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Preço atual aqui: {prix}/{unite}',
   // Accepter
@@ -75306,12 +75571,26 @@ Lang.ui('pt', {
   'objectif.patience': ' (paciência: {jours} d)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (EM ATRASO!)',
+  //  · à {a}
+  'objectif.chez1': ' · em {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · em {a} ou {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Sair do vermelho: patrimônio {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Meta: patrimônio de {seuil} {monnaie} até {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · até {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'Seus canhões atiram pelos lados: apresente o costado ao pirata e toque em FOGO do lado certo.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'Seus canhões atiram pelos lados: apresente o costado ao pirata e use {q} (bombordo) ou {e} (estibordo), ou clique do lado dele.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'Seus canhões atiram pelos lados: vire com {g}/{d} ou ← → para apresentar o costado ao pirata e use {q} (bombordo) ou {e} (estibordo), ou clique do lado dele.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'Para virar: <b>{g}</b> / <b>{d}</b> ou as setas ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'Para virar: ponha o polegar no leme, embaixo à esquerda, e aponte o rumo.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'Para virar: o analógico esquerdo.',
   // VOILES PIRATES !
   'mer.voilesPirates': 'VELAS PIRATAS!',
   // UN PIRATE !
@@ -75412,8 +75691,14 @@ Lang.ui('pt', {
   'mer.autreDestination': 'Escolha outro destino no mapa.',
   // Entrée
   'touche.entree': 'Enter',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'Abordado por piratas: roubaram {somme} {monnaie}.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'Abordado por piratas: roubaram {somme} {monnaie}. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'Quebra na travessia: {lots}.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'Na travessia: {n, plural, one {# homem} other {# homens}} ao mar.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'Abordado por piratas: levaram {somme} {monnaie} e {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Tesouro desenterrado: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -75434,7 +75719,7 @@ Lang.ui('pt', {
   'fin.merOuverte': 'Novo mar desbloqueado: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Siga o objetivo no alto da tela. Toque em um prédio, ou em um atalho embaixo, para ir até lá.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Siga os objetivos no alto à esquerda. Clique em um prédio ou use as teclas 1 a 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Siga os objetivos no alto à esquerda. {lb} {rb}: ir de um prédio a outro, {a}: entrar.',
@@ -76502,8 +76787,8 @@ Lang.sea('pt', 'chine', {
   'intro/2': 'Nas vielas das Treze Feitorias, sussurra-se que um mercador ousado pode fazer fortuna numa única estação. Os ingleses chamam esses gigantes do comércio de “tai-pans”: os grandes patrões.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'Você tem um ano. Tome empréstimos, arme um navio, engane a alfândega, desafie piratas e tufões.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'Em 31 de dezembro, o mar da China saberá o seu nome.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Junte um milhão de taéis até 31 de dezembro, e o mar da China saberá o seu nome.',
   // Jeanne Kerbrat
   'captainNames/0': 'Jeanne Kerbrat',
   // Li Wei
@@ -76886,8 +77171,8 @@ Lang.sea('pt', 'chine', {
   'text/prologue/carte2': '<b>A viagem:</b> duração e perigo. Hong Kong é bem perto, e sem risco.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>Os preços conhecidos</b> deste porto, e há quanto tempo foram vistos: podem ter mudado desde então.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>Ao mar!</b> Seus homens estão alimentados, o porão está cheio.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>Ao mar!</b> Seus homens estão alimentados, o porão está carregado.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': 'No mar! O <b>piloto automático</b> segue a rota traçada e atraca sozinho. Se você assumir o leme, ele se desliga; o botão “Piloto” o religa. Cada dia no mar consome víveres.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -76944,6 +77229,8 @@ Lang.sea('pt', 'chine', {
   'text/hints/coque': 'O casco sofreu. Passe no <b>estaleiro</b>: um navio avariado afunda rápido no próximo aperto.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Início do mês: <b>o soldo</b> dos marinheiros. Guarde sempre o bastante para pagá-los, senão alguns vão desertar.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': 'Esses piratas te deram trabalho? Eu te ensino a lutar: a <b>lição de combate</b> te espera na <b>Ajuda</b>, na tela inicial. Ela não conta na sua carreira.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -84275,8 +84562,8 @@ Lang.ui('de', {
   'mer.cap': 'Kurs auf {port} · ~{jours} Tg. · {auto, select, oui {Autopilot} other {Handsteuerung}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': 'Gefecht! Dreh die Breitseite zum Feind und feuere.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': 'Gefecht! {q}/{e} oder Klick: Breitseiten · Leertaste: Feuer',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': 'Gefecht! {g}/{d}: Ruder · {q}/{e} oder Klick: Breitseiten · Leertaste: Feuer',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': 'Gefecht! {lt}/{rt}: Breitseiten · {a}: entern',
   // « {texte} »
@@ -84304,6 +84591,10 @@ Lang.ui('de', {
   'marche.caleLimite': 'Es ist noch Platz für {n} {unites}: Der Regler hält dort an.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Laderaum voll: Verkauf zuerst etwas.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'Du kannst {n} {unites} bezahlen: Der Regler hält dort an.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'Nicht genug Geld, um etwas zu kaufen.',
   // Pas de navire
   'marche.pasDeNavire': 'Kein Schiff',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -84356,16 +84647,21 @@ Lang.ui('de', {
   'marche.vivresComplet': 'Proviant voll',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Jeder Händler nennt seinen Preis und wie viel er nimmt; darüber hinaus hat er weniger oder zahlt weniger. Verteile deine Ladungen auf mehrere Häfen: Was er genommen hat, füllt sich in ein paar Tagen wieder auf.',
-  'marche.etal.rayon': 'Im Regal: {n} · Vorrat {m} zu {prix}',
-  'marche.etal.rayonVide': 'Regal leer · Vorrat {m} zu {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'Im Regal: {n} · dann {m} Vorrat zu {prix}',
+  // Rayon vide · {m} de réserve à {prix}
+  'marche.etal.rayonVide': 'Regal leer · {m} Vorrat zu {prix}',
   'marche.etal.plusRien': 'Nichts mehr da: Das Regal füllt sich nach und nach wieder',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Auftrag: {n} · danach verramscht ab {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Auftrag erfüllt: verramscht ab {prix}',
+  // En rayon : {n} au prix de {prix}
   'marche.etal.ligneRayon': 'Im Regal: {n} zu {prix}',
+  // Réserve : {n} au prix de {prix}
   'marche.etal.ligneReserve': 'Vorrat: {n} zu {prix}',
   'marche.etal.ligneRien': 'Danach: nichts mehr',
+  // Commande : {n} au prix de {prix}
   'marche.etal.ligneCommande': 'Auftrag: {n} zu {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Darüber: verramscht ab {prix}, immer weniger',
@@ -84389,8 +84685,8 @@ Lang.ui('de', {
   'marche.chen.reventeNote': 'Laut deinem Logbuch ist <b>{port}</b> am besten: Sie nahmen <b>{q} {unites} zu {prix} {monnaie}</b>, {age}. Für deine {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'Laut deinem Logbuch ist <b>{port}</b> am besten: <b>≈ {q} {unites} zu {prix} {monnaie}</b>, aber das war {age}: Die Menge kann sich geändert haben. Für deine {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '{n, plural, one {# Tag} other {# Tage}} auf See von hier.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '{n, plural, one {# Tag} other {# Tage}} auf See: ≈ {gain} pro Tag.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'Und bis du ankommst, treibt die Jahreszeit den Preis dort hoch.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -84399,6 +84695,8 @@ Lang.ui('de', {
   'marche.chen.feteHausse': 'Und bei deiner Ankunft ist {fete}: Dann ist der Preis dort höher.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'Aber das Fest ist vorbei, wenn du ankommst: Dann ist der Preis dort niedriger.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt u
+  'marche.chen.maigre': 'Am besten wäre <b>{port}</b>, {n, plural, one {# Tag} other {# Tage}} auf See, für nur <b>{benefice}</b>: Die Reise lohnt sich nicht. Such dir lieber eine andere Ware.',
   'marche.chen.aucun': 'Kein Hafen in deinem Logbuch zahlt mehr dafür: Heb sie für eine angekündigte Knappheit auf, oder sieh dich anderswo um.',
   'marche.chen.mauvaisPort': 'In {port} würdest du kaum etwas oder nichts verdienen: Nimm einen anderen Hafen, wenn du die Wahl hast.',
   'marche.chen.ferme': 'Alles geht zum festen Preis weg.',
@@ -84532,6 +84830,8 @@ Lang.ui('de', {
   'taverne.contrats': 'ANGEBOTENE AUFTRÄGE',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Belohnung {prime} · bis zum {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# Tag} other {# Tage}} auf See von hier, mit deinem Schiff',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Preis hier: {prix}/{unite}',
   // Accepter
@@ -85377,12 +85677,26 @@ Lang.ui('de', {
   'objectif.patience': ' (Geduld: {jours} Tg.)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (ÜBERFÄLLIG!)',
+  //  · à {a}
+  'objectif.chez1': ' · in {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · in {a} oder {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Raus aus den roten Zahlen: Vermögen {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Ziel: {seuil} {monnaie} Vermögen bis zum {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · bis zum {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'Deine Kanonen feuern zur Seite: Zeig dem Piraten deine Flanke und tippe dann auf dieser Seite auf „Feuer“.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'Deine Kanonen feuern zur Seite: Zeig dem Piraten deine Flanke, dann {q} (Backbord) oder {e} (Steuerbord), oder klicke auf seine Seite.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'Deine Kanonen feuern zur Seite: Dreh mit {g}/{d} oder ← →, um dem Piraten deine Flanke zu zeigen, dann {q} (Backbord) oder {e} (Steuerbord), oder klicke auf seine Seite.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'Zum Drehen: <b>{g}</b> / <b>{d}</b> oder die Pfeiltasten ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'Zum Drehen: Leg den Daumen aufs Ruder unten links und zeig den Kurs an.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'Zum Drehen: der linke Stick.',
   // VOILES PIRATES !
   'mer.voilesPirates': 'PIRATENSEGEL!',
   // UN PIRATE !
@@ -85483,8 +85797,14 @@ Lang.ui('de', {
   'mer.autreDestination': 'Wähle ein anderes Ziel auf der Karte.',
   // Entrée
   'touche.entree': 'Eingabe',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'Von Piraten geentert: {somme} {monnaie} gestohlen.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'Von Piraten geentert: {somme} {monnaie} gestohlen. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'Während der Überfahrt: {lots} zerbrochen.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'Während der Überfahrt: {n, plural, one {# Mann} other {# Mann}} über Bord.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'Von Piraten geentert: Sie erbeuten {somme} {monnaie} und {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Schatz ausgegraben: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -85505,7 +85825,7 @@ Lang.ui('de', {
   'fin.merOuverte': 'Neues Meer freigeschaltet: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Folge dem Ziel oben auf dem Bildschirm. Tippe auf ein Gebäude oder unten auf eine Abkürzung, um hinzugehen.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Folge den Zielen oben links. Klicke auf ein Gebäude oder nutze die Ziffern 1 bis 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Folge den Zielen oben links. {lb} {rb}: von Gebäude zu Gebäude, {a}: eintreten.',
@@ -86573,8 +86893,8 @@ Lang.sea('de', 'chine', {
   'intro/2': 'In den Gassen der Dreizehn Faktoreien raunt man, ein kühner Kaufmann könne in einer einzigen Saison ein Vermögen machen. Die Engländer nennen diese Riesen des Handels „Tai-Pans“: die großen Herren.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'Du hast ein Jahr. Leih dir Geld, rüste ein Schiff aus, spiel Katz und Maus mit dem Zoll, trotze Piraten und Taifunen.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'Am 31. Dezember wird das Chinesische Meer deinen Namen kennen.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Häufe bis zum 31. Dezember eine Million Tael an, und das Chinesische Meer wird deinen Namen kennen.',
   // Jeanne Kerbrat
   'captainNames/0': 'Jeanne Kerbrat',
   // Li Wei
@@ -86957,8 +87277,8 @@ Lang.sea('de', 'chine', {
   'text/prologue/carte2': '<b>Die Reise:</b> Dauer und Gefahr. Hongkong ist ganz nah und ungefährlich.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>Die bekannten Preise</b> dieses Hafens und ihr Alter: Sie können sich seither geändert haben.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>Leinen los!</b> Deine Leute sind satt, dein Laderaum ist voll.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>Leinen los!</b> Deine Leute sind satt, dein Laderaum ist beladen.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': 'Auf See! Der <b>Autopilot</b> folgt dem Kurs und legt von selbst an. Steuerst du selbst, geht er aus; ein Druck auf „Autopilot“ schaltet ihn wieder ein. Jeder Tag auf See zehrt am Proviant.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -87015,6 +87335,8 @@ Lang.sea('de', 'chine', {
   'text/hints/coque': 'Der Rumpf hat gelitten. Geh in die <b>Werft</b>: Ein angeschlagenes Schiff geht beim nächsten harten Schlag schnell unter.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Monatsanfang: <b>die Heuer</b> der Seeleute. Hab immer genug, um sie zu zahlen, sonst desertieren einige.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne c
+  'text/hints/leconCombat': 'Haben dir diese Piraten zu schaffen gemacht? Ich bring dir das Kämpfen bei: Die <b>Lektion zum Gefecht</b> wartet in der <b>Hilfe</b>, auf dem Titelbildschirm. Sie zählt nicht für deine Laufbahn.',
   // taels
   'text/moneyOne': 'Tael',
   // jetons de jade
@@ -94346,8 +94668,8 @@ Lang.ui('it', {
   'mer.cap': 'Rotta per {port} · ~{jours} g · {auto, select, oui {pilota automatico} other {timone a mano}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': 'Combattimento! Presenta il fianco e fai fuoco.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': 'Combattimento! {q}/{e} o clic: bordate · Spazio: fuoco',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': 'Combattimento! {g}/{d}: timone · {q}/{e} o clic: bordate · Spazio: fuoco',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': 'Combattimento! {lt} / {rt}: bordate · {a}: arrembaggio',
   // « {texte} »
@@ -94375,6 +94697,10 @@ Lang.ui('it', {
   'marche.caleLimite': 'C\'è posto per {n} {unites}: il cursore si ferma lì.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Stiva piena: vendi prima.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'Puoi pagarne {n} {unites}: il cursore si ferma lì.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'Non hai abbastanza denaro per comprarne.',
   // Pas de navire
   'marche.pasDeNavire': 'Nessuna nave',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -94427,17 +94753,22 @@ Lang.ui('it', {
   'marche.vivresComplet': 'Viveri al completo',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Ogni mercante annuncia il suo prezzo e quanto ne prende; oltre, ne ha meno o paga meno. Distribuisci i carichi su più porti: quello che ha preso si rifà in pochi giorni.',
-  'marche.etal.rayon': 'Al banco: {n} · scorta {m} a {prix}',
-  'marche.etal.rayonVide': 'Banco vuoto · scorta {m} a {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'Al banco: {n} · poi {m} di scorta a {prix}',
+  // Rayon vide · {m} de réserve à {prix}
+  'marche.etal.rayonVide': 'Banco vuoto · {m} di scorta a {prix}',
   'marche.etal.plusRien': 'Non resta nulla: il banco si rifornisce a poco a poco',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Ordine: {n} · poi svenduto da {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Ordine completo: svenduto da {prix}',
-  'marche.etal.ligneRayon': 'Al banco: {n} a {prix}',
-  'marche.etal.ligneReserve': 'Scorta: {n} a {prix}',
+  // En rayon : {n} au prix de {prix}
+  'marche.etal.ligneRayon': 'Al banco: {n} al prezzo di {prix}',
+  // Réserve : {n} au prix de {prix}
+  'marche.etal.ligneReserve': 'Scorta: {n} al prezzo di {prix}',
   'marche.etal.ligneRien': 'Poi: più nulla',
-  'marche.etal.ligneCommande': 'Ordine: {n} a {prix}',
+  // Commande : {n} au prix de {prix}
+  'marche.etal.ligneCommande': 'Ordine: {n} al prezzo di {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Oltre: svenduto da {prix}, sempre meno',
   // Bradé : de {de} à {a}
@@ -94460,8 +94791,8 @@ Lang.ui('it', {
   'marche.chen.reventeNote': 'Secondo il tuo diario, il meglio è <b>{port}</b>: ne prendevano <b>{q} {unites} a {prix} {monnaie}</b> {age}. Per i tuoi {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'Secondo il tuo diario, il meglio è <b>{port}</b>: <b>≈ {q} {unites} a {prix} {monnaie}</b>, ma era {age}: la quantità può essere cambiata. Per i tuoi {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': 'A {n, plural, one {# giorno} other {# giorni}} di mare.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': 'A {n, plural, one {# giorno} other {# giorni}} di mare: ≈ {gain} al giorno.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'E prima che tu arrivi, la stagione farà salire quel prezzo.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -94470,6 +94801,8 @@ Lang.ui('it', {
   'marche.chen.feteHausse': 'E al tuo arrivo sarà {fete}: lì il prezzo sarà più alto.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'Ma la festa sarà finita al tuo arrivo: lì il prezzo sarà più basso.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': 'Il meglio sarebbe <b>{port}</b>, a {n, plural, one {# giorno} other {# giorni}} di mare, per soli <b>{benefice}</b>: non vale il viaggio. Cerca piuttosto un\'altra merce.',
   'marche.chen.aucun': 'Nessun porto del tuo diario la paga di più: tienila per una penuria annunciata, o guarda altrove.',
   'marche.chen.mauvaisPort': 'A {port} non guadagneresti niente o quasi: punta su un altro porto, se puoi scegliere.',
   'marche.chen.ferme': 'Tutto va a prezzo fisso.',
@@ -94603,6 +94936,8 @@ Lang.ui('it', {
   'taverne.contrats': 'CONTRATTI OFFERTI',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Ricompensa {prime} · scadenza {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# giorno} other {# giorni}} di mare da qui, con la tua nave',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Prezzo attuale qui: {prix} / {unite}',
   // Accepter
@@ -95448,12 +95783,26 @@ Lang.ui('it', {
   'objectif.patience': ' (pazienza: {jours} g)',
   //  (EN RETARD !)
   'objectif.enRetard': ' (IN RITARDO!)',
+  //  · à {a}
+  'objectif.chez1': ' · a {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · a {a} o {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Uscire dal rosso: patrimonio {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Obiettivo: patrimonio di {seuil} {monnaie} entro il {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · scadenza {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'I tuoi cannoni sparano di lato: presenta il fianco al pirata, poi premi FUOCO dal lato giusto.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'I tuoi cannoni sparano di lato: presenta il fianco al pirata, poi {q} (babordo) o {e} (tribordo), oppure clicca dalla sua parte.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'I tuoi cannoni sparano di lato: vira con {g}/{d} o ← → per presentare il fianco al pirata, poi {q} (babordo) o {e} (tribordo), oppure clicca dalla sua parte.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'Per virare: <b>{g}</b> / <b>{d}</b> o le frecce ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'Per virare: appoggia il pollice sul timone, in basso a sinistra, e indica la rotta.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'Per virare: la levetta sinistra.',
   // VOILES PIRATES !
   'mer.voilesPirates': 'VELE PIRATA!',
   // UN PIRATE !
@@ -95554,8 +95903,14 @@ Lang.ui('it', {
   'mer.autreDestination': 'Scegli un\'altra destinazione sulla mappa.',
   // Entrée
   'touche.entree': 'Invio',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'Assalto dei pirati: furto di {somme} {monnaie}.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'Assalto dei pirati: furto di {somme} {monnaie}. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'Rotture durante la traversata: {lots}.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'Durante la traversata: {n, plural, one {# uomo} other {# uomini}} in mare.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'Assalto dei pirati: si portano via {somme} {monnaie} e {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Tesoro dissotterrato: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -95576,7 +95931,7 @@ Lang.ui('it', {
   'fin.merOuverte': 'Nuovo mare sbloccato: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Segui l\'obiettivo in cima allo schermo. Tocca un edificio, o una scorciatoia in basso, per andarci.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Segui gli obiettivi in alto a sinistra. Clicca su un edificio o usa i tasti da 1 a 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Segui gli obiettivi in alto a sinistra. {lb} {rb}: passa da un edificio all\'altro, {a}: entra.',
@@ -96644,8 +96999,8 @@ Lang.sea('it', 'chine', {
   'intro/2': 'Nei vicoli delle Tredici Fattorie si mormora che un mercante audace possa farsi una fortuna in una sola stagione. Gli inglesi chiamano questi giganti del commercio «taipan»: i grandi capi.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'Hai un anno. Chiedi prestiti, arma una nave, gioca d\'astuzia con la dogana, sfida pirati e tifoni.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'Entro il 31 dicembre, il mar della Cina conoscerà il tuo nome.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Accumula un milione di tael entro il 31 dicembre, e il mar della Cina conoscerà il tuo nome.',
   // Jeanne Kerbrat
   'captainNames/0': 'Jeanne Kerbrat',
   // Li Wei
@@ -97028,8 +97383,8 @@ Lang.sea('it', 'chine', {
   'text/prologue/carte2': '<b>Il viaggio:</b> la durata e il pericolo. Hong Kong è a due passi, e senza rischi.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>I prezzi noti</b> di questo porto, e quanto sono vecchi: nel frattempo possono essere cambiati.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>Si salpa!</b> I tuoi uomini hanno da mangiare, la stiva è piena.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>Si salpa!</b> I tuoi uomini hanno da mangiare, la stiva è carica.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': 'In mare! Il <b>pilota automatico</b> segue la rotta tracciata e attracca da solo. Se prendi il timone si disinserisce; il pulsante «Pilota» lo reinserisce. Ogni giorno in mare consuma viveri.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -97086,6 +97441,8 @@ Lang.sea('it', 'chine', {
   'text/hints/coque': 'Lo scafo ha sofferto. Passa dal <b>cantiere navale</b>: una nave malconcia cola a picco al primo guaio serio.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Inizio del mese: <b>la paga</b> dei marinai. Tieni sempre da parte il denaro per pagarli, o qualcuno diserterà.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': 'Quei pirati ti hanno dato del filo da torcere? Ti insegnerò a combattere: la <b>lezione di combattimento</b> ti aspetta nell\'<b>Aiuto</b>, dalla schermata iniziale. Non conta per la tua carriera.',
   // taels
   'text/moneyOne': 'tael',
   // jetons de jade
@@ -104420,8 +104777,8 @@ Lang.ui('pl', {
   'mer.cap': 'Kurs: {port} · ~{jours, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} · {auto, select, oui {autopilot} other {ręczny ster}}',
   // Combat ! Visez de flanc et tirez.
   'mer.combatTactile': 'Bitwa! Ustaw się burtą i strzelaj.',
-  // Combat ! {q}/{e} ou clic : bordées · Espace : feu
-  'mer.combatClavier': 'Bitwa! {q}/{e} lub klik: salwy · Spacja: ogień',
+  // Combat ! {g}/{d} : barre · {q}/{e} ou clic : bordées · Espace : feu
+  'mer.combatClavier': 'Bitwa! {g}/{d}: ster · {q}/{e} lub klik: salwy · Spacja: ogień',
   // Combat ! {lt} / {rt} : bordées · {a} : aborder
   'mer.combatManette': 'Bitwa! {lt}/{rt}: salwy · {a}: abordaż',
   // « {texte} »
@@ -104449,6 +104806,10 @@ Lang.ui('pl', {
   'marche.caleLimite': 'Jest miejsce na {n} {unites}: suwak zatrzymuje się tam.',
   // Cale pleine : vendez d'abord.
   'marche.calePleine': 'Ładownia pełna: najpierw sprzedaj.',
+  // Vous pouvez en payer {n} {unites} : la réglette s'arrête là.
+  'marche.argentLimite': 'Stać cię na {n} {unites}: suwak zatrzymuje się tam.',
+  // Pas assez d'argent pour en acheter.
+  'marche.argentManque': 'Za mało pieniędzy, by cokolwiek kupić.',
   // Pas de navire
   'marche.pasDeNavire': 'Brak statku',
   // Il vous faut un navire pour charger des marchandises. Passez au chantier naval.
@@ -104501,17 +104862,22 @@ Lang.ui('pl', {
   'marche.vivresComplet': 'Prowiant uzupełniony',
   // Chaque vente fait baisser le prix local, chaque achat le fait monter : répartissez vos cargaisons entre plusieurs marchés.
   'marche.conseil': 'Każdy kupiec podaje swoją cenę i ile przyjmie; ponad to ma mniej albo płaci mniej. Rozdzielaj ładunki między kilka portów: to, co wziął, odnawia się w kilka dni.',
-  'marche.etal.rayon': 'Na straganie: {n} · zapas {m} po {prix}',
+  // En rayon : {n} · puis {m} de réserve à {prix}
+  'marche.etal.rayon': 'Na straganie: {n} · potem zapas {m} po {prix}',
+  // Rayon vide · {m} de réserve à {prix}
   'marche.etal.rayonVide': 'Stragan pusty · zapas {m} po {prix}',
   'marche.etal.plusRien': 'Nic nie zostało: stragan powoli się zapełnia',
   // Commande : {n} · puis bradé dès {prix}
   'marche.etal.commande': 'Zamówienie: {n} · potem przecena od {prix}',
   // Commande remplie : bradé dès {prix}
   'marche.etal.commandeRemplie': 'Zamówienie wypełnione: przecena od {prix}',
-  'marche.etal.ligneRayon': 'Na straganie: {n} po {prix}',
-  'marche.etal.ligneReserve': 'Zapas: {n} po {prix}',
+  // En rayon : {n} au prix de {prix}
+  'marche.etal.ligneRayon': 'Na straganie: {n} po cenie {prix}',
+  // Réserve : {n} au prix de {prix}
+  'marche.etal.ligneReserve': 'Zapas: {n} po cenie {prix}',
   'marche.etal.ligneRien': 'Potem: nic więcej',
-  'marche.etal.ligneCommande': 'Zamówienie: {n} po {prix}',
+  // Commande : {n} au prix de {prix}
+  'marche.etal.ligneCommande': 'Zamówienie: {n} po cenie {prix}',
   // Au-delà : bradé dès {prix}, de moins en moins
   'marche.etal.ligneBrade': 'Dalej: przecena od {prix}, coraz niższa',
   // Bradé : de {de} à {a}
@@ -104534,8 +104900,8 @@ Lang.ui('pl', {
   'marche.chen.reventeNote': 'Według twojego dziennika najlepszy jest <b>{port}</b>: brali <b>{q} {unites} po {prix} {monnaie}</b> {age}. Za twoje {n}: <b>{benefice}</b>.',
   // D'après ton journal, le mieux est <b>{port}</b> : <b>≈ {q} {unites} à {prix} {monnaie}</b>, mais c'était {age} : la quantité a pu changer. Pour tes {n} : <b>{benefice}</b>.
   'marche.chen.reventeVieux': 'Według twojego dziennika najlepszy jest <b>{port}</b>: <b>≈ {q} {unites} po {prix} {monnaie}</b>, ale to było {age}: ilość mogła się zmienić. Za twoje {n}: <b>{benefice}</b>.',
-  // À {n, plural, one {# jour} other {# jours}} de mer.
-  'marche.chen.jours': '{n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} żeglugi stąd.',
+  // À {n, plural, one {# jour} other {# jours}} de mer : ≈ {gain} par jour.
+  'marche.chen.joursGain': '{n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} żeglugi stąd: ≈ {gain} dziennie.',
   // Et d'ici ton arrivée, la saison y fera monter ce prix.
   'marche.chen.saisonHausse': 'A zanim dopłyniesz, pora roku podniesie tę cenę.',
   // Mais d'ici ton arrivée, la saison y fera baisser ce prix.
@@ -104544,6 +104910,8 @@ Lang.ui('pl', {
   'marche.chen.feteHausse': 'A gdy dopłyniesz, będzie {fete}: cena będzie tam wyższa.',
   // Mais la fête sera finie à ton arrivée : le prix y sera plus bas.
   'marche.chen.feteBaisse': 'Ale święto się skończy, zanim dopłyniesz: cena będzie tam niższa.',
+  // Le mieux serait <b>{port}</b>, à {n, plural, one {# jour} other {# jours}} de mer, pour <b>{benefice}</b> seulement : ça ne vaut pas le voyage. Cherche plutôt une autre marchandise.
+  'marche.chen.maigre': 'Najlepszy byłby <b>{port}</b>, {n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} żeglugi, ale zysk to tylko <b>{benefice}</b>: nie warto płynąć. Poszukaj raczej innego towaru.',
   'marche.chen.aucun': 'Żaden port z twojego dziennika nie płaci za nią więcej: zachowaj ją na zapowiedziany niedobór albo rozejrzyj się gdzie indziej.',
   'marche.chen.mauvaisPort': 'W porcie {port} nic byś nie zarobił albo prawie nic: płyń do innego portu, jeśli masz wybór.',
   'marche.chen.ferme': 'Wszystko idzie po stałej cenie.',
@@ -104677,6 +105045,8 @@ Lang.ui('pl', {
   'taverne.contrats': 'KONTRAKTY DO WZIĘCIA',
   // Récompense {prime} · avant le {date}
   'taverne.recompense': 'Nagroda {prime} · do {date}',
+  // ≈ {n, plural, one {# jour} other {# jours}} de mer d’ici, avec votre navire
+  'taverne.joursDIci': '≈ {n, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} żeglugi stąd twoim statkiem',
   // Prix actuel ici : {prix} / {unite}
   'taverne.prixIci': 'Obecna cena tutaj: {prix} / {unite}',
   // Accepter
@@ -105522,12 +105892,26 @@ Lang.ui('pl', {
   'objectif.patience': ' (cierpliwość: {jours, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}})',
   //  (EN RETARD !)
   'objectif.enRetard': ' (PO TERMINIE!)',
+  //  · à {a}
+  'objectif.chez1': ' · w porcie {a}',
+  //  · à {a} ou {b}
+  'objectif.chez2': ' · w porcie {a} lub {b}',
+  // Sortir du rouge : valeur nette {valeur}
+  'objectif.sortirRouge': 'Wyjdź na plus: majątek {valeur}',
+  // But : {seuil} {monnaie} de valeur nette avant le {date}
+  'objectif.but': 'Cel: majątek {seuil} {monnaie} do {date}',
   //  · avant le {date}
   'objectif.avantLe': ' · do {date}',
   // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis appuyez sur FEU du bon côté.
   'mer.conseilTactile': 'Działa strzelają na boki: ustaw się burtą do pirata i naciśnij „Ognia” po właściwej stronie.',
-  // Vos canons tirent sur les côtés : présentez votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
-  'mer.conseilClavier': 'Działa strzelają na boki: ustaw się burtą do pirata, a potem {q} (lewa burta) lub {e} (prawa burta) albo kliknij po jego stronie.',
+  // Vos canons tirent sur les côtés : tournez avec {g}/{d} ou ← → pour présenter votre flanc au pirate, puis {q} (bâbord) ou {e} (tribord), ou cliquez de son côté.
+  'mer.conseilClavier': 'Działa strzelają na boki: skręcaj {g}/{d} lub ← →, by ustawić się burtą do pirata, a potem {q} (lewa burta) lub {e} (prawa burta) albo kliknij po jego stronie.',
+  // Pour tourner : <b>{g}</b> / <b>{d}</b> ou les flèches ← →.
+  'mer.barreClavier': 'Skręcanie: <b>{g}</b> / <b>{d}</b> lub strzałki ← →.',
+  // Pour tourner : posez le pouce sur la barre, en bas à gauche, et montrez le cap.
+  'mer.barreTactile': 'Skręcanie: połóż kciuk na sterze w lewym dolnym rogu i wskaż kurs.',
+  // Pour tourner : le stick gauche.
+  'mer.barreManette': 'Skręcanie: lewa gałka.',
   // VOILES PIRATES !
   'mer.voilesPirates': 'PIRACKIE ŻAGLE!',
   // UN PIRATE !
@@ -105628,8 +106012,14 @@ Lang.ui('pl', {
   'mer.autreDestination': 'Wybierz na mapie inny cel podróży.',
   // Entrée
   'touche.entree': 'Enter',
-  // Abordé par des pirates : {somme} {monnaie} volés.
-  'journal.aborde': 'Abordaż piratów: skradziono {somme} {monnaie}.',
+  // Abordé par des pirates : {somme} {monnaie} volés. {pertes}.
+  'journal.aborde': 'Abordaż piratów: skradziono {somme} {monnaie}. {pertes}.',
+  // Pendant la traversée : {lots} brisés.
+  'journal.casse': 'Rozbite w rejsie: {lots}.',
+  // Pendant la traversée : {n, plural, one {# homme} other {# hommes}} à la mer.
+  'journal.hommesALaMer': 'W rejsie: {n, plural, one {# marynarz} few {# marynarzy} many {# marynarzy} other {# marynarza}} za burtą.',
+  // Abordé par des pirates : ils emportent {somme} {monnaie} et {cargaison}. {pertes}.
+  'journal.abordeCargaison': 'Abordaż piratów: zabrali {somme} {monnaie} i {cargaison}. {pertes}.',
   // Trésor déterré : {somme} {monnaie}.
   'journal.tresor': 'Wykopany skarb: {somme} {monnaie}.',
   // Trésor déterré : {somme} {monnaie} et {n} {marchandise}.
@@ -105650,7 +106040,7 @@ Lang.ui('pl', {
   'fin.merOuverte': 'Nowy akwen odblokowany: {mer}!',
   // Suivez l'objectif en haut de l'écran. Touchez un bâtiment ou un raccourci en bas pour y aller.
   'tuto.tactile': 'Kieruj się celem u góry ekranu. Dotknij budynku lub skrótu na dole, by tam przejść.',
-  // Suivez les objectifs en haut à gauche. Touchez un bâtiment ou utilisez les chiffres 1 à 9.
+  // Suivez les objectifs en haut à gauche. Cliquez sur un bâtiment ou utilisez les chiffres 1 à 9.
   'tuto.clavier': 'Kieruj się celami w lewym górnym rogu. Kliknij budynek lub użyj cyfr od 1 do 9.',
   // Suivez les objectifs en haut à gauche. {lb} {rb} : aller d'un bâtiment à l'autre, {a} : entrer.
   'tuto.manette': 'Kieruj się celami w lewym górnym rogu. {lb}/{rb}: przejście między budynkami, {a}: wejście.',
@@ -106718,8 +107108,8 @@ Lang.sea('pl', 'chine', {
   'intro/2': 'W zaułkach Trzynastu Faktorii szepcze się, że śmiały kupiec może zbić fortunę w jeden sezon. Anglicy nazywają tych gigantów handlu „tai-panami”, czyli wielkimi panami.',
   // Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.
   'intro/3': 'Masz rok. Pożyczaj, wyposaż statek, graj w kotka i myszkę z celnikami, rzuć wyzwanie piratom i tajfunom.',
-  // Au 31 décembre, les mers de Chine sauront votre nom.
-  'intro/4': 'Do 31 grudnia całe Morze Chińskie pozna twoje imię.',
+  // Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.
+  'intro/4': 'Zgromadź milion taeli do 31 grudnia, a całe Morze Chińskie pozna twoje imię.',
   // Jeanne Kerbrat
   'captainNames/0': 'Jeanne Kerbrat',
   // Li Wei
@@ -107102,8 +107492,8 @@ Lang.sea('pl', 'chine', {
   'text/prologue/carte2': '<b>Podróż:</b> czas i zagrożenie. Hongkong jest tuż obok, a droga bezpieczna.',
   // <b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.
   'text/prologue/carte3': '<b>Znane ceny</b> w tym porcie i to, jak są stare: od tamtej pory mogły się zmienić.',
-  // <b>En route !</b> Tes hommes sont nourris, ta cale est pleine.
-  'text/prologue/carte4': '<b>W drogę!</b> Twoi ludzie są najedzeni, ładownia pełna.',
+  // <b>En route !</b> Tes hommes sont nourris, ta cale est chargée.
+  'text/prologue/carte4': '<b>W drogę!</b> Twoi ludzie są najedzeni, ładownia załadowana.',
   // En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jo
   'text/prologue/mer': 'Na morzu! <b>Autopilot</b> trzyma się wytyczonej trasy i sam zawija do portu. Gdy chwycisz ster, wyłączy się; przycisk „Pilot” znów go włączy. Każdy dzień na morzu zjada prowiant.',
   // Ce n'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».
@@ -107160,6 +107550,8 @@ Lang.sea('pl', 'chine', {
   'text/hints/coque': 'Kadłub ucierpiał. Zajrzyj do <b>stoczni</b>: uszkodzony statek łatwo pójdzie na dno, gdy znów oberwie.',
   // Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.
   'text/hints/solde': 'Początek miesiąca: <b>żołd</b> dla marynarzy. Zawsze miej czym im zapłacić, inaczej część zdezerteruje.',
+  // Ces pirates t'ont donné du fil à retordre ? Je t'apprendrai à te battre : la <b>leçon de combat</b> t'attend dans l'<b>Aide</b>, depuis l'écran titre. Elle ne compte pas dans ta carrière.
+  'text/hints/leconCombat': 'Ci piraci dali ci w kość? Nauczę cię walczyć: <b>lekcja walki</b> czeka w <b>Pomocy</b>, na ekranie tytułowym. Nie liczy się do twojej kariery.',
   // piculs
   'text/unitMany': 'pikuli',
   // piculs
@@ -119055,7 +119447,16 @@ const Game = {
     r.visited[pid] = (r.visited[pid] || 0) + 1;
     if (pid !== r.lastPort) {
       r.stats.voyages++; this.unlock('voyage');
-      if (r.departDay != null) { const n = Math.max(1, Math.round(r.day - r.departDay)); this.log(T('journal.arrivee', { port: PORT[pid].name, n }), 'voyage'); }
+      // (jours du calendrier, comme la date affichée : 09/10/2026, « après 2 jours de mer » quand la date n'avait avancé que d'un)
+      if (r.departDay != null) { const n = Math.max(1, Math.floor(r.day) - Math.floor(r.departDay)); this.log(T('journal.arrivee', { port: PORT[pid].name, n }), 'voyage'); }
+      // ce que la traversée a coûté sans bruit (porcelaine brisée, hommes à la mer) : dit au journal et à l'arrivée
+      const tl = r.tripLoss;
+      if (tl) {
+        const parts = Object.entries(tl.cargo || {}).map(([gi, n]) => T('abordage.lot', { n, marchandise: lower(GOODS[gi].name), unites: motUnites(n, GOODS[gi]) }));
+        if (parts.length) { const t = T('journal.casse', { lots: listJoin(parts) }); this.log(t, 'voyage'); out.push({ kind: 'toast', t, k: 'bad' }); }
+        if (tl.crew) { const t = T('journal.hommesALaMer', { n: tl.crew }); this.log(t, 'voyage'); out.push({ kind: 'toast', t, k: 'bad' }); }
+      }
+      r.tripLoss = null;
     }
     r.lastPort = pid;
     if (SEA.rules && SEA.rules.onArrive) SEA.rules.onArrive(pid, out);   // avant tout le reste (quarantaine…)
@@ -119139,11 +119540,17 @@ const Game = {
   },
 
   // ════════════ Voyage ════════════
+  // une perte sans combat pendant la traversée (marchandise brisée, homme à la mer) : notée pour le journal de l'arrivée
+  tripLose(gi, n, crew) {
+    const tl = this.run.tripLoss || (this.run.tripLoss = { cargo: {}, crew: 0 });
+    if (gi != null && n > 0) tl.cargo[gi] = (tl.cargo[gi] || 0) + n;
+    if (crew) tl.crew += crew;
+  },
   depart(dest) {
     const r = this.run;
     this.flushTrades();
     if (r.port) this.notePrices(r.port);   // (le journal garde les prix du départ, après vos échanges)
-    r.port = null; r.dest = dest; r.from = r.lastPort; r.visit = null; r.departDay = r.day;
+    r.port = null; r.dest = dest; r.from = r.lastPort; r.visit = null; r.departDay = r.day; r.tripLoss = null;
     if (SEA.rules && SEA.rules.onDepart) SEA.rules.onDepart(r.from, dest);
     this.saveRun();
   },
@@ -119227,9 +119634,21 @@ const Game = {
       }
     }
     const w = this.worth(), next = TITLES[Math.min(TITLES.length - 1, titleIndex(w) + 1)];
-    if (next.min > w) out.push({ t: T('objectif.devenir', { titre: next.name, seuil: fmt(next.min), monnaie: motMonnaie(next.min), valeur: fmt(w) }), cur: true });
-    if (r.debt > 0) { const due = this.debtDueIn(); out.push({ t: T('objectif.rembourser', { preteur: TXT.lender, somme: fmt(r.debt), monnaie: motMonnaie(r.debt) }) + (due != null ? (due > 0 ? T('objectif.patience', { jours: due }) : T('objectif.enRetard')) : ''), cur: true }); }
+    // (09/10/2026, partie d'un débutant : « Devenir Mousse des quais : 0 (−740) » ne se comprenait pas ; en valeur nette
+    //  négative, on dit qu'il faut sortir du rouge)
+    if (w < 0) out.push({ t: T('objectif.sortirRouge', { valeur: fmt(w) }), cur: true });
+    else if (next.min > w) out.push({ t: T('objectif.devenir', { titre: next.name, seuil: fmt(next.min), monnaie: motMonnaie(next.min), valeur: fmt(w) }), cur: true });
+    if (r.debt > 0) {
+      const due = this.debtDueIn();
+      // (10/10/2026, retour d'un testeur : on ne savait pas où rembourser ; les ports où le prêteur a sa maison)
+      const at = PORTS.filter(p => p.buildings.includes('usurier')).map(p => p.name);
+      const where = at.length === 1 ? T('objectif.chez1', { a: at[0] }) : at.length > 1 ? T('objectif.chez2', { a: at.slice(0, -1).join(', '), b: at[at.length - 1] }) : '';
+      out.push({ t: T('objectif.rembourser', { preteur: TXT.lender, somme: fmt(r.debt), monnaie: motMonnaie(r.debt) }) + (due != null ? (due > 0 ? T('objectif.patience', { jours: due }) : T('objectif.enRetard')) : '') + where, cur: true });
+    }
     for (const c of r.contracts) out.push({ t: this.contractText(c) + T('objectif.avantLe', { date: fmtDate(c.deadline, true) }), cur: true });
+    // le but de la partie, chiffré, toujours en dernier (09/10/2026 : le million n'était écrit nulle part) ; une fois atteint, on ne le répète plus
+    const top = TITLES.find(t => t.supreme);
+    if (top && top !== next && w < top.min && r.mode !== 'lecon') out.push({ t: T('objectif.but', { seuil: fmt(top.min), monnaie: motMonnaie(top.min), date: fmtDate(r.endDay - 1, true) }) });
     return { title: T('objectif.titre'), list: out };
   },
 };
@@ -120067,7 +120486,7 @@ const PortScene = {
       if (Input.down('left')) dir = -1;
       else if (Input.down('right')) dir = 1;
     }
-    if (dir) { cap.target = null; cap.openOnArrive = null; cap.fast = false; }
+    if (dir) { cap.target = null; cap.openOnArrive = null; cap.fast = false; this.pendingOpen = null; }
     if (cap.target != null && !dir) {
       const d = cap.target - cap.x;
       if (Math.abs(d) < 2) {
@@ -120093,6 +120512,7 @@ const PortScene = {
       if (d < bd) { bd = d; near = it; }
     }
     this.near = near;
+    if (this.pendingOpen && live && !Main.fadeDir) { const b = this.pendingOpen; this.pendingOpen = null; if (Math.abs(b.door - cap.x) < 6) this.open(b); }
     if (near && live && (Input.hitCode('ArrowUp') || Input.hitCode('KeyW') || Input.hitCode('Enter') || Input.hitCode('KeyE') || Input.hitCode('Space'))) this.open(near);
     // raccourcis clavier des bâtiments
     if (live) {
@@ -120148,7 +120568,11 @@ const PortScene = {
     if (Math.abs(it.door - cap.x) < 3) { cap.target = null; this.open(it); }
   },
   open(it) {
-    if (!it || Input.blocked || Main.fadeDir || Main.sceneName !== 'port') return;
+    if (!it || Main.sceneName !== 'port') return;
+    // (09/10/2026, partie d'un débutant : à l'arrivée, le premier « Commercer » se perdait pendant le fondu ; on le garde
+    //  pour la fin du fondu au lieu de l'oublier)
+    if (Input.blocked || Main.fadeDir) { this.pendingOpen = it; return; }
+    this.pendingOpen = null;
     Sound.sfxPlay('door', { vol: 0.5 });
     if (this.onEnter) this.onEnter(it.type);
   },
@@ -120602,7 +121026,7 @@ const SeaScene = {
     r.flags.metPirates = true;
     if (first && Game.meta.runs < 2) setTimeout(() => Bus.emit('toast', { t: TXT.firstFight ? TXT.firstFight() : Input.touch   // (une mer sans canons explique ses armes)
       ? T('mer.conseilTactile')
-      : T('mer.conseilClavier', { q: Input.label('KeyQ'), e: Input.label('KeyE') }), k: 'gold' }), 1800);
+      : T('mer.conseilClavier', { g: Input.label('KeyA'), d: Input.label('KeyD'), q: Input.label('KeyQ'), e: Input.label('KeyE') }), k: 'gold' }), 1800);
     // (dans la brume, ils surgissent tout près)
     const hid = this.fogs.length && this.fogAt(p.x, p.y) > 0.3;
     const base = hid ? this.freeSpot(p.a, 190, 250) : this.freeSpot(p.a, 330, 420);
@@ -120755,7 +121179,7 @@ const SeaScene = {
     if (s === this.player) {
       this.shake = Math.max(this.shake, 5);
       const r = Game.run, gi = Game.roleIdx('fragile');
-      if (gi >= 0 && r.cargo[gi] > 0 && R.chance(0.4)) { const lost = Math.max(1, Math.round(r.cargo[gi] * 0.03)); r.cargo[gi] -= lost; this.float(s.x, s.y - 18, `-${lost} ${lower(GOODS[gi].name)}`, '#8ab4ff'); }
+      if (gi >= 0 && r.cargo[gi] > 0 && R.chance(0.4)) { const lost = Math.max(1, Math.round(r.cargo[gi] * 0.03)); r.cargo[gi] -= lost; Game.tripLose(gi, lost); this.float(s.x, s.y - 18, `-${lost} ${lower(GOODS[gi].name)}`, '#8ab4ff'); }
     }
     if (s.hull <= 0) this.sinkOrSeize(s, b.owner);
     else if (s.hostile && !s.named && !s.surrendered && s.hull < s.hullMax * 0.22 && R.chance(0.35)) this.surrender(s);
@@ -120857,8 +121281,12 @@ const SeaScene = {
       e.crew = Math.max(1, Math.round(e.crew * 0.8));
       e.ai = 'flee'; e.sated = true;
       const q = { somme: fmt(stolen), monnaie: motMonnaie(stolen), cargaison: listJoin(taken), pertes: marinsPerdus(lost) };
-      this.alert(T('mer.abordes'), T(taken.length ? 'mer.emportentCargaison' : 'mer.emportent', q), 'red');
-      Game.log(T('journal.aborde', q), 'combat');
+      // (09/10/2026, partie d'un débutant : la bannière filait avant qu'on la lise, et le journal ne gardait que l'argent ;
+      //  le bilan reste à l'écran, jeu arrêté, jusqu'à « Compris », et le journal dit tout)
+      const bilan = T(taken.length ? 'mer.emportentCargaison' : 'mer.emportent', q);
+      Sound.sfxPlay('gong');
+      UI.choice(T('mer.abordes'), bilan, [{ label: T('guide.compris'), value: true, cls: 'jade' }], 'skull');
+      Game.log(T(taken.length ? 'journal.abordeCargaison' : 'journal.aborde', q), 'combat');
       this.shake = 6;
     } else {
       const lost = Math.max(0, Math.min(p.crew - 1, Math.max(0, Math.round(e.crew * 0.2 * R.range(0.5, 1)))));
@@ -121422,8 +121850,8 @@ const SeaScene = {
             }
             if (R.chance(0.25 * s.str * prot)) {
               const gi = Game.roleIdx('fragile');
-              if (gi >= 0 && r.cargo[gi] > 0) { const l = Math.max(1, Math.round(r.cargo[gi] * 0.06)); r.cargo[gi] -= l; this.float(p.x, p.y - 22, '-' + T('abordage.lot', { n: l, marchandise: lower(GOODS[gi].name), unites: motUnites(l, GOODS[gi]) }), '#8ab4ff'); }
-              else if (p.crew > 3 && R.chance(0.4)) { p.crew--; r.ship.crew = p.crew; this.float(p.x, p.y - 22, T('mer.hommeALaMer'), '#ffffff'); }
+              if (gi >= 0 && r.cargo[gi] > 0) { const l = Math.max(1, Math.round(r.cargo[gi] * 0.06)); r.cargo[gi] -= l; Game.tripLose(gi, l); this.float(p.x, p.y - 22, '-' + T('abordage.lot', { n: l, marchandise: lower(GOODS[gi].name), unites: motUnites(l, GOODS[gi]) }), '#8ab4ff'); }
+              else if (p.crew > 3 && R.chance(0.4)) { p.crew--; r.ship.crew = p.crew; Game.tripLose(null, 0, 1); this.float(p.x, p.y - 22, T('mer.hommeALaMer'), '#ffffff'); }
             }
           }
           if (R.chance(dt * 0.35 * s.str)) { this.flashT = 0.12; Sound.sfxPlay('thunder', { vol: 0.8 }); }
@@ -122535,7 +122963,7 @@ const UI = {
         const days = Math.max(1, Math.round(SEA.rules && SEA.rules.eta ? SEA.rules.eta(dest.id, p, d) : d * 1.15 / Math.max(20, p.speedMax * 0.85) * DAYS_PER_SEC));
         dtxt = T('mer.cap', { port: dest.name, jours: days, auto: SeaScene.auto ? 'oui' : 'non' });
       }
-      if (SeaScene.combat) dtxt = TXT.combatHint ? TXT.combatHint() : Pad.active ? T('mer.combatManette', { lt: 'LT', rt: 'RT', a: 'A' }) : Input.touch ? T('mer.combatTactile') : T('mer.combatClavier', { q: Input.label('KeyQ'), e: Input.label('KeyE') });
+      if (SeaScene.combat) dtxt = TXT.combatHint ? TXT.combatHint() : Pad.active ? T('mer.combatManette', { lt: 'LT', rt: 'RT', a: 'A' }) : Input.touch ? T('mer.combatTactile') : T('mer.combatClavier', { g: Input.label('KeyA'), d: Input.label('KeyD'), q: Input.label('KeyQ'), e: Input.label('KeyE') });
       const de = document.getElementById('sh-dest');
       if (de.textContent !== dtxt) de.textContent = dtxt;
       document.getElementById('bt-auto').classList.toggle('on', SeaScene.auto);
@@ -122593,6 +123021,9 @@ const UI = {
   // ── Marché ──
   market() {
     const r = Game.run, pid = r.port, P = PORT[pid];
+    // (10/10/2026, choix d'Adrien : le marché s'ouvre toutes rubriques fermées ; le prologue et les leçons choisissent la leur)
+    const guided = Prologue.on || Lessons.on;
+    if (!guided) this.mkOpen = {};
     const list0 = h('div', { class: 'mk-list' }), top = h('div', { class: 'mk-top' });
     // (la carte des trajets à gauche, sauf sur téléphone : retour des testeurs, voir d'un coup d'œil où aller)
     const map = this.isMobile() ? null : this.marketMap(pid);
@@ -122627,12 +123058,13 @@ const UI = {
       if (mode === 'buy' && r.ship) kids.push(this.foodRow(render), h('div', { class: 'mk-sep' }, T('marche.marchandises')));
       // (07/10/2026, le marché à l'étal, maquette D d'Adrien) une ligne par marchandise, qui se déroule au toucher : la réglette,
       // la barre des paliers, le détail de ce qu'on paie ou reçoit, le conseil du mentor. Une seule ouverte à la fois : la
-      // dernière ouverte dans ce mode (-1 : aucune), sinon la première ; au prologue, celle que montre le mentor
+      // dernière ouverte dans ce mode depuis l'ouverture du marché (-1 : aucune), sinon aucune ; au prologue, celle que montre
+      // le mentor ; dans une leçon, celle qu'elle a choisie, sinon la première
       const list = h('div', { class: 'mk' });
       const shown = GOODS.map((g, gi) => gi).filter(gi => mode === 'buy' || r.cargo[gi] > 0);
       const memo = this.mkOpen || (this.mkOpen = {});
       let open = pro ? GOOD[SEA.prologue.good].idx : memo[mode];
-      if (open !== -1 && !shown.includes(open)) open = shown[0];
+      if (open !== -1 && !shown.includes(open)) open = guided ? shown[0] : -1;
       for (const gi of shown) list.append(this.marketRow(gi, mode, gi === open, { pro, st, render, toggle: () => { memo[mode] = open === gi ? -1 : gi; render(); } }));
       if (mode === 'sell' && !list.children.length) list.append(h('p', { class: 'hint' }, T('marche.caleVide')));
       kids.push(list);
@@ -122710,7 +123142,9 @@ const UI = {
     let marge = null;
     if (buy) {
       if (g.contraband && P.customs > 0.15) info.append(h('span', { class: 'tag-ct' }, T('marche.contrebandeIci')));
-      if (holdCap) info.append(h('span', { class: 'tag-hold' }, free > 0 ? T('marche.caleLimite', { n: free, unites: motUnites(free, g) }) : T('marche.calePleine')));
+      // (09/10/2026, partie d'un débutant : la phrase parlait de la cale quand c'était l'argent qui arrêtait la réglette)
+      if (st && max < Math.min(free, t.q1 + t.q2)) info.append(h('span', { class: 'tag-hold' }, max > 0 ? T('marche.argentLimite', { n: max, unites: motUnites(max, g) }) : T('marche.argentManque')));
+      else if (holdCap) info.append(h('span', { class: 'tag-hold' }, free > 0 ? T('marche.caleLimite', { n: free, unites: motUnites(free, g) }) : T('marche.calePleine')));
     }
     else {
       const cost = r.cost[gi];
@@ -122731,29 +123165,38 @@ const UI = {
     const advice = n => {
       if (n <= 0) return '';
       if (buy) {
-        const cost = Game.tierSplit(t, n).total;
-        let best = null;
+        const cost = Game.tierSplit(t, n).total, routes = this.routeDays(pid);
+        // (09/10/2026, partie d'un débutant : le meilleur prix l'envoyait à Batavia, 24 jours de mer, pour un voyage à perte ;
+        //  Chen choisit le meilleur gain par jour de mer, un peu moins s'il faut traverser une zone de pirates)
+        let best = null, known = false;
         for (const p of PORTS) {
           if (p.id === pid || Game.portDormant(p.id)) continue;
           const kp = Game.knownPrices(p.id);
           if (!kp) continue;
+          known = true;
           const kt = Game.knownTiers(p.id, gi, false, kp), rev = Game.tierSplit(kt, n).total;
-          if (!best || rev > best.rev) best = { p, kp, kt, rev };
+          if (rev <= cost) continue;
+          const ro = routes[p.id], days = ro ? ro.n : Math.max(1, Math.round(Game.travelDaysEst(pid, p.id)));
+          const score = (rev - cost) / days * (1 - Math.min(0.5, ro ? ro.danger : 0));
+          if (!best || score > best.score) best = { p, kp, kt, rev, days, score };
         }
-        if (!best) return '';
-        if (best.rev <= cost) return T('marche.chen.aucun');
+        if (!known) return '';
+        if (!best) return T('marche.chen.aucun');
+        // (un gain dérisoire au bout d'un long voyage : Chen le dit, au lieu de l'appeler « le mieux »)
+        if (best.rev - cost < cost * 0.1) return T('marche.chen.maigre', { port: best.p.name, n: best.days, benefice: '+' + monnaie(best.rev - cost) });
         // (08/10/2026, retour d'Adrien) le prix noté reste juste : « ils t'en prennent 134 piculs à 17 taels, en direct ! » ; l'âge du
         // relevé, ≈ au-delà de 15 jours, les jours de mer pour y aller ; une saison ou une fête qui change le prix d'ici l'arrivée
         const kt = best.kt, age = Math.max(0, Math.round(r.day - best.kp.day));
         const p = { port: best.p.name, q: kt.q1, unites: motUnites(kt.q1, g), prix: fmt(kt.p1), monnaie: motMonnaie(kt.p1), age: age ? T('journal.prix.age', { n: age }) : T('journal.prix.auj'), n, benefice: '+' + monnaie(best.rev - cost) };
         const key = best.kp.live ? 'marche.chen.revente' : kt.approx ? 'marche.chen.reventeVieux' : 'marche.chen.reventeNote';
-        const route = this.routeDays(pid)[best.p.id], days = route ? route.n : Math.max(1, Math.round(Game.travelDaysEst(pid, best.p.id)));
+        const days = best.days;
         const at = r.day + days, then = best.kp.live ? r.day : best.kp.day;
         const fe = d => Game.festival(best.p.id, gi, d), se = d => Game.season(best.p.id, gi, monthOf(d));
         const kf = fe(at) / fe(then), ks = se(at) / se(then);
         const warn = kf > 1.03 ? T('marche.chen.feteHausse', { fete: Game.festivalName(at) }) : kf < 0.97 ? T('marche.chen.feteBaisse')
           : ks > 1.04 ? T('marche.chen.saisonHausse') : ks < 0.96 ? T('marche.chen.saisonBaisse') : '';
-        return T(key, p) + ' <small>' + T('marche.chen.jours', { n: days }) + (warn ? ' ' + warn : '') + '</small>';
+        const perDay = Math.round((best.rev - cost) / days);
+        return T(key, p) + ' <small>' + T('marche.chen.joursGain', { n: days, gain: monnaie(perDay) }) + (warn ? ' ' + warn : '') + '</small>';
       }
       if (resell) return '';
       const paid = r.cost[gi];
@@ -123043,6 +123486,8 @@ const UI = {
           cards.append(h('div', { class: 'card' },
             h('h5', null, ico(o.type === 'prime' ? 'skull' : o.type === 'chasse' ? 'sword' : o.type === 'colis' ? 'scroll' : GOODS[o.g].id), ' ', Game.contractText(o)),
             h('div', { class: 'd' }, ...Tn('taverne.recompense', { prime: h('b', null, monnaie(o.reward)), date: fmtDate(o.deadline, true) })),
+            // (09/10/2026, partie d'un débutant : était-ce loin ? il fallait ouvrir la carte)
+            o.to && o.to !== pid && this.routeDays(pid)[o.to] ? h('div', { class: 'd' }, T('taverne.joursDIci', { n: this.routeDays(pid)[o.to].n })) : null,
             o.type === 'livraison' ? h('div', { class: 'd' }, T('contrat.livraisonAide', { port: PORT[o.to].name })) : null,
             o.type === 'livraison' ? h('div', { class: 'd' }, T('taverne.prixIci', { prix: fmt(Game.buyPrice(pid, o.g)), unite: TXT.unitOne })) : null,
             btn(T('taverne.accepter'), () => { const err = Game.acceptContract(o); if (err) { this.toast(err, 'bad'); Sound.sfxPlay('error'); } else { this.toast(T('taverne.contratAccepte'), 'good', 'scroll'); this.after('stamp'); } render(); }, 'jade sm')));
@@ -123298,9 +123743,10 @@ const UI = {
       for (const z of DANGER_ZONES) {
         const x = lonX(z.lon) / C, y = latY(z.lat) / C, rr = z.r * WORLD.K / C;
         const g = ctx.createRadialGradient(x, y, 0, x, y, rr);
-        g.addColorStop(0, `rgba(216,71,43,${(0.08 + z.lvl * 0.14).toFixed(3)})`); g.addColorStop(1, 'rgba(216,71,43,0.03)');
+        // (plus marquées depuis le 09/10/2026 : un débutant ne les voyait pas)
+        g.addColorStop(0, `rgba(216,71,43,${(0.15 + z.lvl * 0.22).toFixed(3)})`); g.addColorStop(1, 'rgba(216,71,43,0.06)');
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, rr, 0, TAU); ctx.fill();
-        ctx.setLineDash([3, 3]); ctx.strokeStyle = 'rgba(200,64,42,0.45)'; ctx.lineWidth = 0.7; ctx.stroke(); ctx.setLineDash([]);
+        ctx.setLineDash([3, 3]); ctx.strokeStyle = 'rgba(190,56,36,0.7)'; ctx.lineWidth = 1.1; ctx.stroke(); ctx.setLineDash([]);
       }
       // calque propre à la mer (les glaces de la Baltique)
       if (SEA.rules && SEA.rules.chartLayer) SEA.rules.chartLayer(ctx, C, LS);
@@ -123363,9 +123809,9 @@ const UI = {
             ctx.lineCap = 'round'; ctx.strokeStyle = '#f7f1e3'; ctx.lineWidth = 5.4; cross(); ctx.strokeStyle = RED; ctx.lineWidth = 2.8; cross();
           }
         }
-        labels.push({ x, y, name, isSel, isHere, dorm, lb: P.label || {} });
+        labels.push({ id: p.id, x, y, name, isSel, isHere, dorm, lb: P.label || {} });
       }
-      this.chartLabels(ctx, labels, LS);
+      cv.labelBoxes = this.chartLabels(ctx, labels, LS);
       // navire
       if (pos) {
         ctx.save(); ctx.translate(pos.x / C, pos.y / C); ctx.rotate(departing ? 0 : SeaScene.player.a); if (LS !== 1) ctx.scale(LS, LS);
@@ -123477,6 +123923,11 @@ const UI = {
       const x = (e.clientX - rect.left) / rect.width * World.GW * WORLD.CELL, y = (e.clientY - rect.top) / rect.height * World.GH * WORLD.CELL;
       let best = null, bd = 60 * LS;
       for (const p of World.ports) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd && p.id !== here) { bd = d; best = p.id; } }
+      // (09/10/2026, partie d'un débutant : toucher le nom ne faisait rien, et Hong Kong et Macao sont à 7 pixels l'un de l'autre :
+      //  un nom touché choisit son port)
+      const C = WORLD.CELL, cx = x / C, cy = y / C, pad = 3 * LS;
+      const hit = (cv.labelBoxes || []).find(o => o.id !== here && cx >= o.box.x0 - pad && cx <= o.box.x1 + pad && cy >= o.box.y0 - pad && cy <= o.box.y1 + pad);
+      if (hit) best = hit.id;
       if (best) { sel = best; Sound.sfxPlay('click'); draw(); renderSide(); }
     });
     draw(); renderSide();
@@ -123489,7 +123940,7 @@ const UI = {
   // parmi d'autres (l'autre côté, décalée vers le bas d'une ou deux lignes avec un trait de rappel, au-dessus, au-dessous) :
   // dans un groupe de ports serrés, les noms gardent l'ordre des ports. sub : un mot après le nom (les jours de mer, au marché)
   chartLabels(ctx, labels, LS) {
-    const F = 13 * LS, placed = [], dots = labels.map(l => ({ x0: l.x - 6 * LS, x1: l.x + 6 * LS, y0: l.y - 6 * LS, y1: l.y + 6 * LS }));
+    const F = 13 * LS, placed = [], boxes = [], dots = labels.map(l => ({ x0: l.x - 6 * LS, x1: l.x + 6 * LS, y0: l.y - 6 * LS, y1: l.y + 6 * LS }));
     const overlap = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
     for (const l of labels.slice().sort((a, b) => a.y - b.y)) {
       const fn = `${l.isSel ? 800 : 700} ${F}px ${FONT_TITLE}`, fs = `800 ${(F * 0.9).toFixed(2)}px ${FONT_UI}`;
@@ -123514,7 +123965,7 @@ const UI = {
         if (s < bestScore - 0.5) { best = Object.assign(c, { box: b, x0 }); bestScore = s; }
         if (s <= 0.5) break;
       }
-      placed.push(best.box);
+      placed.push(best.box); boxes.push({ id: l.id, box: best.box });
       if (best.lead) {   // trait de rappel : du point au nom décalé
         ctx.strokeStyle = 'rgba(27,42,60,0.75)'; ctx.lineWidth = 1.1 * LS;
         ctx.beginPath(); ctx.moveTo(l.x + (best.align === 'right' ? -4 : 4) * LS, l.y); ctx.lineTo(best.tx + (best.align === 'right' ? 2 : -2), best.ty - F * 0.3); ctx.stroke();
@@ -123528,6 +123979,7 @@ const UI = {
         ctx.fillStyle = l.subColor || '#1b2a3c'; ctx.fillText(' ' + l.sub, best.x0 + wn, best.ty);
       }
     }
+    return boxes;   // (la place de chaque nom : on peut le toucher pour choisir le port)
   },
   // les jours de mer d'un port vers chacun des autres, avec le navire du joueur (comme la carte d'appareillage), et la
   // route ; gardés tant que le port, le navire et le jour ne changent pas
@@ -123540,7 +123992,10 @@ const UI = {
       if (p.id === pid || !from) continue;
       const path = World.findPath(from.x, from.y, p.x, p.y);
       const L = path ? World.pathLength(path) : Math.hypot(p.x - from.x, p.y - from.y) * 1.3;
-      out[p.id] = { path, n: Math.max(1, Math.round(path && SEA.rules && SEA.rules.pathDays ? SEA.rules.pathDays(path, sp) : L / (sp * 0.82) * DAYS_PER_SEC)) };
+      // (danger : moyenne le long de la route, comme la carte de départ)
+      let danger = 0;
+      if (path) { for (const q of path) danger += World.danger(q[0], q[1]); danger /= Math.max(1, path.length); }
+      out[p.id] = { path, danger, n: Math.max(1, Math.round(path && SEA.rules && SEA.rules.pathDays ? SEA.rules.pathDays(path, sp) : L / (sp * 0.82) * DAYS_PER_SEC)) };
     }
     this.routeKey = key; this.routes = out;
     return out;
@@ -124908,7 +125363,10 @@ const Hints = {
     if (seen[id]) return false;
     if (Guide.hintEl) { if (!this.wait.some(w => w.id === id)) this.wait.push({ id, p }); return false; }
     seen[id] = 1; Game.saveGlobal();
-    Guide.hint(Lang.fmt(TXT.hints[id], p || {}), TXT.mentorName, SEA.mentorSeal);
+    let text = Lang.fmt(TXT.hints[id], p || {});
+    // (09/10/2026, partie d'un débutant : « présente-leur le flanc », mais rien ne disait comment on tourne)
+    if (id === 'pirates' && !TXT.firstFight) text += '<br>' + (Pad.active ? T('mer.barreManette') : Input.touch ? T('mer.barreTactile') : T('mer.barreClavier', { g: Input.label('KeyA'), d: Input.label('KeyD') }));
+    Guide.hint(text, TXT.mentorName, SEA.mentorSeal);
     return true;
   },
   next() { const w = this.wait.shift(); if (w) this.say(w.id, w.p); },
@@ -126335,7 +126793,7 @@ Seas.register({
     'Votre père, capitaine de cabotage, a disparu dans un typhon au large de Formose. Il ne vous laisse qu\'un nom, quelques taels et une réputation à reconstruire.',
     'Dans les ruelles des Treize Factoreries, on murmure qu\'un marchand audacieux peut bâtir une fortune en une seule saison. Les Anglais appellent ces géants du négoce les « taï-pans » : les grands patrons.',
     'Vous avez un an. Empruntez, armez un navire, jouez avec les douanes, défiez pirates et typhons.',
-    'Au 31 décembre, les mers de Chine sauront votre nom.',
+    'Amassez un million de taels avant le 31 décembre, et les mers de Chine sauront votre nom.',
   ],
   captainNames: ['Jeanne Kerbrat', 'Li Wei', 'Chen Mei', 'Hugo Marceau', 'Ana Ferreira', 'Tom Harkin', 'Lin Xiu', 'Rose Delacroix', 'Wu Jian', 'Mathis Leroux', 'Aiko Tanaka', 'Diego Salcedo'],
   shipNames: ['Dragon de Jade', 'Perle du Levant', 'Vent d\'Orient', 'Lotus Noir', 'Fortune Céleste', 'Mouette Dorée', 'Tigre des Brumes', 'Belle de Macao', 'Hirondelle', 'Phénix Vermeil', 'Grue Blanche', 'Étoile de Canton'],
@@ -127506,7 +127964,7 @@ Seas.register({
       carte1: '<b>La carte.</b> Touche un port pour le choisir. Les taches rouges sont des repaires de pirates.',
       carte2: '<b>Le voyage :</b> sa durée et son danger. Hong Kong est tout près, et sans risque.',
       carte3: '<b>Les prix connus</b> de ce port, et leur âge : ils ont pu changer depuis.',
-      carte4: '<b>En route !</b> Tes hommes sont nourris, ta cale est pleine.',
+      carte4: '<b>En route !</b> Tes hommes sont nourris, ta cale est chargée.',
       mer: 'En mer ! Le <b>pilote automatique</b> suit la route tracée et accoste tout seul. Si tu barres toi-même, il se coupe ; le bouton « Pilote » le relance. Chaque jour en mer mange des vivres.',
       pasIci: 'Ce n\'est pas Hong Kong ! Retourne au quai et mets le cap sur Hong Kong : touche « {bouton} ».',
       arrivee: 'Nous voilà à <b>Hong Kong</b>. Trouve le marché pour vendre ta porcelaine : touche « {bouton} ».',
@@ -127570,6 +128028,7 @@ Seas.register({
       vivres: '<b>Les vivres s\'épuisent !</b> Accoste au port le plus proche et achète de quoi manger, ou l\'équipage va déserter.',
       coque: 'La coque a souffert. Passe au <b>chantier naval</b> : un navire abîmé coule vite au prochain coup dur.',
       solde: 'Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.',
+      leconCombat: 'Ces pirates t\'ont donné du fil à retordre ? Je t\'apprendrai à te battre : la <b>leçon de combat</b> t\'attend dans l\'<b>Aide</b>, depuis l\'écran titre. Elle ne compte pas dans ta carrière.',
     },
   },
 
@@ -139212,6 +139671,8 @@ const Main = {
       const r = Game.run, due = Game.debtDueIn(), st = Game.stats();
       if (r.debt > 0 && due != null && due <= 30) Bus.emit('hint', { id: 'dette', p: { jours: Math.max(0, due), preteur: TXT.lender } });
       else if (r.ship && st && r.ship.hull < st.hullMax * 0.5) Bus.emit('hint', { id: 'coque' });
+      // (après le premier combat, la leçon de combat, si on ne l'a pas faite : 09/10/2026, partie d'un débutant)
+      if (r.flags.metPirates && !Lessons.done('combat')) Bus.emit('hint', { id: 'leconCombat' });
     }, 1100);
   },
   setSail(dest) {
@@ -139379,9 +139840,9 @@ body:has(.title-screen):not(:has(#loading)) #majb { display: inline-flex; }
 @media (max-width: 520px) { #majb { padding: 6px 11px; font-size: 11.5px; } #majn .majn-h { padding: 12px 14px 10px; } #majn .majn-b { padding: 4px 14px 14px; } #majn h2 { font-size: 19px; } }
 </style>
 <button type="button" id="majb"><span class="majb-p" aria-hidden="true"></span><span class="majb-t">Mises à jour</span><span class="majb-d"></span></button>
-<div id="majn" role="dialog" aria-modal="true" aria-labelledby="majn-t"><div class="majn-box"><div class="majn-h"><div><h2 id="majn-t">Dernières mises à jour</h2><p class="majn-l" hidden></p></div><button type="button" class="majn-x">×</button></div><div class="majn-b" lang="fr"><article class="majn-e"><div class="majn-d">10 octobre 2026 · 00 h 25</div><h3>Les mises à jour en un coup d’œil</h3><ul><li>Sur l’écran titre, en bas à droite, le bouton « Mises à jour » donne la date de la dernière. Il ouvre les dix dernières, de la plus récente à la plus ancienne, avec ce qu’elles changent pour vous.</li></ul><p class="majn-pv"><b>Pour vous</b>Vous savez tout de suite si votre version est à jour, et ce qui a changé depuis votre dernière partie.</p></article><article class="majn-e"><div class="majn-d">10 octobre 2026 · 00 h 02</div><h3>Une musique qui se renouvelle</h3><span class="majn-tag majn-chine">Mer de Chine</span><ul><li>Chaque musique change d’un passage à l’autre : des instruments entrent et sortent, une deuxième (parfois une troisième) mélodie prend le relais, les percussions changent de rythme. Rien de plus à télécharger : le jeu joue sa musique lui-même.</li><li>Mer de Chine : au port et en mer, quatre morceaux au lieu d’un, dont trois nouveaux deux fois plus longs. L’un d’eux est tiré au hasard à chaque arrivée, jamais le même deux fois de suite.</li></ul><p class="majn-pv"><b>Pour vous</b>On peut rester longtemps au port ou en mer sans réentendre la même boucle. Les nouveaux morceaux viendront ensuite pour les Caraïbes et la Méditerranée.</p></article><article class="majn-e"><div class="majn-d">8 octobre 2026 · 16 h 07</div><h3>Les retours du 8 octobre</h3><h4>Lisibilité</h4><ul><li>Journal des prix en deux bandes par port : en haut, en jade, ce que le port vous vend (prix et quantité en rayon) ; en bas, en or, ce qu’il vous achète (prix et commande). Le meilleur prix est encadré.</li><li>Pénuries toujours en or, surplus toujours en bleu, partout dans le jeu.</li><li>La valeur nette se détaille dans une bulle : argent, banque, navire, cargaison, dette, prochain titre.</li><li>Le conseil de Chen à l’achat devient concret : combien le port en prend et à quel prix, l’âge du relevé, les jours de mer, la saison ou la fête à l’arrivée.</li><li>Les fausses rumeurs et les bavardages de la rue ne sont plus notés au journal.</li><li>Les bénédictions du temple s’affichent en cercles à minuteur sous le bandeau ; la cale a une jauge, rouge quand elle est pleine.</li></ul><h4>Le rythme de l’année</h4><ul><li>Une page d’éphéméride à chaque 1er du mois (mois restants, solde de l’équipage), « J−7 » à côté de la date les sept derniers jours, et un bandeau avant le bilan de fin d’année.</li></ul><h4>La vente</h4><ul><li>Au-delà de ce que le port commande, on brade : le premier picul part 20 % sous le prix ferme, puis un peu moins à chaque unité, et le jeu vous prévient.</li><li>Mer de Chine : les entrepôts sont retirés. Ce qui y était laissé est revenu à bord, le reste a été racheté.</li></ul><h4>Le registre</h4><ul><li>Chaque achat et chaque vente laisse un billet numéroté dans le nouvel onglet « Registre » du journal, rangé par escale : les quantités à chaque prix, ce qui a fait le prix (pénurie, saison, fête, marge du marchand, Sens des affaires, présage du temple), le bénéfice et ce que vos bonus ont rapporté.</li></ul><h4>Les rumeurs (Mer de Chine)</h4><ul><li>Chaque pénurie ou surplus a sa cause, dite à la taverne : grève des mineurs de jade, fours de Jingdezhen éteints…</li><li>Au journal, une fiche par rumeur : la cause, l’effet sur l’étal, une frise du début à la fin, la source et la durée. Nouvelle section « Saisons et fêtes ».</li></ul><h4>Les leçons de Chen</h4><ul><li>Deux leçons guidées, le marché et le combat, à part de la carrière : rien ne compte, votre partie est mise de côté puis rendue, 5 jetons de jade la première fois. Dans l’Aide de l’écran titre et à la fin du prologue.</li></ul><p class="majn-pv"><b>Pour vous</b>On voit d’où vient chaque prix et ce qu’il vous a rapporté. Vendre trop d’un coup coûte moins cher qu’avant, et le jeu vous prévient avant. Si vous aviez des marchandises en entrepôt en mer de Chine, vérifiez votre cale.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 20 h 38</div><h3>Le marché à l’étal</h3><ul><li>Chaque marchand annonce ses prix et combien il en prend. À l’achat : son rayon au prix affiché, puis une réserve 25 % plus chère, puis plus rien. À la vente : sa commande au prix affiché ; au-delà, on brade (voir le 8 octobre).</li><li>Vos achats et vos ventes ne font plus bouger le prix : ce sont les quantités qui s’épuisent, puis se refont en 4 à 18 jours selon la marchandise et la taille du port.</li><li>En pénurie, le port vous achète davantage ; en surplus, il vous vend davantage, et moins cher.</li><li>Hors pénuries, surplus, saisons et fêtes, les prix ne bougent plus : un prix noté au journal reste juste.</li><li>Au marché, chaque marchandise se déroule d’un clic : la barre des paliers, le détail de ce que vous payez ou recevez, et un conseil de Chen.</li><li>Le journal donne, pour chaque port, le prix d’achat, le prix de vente et la quantité à ce prix. Le prologue a été réécrit pour l’expliquer.</li></ul><p class="majn-pv"><b>Pour vous</b>On sait à l’avance ce qu’on paiera et ce qu’on touchera. Une fois un rayon vidé ou une commande remplie, il faut attendre quelques jours ou aller ailleurs.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 16 h 59</div><h3>Téléphone : avancer au pouce</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><ul><li>Deux boutons au-dessus des canons choisissent la toile : toute voile en haut, mi-voile en dessous. Le choix est gardé d’un voyage à l’autre.</li><li>La barre au pouce fait avancer le navire tant que le pouce la pousse. Pouce levé ou ramené au centre, les voiles se ferlent et le navire s’arrête en gardant son cap (sauf sous le pilote automatique).</li></ul><p class="majn-pv"><b>Pour vous</b>Au téléphone, on avance en poussant le pouce et on s’arrête en le levant.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 10 h 44</div><h3>Jouer au téléphone</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><ul><li>En mer, une barre au pouce remplace les quatre flèches : posez le pouce n’importe où sur la moitié gauche de l’écran, le navire suit.</li><li>Le bouton d’abordage se pose sur le navire à aborder et le suit ; les boutons de feu ne bougent plus.</li><li>Les vivres s’affichent dans le bandeau ; en portrait, le bandeau prend toute la largeur.</li><li>Fenêtres plus ramassées : boutons, marché, taverne.</li></ul><p class="majn-pv"><b>Pour vous</b>La partie se joue au doigt, sans flèches à l’écran. Rien ne change à l’ordinateur ni à la manette.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 23 h 31</div><h3>Écran de démarrage</h3><ul><li>Au lancement, le logo de Besenet Studio (un clic l’écourte), puis un accueil : sauvegarde automatique, « Meilleur avec le son », « Cliquez pour commencer ».</li></ul><p class="majn-pv"><b>Pour vous</b>Le son se débloque au premier clic et la musique du titre démarre aussitôt.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 23 h 06</div><h3>Nouveau logo</h3><ul><li>Le logo de l’écran titre est désormais dessiné à la main (essai).</li></ul><p class="majn-pv"><b>Pour vous</b>Rien ne change dans la partie.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 22 h 52</div><h3>Onglets, contrats et rumeurs rangées</h3><ul><li>Taverne, journal et marché ont des onglets en classeur doré. Les fenêtres s’ouvrent en haut de l’écran et ne grandissent que vers le bas : les onglets ne sautent plus sous la souris. Le journal reste ouvert d’un onglet à l’autre.</li><li>Au port, le nom et la description de la ville s’affichent sous le bandeau.</li><li>Contrats : la prime est affichée, avec « à bord : 3 / 10 ». En arrivant avec la marchandise, « Livrer » ou « Plus tard », puis des rappels au marché, à la taverne et à l’appareillage. « Tout vendre » garde la marchandise promise.</li><li>Le journal des rumeurs est rangé : en ce moment, à venir, prix rapportés, autres nouvelles, passées.</li></ul><p class="majn-pv"><b>Pour vous</b>Plus de livraison oubliée, ni vendue par erreur avec « Tout vendre ».</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 22 h 06</div><h3>Un marché plus lisible</h3><ul><li>Le journal note aussi les prix au départ du port, après vos échanges.</li><li>Au marché, sous chaque marchandise : ce qu’en disent les rumeurs.</li><li>Au journal, « Pour votre cargaison » : les trois meilleurs ports où vendre toute votre cargaison.</li><li>À la taverne, les rumeurs sont datées et chiffrées : quand, pour combien de temps, de combien. Quand il n’y a rien à dire, la tournée est gratuite. Un capitaine rapporte parfois les prix d’un port lointain.</li><li>Sur la carte, les rumeurs ont une pastille avec l’icône de la marchandise, et la fiche d’un port liste ses rumeurs.</li></ul><p class="majn-pv"><b>Pour vous</b>Le prix noté au journal correspond à celui que vous trouverez en revenant, et les rumeurs disent clairement quoi, où et quand.</p></article></div></div></div>
+<div id="majn" role="dialog" aria-modal="true" aria-labelledby="majn-t"><div class="majn-box"><div class="majn-h"><div><h2 id="majn-t">Dernières mises à jour</h2><p class="majn-l" hidden></p></div><button type="button" class="majn-x">×</button></div><div class="majn-b" lang="fr"><article class="majn-e"><div class="majn-d">10 octobre 2026 · 15 h 15</div><h3>Pour mieux démarrer</h3><span class="majn-tag majn-chine">Mer de Chine</span><h4>Le but et la dette</h4><ul><li>Le but est écrit dès le début et reste en bas des objectifs : un million de taels de valeur nette avant le 31 décembre.</li><li>Endetté, l’objectif dit « Sortir du rouge » au lieu d’un titre incompréhensible.</li><li>La dette de Wang dit où la rembourser : à Canton ou à Macao.</li></ul><h4>En mer</h4><ul><li>Au premier pirate, Chen dit comment tourner (Q/D ou les flèches au clavier, la barre au doigt, le stick à la manette) ; le message de combat aussi.</li><li>Abordé, un bilan reste à l’écran jusqu’à « Compris » ; le journal note l’argent, la cargaison et les marins perdus.</li><li>Après le premier combat, Chen propose la leçon de combat (dans l’Aide, depuis l’écran titre).</li><li>La porcelaine brisée et les hommes tombés à la mer pendant la traversée sont notés à l’arrivée. Le nombre de jours de mer suit le calendrier.</li></ul><h4>Marché et carte</h4><ul><li>Chen conseille le port qui rapporte le plus par jour de mer, et plus seulement le meilleur prix ; il dit quand un voyage ne vaut pas la peine.</li><li>Les quantités se lisent mieux : « En rayon : 61 · puis 61 de réserve à 85 ».</li><li>Quand c’est l’argent qui arrête la réglette, le jeu le dit (et plus « place pour… »).</li><li>Le marché s’ouvre toutes rubriques fermées : vous ouvrez celle que vous voulez.</li><li>Les contrats disent à combien de jours de mer est le port de livraison.</li><li>Sur la carte, on choisit un port en touchant son nom (Hong Kong et Macao se distinguent enfin) ; les zones de pirates sont plus visibles.</li></ul><p class="majn-pv"><b>Pour vous</b>Une première partie plus claire : vous savez où aller, ce que vous risquez et ce que vous avez perdu.</p></article><article class="majn-e"><div class="majn-d">10 octobre 2026 · 00 h 25</div><h3>Les mises à jour en un coup d’œil</h3><ul><li>Sur l’écran titre, en bas à droite, le bouton « Mises à jour » donne la date de la dernière. Il ouvre les dix dernières, de la plus récente à la plus ancienne, avec ce qu’elles changent pour vous.</li></ul><p class="majn-pv"><b>Pour vous</b>Vous savez tout de suite si votre version est à jour, et ce qui a changé depuis votre dernière partie.</p></article><article class="majn-e"><div class="majn-d">10 octobre 2026 · 00 h 02</div><h3>Une musique qui se renouvelle</h3><span class="majn-tag majn-chine">Mer de Chine</span><ul><li>Chaque musique change d’un passage à l’autre : des instruments entrent et sortent, une deuxième (parfois une troisième) mélodie prend le relais, les percussions changent de rythme. Rien de plus à télécharger : le jeu joue sa musique lui-même.</li><li>Mer de Chine : au port et en mer, quatre morceaux au lieu d’un, dont trois nouveaux deux fois plus longs. L’un d’eux est tiré au hasard à chaque arrivée, jamais le même deux fois de suite.</li></ul><p class="majn-pv"><b>Pour vous</b>On peut rester longtemps au port ou en mer sans réentendre la même boucle. Les nouveaux morceaux viendront ensuite pour les Caraïbes et la Méditerranée.</p></article><article class="majn-e"><div class="majn-d">8 octobre 2026 · 16 h 07</div><h3>Les retours du 8 octobre</h3><h4>Lisibilité</h4><ul><li>Journal des prix en deux bandes par port : en haut, en jade, ce que le port vous vend (prix et quantité en rayon) ; en bas, en or, ce qu’il vous achète (prix et commande). Le meilleur prix est encadré.</li><li>Pénuries toujours en or, surplus toujours en bleu, partout dans le jeu.</li><li>La valeur nette se détaille dans une bulle : argent, banque, navire, cargaison, dette, prochain titre.</li><li>Le conseil de Chen à l’achat devient concret : combien le port en prend et à quel prix, l’âge du relevé, les jours de mer, la saison ou la fête à l’arrivée.</li><li>Les fausses rumeurs et les bavardages de la rue ne sont plus notés au journal.</li><li>Les bénédictions du temple s’affichent en cercles à minuteur sous le bandeau ; la cale a une jauge, rouge quand elle est pleine.</li></ul><h4>Le rythme de l’année</h4><ul><li>Une page d’éphéméride à chaque 1er du mois (mois restants, solde de l’équipage), « J−7 » à côté de la date les sept derniers jours, et un bandeau avant le bilan de fin d’année.</li></ul><h4>La vente</h4><ul><li>Au-delà de ce que le port commande, on brade : le premier picul part 20 % sous le prix ferme, puis un peu moins à chaque unité, et le jeu vous prévient.</li><li>Mer de Chine : les entrepôts sont retirés. Ce qui y était laissé est revenu à bord, le reste a été racheté.</li></ul><h4>Le registre</h4><ul><li>Chaque achat et chaque vente laisse un billet numéroté dans le nouvel onglet « Registre » du journal, rangé par escale : les quantités à chaque prix, ce qui a fait le prix (pénurie, saison, fête, marge du marchand, Sens des affaires, présage du temple), le bénéfice et ce que vos bonus ont rapporté.</li></ul><h4>Les rumeurs (Mer de Chine)</h4><ul><li>Chaque pénurie ou surplus a sa cause, dite à la taverne : grève des mineurs de jade, fours de Jingdezhen éteints…</li><li>Au journal, une fiche par rumeur : la cause, l’effet sur l’étal, une frise du début à la fin, la source et la durée. Nouvelle section « Saisons et fêtes ».</li></ul><h4>Les leçons de Chen</h4><ul><li>Deux leçons guidées, le marché et le combat, à part de la carrière : rien ne compte, votre partie est mise de côté puis rendue, 5 jetons de jade la première fois. Dans l’Aide de l’écran titre et à la fin du prologue.</li></ul><p class="majn-pv"><b>Pour vous</b>On voit d’où vient chaque prix et ce qu’il vous a rapporté. Vendre trop d’un coup coûte moins cher qu’avant, et le jeu vous prévient avant. Si vous aviez des marchandises en entrepôt en mer de Chine, vérifiez votre cale.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 20 h 38</div><h3>Le marché à l’étal</h3><ul><li>Chaque marchand annonce ses prix et combien il en prend. À l’achat : son rayon au prix affiché, puis une réserve 25 % plus chère, puis plus rien. À la vente : sa commande au prix affiché ; au-delà, on brade (voir le 8 octobre).</li><li>Vos achats et vos ventes ne font plus bouger le prix : ce sont les quantités qui s’épuisent, puis se refont en 4 à 18 jours selon la marchandise et la taille du port.</li><li>En pénurie, le port vous achète davantage ; en surplus, il vous vend davantage, et moins cher.</li><li>Hors pénuries, surplus, saisons et fêtes, les prix ne bougent plus : un prix noté au journal reste juste.</li><li>Au marché, chaque marchandise se déroule d’un clic : la barre des paliers, le détail de ce que vous payez ou recevez, et un conseil de Chen.</li><li>Le journal donne, pour chaque port, le prix d’achat, le prix de vente et la quantité à ce prix. Le prologue a été réécrit pour l’expliquer.</li></ul><p class="majn-pv"><b>Pour vous</b>On sait à l’avance ce qu’on paiera et ce qu’on touchera. Une fois un rayon vidé ou une commande remplie, il faut attendre quelques jours ou aller ailleurs.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 16 h 59</div><h3>Téléphone : avancer au pouce</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><ul><li>Deux boutons au-dessus des canons choisissent la toile : toute voile en haut, mi-voile en dessous. Le choix est gardé d’un voyage à l’autre.</li><li>La barre au pouce fait avancer le navire tant que le pouce la pousse. Pouce levé ou ramené au centre, les voiles se ferlent et le navire s’arrête en gardant son cap (sauf sous le pilote automatique).</li></ul><p class="majn-pv"><b>Pour vous</b>Au téléphone, on avance en poussant le pouce et on s’arrête en le levant.</p></article><article class="majn-e"><div class="majn-d">7 octobre 2026 · 10 h 44</div><h3>Jouer au téléphone</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><ul><li>En mer, une barre au pouce remplace les quatre flèches : posez le pouce n’importe où sur la moitié gauche de l’écran, le navire suit.</li><li>Le bouton d’abordage se pose sur le navire à aborder et le suit ; les boutons de feu ne bougent plus.</li><li>Les vivres s’affichent dans le bandeau ; en portrait, le bandeau prend toute la largeur.</li><li>Fenêtres plus ramassées : boutons, marché, taverne.</li></ul><p class="majn-pv"><b>Pour vous</b>La partie se joue au doigt, sans flèches à l’écran. Rien ne change à l’ordinateur ni à la manette.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 23 h 31</div><h3>Écran de démarrage</h3><ul><li>Au lancement, le logo de Besenet Studio (un clic l’écourte), puis un accueil : sauvegarde automatique, « Meilleur avec le son », « Cliquez pour commencer ».</li></ul><p class="majn-pv"><b>Pour vous</b>Le son se débloque au premier clic et la musique du titre démarre aussitôt.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 23 h 06</div><h3>Nouveau logo</h3><ul><li>Le logo de l’écran titre est désormais dessiné à la main (essai).</li></ul><p class="majn-pv"><b>Pour vous</b>Rien ne change dans la partie.</p></article><article class="majn-e"><div class="majn-d">6 octobre 2026 · 22 h 52</div><h3>Onglets, contrats et rumeurs rangées</h3><ul><li>Taverne, journal et marché ont des onglets en classeur doré. Les fenêtres s’ouvrent en haut de l’écran et ne grandissent que vers le bas : les onglets ne sautent plus sous la souris. Le journal reste ouvert d’un onglet à l’autre.</li><li>Au port, le nom et la description de la ville s’affichent sous le bandeau.</li><li>Contrats : la prime est affichée, avec « à bord : 3 / 10 ». En arrivant avec la marchandise, « Livrer » ou « Plus tard », puis des rappels au marché, à la taverne et à l’appareillage. « Tout vendre » garde la marchandise promise.</li><li>Le journal des rumeurs est rangé : en ce moment, à venir, prix rapportés, autres nouvelles, passées.</li></ul><p class="majn-pv"><b>Pour vous</b>Plus de livraison oubliée, ni vendue par erreur avec « Tout vendre ».</p></article></div></div></div>
 <script>(() => {
-  const last = "2026-10-10 00:25";
+  const last = "2026-10-10 15:15";
   const btn = document.getElementById('majb'), pan = document.getElementById('majn');
   const code = () => (typeof Lang !== 'undefined' && Lang.code) || 'fr';
   const tr = (k, fb) => { try { const s = T(k); return s && s !== k && s.indexOf(k) < 0 ? s : fb; } catch (e) { return fb; } };
