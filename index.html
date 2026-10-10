@@ -941,6 +941,7 @@ body:not(.mobile) .g-bubble.g-cols .g-list { display: grid; grid-template-column
 
 /* ── Prologue : la proposition, au premier « Nouvelle carrière » ── */
 .pro-offer > p { color: var(--text-2); }
+.pro-offer > p.reset-merci { color: var(--gold-hi); font-style: italic; text-align: center; margin-top: 4px; }   /* (11/10/2026) le merci aux testeurs */
 .pro-head { display: flex; gap: 14px; align-items: center; margin-bottom: 10px; }
 .pro-head .g-seal { cursor: var(--cur); }
 .pro-eyebrow { margin: 0 0 2px !important; font: 800 11px var(--font-ui); letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-hi); }
@@ -3589,7 +3590,7 @@ Lang.ui('fr', {
   'reset.pourquoi': 'Le <b>système d\'Héritage</b> et le <b>tutoriel</b> ont été refaits de fond en comble. Pour que chacun reparte sur les mêmes bases, votre progression a été remise à zéro.',
   'reset.efface': 'Jetons de jade, Héritage, hauts faits, records et parties en cours sont effacés, sur toutes les mers. Vos réglages et votre langue sont conservés.',
   'reset.attend': 'Ce qui vous attend : <b>le premier voyage</b>, un tutoriel en trois chapitres avec le vieux Chen, de Canton à Manille puis Hong Kong, et un <b>Héritage repensé</b> pour le marché à l\'étal.',
-  'reset.merci': 'Merci de tester Silk & Cannons !',
+  'reset.merci': 'Encore merci pour votre participation et vos retours dans les tests de Silk & Cannons !',
   'reset.voyage': 'Découvrir le premier voyage',
   // les répliques de Chen ; {bouton} : le libellé du bâtiment dans la barre du port ; {pilote}, {vite}, {accoster}, {feu} : les
   // gestes selon l'appareil ; {q}, {e} : les touches de tir choisies
@@ -125283,7 +125284,7 @@ const UI = {
       h('p', { html: T('reset.pourquoi') }),
       h('p', { html: T('reset.efface') }),
       h('p', { html: T('reset.attend') }),
-      h('p', { class: 'hint' }, T('reset.merci')));
+      h('p', { class: 'reset-merci' }, T('reset.merci')));
     const entry = this.open({ id: 'reset', title: T('reset.fenetre'), icon: 'scroll', cls: 'narrow', body, help: false, closeLabel: T('commun.fermer'), onClose: done,
       foot: [btn(T('commun.fermer'), () => this.close(entry)), Voyage.has() ? btn(T('reset.voyage'), () => { this.close(entry); this.newGame('career'); }, 'jade big') : null].filter(Boolean) });
   },
