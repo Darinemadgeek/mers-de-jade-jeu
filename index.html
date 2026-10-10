@@ -10,6 +10,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<script>var WEB_RESET = '2026-10-11-premier-voyage';</script>
 <title>Silk &amp; Cannons</title>
 <meta name="description" content="Un an pour faire fortune : commerce, pirates et typhons en mer de Chine, 1840.">
 <link rel="stylesheet" href="fonts/fonts.css">
@@ -883,6 +884,10 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .g-tip p { margin: 0; }
 .g-bubble { position: fixed; z-index: 3; left: 50%; top: 50%; width: min(600px, calc(100vw - 16px)); display: flex; gap: 14px; padding: 15px 17px 13px; border-radius: 16px; background: linear-gradient(180deg, rgba(20, 30, 48, 0.98), rgba(11, 18, 30, 0.98)); border: 1px solid rgba(247, 213, 138, 0.5); box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 0, 0, 0.4); animation: g-in 0.25s ease-out; }
 .g-bubble.wide { width: min(640px, calc(100vw - 16px)); }
+/* (11/10/2026, Adrien : « Chen masque l'interface ») la bulle de la fenêtre Appareiller, en haut, la liste sur deux colonnes :
+   basse, elle fait descendre la fenêtre sans rien cacher */
+body:not(.mobile) .g-bubble.g-cols { width: min(860px, calc(100vw - 16px)); }
+body:not(.mobile) .g-bubble.g-cols .g-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; }
 .g-bubble.help { width: min(520px, calc(100vw - 16px)); }
 .g-bubble.narrow { width: min(390px, calc(100vw - 16px)); }
 .g-bubble.plain { padding-left: 18px; }
@@ -949,6 +954,9 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .notice-nav .btn.on { background: rgba(232, 181, 74, 0.14); color: var(--gold-hi); box-shadow: inset 3px 0 0 var(--gold); }
 .notice-nav .notice-replay { margin-top: auto; background: rgba(63, 174, 138, 0.12); border-color: rgba(63, 174, 138, 0.5); color: var(--jade-hi); }
 .notice-nav .notice-replay ~ .notice-replay { margin-top: 0; }   /* (le prologue et les leçons, groupés en bas, même devant une longue page) */
+/* (11/10/2026) « Rejouer le premier voyage », puis ses trois chapitres */
+.notice-nav .notice-replay-k { margin-top: auto; padding: 6px 6px 2px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); }
+.notice-nav .notice-replay-k ~ .notice-replay { margin-top: 0; }
 .notice-page { min-width: 0; }
 .notice-page h3 { margin: 0 0 10px; font: 700 21px var(--font-title); color: var(--paper); }
 .notice-page p { color: var(--text-2); }
@@ -983,6 +991,7 @@ button, .prompt, .objectives { touch-action: manipulation; }
 .mobile .notice-nav .btn { flex: none; }
 .mobile .notice-nav .btn.on { box-shadow: inset 0 -3px 0 var(--gold); }
 .mobile .notice-nav .notice-replay { margin-top: 0; }
+.mobile .notice-nav .notice-replay-k { margin-top: 0; flex: none; align-self: center; }
 
 /* ── Manette (js/pad.js) : le repère doré dans les fenêtres, les symboles des boutons (classe « pad » du body) ── */
 .pg { display: inline-flex; align-items: center; justify-content: center; min-width: 1.5em; height: 1.5em; padding: 0 0.32em; margin: 0 0.12em; border-radius: 0.75em; font: 800 0.74em/1 var(--font-ui); letter-spacing: 0; vertical-align: 0.08em; color: #0b1220; background: #d6dce6; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.28); }
@@ -1231,6 +1240,8 @@ html, body, #app, #app canvas { cursor: var(--cur); }
 /* (la fenêtre ouverte descend sous la bulle : js/guide.js, pushWin) */
 body.guide-top:not(.mobile) .overlay { padding-top: calc(var(--guide-top, 0px) + 4px); }
 body.guide-top:not(.mobile) .chart-cv { height: min(calc(100vh - 150px - var(--guide-top, 0px)), 1100px); }
+/* (11/10/2026) la fenêtre Appareiller sous la bulle du premier voyage : le bouton de départ reste visible, collé au bas */
+body.guide-top:not(.mobile) .chart-side [data-g="ch-go"] { position: sticky; bottom: 0; z-index: 2; box-shadow: 0 -10px 18px rgba(11, 18, 30, 0.85); }
 
 /* ── Les info-bulles du jeu (les attributs title, js/ui.js : UI.tipInit) : verre d'encre, liseré doré, petite pointe ── */
 .tip { position: absolute; z-index: 70; max-width: min(300px, calc(100vw - 16px)); padding: 8px 12px; border-radius: 10px; background: #142034; border: 1px solid rgba(232, 181, 74, 0.5); color: var(--text); font: 600 13px/1.45 var(--font-ui); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5); pointer-events: none; animation: tipIn 0.14s ease-out; }
@@ -1435,6 +1446,8 @@ body.guide-top:not(.mobile) .chart-cv { height: min(calc(100vh - 150px - var(--g
 
 /* ── Le marché : la carte des trajets à gauche (jours de mer vers chaque port) ── */
 .panel.wide.mk-wide { width: min(1340px, 100%); }
+/* (11/10/2026) le journal plus large sur ordinateur : les cases des prix disent « 14 tael × 119 piculs » */
+body:not(.mobile) .panel.wide.jr-wide { width: min(1180px, 100%); }
 .mk-split { display: grid; grid-template-columns: minmax(250px, 410px) minmax(0, 1fr); gap: 16px; align-items: center; }   /* (la carte centrée sur la liste des marchandises ; la fenêtre garde la hauteur de son contenu) */
 .mk-split > .mk-list { align-self: start; min-width: 0; }
 .mk-mapcol { position: sticky; top: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
@@ -1596,7 +1609,12 @@ body:not(.pad):not(.mobile) #seahud .btn.on[data-key]::after { background: rgba(
 /* le journal à l'étal : dans chaque case, l'achat en haut, la vente en bas, et combien à ce prix */
 /* (08/10/2026, choix 1B) deux bandes : en haut, jade, le port vous vend ; en bas, or, il vous achète ; le meilleur prix encadré */
 .jr-prices td.jr-cell { line-height: 1.3; padding: 4px 4px; }
-.jr-prices .jr-b, .jr-prices .jr-s { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; padding: 1px 6px; white-space: nowrap; }
+.jr-prices .jr-b, .jr-prices .jr-s { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 4px; padding: 1px 6px; white-space: nowrap; }
+/* (11/10/2026, choix d'Adrien) le prix et le tael à gauche, la quantité et son unité à droite, le « × » entre les deux */
+.jr-prices .jr-p { display: inline-flex; align-items: center; gap: 2px; }
+.jr-prices .jr-p .ico { width: 11px; height: 11px; }
+.jr-prices .jr-x { font-style: normal; font-size: 10px; color: var(--text-3); text-align: center; }
+.mobile .jr-prices .jr-u { display: none; }
 .jr-prices .jr-b { background: rgba(63, 174, 138, 0.15); border-radius: 7px 7px 0 0; }
 .jr-prices .jr-s { background: rgba(232, 181, 74, 0.11); border-radius: 0 0 7px 7px; }
 .jr-prices .jr-b b, .jr-prices .jr-s b { font-weight: 700; }
@@ -1610,7 +1628,9 @@ body:not(.pad):not(.mobile) #seahud .btn.on[data-key]::after { background: rgba(
 .jr-key i.s { background: rgba(232, 181, 74, 0.4); }
 .jr-key i.best { box-shadow: inset 0 0 0 1.5px var(--jade-hi); }
 .jr-prices .jr-mk { display: block; line-height: 1; height: 11px; }
-.ch-etal { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ch-etal { display: grid; gap: 1px; justify-items: end; white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 12.5px; color: var(--text-2); }
+.ch-etal b { color: var(--text-1); }
+.ch-etal .ico.xs { width: 11px; height: 11px; vertical-align: -1px; margin-left: 2px; }
 
 /* ── La nouvelle lune (10/10/2026, Mer de Chine) : écran du 1er du mois, jeu en pause jusqu'au clic ── */
 .moon { position: absolute; inset: 0; z-index: 70; display: flex; align-items: safe center; justify-content: center; overflow-y: auto; padding: 18px 16px; cursor: pointer; animation: mnIn 0.5s ease-out;
@@ -2861,7 +2881,8 @@ Lang.ui('fr', {
   'carte.rumeurQuand': '{port} · {marchandise} · {quand}',
   'carte.prixOuiDire': 'Prix rapportés il y a {jours} j (ouï-dire)',   // les prix d'un port donnés par un capitaine à la taverne (06/10/2026)
   'carte.pourVous': 'vos {n} : {prix} en moyenne',   // à côté d'un prix, pour ce qu'on a à bord : le prix moyen de toute la quantité
-  'carte.etal': 'achat {achat} ×{qa} · vente {vente} ×{qv}',   // les prix d'un port sur la carte de départ : le rayon et la commande notés, et combien à ce prix
+  'carte.etalAchat': 'achat {prix} × {q}',   // les prix d'un port sur la carte de départ, sur deux lignes : le rayon et la commande notés (prix : avec le tael), et combien à ce prix (q : « 119 piculs »)
+  'carte.etalVente': 'vente {prix} × {q}',
   'carte.onDit': 'On dit',
   'carte.onDitPenurie': '{Marchandise} : pénurie {quand}, pour {duree}, prix ×{fois}',   // Marchandise : le nom avec sa majuscule ; duree : « deux à trois semaines »
   'carte.onDitSurplus': '{Marchandise} : surplus {quand}, pour {duree}, prix ÷{fois}',
@@ -2915,7 +2936,7 @@ Lang.ui('fr', {
   'pause.carte': 'Carte des mers',
   'pause.journal': 'Journal de bord',
   'pause.options': 'Options',
-  'pause.aide': 'Aide et commandes',
+  'pause.aide': 'Aide',
   'pause.retraite': 'Prendre sa retraite (terminer la partie)',
   'pause.retraiteTitre': 'Prendre sa retraite',
   'pause.retraiteTexte': 'Terminer la carrière maintenant avec {somme} de valeur nette ?',
@@ -3061,7 +3082,8 @@ Lang.ui('fr', {
   'options.tactile.auto': 'Auto',
   'options.tactile.always': 'Toujours',
   'options.tactile.never': 'Jamais',
-  'options.clavier': 'CLAVIER',
+  'options.commandes': 'COMMANDES ET RACCOURCIS',   // (11/10/2026) les commandes, dans les Options plutôt que dans l'Aide
+  'commandes.titre': 'Commandes et raccourcis',
   'options.touches': 'Régler les touches',
   // (10/10/2026) Options › Touches
   'touches.titre': 'Touches du clavier',
@@ -3136,7 +3158,6 @@ Lang.ui('fr', {
   'aide.m.menu': 'Bouton « Menu »',
   'aide.m.fenetres': 'Bouton « Sortir »',
   'aide.p.fenetres': '{a} valide · {b} ferme · {lb} {rb} onglets',   // symboles des boutons de la manette
-  'aide.reglerTouches': 'Les touches du clavier se changent dans les Options.',
 
   // ── Écran titre ──
   'titre.choisirMer': 'Choisir la mer',
@@ -3463,118 +3484,23 @@ Lang.ui('fr', {
   'prologue.quitter': 'Quitter le prologue',
   'prologue.quitterTitre': 'Quitter le prologue ?',
   'prologue.quitterTexte': 'Ce voyage d\'essai s\'arrête là, sans récompense. Vous pourrez le reprendre depuis l\'Aide, sur l\'écran titre.',
-  'lecon.quitterTitre': 'Quitter la leçon ?',   // les leçons du mentor (08/10/2026, js/lessons.js) : Chen tutoie ; quitter une leçon
-  'lecon.quitterTexte': 'La leçon s\'arrête là. Votre carrière vous attend telle que vous l\'avez laissée.',
-  'lecon.quitter': 'Quitter la leçon',
-  'lecon.continuer': 'Continuer la leçon',
-  'lecon.finTitre': 'Leçon terminée',
-  'lecon.aller': 'Allons-y : touche « {bouton} », en bas de l\'écran.',
-  'lecon.fermer': 'Ferme cette fenêtre : le bouton « {sortir} ».',
-  'lecon.journal': 'Ouvre ton journal : le bouton « {bouton} », en haut.',
-  'lecon.carte': '{port} est déjà choisi : touche « {bouton} ».',
-  'lecon.quai': 'Cap sur {port} : touche « {bouton} ».',
-  'lecon.feuClavier': '{q} pour bâbord, {e} pour tribord, ou un clic du côté du pirate',
-  'lecon.feuTactile': 'les boutons Feu, à droite de l\'écran',
-  'lecon.feuManette': 'les gâchettes LT et RT',
+  // ── Les leçons du mentor : ce qui sert encore au premier voyage (gestes, barre, combat, marché ; Chen tutoie) ──
   'lecon.abordClavier': 'la touche {b}',
   'lecon.abordTactile': 'le bouton « À l\'abordage » qui apparaît sur lui',
   'lecon.abordManette': 'le bouton A',
-  'lecon.marche.titre': 'Leçon du marché',
-  'lecon.combat.titre': 'Leçon de combat',
-  'lecon.marche.e1': 'La barre',
-  'lecon.marche.e2': 'Le rayon vide',
-  'lecon.marche.e3': 'La commande',
-  'lecon.marche.e4': 'Brader',
-  'lecon.marche.e5': 'Répartir et laisser digérer',
-  'lecon.marche.e6': 'Pénurie et surplus',
-  'lecon.combat.e1': 'Le vent',
-  'lecon.combat.e2': 'Présenter le flanc',
-  'lecon.combat.e3': 'Le drapeau blanc',
-  'lecon.combat.e4': 'L\'abordage et le butin',
-  'lecon.combat.e5': 'Les épaves',
-  'lecon.combat.e6': 'Quand fuir',
-  'lecon.marche.intro1': 'Une dernière leçon, capitaine : l\'art du marchand. Tu sais acheter et vendre ; voyons comment comptent les marchands de ces mers.',
-  'lecon.marche.intro2': 'Pour la leçon, je t\'ai confié un {navire} et {somme}. Rien de ce qu\'on fera ici ne comptera dans ta carrière.',
-  'lecon.marche.barre1': 'La soie est ouverte. La barre dit tout : <b class="c-vert">en vert</b>, le rayon, au prix affiché ; <b class="c-or">en or</b>, la réserve, plus chère ; ensuite, plus rien.',
-  'lecon.marche.barre2': 'Pousse la réglette jusqu\'au bout et achète tout : le rayon et la réserve.',
-  'lecon.marche.rayon': 'Regarde : « Plus rien ». {port} t\'a vendu tout ce qu\'il avait. Son rayon se refait de moitié en {n} jours : reviens plus tard, ou achète ailleurs.',
-  'lecon.marche.mer': 'Une journée de mer. À {port}, on vendra.',
   'lecon.marche.commande': '{port} en <b>commande {n}</b> au prix ferme : c\'est le vert. Pousse la réglette plus loin, dans l\'orange, et regarde le total et l\'avertissement.',
   'lecon.marche.brade': 'Tu vois ? Au-delà de {n}, tu brades : chaque picul rapporte un peu moins que le précédent. Ramène la réglette sur {n}, et vends la commande seulement.',
-  'lecon.marche.repartir': 'Il te reste {reste} piculs de soie. D\'après ton journal, Macao en commande {q} à {prix}, à une journée d\'ici : c\'est là qu\'on écoulerait le reste, au prix ferme. Répartir entre les ports, c\'est tout le secret.',
   'lecon.marche.attendre': 'La commande de {port} est remplie : il n\'en prend presque plus. Attendons quelques jours au port, pour voir.',
   'lecon.marche.btnAttendre': 'Attendre {n} jours',
-  'lecon.marche.digere': 'Quelques jours ont passé : la commande est revenue à {n}. Une ville digère ce qu\'on lui vend. Reviens plus tard, ou va ailleurs : c\'est pareil pour un rayon qu\'on a vidé.',
-  'lecon.marche.penurie': 'Et quand une ville manque d\'une marchandise ? Une rumeur : pénurie de soie à Shanghai. Là-bas, la commande sera bien plus grande, au prix fort, et le rayon presque vide. Ces fiches te disent la cause, l\'effet et combien de temps ça dure.',
-  'lecon.marche.fin1': 'Retiens : le vert au prix ferme, puis on brade ; on répartit entre les ports ; on laisse les villes digérer.',
-  'lecon.marche.fin2': 'Le reste, la mer te l\'apprendra. Veux-tu apprendre aussi à te battre ?',
-  'lecon.combat.intro1': 'Leçon de combat, capitaine. Les pirates de ces mers ne font pas de cadeau : autant savoir s\'y prendre.',
-  'lecon.combat.intro2': 'Ton navire pour la leçon : {navire}, huit canons. Rien de ce qu\'on fera ici ne comptera dans ta carrière. Prends la mer.',
-  'lecon.combat.vent': 'La boussole, en bas à gauche : <b class="c-vert">en vert</b>, la bonne allure par rapport au vent. Vent arrière, tu files : c\'est par là qu\'on fuit.',
-  'lecon.combat.flanc': 'Un pirate ! Les canons tirent sur les côtés : mets-le à bâbord ou à tribord, puis feu, avec {touches}. Un bord recharge pendant que tu tires de l\'autre.',
   'lecon.combat.rendu': 'Drapeau blanc ! Un navire rendu ne tire plus. Approche-toi tout près et aborde-le, avec {touche}.',
   'lecon.combat.abordage': 'Tes marins contre les siens : le plus nombreux l\'emporte, et un navire rendu se défend mal. Ensuite, prends sa cargaison selon ta place libre, puis saborde-le.',
   'lecon.combat.epaves': 'Quand un navire coule, son or et ses caisses flottent un moment. Passe dessus pour les ramasser.',
-  'lecon.combat.fuir': 'Deux voiles rouges, derrière nous : trop pour nous. Toute voile, et file vent arrière !',
-  'lecon.combat.fin1': 'Bien manœuvré. Retiens : présenter le flanc, frapper jusqu\'au drapeau blanc, aborder, et savoir fuir quand ils sont trop nombreux.',
-  'lecon.combat.fin2': 'Et engage assez de marins : un abordage se gagne à la taverne.',
-  // (10/10/2026) la leçon de mer : la barre puis le combat, dans une zone d'entraînement au grand large (elle reprend les textes
-  // lecon.navigation.* pour la barre et lecon.combat.* pour le combat)
-  'lecon.mer.titre': 'Leçon de mer',
-  'lecon.mer.e1': 'Prendre la barre',
-  'lecon.mer.e2': 'Réduire la toile',
-  'lecon.mer.e3': 'Ferler et s\'arrêter',
-  'lecon.mer.e4': 'Le vent',
-  'lecon.mer.e5': 'Présenter le flanc',
-  'lecon.mer.e6': 'Le drapeau blanc, l\'abordage',
-  'lecon.mer.e7': 'Les épaves',
-  'lecon.mer.e8': 'Quand fuir',
-  'lecon.mer.e9': 'Accoster à la main',
-  'lecon.mer.intro1': 'Ton père disait : « Un capitaine qui ne sait pas ralentir finit sur les récifs. » Je t\'emmène au grand large, loin des côtes, là où l\'on apprend sans risque. Une lorcha armée de huit canons, vingt marins, et pas de pilote.',
-  'lecon.mer.intro2': 'D\'abord la barre : tourner, réduire la toile, s\'arrêter, lire le vent. Puis le combat : présenter le flanc, aborder, fuir. Et tu accosteras le long de ma jonque. Cinq minutes, et la mer n\'aura plus de secret.',
-  'lecon.mer.btnMer': 'Prendre la mer',
-  'lecon.mer.loin': '<b>Tu t\'éloignes !</b> Reviens vers le parcours : suis le fil doré.',
-  'lecon.mer.jonqueChen': 'Jonque de Chen',
-  'lecon.mer.accoster': 'Bien joué ! Ma jonque t\'attend à l\'ancre, au bout du fil doré. Approche à mi-voile ({reduire}), et quand « Accoster » s\'affiche, {accoster}.',
-  'lecon.mer.accosterChen': 'Accoster le long de la jonque de Chen',
-  'lecon.mer.fin1': 'Voilà : tu tiens la barre comme ton père, et tu sais te battre. Ralentir avant une côte, prendre le vent, présenter le flanc, savoir fuir : la mer pardonne à ceux qui savent tout cela.',
-  'lecon.mer.fin2': 'Le pilote fera le chemin quand tu voudras ; au moindre récif ou au premier pirate, tu sauras reprendre la main.',
-  'lecon.mer.reprendre': 'Reprendre ma carrière',
-  'lecon.mer.promesse': 'Au prochain port, je t\'apprends la barre : quelques minutes, au grand large.',   // ajouté au conseil du premier échouage
-  'lecon.mer.plusTard': 'Plus tard',
-  'lecon.mer.offreTitre': 'Jamais tenu la barre ?',   // l'offre de la leçon, en tête de la fenêtre Appareiller
-  'lecon.mer.offreTexte': '{mentor} te montre en 5 minutes : barrer, ralentir, combattre, accoster.',
-  'lecon.mer.offreJetons': '+{n} jetons',
-  'lecon.mer.pasDeCarte': 'Pas de carte pendant la leçon : suis le fil doré.',
-  // (10/10/2026) la leçon de navigation : un slalom au large de Hong Kong ; {tourner}, {reduire}, {ferler}, {envoyer}, {feu},
-  // {accoster} : les gestes selon l'appareil (lecon.navigation.k.*), déjà mis en forme
-  'lecon.navigation.titre': 'Leçon de navigation',
-  'lecon.navigation.e1': 'Prendre la barre',
-  'lecon.navigation.e2': 'Réduire la toile',
-  'lecon.navigation.e3': 'Ferler et s\'arrêter',
-  'lecon.navigation.e4': 'Le vent',
-  'lecon.navigation.e5': 'La cible',
-  'lecon.navigation.e6': 'Accoster à la main',
-  'lecon.navigation.intro1': 'Ton père disait : « Un capitaine qui ne sait pas ralentir finit sur les récifs. » Je t\'emmène au large de Hong Kong, sans pilote cette fois.',
-  'lecon.navigation.intro2': 'Tourner, réduire la toile, t\'arrêter, lire le vent, présenter le flanc, accoster à la main : trois minutes, et tu tiendras la barre.',
-  'lecon.navigation.btnMer': 'Prendre la mer',
   'lecon.navigation.barre': 'À toi la barre : le pilote est coupé. {tourner} pour tourner. Passe entre les deux <b>bouées vertes</b>, sur ta droite.',
   'lecon.navigation.rate': 'Raté ! Fais demi-tour et repasse entre les bouées.',
   'lecon.navigation.toile': 'Bien tenu ! Devant, sur ta gauche, le chenal se resserre entre deux récifs. À toute voile, tu n\'y passeras pas : <b>réduis la toile</b> ({reduire}), regarde la vitesse baisser, puis passe entre les <b>bouées rouges</b>.',
   'lecon.navigation.trop': 'Trop vite pour le chenal ! Réduis la toile ({reduire}), fais demi-tour et repasse entre les bouées rouges.',
   'lecon.navigation.ferler': 'Le <b>banc de sable</b>, droit devant, sous l\'eau claire. <b>Ferle tout</b> : {ferler}. Le navire glisse, puis s\'arrête : avant la ligne rouge, si tu peux.',
   'lecon.navigation.vent': 'La boussole, en bas à gauche : <b>en vert</b>, la bonne allure par rapport au vent. Envoie toute la toile ({envoyer}) et tourne jusqu\'au vert : regarde la vitesse monter.',
-  'lecon.navigation.cible': 'Une vieille coque sert de <b>cible</b>, là, à l\'ancre. Tes canons tirent sur les côtés : présente-lui le flanc, puis feu : {feu}.',
-  'lecon.navigation.accoster': 'Cap sur {port}. Sans pilote, c\'est toi qui accostes : approche à mi-voile, et quand « Accoster » s\'affiche, {accoster}.',
-  'lecon.navigation.cibleNom': 'Vieille coque',
-  'lecon.navigation.fin1': 'Voilà : tu tiens la barre comme ton père. Ralentir avant une côte, s\'arrêter, lire le vent : la mer pardonne à ceux qui savent freiner.',
-  'lecon.navigation.fin2': 'Le pilote fera le chemin quand tu voudras ; au moindre récif, tu sauras reprendre la main.',
-  'lecon.navigation.reprendre': 'Reprendre ma carrière',
-  'lecon.navigation.promesse': 'Au prochain port, je t\'apprends la barre : trois minutes, entre les récifs.',   // ajouté au conseil du premier échouage
-  'lecon.navigation.plusTard': 'Plus tard',
-  'lecon.navigation.offreTitre': 'Jamais tenu la barre ?',   // l'offre de la leçon, en tête de la fenêtre Appareiller
-  'lecon.navigation.offreTexte': '{mentor} te montre en 3 minutes : tourner, ralentir, accoster.',
-  'lecon.navigation.offreJetons': '+{n} jetons',
   'lecon.navigation.k.ouFleches': '(ou ← →)',
   'lecon.navigation.k.encore': '{k} encore une fois',
   'lecon.navigation.k.deuxFois': '{k} deux fois',
@@ -3588,6 +3514,105 @@ Lang.ui('fr', {
   'lecon.navigation.k.lacher': 'lâche la barre',
   'lecon.navigation.k.touteVoile': '« Toute voile »',
   'lecon.navigation.k.toucher': 'touche-la',
+  // ── Le premier voyage (11/10/2026, js/voyage.js) : la soie de Canton à Manille, puis le riz vers Hong Kong, en trois chapitres ;
+  // Chen tutoie le joueur (les autres textes le vouvoient). Les répliques reprises de l'ancien prologue sont dans les textes de la mer
+  'voyage.carnet': 'Premier voyage · chapitre {n}/3',   // le titre du carnet, en haut à gauche
+  'voyage.e.but': 'Le but du voyage',   // les lignes du carnet, chapitre 1
+  'voyage.e.wang': 'Emprunter à Wang',
+  'voyage.e.jonque': 'Acheter la jonque',
+  'voyage.e.equipage': 'Engager l\'équipage',
+  'voyage.e.vivres': 'Les vivres',
+  'voyage.e.soie': 'La soie : rayon et réserve',
+  'voyage.e.appareiller': 'Appareiller pour Manille',   // chapitre 2
+  'voyage.e.pilote': 'Le pilote',
+  'voyage.e.barre': 'Prendre la barre',
+  'voyage.e.toile': 'Réduire la toile',
+  'voyage.e.ferler': 'Ferler et s\'arrêter',
+  'voyage.e.vent': 'Le vent',
+  'voyage.e.pirate': 'Un pirate : le flanc',
+  'voyage.e.abordage': 'Le drapeau blanc, l\'abordage',
+  'voyage.e.epaves': 'Les épaves',
+  'voyage.e.manille': 'Accoster à Manille',
+  'voyage.e.commande': 'Vendre la commande',   // chapitre 3
+  'voyage.e.brader': 'Brader',
+  'voyage.e.revient': 'La commande revient',
+  'voyage.e.rumeur': 'Une rumeur à la taverne',
+  'voyage.e.journal': 'Le journal de bord',
+  'voyage.e.riz': 'Acheter du riz',
+  'voyage.e.retour': 'Cap sur Hong Kong',
+  'voyage.e.penurie': 'Vendre pendant la pénurie',
+  'voyage.e.port': 'Dette, coque et chantier',
+  'voyage.ch1': 'Canton, préparer le voyage',   // les titres des chapitres (Aide, fin de chapitre)
+  'voyage.ch2': 'La traversée vers Manille',
+  'voyage.ch3': 'Manille, puis Hong Kong',
+  'voyage.chBouton': '{n} · {titre}',   // un chapitre, dans l'Aide de l'écran titre
+  'voyage.chapitreN': 'le chapitre {n}',
+  'voyage.rejouer': 'Le premier voyage',   // au-dessus des trois chapitres, dans l'Aide
+  'voyage.rejouerTitre': 'Le premier voyage se rejoue chapitre par chapitre depuis l\'Aide de l\'écran titre.',
+  'voyage.continuer': 'Continuer le premier voyage',   // écran titre : une partie d'essai en cours
+  'voyage.reprendre': 'Reprendre le premier voyage · chapitre {n}',   // écran titre : un voyage laissé « Plus tard »
+  'voyage.offre.titre': 'Le premier voyage ?',   // la proposition, au premier « Nouvelle carrière »
+  'voyage.offre.texte': '{mentor}, second de votre père, vous emmène sur un vrai trajet : la soie de Canton à Manille, puis le riz vers Hong Kong. Emprunter, armer un navire, barrer, se battre, acheter, revendre.',
+  'voyage.offre.duree': 'Environ 20 minutes · 3 chapitres',
+  'voyage.offre.reprise': 'Reprise au chapitre {n}',
+  'voyage.offre.suivre': 'Suivre le premier voyage',
+  'voyage.quitter': 'Quitter le premier voyage',
+  'voyage.quitterTitre': 'Quitter le premier voyage ?',
+  'voyage.quitterTexte': 'Le voyage s\'arrête là. Vous reprendrez ce chapitre depuis l\'écran titre ou l\'Aide ; votre carrière vous attend telle que vous l\'avez laissée.',
+  'voyage.continuerVoyage': 'Continuer le voyage',
+  'voyage.finChapitre': 'Chapitre {n} terminé',
+  'voyage.suite': 'Continuer : chapitre {n}',
+  'voyage.plusTard': 'Plus tard',
+  'voyage.carriere': 'Reprendre ma carrière',
+  'voyage.reste': 'Termine aussi {chapitres} : tes {n} jetons de jade t\'attendent au bout des trois chapitres.',
+  'voyage.rejoue': 'Cette fois, pas de jetons : je ne les donne qu\'une fois.',
+  'voyage.promesse': 'Au prochain départ, je te propose la traversée du premier voyage : la barre, puis le combat.',   // ajouté au conseil du premier échouage
+  'voyage.nav.titre': 'Jamais tenu la barre ?',   // l'offre de la traversée, en tête de la fenêtre Appareiller
+  'voyage.nav.texte': '{mentor} te montre, sur la route de Manille : barrer, ralentir, combattre, aborder.',
+  'voyage.nav.bouton': 'La traversée',
+  'voyage.pasDeCarte': 'Pendant le premier voyage, le cap reste sur {port}.',
+  'voyage.pasDePilote': 'Pas de pilote pendant l\'exercice : c\'est toi qui tiens la barre.',
+  'voyage.k.pilote': 'le bouton « Pilote »',   // au doigt
+  'voyage.k.vite': 'le bouton « ×2 »',
+  'voyage.k.piloteClavier': '{k}, ou le bouton « Pilote »',   // au clavier ({k} : la touche choisie)
+  'voyage.k.viteClavier': '{k}, ou le bouton « ×2 »',
+  // les répliques de Chen ; {bouton} : le libellé du bâtiment dans la barre du port ; {pilote}, {vite}, {accoster}, {feu} : les
+  // gestes selon l'appareil ; {q}, {e} : les touches de tir choisies
+  'voyage.intro2': 'Ton but : <b>faire fortune avant le {date}</b>. Les plus grands marchands de Canton, on les appelle les taï-pans ; ton père rêvait d\'en devenir un. Aujourd\'hui, un vrai voyage : <b>la soie de Canton jusqu\'à Manille</b>, puis le riz vers Hong Kong. Suis la liste, en haut à gauche.',
+  'voyage.vivres2': 'Manille est à une dizaine de jours de mer : remplis la réserve à <b>40 jours</b>. C\'est la ligne dorée, tout en haut du marché.',
+  'voyage.soie1': 'La <b>soie</b>, maintenant. La barre dit tout : <b class="c-vert">en vert</b>, le rayon, au prix affiché ; <b class="c-or">en or</b>, la réserve du marchand, plus chère ; ensuite, plus rien. D\'autres sont passés avant nous : il ne reste que <b>{rayon} piculs</b> en rayon.',
+  'voyage.soie2': 'Canton la vend <b>{prix}</b> le picul, <b>{reserve}</b> dans la réserve ; le carnet de ton père dit que Manille la paie près de <b>{revente}</b>. Pousse la réglette jusqu\'au bout, dans l\'or : <b>{n} piculs</b>, tout ce que ta bourse permet.',
+  'voyage.abord': 'La soie est à bord. Le rayon de Canton se refait de moitié en {n} jours : au prochain passage, il y en aura de nouveau. Ferme le marché.',
+  'voyage.fin1': 'La cale est chargée, l\'équipage nourri, et Wang a ta signature. La suite se passe en mer : la barre, le vent, et peut-être des pirates…',
+  'voyage.carte': 'J\'ai marqué <b>Manille</b> sur la carte : une dizaine de jours de mer. Voici comment lire cette fenêtre :',
+  'voyage.carte2': '<b>Le voyage :</b> sa durée et son danger. La route de Manille passe au large : on y croise parfois des pirates.',
+  'voyage.pilote': 'En mer ! Le <b>pilote automatique</b> suit la route tracée : il nous sort de l\'estuaire. On ne s\'arrête ni à Hong Kong ni à Macao. Au large, je te passe la barre.',
+  'voyage.estuaire': 'Suis le fil doré jusqu\'au large : je te passe la barre là-bas.',
+  'voyage.loin': '<b>Tu t\'éloignes !</b> Reviens vers les bouées : suis le fil doré.',
+  'voyage.route': 'Bien barré, capitaine ! Cap sur <b>Manille</b>, maintenant : relance le <b>pilote</b> ({pilote}). Il suit la route tout seul, et se coupe dès que tu barres.',
+  'voyage.croisiere': 'Le fil doré montre le port. Relance le pilote ({pilote}), ou barre toi-même.',
+  'voyage.pirate': 'Des voiles noires, droit sur nous : <b>un pirate</b> ! En combat, le temps du calendrier passe bien moins vite : on a le temps de manœuvrer. On pourrait fuir, vent arrière ; aujourd\'hui, on se bat <b>jusqu\'au bout</b>.',
+  'voyage.flanc': 'Les canons tirent <b>sur les côtés</b> : présente-lui le flanc, à bâbord ou à tribord. Tu barres au clavier ; pour tirer, {q} à bâbord, {e} à tribord, ou <b>un clic de souris</b> : la bordée part du côté où tu cliques. Un bord recharge pendant que tu tires de l\'autre.',
+  'voyage.flancAutre': 'Les canons tirent <b>sur les côtés</b> : présente-lui le flanc, à bâbord ou à tribord, puis feu : {feu}. Un bord recharge pendant que tu tires de l\'autre.',
+  'voyage.flancRappel': 'Présente-lui le flanc, et feu : {feu}.',
+  'voyage.manille': 'Belle prise ! Reprends la route de <b>Manille</b> : relance le pilote ({pilote}), ou barre toi-même.',
+  'voyage.approche': 'Manille en vue ! Le port qu\'on a choisi <b>s\'ouvre à l\'approche</b> : le pilote y accoste tout seul ; à la barre, quand « Accoster » s\'affiche, {accoster}.',
+  'voyage.fin2': 'Belle traversée, capitaine : la barre, le vent, et ton premier pirate. Voyons ce que Manille paie pour ta soie.',
+  'voyage.arrivee': 'Nous voilà à <b>Manille</b>. Les galions espagnols paient la soie au prix fort : au marché, touche « {bouton} ».',
+  'voyage.digere': 'Six jours ont passé : la commande est revenue à <b>{n}</b>. Une ville digère ce qu\'on lui vend. Vends le reste de ta soie.',
+  'voyage.tournee': 'Avant de repartir, passons à la <b>taverne</b> : touche « {bouton} ». Les marins boivent, et ils parlent.',
+  'voyage.tournee2': 'Offre une tournée : pour {cout}, les marins racontent ce qu\'ils ont vu ou entendu. Ce qui est sûr va dans ton journal.',
+  'voyage.rumeur': 'Tiens donc : <b>Hong Kong va manquer de riz</b>, dans trois jours, pour deux ou trois semaines. Et comme par hasard, le riz ne vaut presque rien ici… Ferme la taverne : on va lire ça au journal.',
+  'voyage.prix': 'Le premier onglet garde <b>les prix vus</b> dans chaque port. Dans chaque case, en haut ce que le port te vend, en bas ce qu\'il t\'achète : le prix, puis combien. Lis la colonne du <b>riz</b> : il ne vaut presque rien à Manille, et la flèche <b class="c-or">▲</b> dit que Hong Kong va le payer cher.',
+  'voyage.rumeurs': 'L\'onglet <b>Rumeurs</b> range ce que tu as entendu : la fiche dit la cause, de combien les prix bougent et jusqu\'à quand. Les autres onglets gardent tes contrats, le carnet de tes voyages et les nouvelles de la mer.',
+  'voyage.riz': 'Le riz : <b>{prix}</b> le picul. Remplis la cale : pousse la réglette jusqu\'au bout, <b>{n} piculs</b>.',
+  'voyage.quaiHK': 'La cale est pleine de riz. Cap sur Hong Kong : touche « {bouton} ».',
+  'voyage.carteHK': 'J\'ai marqué <b>Hong Kong</b>. En route !',
+  'voyage.retour': 'Cap sur <b>Hong Kong</b>, une dizaine de jours de mer. Cette fois, ni pirate ni tempête : le pilote s\'en charge. Pour que le temps passe plus vite : {vite}.',
+  'voyage.arriveeHK': 'Hong Kong ! La pénurie a commencé. Au marché, touche « {bouton} ».',
+  'voyage.vente': 'Pénurie de riz : Hong Kong en <b>commande {n}</b> à <b>{offre}</b> le picul, quand tu l\'as payé <b>{paye}</b> à Manille. Vends tout.',
+  'voyage.benefice': 'Voilà le métier : <b>acheter là où c\'est produit, revendre là où ça manque</b>, et une rumeur entendue au bon moment. Ferme le marché.',
+  'voyage.port2': '<b>La coque</b> a souffert au combat. Tempêtes et boulets l\'abîment ; à zéro, c\'est le naufrage.',
   'prologue.continuer': 'Continuer le prologue',
   'prologue.voirHeritage': 'Voir l\'Héritage ›',
   'prologue.carriere': 'Commencer ma carrière',
@@ -3779,7 +3804,7 @@ Lang.ui('fr', {
   'notice.heritage.titre': 'Les jetons et l\'Héritage',
   'notice.heritage.1': 'À la fin de chaque partie, la fortune bâtie pendant celle-ci vous rapporte des {jetons}, au moins un si vous avez fait escale : ce que vous possédiez au départ (navire de famille, coffre) ne compte pas. Les hauts faits en donnent aussi.',
   'notice.heritage.2': 'Dépensez-les dans l\'<b>Héritage</b>, depuis l\'écran titre : chaque amélioration aide toutes vos parties suivantes dans cette mer. Les jetons servent aussi aux couleurs des voiles.',
-  'notice.touches.titre': 'Les commandes',
+  'notice.commandesOptions': 'Les commandes du clavier, de la souris et de la manette sont dans les Options : « Commandes et raccourcis ».',
   // ── Crédits (chapitre de l'Aide, et CREDITS.txt des versions livrées ; liste dans js/credits.js) ──
   'notice.credits.titre': 'Crédits',
   'credits.jeu': 'Le jeu',
@@ -118591,6 +118616,22 @@ const Game = {
     Store.set(GLOBAL_KEY, d);
     return !!g;
   },
+  // (11/10/2026, demande d'Adrien : « je veux vivre le premier voyage comme à la première ouverture ») la version test du site
+  // remise à zéro, une fois par clé WEB_RESET (posée par tools/publish-web.js) : toutes les mers repartent de zéro (jetons, Héritage,
+  // hauts faits, records, parties, premier voyage), avec les aides et les voiles ; les réglages et la langue restent. Ni le jeu
+  // lancé en local, ni la démo, ni la version Steam n'y passent
+  webReset() {
+    if (typeof WEB_RESET === 'undefined' || !WEB_RESET || (typeof DEMO !== 'undefined' && DEMO)) return false;
+    const g = Store.get(GLOBAL_KEY, null);
+    if (g && g.webReset === WEB_RESET) return false;
+    for (const id of SEA_ORDER) { Store.del(metaKey(id)); Store.del(runKey(id)); Store.del(runKey(id) + '.avantLecon'); }
+    const d = this.defaultGlobal();
+    if (g && g.settings) Object.assign(d.settings, g.settings);
+    if (g && g.lang) d.lang = g.lang;
+    d.webReset = WEB_RESET;
+    Store.set(GLOBAL_KEY, d);
+    return !!g;
+  },
   // tout effacer : toutes les mers et les réglages
   // efface la progression d'une mer (la mer en cours par défaut) ; les autres mers, les voiles et les réglages restent
   eraseSea(id) {
@@ -118716,7 +118757,7 @@ const Game = {
     run.worth0 = this.worth();
     this.monthSnap();
     this.log(TXT.startLog, 'career');
-    if (o.mode === 'lecon' && typeof Lessons !== 'undefined') Lessons.setup(run, o.lecon);
+    if (o.mode === 'lecon' && typeof Lessons !== 'undefined') Lessons.setup(run, o.lecon, o);
     this.checkTitle(true);
     return run;
   },
@@ -119131,7 +119172,7 @@ const Game = {
     // (08/10/2026) le 1er du mois : la solde, puis la feuille du mois à l'écran (UI.monthLeaf), qui dit aussi la solde payée
     // (10/10/2026, Mer de Chine : l'écran de la nouvelle lune) le bilan du mois écoulé, pris avant la paye ; la paye ; la photo
     // des compteurs pour le mois qui commence (la paye du 1er compte donc dans le mois qui commence, pas dans le bilan)
-    // (10/10/2026) pas pendant une leçon : le slalom de la leçon de navigation passe parfois un 1er du mois
+    // (10/10/2026) pas pendant une leçon : le premier voyage passe parfois un 1er du mois (ni feuille ni solde)
     if (t.d === 1 && this.run.mode !== 'lecon') {
       const recap = this.monthRecap(d);
       const pay = this.payWages() || {};
@@ -119612,6 +119653,7 @@ const Game = {
   },
   rumorPick() {
     const r = this.run;
+    if (typeof Voyage !== 'undefined') { const x = Voyage.rumorPick(); if (x) return x; }   // (le premier voyage : la pénurie de riz à Hong Kong)
     if (SEA.rules && SEA.rules.rumor) { const x = SEA.rules.rumor(); if (x) return x; }   // rumeurs propres à la mer
     const d = r.day;
     const cands = r.events.filter(e => e.p !== r.port && e.start + e.dur > d && e.start - d < 28 && !r.rumors.includes(e.id) && !this.portDormant(e.p));
@@ -119722,8 +119764,8 @@ const Game = {
     for (const c of this.deliverable(pid)) out.push({ kind: 'deliver', c });
     // les hommes de l'usurier
     if (this.debtOverdue() && R.chance(0.45)) out.push({ kind: 'wang' });
-    // voleurs
-    if (r.cash > 6000 && R.chance(P.thieves != null ? P.thieves : SEA.thieves)) {
+    // voleurs (pas dans une leçon)
+    if (r.cash > 6000 && r.mode !== 'lecon' && R.chance(P.thieves != null ? P.thieves : SEA.thieves)) {
       const t = Math.round(r.cash * R.range(0.08, 0.18));
       r.cash -= t;
       out.push({ kind: 'toast', t: T('port.voleurs', { somme: fmt(t), monnaie: motMonnaie(t) }), k: 'bad' });
@@ -119852,8 +119894,8 @@ const Game = {
   // ════════════ Objectifs ════════════
   objectives() {
     const r = this.run, s = r.ship, out = [];
-    // le prologue : son carnet d'étapes (textes de la mer), l'étape en cours marquée
-    if (r.mode === 'lecon' && typeof Lessons !== 'undefined' && Lessons.on) return Lessons.objectives();
+    // le prologue, le premier voyage : leur carnet d'étapes, l'étape en cours marquée
+    if (r.mode === 'lecon' && typeof Lessons !== 'undefined' && Lessons.on) return Voyage.objectives();
     if (r.mode === 'prologue' && TXT.prologue) {
       const k = Prologue.rank();
       return { title: TXT.prologue.titre, list: TXT.prologue.etapes.map((t, i) => ({ t, done: i + 1 < k, cur: i + 1 === k })) };
@@ -121216,7 +121258,7 @@ const SeaScene = {
     for (let i = 0; i < 2; i++) if (R.chance(0.6)) this.spawnMerchant(true);
     // (brouillard : un banc de brume peut déjà traîner au départ)
     if (SEA.fog && R.chance(Math.min(0.8, this.fogRate(this.player.x, this.player.y) * 2))) this.spawnFog(true);
-    if (r.mode === 'lecon') Lessons.seaEnter(this);   // (la leçon de navigation pose son parcours, au large de Hong Kong)
+    if (r.mode === 'lecon') Lessons.seaEnter(this);   // (le premier voyage pose le parcours de la barre sur la route de Manille)
     Sound.play('sea');
     Sound.ambient('sea', 0.6); Sound.ambient('port', 0); Sound.ambient('rain', 0);
   },
@@ -121685,6 +121727,7 @@ const SeaScene = {
     // nuits passées sur la grève)
     let dd = dt * DAYS_PER_SEC * (this.combat ? 1 / 15 : 1);
     if (SEA.rules && SEA.rules.dayMul) dd *= SEA.rules.dayMul(this);
+    if (r.mode === 'lecon' && Lessons.timeStill()) dd = 0;   // (le premier voyage : le calendrier arrêté pendant l'exercice de la barre)
     Game.advance(dd);
     // la solde impayée peut faire déserter des marins pendant le voyage
     if (r.ship) p.crew = Math.min(p.crew, r.ship.crew);
@@ -121729,7 +121772,7 @@ const SeaScene = {
       this.move(s, dt, s === p ? wind : World.wind(r.day, s.x, s.y));
     }
     this.ships = this.ships.filter(s => !(s.dead && s.sinkT > 4) && !(s !== p && Math.hypot(s.x - p.x, s.y - p.y) > 1100));
-    if (r.mode === 'lecon') Lessons.seaUpdate(this, dt);   // (la leçon de navigation : portes, récifs, banc de sable, vent)
+    if (r.mode === 'lecon') Lessons.seaUpdate(this, dt);   // (le premier voyage : portes, récifs, banc de sable, vent)
     // collisions entre navires
     for (let i = 0; i < this.ships.length; i++) for (let j = i + 1; j < this.ships.length; j++) {
       const a = this.ships[i], b = this.ships[j];
@@ -121838,7 +121881,7 @@ const SeaScene = {
     this.updatePrompt();
     // arrivée automatique
     const destP = World.ports.find(q => q.id === this.dest);
-    if (destP && Math.hypot(destP.x - p.x, destP.y - p.y) < 22 && !this.combat) this.dock(destP.id);
+    if (destP && Math.hypot(destP.x - p.x, destP.y - p.y) < 22 && !this.combat && !Lessons.portClosed(destP.id)) this.dock(destP.id);
     // état du navire → partie
     r.ship.hull = Math.max(0, p.hull); r.ship.crew = p.crew;
   },
@@ -121850,7 +121893,7 @@ const SeaScene = {
     if (!pr) for (const port of World.ports) {
       const d = Math.hypot(port.x - p.x, port.y - p.y);
       if ((port.id === r.lastPort && this.voyageT < 8) || Game.portDormant(port.id)) continue;
-      if (Lessons.isNav()) break;   // (la leçon de mer : on n'accoste qu'à la fin, le long de la jonque de Chen)
+      if (Lessons.portClosed(port.id)) continue;   // (le premier voyage : ni Hong Kong ni Macao en passant, Manille après le pirate)
       // (10/10/2026, retours des testeurs : à la main, on s'échouait en cherchant le quai au fond de la rade) en mer de Chine,
       // le port où l'on va s'accoste aussi d'ici, sans attendre d'y toucher
       const destOk = port.id !== this.dest || (SEA.debutant && SEA.debutant.dockDest && !this.auto);
@@ -121860,13 +121903,14 @@ const SeaScene = {
       if (tr.found) continue;
       if (Math.hypot(tr.x - p.x, tr.y - p.y) < 34) { pr = { kind: 'dig', tr, text: p.v < 20 ? T('mer.deterrer') : T('mer.ralentir'), key: Input.keyLabel('dock') }; break; }
     }
-    if (!pr && r.mode === 'lecon') pr = Lessons.seaPrompt(p);   // (la leçon de mer : accoster le long de la jonque de Chen)
     // (une mer peut proposer sa propre invite : { kind: 'sea', text, key, act })
     if (!pr && SEA.rules && SEA.rules.prompt) pr = SEA.rules.prompt(p, this) || null;
     this.prompt = pr;
   },
   toggleAuto() {
     if (!this.dest) return;
+    // (le premier voyage : pas de pilote pendant l'exercice de la barre)
+    if (!this.auto && Lessons.timeStill() && Lessons.isNav()) { Bus.emit('toast', { t: T('voyage.pasDePilote'), k: '' }); return; }
     this.auto = !this.auto;
     if (this.auto) { this.setDest(this.dest); Bus.emit('toast', { t: T('mer.piloteEngage'), k: '' }); }
   },
@@ -121917,7 +121961,7 @@ const SeaScene = {
           v.hull -= v.v * 0.1 * (SEA.groundDmg || 1); this.shake = 4; Sound.sfxPlay('hit', { vol: 0.6 });
           this.float(v.x, v.y - 14, T('mer.echoue'), '#ffd87a');
           this.grounded = 1.5;
-          Lessons.grounded();   // (le premier échouage : le conseil du mentor, et la leçon de navigation reproposée au port)
+          Voyage.grounded();   // (le premier échouage : le conseil du mentor, et la traversée du premier voyage reproposée au départ)
         }
         v.v *= 0.75;
       }
@@ -121951,7 +121995,8 @@ const SeaScene = {
     const dx = p.x - s.x, dy = p.y - s.y, d = Math.hypot(dx, dy);
     const angTo = Math.atan2(dy, dx);
     let des = angTo, sail = 2;
-    const fleeing = s.ai === 'flee' || (!s.named && !s.wang && s.hull < s.hullMax * 0.25);
+    // (le pirate du premier voyage ne fuit pas : on se bat jusqu'au bout, choix d'Adrien du 11/10/2026)
+    const fleeing = s.ai === 'flee' || (!s.named && !s.wang && !s.lessonFoe && s.hull < s.hullMax * 0.25);
     s.fleeing = fleeing;
     if (p.dead) { des = angTo + Math.PI; }
     else if (fleeing) { des = angTo + Math.PI; }
@@ -122155,7 +122200,7 @@ const SeaScene = {
     if (this.spawnT > 0) return;
     this.spawnT = 1;
     const r = Game.run, p = this.player;
-    if (r.mode === 'prologue' || r.mode === 'lecon') { if (!(r.lecon && r.lecon.id === 'navigation') && this.ships.filter(s => s.kind === 'merchant').length < 2 && R.chance(0.06)) this.spawnMerchant(false); return; }
+    if (r.mode === 'prologue' || r.mode === 'lecon') { if (!Lessons.isNav() && this.ships.filter(s => s.kind === 'merchant').length < 2 && R.chance(0.06)) this.spawnMerchant(false); return; }
     // pirates recherchés
     for (const np of NAMED_PIRATES.concat([DRAGON])) {
       if (r.hunts[np.id] === 'active' && !this.spawnedNamed[np.id] && Math.hypot(lonX(np.lon) - p.x, latY(np.lat) - p.y) < 430) this.spawnNamed(np);
@@ -122351,7 +122396,7 @@ const SeaScene = {
       if (!inView(l.x, l.y, 20)) continue;
       this.drawLoot(ctx, l, t);
     }
-    if (Game.run.mode === 'lecon') Lessons.drawSea(ctx, t);   // (bouées, récifs et banc de sable de la leçon de navigation)
+    if (Game.run.mode === 'lecon') Lessons.drawSea(ctx, t);   // (le fil doré ; bouées, récifs et banc de sable du premier voyage)
     this.drawWakes(ctx);
     this.fx.draw(ctx, 0, 0, 'wake');
     this.drawCritters(ctx);
@@ -123326,7 +123371,7 @@ const UI = {
     if (!this.el.banner.hidden && (this.bannerTick = (this.bannerTick || 0) + 1) % 6 === 0) this.bannerAvoid();   // (une bulle ou un message arrivé après le bandeau)
     // le guide : l'étape du prologue ou de la présentation de la mer, puis les éléments montrés suivis à l'écran
     Prologue.tick();
-    Lessons.tick();
+    Voyage.tick();
     SeaIntro.tick();
     Guide.frame();
     const mode = this.mode;
@@ -123577,7 +123622,8 @@ const UI = {
     const heard = pro ? null : Game.rumorsFor(gi).find(e => e.p !== pid);
     // le conseil du mentor (sa voix, il tutoie ; seulement dans une mer qui a un mentor, si ses conseils ne sont pas coupés) : à
     // l'achat, où la revendre d'après le journal, sans promettre que le marchand en prenne encore autant ; à la vente, les paliers
-    const mentor = !pro && SEA.mentorSeal && Game.global.settings.chen !== false;
+    // (pas pendant le premier voyage : Chen y dit lui-même où aller, et son conseil chiffré envoyait la soie à Hong Kong)
+    const mentor = !pro && !Lessons.on && SEA.mentorSeal && Game.global.settings.chen !== false;
     const chenT = h('span');
     const chen = mentor ? h('p', { class: 'mk-chen' }, h('span', { class: 'mk-seal xs' + (SEA.mentorWax ? ' wax' : ''), 'aria-hidden': 'true' }, SEA.mentorSeal), chenT) : null;
     const advice = n => {
@@ -123736,7 +123782,7 @@ const UI = {
     // (ce que la bourse permet, 90 jours au plus ; 40 jours proposés, comme avant)
     const top = crew ? Math.max(now, Math.min(90, Math.floor(Game.foodDays() + r.cash / Math.max(0.01, perDay)))) : now;
     // (le prologue : les 40 jours que dit le mentor, la réglette ne bouge pas)
-    const slider = h('input', { type: 'range', min: now, max: Math.max(now, top), value: U.clamp(40, now, Math.max(now, top)), step: 1, 'aria-label': T('marche.vivresJours'), id: 'mk-food', disabled: Prologue.on });
+    const slider = h('input', { type: 'range', min: now, max: Math.max(now, top), value: U.clamp(40, now, Math.max(now, top)), step: 1, 'aria-label': T('marche.vivresJours'), id: 'mk-food', disabled: Prologue.on || Voyage.imposed() });
     const out = h('output', null, '');
     const act = btn(T('marche.ravitailler'), () => {
       const c = Game.buyFood(+slider.value);
@@ -123863,9 +123909,9 @@ const UI = {
         if (!s) kids.push(h('p', { class: 'hint' }, T('taverne.sansNavire')));
         else {
           const room = Math.max(0, st.crewMax - s.crew), cost = Game.hireCost();
-          // (le prologue : le nombre que dit le mentor, sans réglage ; sinon, proposé : le minimum et trois de plus)
-          const pro = Prologue.on;
-          if (pro) n = Prologue.crewGoal() - s.crew;
+          // (le prologue, le premier voyage : le nombre que dit le mentor, sans réglage ; sinon, proposé : le minimum et trois de plus)
+          const pro = Prologue.on || Voyage.imposed();
+          if (pro) n = (Prologue.on ? Prologue.crewGoal() : Voyage.crewGoal()) - s.crew;
           else if (!picked) n = st.crewMin + 3 - s.crew;
           n = U.clamp(n, 0, room);
           const berths = h('div', { class: 'berths', 'data-g': 'tv-crew' });
@@ -123973,9 +124019,9 @@ const UI = {
       if (r.debt <= 0) line = TU.fresh;
       else if (Game.debtOverdue()) line = TU.angry;
       else line = Lang.fmt(TU.wait, { jours: due });
-      // (le prologue : la somme que dit le mentor, la réglette ne bouge pas)
-      const pro = Prologue.on && r.debt <= 0;
-      const bor = h('input', { type: 'range', class: 'red', min: 0, max: Math.max(0, max), step: 100, value: Math.min(max, pro ? SEA.prologue.loan : r.debt > 0 ? 0 : 4000), id: 'wang-bor', 'aria-label': T('usurier.montant'), disabled: pro || max <= 0 });
+      // (le prologue, le premier voyage : la somme que dit le mentor, la réglette ne bouge pas)
+      const pro = (Prologue.on || Voyage.imposed()) && r.debt <= 0;
+      const bor = h('input', { type: 'range', class: 'red', min: 0, max: Math.max(0, max), step: 100, value: Math.min(max, pro ? (Prologue.on ? SEA.prologue : SEA.voyage).loan : r.debt > 0 ? 0 : 4000), id: 'wang-bor', 'aria-label': T('usurier.montant'), disabled: pro || max <= 0 });
       const out = h('b', { class: 'num' });
       const bb = btn(T('usurier.emprunterBt'), () => { const n = Game.borrow(+bor.value); if (n) { this.toast(T('usurier.prete', { preteur: TXT.lender, somme: monnaie(n) }), '', 'coin'); this.after('cash'); } render(); }, 'red');
       const upd = () => { out.textContent = monnaie(+bor.value); bb.disabled = +bor.value <= 0; };
@@ -124127,8 +124173,8 @@ const UI = {
 
   // ════════════ Carte marine ════════════
   chart(departing) {
-    // (la leçon de mer, à la barre dans sa zone d'entraînement : pas de carte, on n'y met pas le cap ailleurs)
-    if (!departing && Lessons.isNav()) { this.toast(T('lecon.mer.pasDeCarte'), ''); return; }
+    // (le premier voyage, en mer : pas de carte, on n'y met pas le cap ailleurs)
+    if (!departing && Lessons.on && Main.sceneName === 'sea') { this.toast(T('voyage.pasDeCarte', { port: PORT[SeaScene.dest] ? PORT[SeaScene.dest].name : '' }), ''); return; }
     const r = Game.run;
     const body = h('div');
     const here = departing ? r.port : null;
@@ -124261,15 +124307,15 @@ const UI = {
     };
     const renderSide = () => {
       const kids = [];
-      // (10/10/2026, maquette validée par Adrien, variante A) la leçon de navigation, aux premiers départs d'une carrière en mer
-      // de Chine : en tête, visible sans faire défiler ; la croix la range pour de bon (js/lessons.js, navOffer)
-      if (departing && Lessons.navOffer()) kids.push(h('div', { class: 'card nav-offer', 'data-g': 'ch-lecon' },
-        h('button', { class: 'nav-x', type: 'button', 'aria-label': T('lecon.mer.plusTard'), title: T('lecon.mer.plusTard'),
-          onclick: e => { e.stopPropagation(); Sound.sfxPlay('click'); Lessons.navClose(); renderSide(); } }, '×'),
+      // (10/10/2026, maquette validée par Adrien, variante A) la traversée du premier voyage (son chapitre 2 : la barre, puis le
+      // combat), aux premiers départs d'une carrière en mer de Chine : en tête, visible sans faire défiler ; la croix la range pour
+      // de bon (js/voyage.js, navOffer) ; on revient ensuite à sa carrière
+      if (departing && Voyage.navOffer()) kids.push(h('div', { class: 'card nav-offer', 'data-g': 'ch-lecon' },
+        h('button', { class: 'nav-x', type: 'button', 'aria-label': T('voyage.plusTard'), title: T('voyage.plusTard'),
+          onclick: e => { e.stopPropagation(); Sound.sfxPlay('click'); Voyage.navClose(); renderSide(); } }, '×'),
         h('div', { class: 'nav-top' }, h('span', { class: 'mk-seal' + (SEA.mentorWax ? ' wax' : ''), 'aria-hidden': 'true' }, SEA.mentorSeal),
-          h('div', null, h('b', null, T('lecon.mer.offreTitre')), h('div', { class: 'd' }, T('lecon.mer.offreTexte', { mentor: TXT.mentorName })))),
-        h('div', { class: 'row nav-go' }, btn(T('lecon.mer.titre'), () => { this.close(entry); Lessons.start('mer', { resume: true }); }, 'gold sm'),
-          h('span', { class: 'pill jade' }, T('lecon.mer.offreJetons', { n: Lessons.CFG.mer.reward })))));
+          h('div', null, h('b', null, T('voyage.nav.titre')), h('div', { class: 'd' }, T('voyage.nav.texte', { mentor: TXT.mentorName })))),
+        h('div', { class: 'row nav-go' }, btn(T('voyage.nav.bouton'), () => { this.close(entry); Voyage.start(2, { resume: true }); }, 'gold sm'))));
       // (07/10/2026) un contrat livrable ici, en tête : on le voit avant de partir, sans faire défiler
       if (departing && r.ship) {
         const dv = Game.deliverable(here);
@@ -124309,7 +124355,10 @@ const UI = {
               // (le marché à l'étal, 07/10/2026 : le prix du rayon et de la commande notés, et combien à ce prix, comme au journal)
               const n = r.cargo[gi], q = n > 0 ? Game.knownSellQuote(sel, gi, n) : null, b = Game.knownTiers(sel, gi, true, k), s = Game.knownTiers(sel, gi, false, k);
               return h('div', { class: 'stat' }, h('span', null, ico(g.id, 'sm'), ' ', g.name, q ? h('small', { class: 'hint' }, ' · ' + T('carte.pourVous', { n, prix: fmt(q / n) })) : null),
-                h('b', { class: 'ch-etal' }, T('carte.etal', { achat: fmt(b.p1), qa: (b.approx ? '≈' : '') + b.q1, vente: fmt(s.p1), qv: (s.approx ? '≈' : '') + s.q1 })));
+                // (11/10/2026, Adrien : « on ne comprend pas ce qui est quoi ») sur deux lignes, l'achat puis la vente : le prix avec le
+                // tael, « × », la quantité avec son unité
+                h('span', { class: 'ch-etal' }, ...[['carte.etalAchat', b], ['carte.etalVente', s]].map(([key, t]) => h('span', { class: 'ch-l' },
+                  ...Tn(key, { prix: h('b', { class: 'nowrap' }, fmt(t.p1), ico('coin', 'xs')), q: (t.approx ? '≈' : '') + t.q1 + ' ' + motUnites(t.q1, g) })))));
             })));
         } else if (!dorm) kids.push(h('p', { class: 'hint' }, T('carte.prixInconnus')));
         const said = dorm ? [] : Game.knownEvents().filter(e => e.p === sel).sort((a, b) => a.start - b.start);
@@ -124571,7 +124620,7 @@ const UI = {
       btn(T('pause.journal'), () => { this.close(entry); this.journal(); }, 'wide'),
       btn(T('pause.options'), () => { this.close(entry); this.options(); }, 'wide'),
       btn(T('pause.aide'), () => { this.close(entry); this.help(); }, 'wide'),
-      Prologue.on ? btn(T('prologue.quitter'), () => { this.close(entry); Prologue.quit(); }, 'red wide') : Lessons.on ? btn(T('lecon.quitter'), () => { this.close(entry); Lessons.quit(); }, 'red wide') : !atSea ? btn(T('pause.retraite'), async () => {
+      Prologue.on ? btn(T('prologue.quitter'), () => { this.close(entry); Prologue.quit(); }, 'red wide') : Lessons.on ? btn(T('voyage.quitter'), () => { this.close(entry); Lessons.quit(); }, 'red wide') : !atSea ? btn(T('pause.retraite'), async () => {
         const ok = await this.confirm(T('pause.retraiteTitre'), T('pause.retraiteTexte', { somme: monnaie(Game.worth()) }), T('pause.terminer'), T('commun.continuer'), true);
         if (ok) { this.closeAll(); Main.endRun('retire'); }
       }, 'red wide') : null,
@@ -124607,7 +124656,7 @@ const UI = {
     const wrap = h('div', { class: 'jr' });
     // (09/10/2026, partie d'un débutant : au prologue, le capitaine portait un nom tiré au sort qu'il n'avait pas choisi ; le navire seul)
     const who = r.mode === 'prologue' ? r.shipName : r.captain + ' · ' + r.shipName;
-    const entry = this.open({ id: 'journal', title: T('pause.journal'), sub: who, icon: 'scroll', cls: 'wide', top: true, head: top, body: wrap });
+    const entry = this.open({ id: 'journal', title: T('pause.journal'), sub: who, icon: 'scroll', cls: 'wide jr-wide', top: true, head: top, body: wrap });
     const render = () => {
       const tabs = [['prix', 'coin', T('journal.onglet.prix')], ['registre', 'cargo', T('journal.onglet.registre')], ['contrats', 'scroll', T('journal.onglet.contrats')], ['carnet', 'anchor', T('journal.onglet.carnet')], ['mer', 'map', capFirst(TXT.seaName)], ['rumeurs', 'wind', T('journal.onglet.rumeurs')]];
       const bar = h('div', { class: 'tabs onglets jr-tabs', role: 'tablist', 'data-g': 'jr-tabs' }, tabs.map(([id, ic, l]) => btn([ico(ic), l], () => { if (id === tab) return; tab = this.journalTab = id; render(); entry.body.scrollTop = 0; }, 'sm' + (id === tab ? ' on' : ''), { role: 'tab', 'aria-selected': id === tab ? 'true' : 'false' })));
@@ -124851,8 +124900,11 @@ const UI = {
     // (06/10/2026) une pénurie ou un surplus annoncés par une rumeur : une flèche, or (▲, le prix va monter) ou bleue (▼)
     const arrow = e => { said = true; return h('span', { class: 'jr-ru ' + (e.shortage ? 'up' : 'down'), 'aria-hidden': 'true' }, e.shortage ? '▲' : '▼'); };
     // (08/10/2026, choix 1B d'Adrien : « 25×32, on ne sait pas ce qui est quoi ») deux bandes : en haut, sur fond jade, ce que le
-    // port vous vend ; en bas, sur fond or, ce qu'il vous achète ; à droite, en gris, combien à ce prix ; le meilleur prix encadré
-    const line = (t, cls) => h('span', { class: cls }, h('b', null, fmt(t.p1)), h('small', null, (t.approx ? '≈' : '') + t.q1));
+    // port vous vend ; en bas, sur fond or, ce qu'il vous achète ; à droite, en gris, combien à ce prix ; le meilleur prix encadré.
+    // (11/10/2026, Adrien : « 14 119, on ne comprend pas ce qui est quoi ») à gauche le prix et le tael, à droite la quantité et
+    // son unité (les piculs ; au téléphone, le nombre seul), un « × » entre les deux
+    const line = (t, cls, g) => h('span', { class: cls }, h('span', { class: 'jr-p' }, h('b', null, fmt(t.p1)), ico('coin', 'xs')), h('i', { class: 'jr-x', 'aria-hidden': 'true' }, '×'),
+      h('small', null, (t.approx ? '≈' : '') + t.q1, h('span', { class: 'jr-u' }, ' ' + motUnites(t.q1, g))));
     const table = h('table', { class: 'ledger jr-prices' },
       // (en-têtes : l'icône de la marchandise, comme au marché ; son nom au survol et pour les lecteurs d'écran)
       h('thead', null, h('tr', null, h('th', null, T('journal.prix.port')), ...GOODS.map(g => h('th', { class: 'r jr-good', title: g.name, 'aria-label': g.name }, ico(g.id), h('small', { class: 'jr-gn', 'aria-hidden': 'true' }, g.name))))),   // (le nom sous l'icône, 09/10/2026 : on ne reconnaissait pas toutes les icônes)
@@ -124865,7 +124917,7 @@ const UI = {
             e ? T(e.shortage ? 'journal.prix.passagerPenurie' : 'journal.prix.passagerSurplus') : null,
             ru ? T(ru.shortage ? 'journal.prix.rumeurPenurie' : 'journal.prix.rumeurSurplus', Game.rumorFacts(ru)) : null].filter(Boolean);
           return h('td', { class: 'r jr-cell', 'data-tip': tips.join(' ') }, e || ru ? h('span', { class: 'jr-mk' }, e ? glass(e) : null, ru ? arrow(ru) : null) : null,
-            line(b, 'jr-b' + (many && b.p1 === lo[i] ? ' lo' : '')), line(s, 'jr-s' + (many && s.p1 === hi[i] ? ' hi' : '')));
+            line(b, 'jr-b' + (many && b.p1 === lo[i] ? ' lo' : ''), g), line(s, 'jr-s' + (many && s.p1 === hi[i] ? ' hi' : ''), g));
         })))));
     const key = h('div', { class: 'jr-key', 'data-g': 'jr-key' }, h('span', null, h('i', { class: 'b' }), T('journal.prix.cleAchat')), h('span', null, h('i', { class: 's' }), T('journal.prix.cleVente')),
       rows.length > 1 ? h('span', null, h('i', { class: 'best' }), T('journal.prix.cleMeilleur')) : null);
@@ -124950,8 +125002,10 @@ const UI = {
       chen ? h('label', { class: 'chk' }, chen, T('options.conseils', { mentor: TXT.mentorName })) : null,
       h('div', { class: 'row' }, btn(T('options.revoirAides'), () => { Help.reset(); this.toast(T('options.aidesRevues'), 'good'); }, 'sm')),
       h('h4', null, T('options.tactile')), touchSel,
-      // (10/10/2026, retour de Maz) les touches du clavier, une par action (pas au téléphone)
-      document.body.classList.contains('mobile') ? null : [h('h4', null, T('options.clavier')), h('div', { class: 'row' }, btn(T('options.touches'), () => this.keysWindow(), 'sm'))],
+      // (11/10/2026, Adrien : les commandes dans les Options, pas dans l'Aide) le tableau des commandes ; les touches du clavier,
+      // une par action (10/10/2026, retour de Maz ; pas au téléphone)
+      h('h4', null, T('options.commandes')),
+      h('div', { class: 'row' }, btn(T('commandes.titre'), () => this.controls(), 'sm'), document.body.classList.contains('mobile') ? null : btn(T('options.touches'), () => this.keysWindow(), 'sm')),
       langSel,
       all ? h('label', { class: 'chk' }, all, 'Tout débloquer (test)') : null,
       h('h4', null, T('options.donnees')),
@@ -124963,13 +125017,13 @@ const UI = {
   },
   // ════════════ Aide : la notice du jeu, en chapitres (sommaire à gauche, ou en onglets sur téléphone) ════════════
   // notice.<chapitre>.titre et notice.<chapitre>.1, .2… (le premier paragraphe du marché, les vivres, mis en avant) ;
-  // le chapitre des commandes reprend les phrases aide.* ; « Rejouer le prologue » depuis l'écran titre ; une mer qui a ses
-  // propres règles ajoute son chapitre après le premier (« regles » : TXT.notice, titre et paragraphes)
-  NOTICE: { but: 3, port: 2, marche: 5, dette: 3, mer: 3, combat: 4, journal: 1, heritage: 2, touches: 0, credits: 0 },
+  // « Rejouer le prologue » (ou, en mer de Chine, un chapitre du premier voyage) depuis l'écran titre ; une mer qui a ses propres
+  // règles ajoute son chapitre après le premier (« regles » : TXT.notice, titre et paragraphes). Les commandes sont dans les
+  // Options depuis le 11/10/2026 (UI.controls)
+  NOTICE: { but: 3, port: 2, marche: 5, dette: 3, mer: 3, combat: 4, journal: 1, heritage: 2, credits: 0 },
   help(ch) {
     const r = Game.run, end = r ? r.endDay : (DEMO && DEMO.endDay) || SEA.days;
     const P = Object.assign(Help.params(), { fin: fmtDate(end - 0.5), unite: TXT.unitOne });
-    const k = c => h('kbd', { class: 'pill' }, Input.label(c));
     const chs = Object.keys(this.NOTICE);
     if (TXT.notice) chs.splice(1, 0, 'regles');
     let cur = ch || this.noticeCh || 'but';
@@ -124981,8 +125035,8 @@ const UI = {
       this.noticeCh = cur;
       put(nav, chs.map(c => btn(titre(c), () => { cur = c; render(); page.scrollTop = 0; }, 'sm' + (c === cur ? ' on' : ''), { role: 'tab', 'aria-selected': c === cur ? 'true' : 'false' })),
         Prologue.available() ? btn([ico('scroll', 'sm'), ' ', T('notice.rejouer')], () => { this.closeAll(); Prologue.start(); }, 'sm jade notice-replay') : null,
-        // (08/10/2026) les leçons du mentor : l'art du marchand, le combat en mer
-        ...(Lessons.available() ? ['marche', 'mer'].map(id => btn([ico({ marche: 'coin', mer: 'wind' }[id], 'sm'), ' ', T('lecon.' + id + '.titre'), Lessons.done(id) ? ' ✓' : ''], () => { this.closeAll(); Lessons.start(id); }, 'sm jade notice-replay')) : []));
+        // (11/10/2026) le premier voyage, chapitre par chapitre (coché une fois fait)
+        ...(Voyage.available() ? [h('small', { class: 'notice-replay-k' }, T('voyage.rejouer')), ...[1, 2, 3].map(n => btn([ico(['scroll', 'wind', 'coin'][n - 1], 'sm'), ' ', T('voyage.chBouton', { n, titre: T('voyage.ch' + n) }), Voyage.done(n) ? ' ✓' : ''], () => { this.closeAll(); Voyage.start(n); }, 'sm jade notice-replay'))] : []));
       const n = this.NOTICE[cur] || 0, kids = [h('h3', null, titre(cur))];
       // (les règles de la mer, et la présentation de son mentor à revoir, au port)
       if (cur === 'regles') kids.push(...TXT.notice.p.map(t => h('p', { html: Lang.fmt(t, P) })),
@@ -124991,24 +125045,30 @@ const UI = {
         const p = h('p', { html: T('notice.' + cur + '.' + i, P) });
         kids.push(cur === 'marche' && i === 1 ? h('div', { class: 'mk-foot notice-key' }, ico('vivres', 'big'), p) : p);
       }
-      if (cur === 'touches' && !TXT.helpSea) kids.push(...this.keysTable());
-      else if (cur === 'touches') kids.push(   // (une mer sans canons, la Phénicie, décrit ses propres armes)
-        h('h4', null, T('aide.auPort')),
-        h('p', null, ...Tn('aide.port', { a: k('KeyA'), d: k('KeyD'), w: k('KeyW') })),
-        h('h4', null, T('aide.enMer')),
-        // (une mer sans canons décrit ses propres armes)
-        TXT.helpSea ? h('p', null, TXT.helpSea(k)) : h('p', null, ...Tn('aide.mer', { a: k('KeyA'), d: k('KeyD'), w: k('KeyW'), s: k('KeyS'), q: k('KeyQ'), e: k('KeyE') })),
-        h('p', null, T('aide.boussole')),
-        h('h4', null, T('aide.aLaManette')),
-        ...['manettePort', 'manetteMer', 'manetteMenus'].map(c => h('p', { class: 'pad-help' }, ...Tn('aide.' + c, PAD_GLYPHS()))));
       if (cur === 'credits') kids.push(...this.credits());
       if (SEA.prologue && TXT.prologue && !Prologue.available() && cur === 'but') kids.push(h('p', { class: 'hint' }, T('notice.rejouerTitre')));
+      if (Voyage.has() && !Voyage.available() && cur === 'but') kids.push(h('p', { class: 'hint' }, T('voyage.rejouerTitre')));
+      if (cur === 'but') kids.push(h('p', { class: 'hint' }, T('notice.commandesOptions')));
       put(page, kids);
     };
     render();
     this.open({ id: 'aide', title: T('notice.titre'), sub: T('notice.sousTitre'), icon: 'scroll', cls: 'wide notice-p', body: h('div', { class: 'notice' }, nav, page) });
   },
 
+  // (11/10/2026, Adrien : « commandes et raccourcis dans les Options, pas dans l'Aide ») la fenêtre des commandes, ouverte depuis les
+  // Options : le tableau (keysTable), ou, pour une mer sans canons (la Phénicie), ses propres armes décrites
+  controls() {
+    const k = c => h('kbd', { class: 'pill' }, Input.label(c));
+    const body = h('div', { class: 'stack' }, ...(!TXT.helpSea ? this.keysTable() : [
+      h('h4', null, T('aide.auPort')),
+      h('p', null, ...Tn('aide.port', { a: k('KeyA'), d: k('KeyD'), w: k('KeyW') })),
+      h('h4', null, T('aide.enMer')),
+      h('p', null, TXT.helpSea(k)),
+      h('p', null, T('aide.boussole')),
+      h('h4', null, T('aide.aLaManette')),
+      ...['manettePort', 'manetteMer', 'manetteMenus'].map(c => h('p', { class: 'pad-help' }, ...Tn('aide.' + c, PAD_GLYPHS())))]));
+    this.open({ id: 'commandes', title: T('commandes.titre'), icon: 'scroll', cls: 'wide', body });
+  },
   // (10/10/2026, retour de Maz : « tu détailles les touches manette, mais très peu pour le clavier ») les commandes en tableau :
   // une ligne par action, avec le clavier (les touches choisies dans les Options), la souris et la manette
   keysTable() {
@@ -125050,7 +125110,7 @@ const UI = {
         ])));
     const mobile = document.body.classList.contains('mobile');
     return [h('div', { class: 'kt-wrap' }, table), h('p', null, T('aide.boussole')),
-      mobile ? null : h('p', { class: 'row' }, h('span', null, T('aide.reglerTouches')), btn(T('options.touches'), () => this.keysWindow(), 'sm'))];
+      mobile ? null : h('div', { class: 'row' }, btn(T('options.touches'), () => this.keysWindow(), 'sm'))];
   },
 
   // (10/10/2026, retour de Maz) Options › Touches : une touche par action. « Changer », puis la touche voulue (Échap annule) ;
@@ -125118,9 +125178,11 @@ const UI = {
     this.hideTitle();
     this.showHud('title');
     const m = Game.meta;
+    Lessons.purge();   // (une partie d'essai d'une ancienne version : oubliée, la carrière rendue)
     const has = Game.hasSave();
-    // (une partie d'essai interrompue : le bouton dit qu'on reprend le prologue, pour qu'on ne la prenne pas pour sa carrière)
-    const pro = has && Game.savedMode() === 'prologue';
+    // (une partie d'essai interrompue : le bouton dit qu'on reprend le prologue, ou le premier voyage, pour qu'on ne la prenne
+    //  pas pour sa carrière) ; un premier voyage laissé « Plus tard » : son bouton, au chapitre suivant
+    const pro = has && Game.savedMode() === 'prologue', voy = has && Voyage.saved(), back = Voyage.resumable();
     const dk = dailyKey();
     const dailyBest = m.daily[dk];
     // sélecteur de mer : les mers du jeu de base (cadenas et condition sur celles qui restent fermées) et les extensions
@@ -125180,8 +125242,9 @@ const UI = {
         h('p', { class: 'tagline' }, TXT.tagline)),
       pick, syn,
       h('div', { class: 'menu' },
-        has ? btn(pro ? T('prologue.continuer') : T('commun.continuer'), () => { root.remove(); Main.continueRun(); }, 'jade big') : null,
-        btn(T('titre.nouvelle'), () => this.newGame('career'), has ? 'big' : 'jade big'),
+        has ? btn(voy ? T('voyage.continuer') : pro ? T('prologue.continuer') : T('commun.continuer'), () => { root.remove(); Main.continueRun(); }, 'jade big') : null,
+        back ? btn(T('voyage.reprendre', { n: Voyage.meta().next }), () => Voyage.start(Voyage.meta().next), has ? 'big' : 'jade big') : null,
+        btn(T('titre.nouvelle'), () => this.newGame('career'), has || back ? 'big' : 'jade big'),
         btn(T('titre.defi') + (dailyBest != null ? T('titre.defiRecord', { record: fmtShort(dailyBest) }) : ''), () => this.newGame('daily'), 'gold-line'),
         h('div', { class: 'row menu-sub' },
           btn(T('titre.heritage'), () => this.heritage(), 'sm ghost'), btn(T('titre.hautsFaits'), () => this.achievements(), 'sm ghost'), btn(T('titre.records'), () => this.records(), 'sm ghost'), btn(T('pause.options'), () => this.options(), 'sm ghost'), btn(T('aide.titre'), () => this.help(), 'sm ghost'))),
@@ -125251,7 +125314,7 @@ const UI = {
         }, 'jade big')],
       });
     };
-    const first = () => (mode === 'career' && Prologue.offerable() ? Prologue.offer(go) : go());
+    const first = () => (mode === 'career' && Voyage.offerable() ? Voyage.offer(go) : mode === 'career' && Prologue.offerable() ? Prologue.offer(go) : go());
     if (Game.hasSave()) {
       this.confirm(T('nouvelle.partieTitre'), T('nouvelle.partieTexte'), T('nouvelle.recommencer'), T('commun.annuler'), true).then(ok => { if (ok) first(); });
     } else first();
@@ -125579,7 +125642,7 @@ const Guide = {
   // le prologue et les présentations laissent toujours le bouton « Menu » du bandeau (pause, son, quitter le prologue) ;
   // pendant que ce menu, ses Options ou l'Aide sont ouverts, le guide s'efface
   withMenu(cfg) { if (cfg && cfg.lock) cfg.lock = cfg.lock.concat(gSel('hud-menu')); return cfg; },
-  menuOpen() { return ['pause', 'options', 'aide'].includes(UI.top()); },
+  menuOpen() { return ['pause', 'options', 'aide', 'commandes', 'touches'].includes(UI.top()); },   // (les commandes et les touches : depuis les Options)
 
   // la place à l'écran d'un sélecteur (ou d'une liste) : réunion de ses éléments visibles, rognée à la partie visible de
   // leur fenêtre (une ligne du marché à moitié défilée), élargie de « pad » ; null si rien n'est visible
@@ -126034,7 +126097,8 @@ const SeaIntro = {
 // Une partie à part (mode 'prologue') : graine fixe (les mêmes prix à chaque fois), ni pirates ni tempêtes, et rien
 // n'y compte (records, hauts faits). La mer en donne le scénario (SEA.prologue : ports de départ et d'arrivée,
 // marchandise, navire, graine, récompense) et les textes (TXT.prologue, TXT.mentorName, TXT.mentorRole, dans la langue
-// du joueur ; SEA.mentorSeal, le sceau du mentor). Une mer sans ces données n'a pas de prologue.
+// du joueur ; SEA.mentorSeal, le sceau du mentor). Une mer sans ces données n'a pas de prologue. (La mer de Chine n'en a plus
+// depuis le 11/10/2026 : le premier voyage, js/voyage.js, le remplace, et reprend ses répliques TXT.prologue.)
 // L'étape en cours est rangée dans la partie (run.pro.s) : on reprend où l'on s'était arrêté. Chaque étape dit, selon ce
 // qui est à l'écran (le port, une fenêtre, la mer), ce que le guide montre (view) et quand elle est faite (done).
 
@@ -126338,10 +126402,8 @@ const Prologue = {
     const b = {
       mentor: this.mentor(), who: TXT.mentorName,
       text: [x ? this.X('heritage', { nom: x.name }) : '', this.X('pret')].filter(Boolean), step: { i: 12, n: this.N },
-      // (08/10/2026) une dernière leçon, l'art du marchand, proposée tout de suite
       buttons: [{ label: T('prologue.ecranTitre'), cls: 'ghost sm', fn: () => this.endPost(false) },
-        Lessons.available() || Seas.current === 'chine' ? { label: T('lecon.marche.titre'), cls: 'gold', fn: () => { this.post = null; Guide.hide(); Lessons.start('marche'); } } : null,
-        { label: T('prologue.carriere'), cls: 'jade', fn: () => this.endPost(true) }].filter(Boolean),
+        { label: T('prologue.carriere'), cls: 'jade', fn: () => this.endPost(true) }],
     };
     if (UI.top() === 'heritage' && x) return { key: 'heritage', spot: ['hr-h-' + x.id, 'hr-fiche'], veil: false, bubble: Object.assign(b, { anchor: 'hr-h-' + x.id }) };
     return { key: 'heritage:seul', veil: false, bubble: Object.assign(b, { dock: 'center', anchor: null }) };
@@ -126351,262 +126413,90 @@ const Prologue = {
 </script>
 <script>
 'use strict';
-// ─── Silk & Cannons · les leçons du mentor (08/10/2026, retours d'Adrien) : l'art du marchand, puis le combat en mer ───
-// Comme le prologue (js/prologue.js) : une partie à part (mode 'lecon'), graine fixe, ni pirates ni tempêtes au hasard, rien
-// n'y compte (records, hauts faits) ; l'étape en cours est rangée dans run.lecon.s. La carrière en cours est mise de côté le
-// temps de la leçon et rendue à la fin. Seulement en mer de Chine (Canton, Hong Kong, Macao, le vieux Chen).
-// Chaque étape dit ce que le guide montre (view) et quand elle est faite (done) ; le carnet (en haut à gauche) suit les étapes.
-// Textes : lecon.* (js/lang/<code>/ui.js).
+// ─── Silk & Cannons · les leçons du mentor : le cadre, et les outils de la mer ───
+// Une leçon est une partie à part (mode 'lecon') : graine fixe, ni pirates ni tempêtes au hasard, rien n'y compte (records,
+// hauts faits), pas de feuille du mois ni de solde ; l'étape en cours est rangée dans run.lecon.s. La carrière en cours est mise
+// de côté le temps de la leçon et rendue à la fin. Depuis le 11/10/2026 (choix d'Adrien), une seule leçon : le premier voyage
+// (js/voyage.js), qui remplace en mer de Chine le prologue, la leçon du marché et la leçon de mer (08-10/10/2026).
+// Ici : démarrer, quitter, rendre la carrière ; et, en mer, le parcours de la barre (bouées vertes, chenal à mi-voile entre
+// deux récifs, banc de sable, vent), le fil doré vers l'étape en cours, le pirate de la leçon et ses épaves, les gestes selon
+// l'appareil. Textes : lecon.* et voyage.* (js/lang/<code>/ui.js).
 
 const Lessons = {
-  CFG: {
-    marche: { from: 'canton', to: 'hongkong', good: 'soie', ship: 'brick', cash: 19000, seed: 20261008, reward: 5,
-      steps: ['intro', 'barre', 'rayon', 'traversee', 'mer', 'commande', 'brade', 'repartir', 'digerer', 'penurie', 'fin'],
-      rank: { intro: 1, barre: 1, rayon: 2, traversee: 2, mer: 2, commande: 3, brade: 4, repartir: 5, digerer: 5, penurie: 6, fin: 6 }, n: 6 },
-    combat: { from: 'canton', to: 'macao', ship: 'lorcha', cannons: 8, crew: 20, seed: 20261009, reward: 5,
-      steps: ['intro', 'traversee', 'vent', 'flanc', 'rendu', 'abordage', 'epaves', 'fuir', 'fin'],
-      rank: { intro: 1, traversee: 1, vent: 1, flanc: 2, rendu: 3, abordage: 4, epaves: 5, fuir: 6, fin: 6 }, n: 6 },
-    // (10/10/2026, retours des testeurs : « j'arrivais pas à ralentir » ; puis d'Adrien : la navigation avec le combat, sur une
-    // map à part, sans pouvoir accoster avant la fin) : la leçon de mer, d'abord la barre (bouées vertes, chenal entre deux récifs
-    // à mi-voile, banc de sable où s'arrêter, vent), puis le combat (flanc, drapeau blanc, abordage, épaves, fuite), et l'on
-    // accoste à la main le long de la jonque de Chen ; dans une zone d'entraînement au grand large (layArena). Elle remplace la
-    // leçon de combat dans l'Aide (celle-ci reste ici pour une partie en cours) ; proposée aussi dans la fenêtre Appareiller
-    mer: { from: 'canton', ship: 'lorcha', cannons: 8, crew: 20, seed: 20261010, reward: 10,
-      steps: ['intro', 'barre', 'toile', 'ferler', 'vent', 'flanc', 'rendu', 'abordage', 'epaves', 'fuir', 'accoster', 'fin'],
-      rank: { intro: 1, barre: 1, toile: 2, ferler: 3, vent: 4, flanc: 5, rendu: 6, abordage: 6, epaves: 7, fuir: 8, accoster: 9, fin: 9 }, n: 9 },
-  },
-  ARENA_R: 430,   // (au-delà, loin du centre de la zone : le mentor rappelle)
-  // (les textes repris des anciennes leçons : la barre, de la navigation ; le combat, de la leçon de combat)
-  MER_SRC: { barre: 'navigation', rate: 'navigation', toile: 'navigation', trop: 'navigation', ferler: 'navigation', vent: 'navigation',
-    flanc: 'combat', rendu: 'combat', abordage: 'combat', epaves: 'combat', fuir: 'combat' },
-  // le parcours de la leçon de navigation, en distances le long de la route (s) et de côté (l) depuis son départ
+  CFG: { voyage: {} },
+  // le parcours de la barre, en distances le long de la route (s) et de côté (l) depuis son départ
   // (les portes décalées sur les côtés : il faut barrer pour les passer)
   NAV: { L: 440, g1: { s: 110, l: 42, w: 30 }, g2: { s: 225, l: -24, w: 22 }, reef: 26, sand: { s: 325, a: 24, b: 74 } },
+  ARENA_R: 430,   // (au-delà, loin du milieu du parcours : le mentor rappelle)
   asking: false,
-  get on() {
-    const r = Game.run;
-    if (r && r.lecon && r.lecon.id === 'navigation') r.lecon.id = 'mer';   // (la leçon de navigation du 10/10, devenue la leçon de mer)
-    return !!(r && r.mode === 'lecon' && !r.over && r.lecon && this.CFG[r.lecon.id]);
-  },
-  busy() { return this.on; },
-  available() { return !!(Seas.current === 'chine' && SEA.mentorSeal && Main.sceneName === 'title'); },
-  done(id) { const m = Game.meta; return !!(m && m.lessons && m.lessons[id]); },
+  get on() { const r = Game.run; return !!(r && r.mode === 'lecon' && !r.over && r.lecon && this.CFG[r.lecon.id]); },
+  busy() { return this.on || Voyage.busy(); },
   id() { return Game.run.lecon.id; },
-  cfg() { return this.CFG[this.id()]; },
   stashKey() { return runKey(Seas.current) + '.avantLecon'; },
+  // une partie d'essai d'une ancienne version (le prologue de la mer de Chine, les leçons du marché, de mer, de combat, de
+  // navigation : remplacés par le premier voyage) : oubliée, et la carrière mise de côté rendue
+  purge() {
+    const cur = Store.get(runKey(Seas.current), null);
+    const old = cur && ((cur.mode === 'lecon' && !(cur.lecon && this.CFG[cur.lecon.id])) || (cur.mode === 'prologue' && !SEA.prologue));
+    if (!old) return;
+    Store.del(runKey(Seas.current));
+    const st = Store.get(this.stashKey(), null);
+    if (st) { Store.set(runKey(Seas.current), st); Store.del(this.stashKey()); }
+  },
 
-  // ── Démarrer, préparer, finir ──
-  // (o.resume : lancée depuis une carrière, la fenêtre Appareiller ; à la fin, on revient à la carrière plutôt qu'à l'écran titre)
+  // ── Démarrer, finir, quitter ──
+  // o.resume : lancée depuis une carrière (la fenêtre Appareiller) ; à la fin, on revient à la carrière plutôt qu'à l'écran titre.
+  // o.discard : la partie en cours est abandonnée (une nouvelle carrière confirmée), pas mise de côté. o.ch : le chapitre
   start(id, o) {
-    if (o && o.resume && Game.run && !Game.run.over) Game.saveRun();
+    o = o || {};
+    if (o.resume && Game.run && !Game.run.over) Game.saveRun();
     UI.closeAll(); UI.hideTitle();
+    if (o.discard) Store.del(runKey(Seas.current));
     // (la carrière en cours, mise de côté le temps de la leçon)
     const cur = Store.get(runKey(Seas.current), null);
     const stashed = !!(cur && cur.v === RUN_VERSION && !cur.over && cur.mode !== 'lecon' && cur.mode !== 'prologue');
     if (stashed) Store.set(this.stashKey(), cur);
     UI.marketMode = null; UI.journalTab = 'prix'; UI.lastDest = null; UI.mkOpen = null;
-    Main.startRun({ mode: 'lecon', lecon: id, seed: this.CFG[id].seed, captain: R.pick(CAPTAIN_NAMES), shipName: R.pick(SHIP_NAMES) });
-    if (o && o.resume && stashed) { Game.run.lecon.resume = true; Game.saveRun(); }
+    Main.startRun({ mode: 'lecon', lecon: id, ch: o.ch, seed: id === 'voyage' ? SEA.voyage.seed : this.CFG[id].seed, captain: R.pick(CAPTAIN_NAMES), shipName: R.pick(SHIP_NAMES) });
+    if (o.resume && (stashed || Store.get(this.stashKey(), null))) { Game.run.lecon.resume = true; Game.saveRun(); }
   },
-  // (Game.newRun) le navire, l'équipage, les vivres, l'argent, les prix connus, et ce que la leçon met en scène
-  setup(run, id) {
-    const c = this.CFG[id], S = SHIPS[c.ship];
-    run.lecon = { id, s: 'intro' };
-    run.port = run.lastPort = c.from;
-    run.ship = Game.makeShip(c.ship);
-    run.ship.crew = c.crew || Math.min(S.crew, S.crewMin + 6);
-    if (c.cannons) run.ship.cannons = Math.min(S.guns, c.cannons);
-    run.ship.food = run.ship.crew * (id === 'mer' ? 150 : 40);   // (le slalom peut durer : pas de famine pendant la leçon)
-    run.cash = c.cash || 6000;
-    if (id === 'marche') {
-      const gi = GOOD[c.good].idx;
-      // (la soie sans pénurie ni surplus là où passe la leçon ; une pénurie annoncée à Shanghai, pour la dernière étape)
-      run.events = run.events.filter(e => e.g !== gi);
-      const ev = { id: 9000, p: 'shanghai', g: gi, mult: 2.6, start: Math.round(run.day) + 12, dur: 18, shortage: true };
-      run.events.push(ev); run.rumors.push(ev.id);
-      Game.log(Game.rumorText(ev), 'rumor', 'tavern', { ev: ev.id });
-      for (const pid of ['hongkong', 'macao', 'shanghai']) Game.recordPrices(pid);
-    }
+  // (Game.newRun) ce que la leçon met en scène
+  setup(run, id, o) {
+    if (id === 'voyage') Voyage.setup(run, o || {});
     run.worth0 = Game.worth();
   },
-  // la fin : la récompense (la première fois), puis la carrière rendue et l'écran titre ; next : la leçon suivante
-  finish(next) {
-    const m = Game.meta, id = this.id(), n = this.cfg().reward;
-    if (!this.done(id)) { m.jade += n; m.jadeTotal += n; (m.lessons = m.lessons || {})[id] = 1; Game.saveMeta(); }
-    Sound.sfxPlay('levelup');
-    this.leave(next);
-  },
-  leave(next) {
+  // la fin : la partie d'essai oubliée, la carrière rendue, puis l'écran titre (ou la carrière, si la leçon y a été prise)
+  leave() {
     Store.del(runKey(Seas.current));
     const st = Store.get(this.stashKey(), null);
     if (st) { Store.set(runKey(Seas.current), st); Store.del(this.stashKey()); }
-    const resume = !!(st && Game.run && Game.run.lecon && Game.run.lecon.resume && !next);
+    const resume = !!(st && Game.run && Game.run.lecon && Game.run.lecon.resume);
     if (Game.run) Game.run.over = true;
     if (Main.sceneName === 'sea') SeaScene.over = true;
     Guide.hide();
     UI.closeAll();
     UI.marketMode = null; UI.journalTab = 'prix'; UI.lastDest = null; UI.mkOpen = null;
     // (une leçon prise depuis la carrière : on la retrouve au port qu'on quittait)
-    Main.transition(() => { Game.run = null; if (resume) { Main.continueRun(true); return; } Main.toTitle(true); if (next) setTimeout(() => this.start(next), 400); });
+    Main.transition(() => { Game.run = null; if (resume) { Main.continueRun(true); return; } Main.toTitle(true); });
   },
   async quit() {
     this.asking = true;
     Guide.hide();
-    const ok = await UI.confirm(T('lecon.quitterTitre'), T('lecon.quitterTexte'), T('lecon.quitter'), T('lecon.continuer'), true);
+    const ok = await UI.confirm(T('voyage.quitterTitre'), T('voyage.quitterTexte'), T('voyage.quitter'), T('voyage.continuerVoyage'), true);
     this.asking = false;
-    if (ok) this.leave();
+    if (!ok) return;
+    if (this.on && this.id() === 'voyage') Voyage.interrupted();
+    this.leave();
   },
-  go(s) {
-    const r = Game.run, id = this.id(), gi = id === 'marche' ? GOOD[this.cfg().good].idx : -1;
-    r.lecon.s = s; r.lecon.t0 = SeaScene.t || 0; r.lecon.miss = 0; r.lecon.trop = 0;
-    if (s === 'barre') { UI.marketMode = 'buy'; UI.mkOpen = { buy: gi }; }
-    if (s === 'commande' || s === 'digerer') { UI.marketMode = 'sell'; UI.mkOpen = { sell: gi }; }
-    if (s === 'repartir') UI.journalTab = 'prix';
-    if (s === 'penurie') UI.journalTab = 'rumeurs';
-    if (s === 'flanc') this.spawnFoe();
-    if (s === 'epaves') this.spawnWreck();
-    if (s === 'fuir') this.spawnChasers();
-    if (s === 'accoster') { this.dropChasers(); this.spawnChen(); }
-    Game.saveRun();
-    UI.refresh();
-  },
-  // le carnet (Game.objectives) : les étapes de la leçon, celle en cours marquée
-  objectives() {
-    const id = this.id(), c = this.cfg(), k = c.rank[Game.run.lecon.s] || 1;
-    return { title: T('lecon.' + id + '.titre'), list: Array.from({ length: c.n }, (_, i) => ({ t: T('lecon.' + id + '.e' + (i + 1)), done: i + 1 < k, cur: i + 1 === k })) };
-  },
-  dest() { return this.on ? this.cfg().to : null; },
+  dest() { return this.on && this.id() === 'voyage' ? Voyage.dest() : null; },
 
-  // ── À chaque image ──
-  tick() {
-    if (!this.on || this.asking || Main.fadeDir || Guide.menuOpen()) { if (Guide.owner === 'lecon') Guide.hide(); return; }
-    if (Help.active) return;
-    const r = Game.run, st = this.S[this.id()][r.lecon.s];
-    if (!st) { this.go('intro'); return; }
-    if (st.done && st.done.call(this, r)) { this.go(st.next); return; }
-    const cfg = st.view.call(this, r);
-    if (cfg) Guide.show(Guide.withMenu(cfg), 'lecon');
-    else if (Guide.owner === 'lecon') Guide.hide();
-  },
-
-  // ── Morceaux de vue ──
-  X(k, p) { const id = this.id(); return T('lecon.' + (id === 'mer' ? this.MER_SRC[k] || 'mer' : id) + '.' + k, p || {}); },
-  bub(text, o) {
-    o = o || {};
-    const c = this.cfg();
-    const b = Object.assign({ mentor: { seal: SEA.mentorSeal, name: TXT.mentorName }, who: TXT.mentorName, text, step: { i: c.rank[Game.run.lecon.s] || 1, n: c.n } }, o);
-    b.buttons = o.next ? [{ label: o.next, cls: 'jade', fn: o.fn }] : (o.buttons || []);
-    delete b.next; delete b.fn;
-    return b;
-  },
-  label(type) { return type === 'quai' ? T('port.appareiller') : (PortScene.P && PortScene.P.verbs && PortScene.P.verbs[type]) || BUILDINGS[type].verb; },
-  goTo(type, text) {
-    if (UI.isOpen()) return this.closeV();
-    if (Main.sceneName !== 'port') return null;
-    const sel = 'bar-' + type;
-    return { key: 'lc-go:' + type + ':' + Game.run.lecon.s, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel), '#screen'],
-      bubble: this.bub([text || T('lecon.aller', { bouton: this.label(type) })], { anchor: sel }) };
-  },
-  closeV(text) {
-    const top = UI.top(), sel = '[data-g="x-' + (top || 'win') + '"]', x = document.querySelector(sel);
-    if (!x) return null;
-    return { key: 'lc-close:' + top + ':' + Game.run.lecon.s, spot: [sel], lock: [sel], bubble: this.bub([text || T('lecon.fermer', { sortir: x.textContent })], { anchor: sel }) };
-  },
-  goJournal() {
-    if (UI.isOpen()) return this.closeV();
-    return { key: 'lc-journal:' + Game.run.lecon.s, spot: ['hud-journal'], arrow: 'hud-journal', veil: false, lock: [gSel('hud-journal')],
-      bubble: this.bub([T('lecon.journal', { bouton: T('hud.journal') })], { anchor: 'hud-journal' }) };
-  },
-  sail() {
-    if (UI.top() === 'carte') {
-      const b = document.querySelector(gSel('ch-go'));
-      return { key: 'lc-carte', spot: ['ch-go'], lock: [gSel('ch-go')], bubble: this.bub([T('lecon.carte', { port: PORT[this.cfg().to].name, bouton: b ? b.textContent.trim() : T('port.appareiller') })], { anchor: 'ch-go' }) };
-    }
-    return this.goTo('quai', T('lecon.quai', { port: PORT[this.cfg().to].name, bouton: this.label('quai') }));
-  },
-  // les commandes de tir et d'abordage, selon l'appareil
-  fireKeys() { return Pad.active ? T('lecon.feuManette') : Input.touch ? T('lecon.feuTactile') : T('lecon.feuClavier', Input.keyText()); },
-  boardKey() { return Pad.active ? T('lecon.abordManette') : Input.touch ? T('lecon.abordTactile') : T('lecon.abordClavier', { b: Input.keyLabel('board') }); },
-  seaBubble(key, text, o) { return Object.assign({ key, veil: false, lock: null, bubble: this.bub(text, Object.assign({ dock: 'top', anchor: null }, o || {})) }, o && o.cfg); },
-
-  // ── La mise en scène du combat ──
-  foe() { return SeaScene.ships.find(s => s.lessonFoe); },
-  spawnFoe() {
-    const S = SeaScene, p = S.player; if (!p) return;
-    const at = S.freeSpot(p.a, 170, 240) || [p.x + Math.cos(p.a) * 200, p.y + Math.sin(p.a) * 200];
-    const e = S.makeEnemy('sampan', at[0], at[1], { hullMul: 0.75, boarder: false });
-    e.lessonFoe = true; e.a = Math.atan2(p.y - e.y, p.x - e.x);
-    S.ships.push(e);
-    S.alert(T('mer.unPirate'), '', 'red');
-  },
-  spawnWreck() {
-    const S = SeaScene, p = S.player; if (!p) return;
-    const cargo = zeros(); cargo[GOOD.the.idx] = 6; cargo[GOOD.epices.idx] = 4;
-    S.dropLoot({ x: p.x + Math.cos(p.a) * 70, y: p.y + Math.sin(p.a) * 70, gold: 260, cargo, kind: 'lecon' }, 1);
-  },
-  spawnChasers() {
-    const S = SeaScene, p = S.player; if (!p) return;
-    const back = p.a + Math.PI;
-    for (let i = 0; i < 2; i++) {
-      const x = p.x + Math.cos(back + (i ? 0.35 : -0.35)) * 330, y = p.y + Math.sin(back + (i ? 0.35 : -0.35)) * 330;
-      if (World.sdf(x, y) < 18) continue;
-      const e = S.makeEnemy('lorcha', x, y, { boarder: false });
-      e.lessonChaser = true; e.speedMax *= 0.8; e.a = Math.atan2(p.y - y, p.x - x);
-      S.ships.push(e);
-    }
-    S.alert(T('mer.voilesPirates'), '', 'red');
-  },
-  dropChasers() { SeaScene.ships = SeaScene.ships.filter(s => !s.lessonChaser); },
-
-  // ── La leçon de mer : la zone d'entraînement ──
-  // (10/10/2026, retour d'Adrien : « on pouvait accoster avant la fin, j'ai été un peu perdu ; pourquoi pas sur une map à part ? »)
-  // une zone d'entraînement au grand large, loin de toute côte, de tout port et de tout récif : rien où accoster, rien où se
-  // perdre ; le parcours y remonte vers le nord (de bas en haut de l'écran), et la jonque de Chen y attend à la fin
-  isNav() { return this.on && (this.id() === 'mer' || this.id() === 'navigation'); },
-  // (SeaScene.enter) au départ de Canton, le navire est posé dans la zone, au début du parcours, à la barre, sans destination
-  seaEnter(S) {
-    if (!this.isNav()) return;
-    const r = Game.run, p = S.player;
-    if (!r.lecon.course || r.lecon.course.cx == null) r.lecon.course = this.layArena();
-    const k = r.lecon.course;
-    p.x = k.sx; p.y = k.sy; p.a = Math.atan2(k.uy, k.ux); p.v = 0;
-    S.ships = S.ships.filter(s => s === p);   // (pas de marchand au milieu du slalom)
-    S.camX = p.x - (S.W || 480) / 2; S.camY = p.y - (S.H || 270) / 2;
-    World.warm(p.x, p.y, 360);
-    S.dest = null; S.path = null; S.auto = false; p.sail = 2;
-    r.lecon.sPrev = 0;
-  },
-  // le point de la mer le plus loin de tout (côtes, ports, récifs, bords du monde) : le centre de la zone, décidé une fois
-  layArena() {
-    let best = null;
-    for (let y = 320; y < WORLD.H - 320; y += 48) for (let x = 320; x < WORLD.W - 320; x += 48) {
-      let d = World.sdf(x, y);
-      if (d < 220) continue;
-      for (const q of World.ports) d = Math.min(d, Math.hypot(q.x - x, q.y - y) - 140);
-      for (const rf of World.reefs) d = Math.min(d, Math.hypot(rf.x - x, rf.y - y) - rf.r - 90);
-      if (!best || d > best.d) best = { x, y, d };
-    }
-    const cx = best ? best.x : WORLD.W / 2, cy = best ? best.y : WORLD.H / 2, ux = 0, uy = -1;
-    return { cx, cy, sx: cx - ux * 200, sy: cy - uy * 200, ux, uy };
-  },
-  // la jonque de Chen, à l'ancre, où l'on accoste à la fin (devant le navire, vers le centre de la zone)
-  chen() { return SeaScene.ships.find(s => s.lessonChen); },
-  spawnChen() {
-    const S = SeaScene, p = S.player, k = Game.run.lecon.course; if (!p || this.chen()) return;
-    const dc = Math.hypot(k.cx - p.x, k.cy - p.y), a = dc > 120 ? Math.atan2(k.cy - p.y, k.cx - p.x) : p.a;
-    const x = p.x + Math.cos(a) * 190, y = p.y + Math.sin(a) * 190;
-    const v = new Vessel({ kind: 'merchant', style: 'junk', len: 26, scheme: 'merchant', name: T('lecon.mer.jonqueChen'), x, y, a: a + Math.PI / 2,
-      v: 0, sail: 0, hull: 200, guns: 0, crew: 6, speedMax: 0, turn: 0, reload: 9, dmg: 0, range: 0, ai: 'cruise' });
-    v.lessonChen = true; v.passive = true;
-    S.ships.push(v);
-  },
-  // (SeaScene.updatePrompt) l'invite de la leçon : accoster le long de la jonque de Chen, à la dernière étape seulement
-  seaPrompt(p) {
-    if (!this.isNav() || Game.run.lecon.s !== 'accoster') return null;
-    const j = this.chen();
-    if (!j || Math.hypot(j.x - p.x, j.y - p.y) > 50) return null;
-    return { kind: 'sea', text: T('lecon.mer.accosterChen'), key: Input.keyLabel('dock'), act: () => { p.v = 0; p.sail = 0; this.go('fin'); } };
-  },
+  // ── En mer ──
+  // le parcours de la barre est posé (Voyage.isNav) : on le dessine, on en suit les portes ; les ports fermés (Voyage.portClosed) ;
+  // le calendrier arrêté pendant l'exercice (sinon des semaines passaient, avec les vivres et la dette)
+  isNav() { return this.on && this.id() === 'voyage' && Voyage.isNav(); },
+  portClosed(pid) { return this.on && this.id() === 'voyage' && Voyage.portClosed(pid); },
+  timeStill() { return this.on && this.id() === 'voyage' && Voyage.timeStill(); },
+  seaEnter(S) { if (this.on && this.id() === 'voyage') Voyage.seaEnter(S); },
   // un point du parcours (s : le long de la route, l : de côté, à droite en avançant), et la position du navire dans ce repère
   navPt(s, l) { const k = Game.run.lecon.course; return [k.sx + k.ux * s - k.uy * l, k.sy + k.uy * s + k.ux * l]; },
   navPos(x, y) { const k = Game.run.lecon.course, dx = x - k.sx, dy = y - k.sy; return { s: dx * k.ux + dy * k.uy, l: -dx * k.uy + dy * k.ux }; },
@@ -126615,7 +126505,7 @@ const Lessons = {
   seaUpdate(S, dt) {
     if (!this.isNav() || !Game.run.lecon.course) return;
     const r = Game.run, c = r.lecon, N = this.NAV, p = S.player, q = this.navPos(p.x, p.y), prev = c.sPrev == null ? q.s : c.sPrev;
-    // (trop loin du centre de la zone : le mentor le dit, et le fil doré ramène vers l'étape en cours)
+    // (trop loin du milieu du parcours : le mentor le dit, et le fil doré ramène vers l'étape en cours)
     const k = c.course; c.loin = Math.hypot(k.cx - p.x, k.cy - p.y) > this.ARENA_R ? 1 : 0;
     const cross = g => prev < g && q.s >= g;
     if (c.s === 'barre' && cross(N.g1.s)) { if (Math.abs(q.l - N.g1.l) < N.g1.w) c.gate1 = 1; else c.miss = 1; }
@@ -126635,22 +126525,11 @@ const Lessons = {
       c.ventT = p.sail === 2 && pol > 0.95 ? (c.ventT || 0) + dt : 0;
     }
   },
-  // l'endroit où mène l'étape en cours (le fil doré) : la porte à passer, le banc de sable, la jonque de Chen ; null au combat
-  aim() {
-    const N = this.NAV, s = Game.run.lecon.s;
-    if (s === 'barre') return this.navPt(N.g1.s, N.g1.l);
-    if (s === 'toile') return this.navPt(N.g2.s, N.g2.l);
-    if (s === 'ferler') return this.navPt(N.sand.s - N.sand.a - 20, 0);
-    if (s === 'accoster') { const j = this.chen(); return j ? [j.x, j.y] : null; }
-    const k = Game.run.lecon.course;
-    return Game.run.lecon.loin ? [k.cx, k.cy] : null;
-  },
-  // le parcours, sous les navires : banc de sable, récifs, bouées (vertes, puis rouges), dessiné dans le repère du monde ; et un
-  // fil doré en pointillés, du navire vers l'étape en cours
+  // un fil doré en pointillés, du navire vers l'étape en cours (Voyage.aim) ; puis, quand il est posé, le parcours sous les
+  // navires : banc de sable, récifs, bouées (vertes, puis rouges), dessinés dans le repère du monde
   drawSea(ctx, t) {
-    if (!this.isNav() || !Game.run.lecon.course) return;
-    const N = this.NAV, k = Game.run.lecon.course, s = Game.run.lecon.s, ang = Math.atan2(k.uy, k.ux);
-    const pl = SeaScene.player, to = pl && this.aim();
+    if (!this.on || this.id() !== 'voyage') return;
+    const pl = SeaScene.player, to = pl && Voyage.aim();
     if (to && Math.hypot(to[0] - pl.x, to[1] - pl.y) > 45) {
       const a = Math.atan2(to[1] - pl.y, to[0] - pl.x), d = Math.min(Math.hypot(to[0] - pl.x, to[1] - pl.y) - 18, 150);
       const x0 = pl.x + Math.cos(a) * 22, y0 = pl.y + Math.sin(a) * 22, x1 = pl.x + Math.cos(a) * d, y1 = pl.y + Math.sin(a) * d;
@@ -126660,6 +126539,8 @@ const Lessons = {
       ctx.lineTo(x1 - Math.cos(a) * 2 - Math.sin(a) * 3.5, y1 - Math.sin(a) * 2 + Math.cos(a) * 3.5); ctx.lineTo(x1 - Math.cos(a) * 2 + Math.sin(a) * 3.5, y1 - Math.sin(a) * 2 - Math.cos(a) * 3.5); ctx.fill();
       ctx.restore();
     }
+    if (!this.isNav() || !Game.run.lecon.course) return;
+    const N = this.NAV, k = Game.run.lecon.course, s = Game.run.lecon.s, ang = Math.atan2(k.uy, k.ux);
     // le banc de sable : de l'eau claire, un liseré d'écume
     const [bx, by] = this.navPt(N.sand.s, 0);
     ctx.save(); ctx.translate(bx, by); ctx.rotate(ang);
@@ -126695,25 +126576,255 @@ const Lessons = {
     for (const d of [-1, 1]) buoy(N.g1.s, N.g1.l + d * N.g1.w, '#3fae8a', s === 'barre');
     for (const d of [-1, 1]) buoy(N.g2.s, N.g2.l + d * N.g2.w, '#d8472b', s === 'toile');
   },
-  // les touches, selon l'appareil (en HTML pour la bulle) : tourner, réduire la toile, l'envoyer, accoster
+
+  // ── Le combat de la leçon ──
+  foe() { return SeaScene.ships.find(s => s.lessonFoe); },
+  // un sampan, à l'écran sur le côté (comme le premier pirate de la mer de Chine) : cinq hommes, il n'aborde pas, ne fuit pas
+  // (SeaScene.think), et se rend à mi-coque (Voyage) ; dans une leçon, il ne coule pas avant (SeaScene.hitShip)
+  spawnFoe() {
+    const S = SeaScene, p = S.player; if (!p) return;
+    const at = S.visibleSpot(p) || S.freeSpot(p.a, 170, 240) || [p.x + Math.cos(p.a) * 200, p.y + Math.sin(p.a) * 200];
+    const e = S.makeEnemy('sampan', at[0], at[1], { hullMul: 0.75, boarder: false });
+    e.lessonFoe = true; e.crew = 5; e.a = Math.atan2(p.y - e.y, p.x - e.x);
+    S.ships.push(e);
+    S.alert(T('mer.unPirate'), '', 'red');
+  },
+  spawnWreck() {
+    const S = SeaScene, p = S.player; if (!p) return;
+    const cargo = zeros(); cargo[GOOD.the.idx] = 6; cargo[GOOD.epices.idx] = 4;
+    S.dropLoot({ x: p.x + Math.cos(p.a) * 70, y: p.y + Math.sin(p.a) * 70, gold: 260, cargo, kind: 'lecon' }, 1);
+  },
+
+  // ── Les gestes, selon l'appareil (en HTML pour la bulle) ──
+  // tourner, réduire la toile, ferler, l'envoyer, tirer, accoster, le pilote, le temps accéléré
   navKeys() {
     const N = k => T('lecon.navigation.k.' + k), Nk = (k, v) => T('lecon.navigation.k.' + k, { k: v });
     if (Pad.active) {
       const G = PAD_GLYPHS_HTML();
-      return { tourner: N('stick'), reduire: G.lb, ferler: Nk('encore', G.lb), envoyer: Nk('deuxFois', G.rb), feu: T('lecon.navigation.k.feuManette', G), accoster: Nk('appuie', G.a) };
+      return { tourner: N('stick'), reduire: G.lb, ferler: Nk('encore', G.lb), envoyer: Nk('deuxFois', G.rb), feu: T('lecon.navigation.k.feuManette', G), accoster: Nk('appuie', G.a), pilote: G.x, vite: G.b };
     }
-    if (Input.touch) return { tourner: N('pouce'), reduire: N('miVoile'), ferler: N('lacher'), envoyer: N('touteVoile'), feu: N('feuTactile'), accoster: N('toucher') };
+    if (Input.touch) return { tourner: N('pouce'), reduire: N('miVoile'), ferler: N('lacher'), envoyer: N('touteVoile'), feu: N('feuTactile'), accoster: N('toucher'), pilote: T('voyage.k.pilote'), vite: T('voyage.k.vite') };
     const kb = a => '<kbd>' + U.esc(Input.keyLabel(a)) + '</kbd>';
     return { tourner: kb('left') + ' ' + kb('right') + ' ' + N('ouFleches'), reduire: kb('down'), ferler: Nk('encore', kb('down')), envoyer: Nk('deuxFois', kb('up')),
-      feu: T('lecon.navigation.k.feuClavier', { q: kb('fireL'), e: kb('fireR') }), accoster: Nk('appuie', kb('dock')) };
+      feu: T('lecon.navigation.k.feuClavier', { q: kb('fireL'), e: kb('fireR') }), accoster: Nk('appuie', kb('dock')), pilote: T('voyage.k.piloteClavier', { k: kb('auto') }), vite: T('voyage.k.viteClavier', { k: kb('fast') }) };
+  },
+  boardKey() { return Pad.active ? T('lecon.abordManette') : Input.touch ? T('lecon.abordTactile') : T('lecon.abordClavier', { b: Input.keyLabel('board') }); },
+};
+
+</script>
+<script>
+'use strict';
+// ─── Silk & Cannons · le premier voyage (11/10/2026, demande d'Adrien, maquette https://claude.ai/artifact/CVEhhw9dRKv4rQLpuyKVzV) ───
+// Un seul tutoriel en mer de Chine, sur un vrai trajet, à la place du prologue, de la leçon du marché et de la leçon de mer :
+// la soie de Canton à Manille, puis le riz de Manille à Hong Kong. Trois chapitres, rejouables un par un depuis l'Aide :
+//  1. Canton, préparer le voyage : Wang, la jonque, l'équipage, les vivres, la soie (le rayon, la réserve) ;
+//  2. la traversée vers Manille : le pilote, la barre au large (bouées, chenal entre deux récifs, banc de sable, vent), puis un
+//     pirate (le flanc, le drapeau blanc, l'abordage, les épaves) ; on n'accoste nulle part avant Manille ;
+//  3. Manille, puis Hong Kong : la commande, le bradé, la commande qui revient ; une rumeur à la taverne (pénurie de riz à Hong
+//     Kong), le journal ; le riz, le retour sans pirate, la vente pendant la pénurie ; dette, coque, chantier ; jetons, Héritage.
+// Une leçon du mentor (js/lessons.js, mode 'lecon', lecon.id 'voyage') : la carrière en cours est mise de côté, rien n'y compte.
+// Chaque chapitre part d'un état écrit d'avance (setup) ; « Continuer » enchaîne dans la même partie, « Plus tard » ramène à
+// l'écran titre, d'où l'on reprend au chapitre suivant. 15 jetons quand les trois chapitres sont faits, une seule fois (choix
+// d'Adrien). En mer, chaque explication arrête le jeu le temps de la lire (« on ne peut pas lire et naviguer en vrai »), puis
+// un rappel reste en bas. Le scénario : SEA.voyage (js/seas/chine.js) ; les répliques : voyage.* (js/lang/<code>/ui.js), et
+// celles de l'ancien prologue reprises telles quelles (TXT.prologue, P), comme celles des anciennes leçons (lecon.*).
+
+const Voyage = {
+  EV: 9100,          // l'identifiant de la pénurie de riz à Hong Kong
+  post: null,        // après le voyage : 'heritage' (écran titre, Héritage ouvert, dernier conseil du mentor)
+  postOpened: false,
+  FIRST: { 1: 'intro', 2: 'quai', 3: 'commande' },
+  // le carnet (en haut à gauche) : les lignes de chaque chapitre, et la ligne de chaque étape
+  LINES: {
+    1: ['but', 'wang', 'jonque', 'equipage', 'vivres', 'soie'],
+    2: ['appareiller', 'pilote', 'barre', 'toile', 'ferler', 'vent', 'pirate', 'abordage', 'epaves', 'manille'],
+    3: ['commande', 'brader', 'revient', 'rumeur', 'journal', 'riz', 'retour', 'penurie', 'port'],
+  },
+  RANK: {
+    intro: 1, emprunt: 2, navire: 3, ameliorations: 3, equipage: 4, taverne: 4, vivres: 5, soie: 6, abord: 6, fin1: 6,
+    quai: 1, pilote: 2, estuaire: 2, barre: 3, toile: 4, ferler: 5, vent: 6, route: 6, croisiere: 6, pirate: 7, flanc: 7, rendu: 8, abordage: 8, epaves: 9, manille: 10, fin2: 10,
+    commande: 1, brade: 2, attendre: 3, digere: 3, tournee: 4, rumeur: 4, journal: 5, rumeurs: 5, riz: 6, quai3: 7, retour: 7, vente: 8, benefice: 8, port: 9, fin: 9,
+  },
+  SEA2: ['pilote', 'estuaire', 'barre', 'toile', 'ferler', 'vent', 'route', 'croisiere', 'pirate', 'flanc', 'rendu', 'abordage', 'epaves', 'manille'],
+
+  get on() { return Lessons.on && Game.run.lecon.id === 'voyage'; },
+  busy() { return !!this.post; },
+  V() { return SEA.voyage; },
+  gi(k) { return GOOD[this.V()[k || 'good']].idx; },
+  meta() { const m = Game.meta; if (!m) return { done: {} }; if (!m.voyage) m.voyage = { done: {} }; return m.voyage; },
+  // un chapitre fait (n), ou les trois
+  done(n) { const d = this.meta().done; return n ? !!d[n] : !!(d[1] && d[2] && d[3]); },
+  has() { return !!(SEA.voyage && SEA.mentorSeal && TXT.prologue); },
+  // (rejouer un chapitre : depuis l'Aide de l'écran titre)
+  available() { return this.has() && Main.sceneName === 'title'; },
+  offerable() { const m = Game.meta; return !!(this.has() && m && !this.done() && !m.voyageNever); },
+  // le chapitre où reprendre : celui laissé « Plus tard », sinon le premier qui n'est pas fait
+  nextCh() { const m = this.meta(); return m.next || [1, 2, 3].find(n => !this.done(n)) || 1; },
+  // (l'écran titre) un voyage laissé en route, sans partie d'essai en cours : « Reprendre le premier voyage »
+  resumable() { return !!(this.has() && Game.meta && this.meta().next && !this.done() && !this.saved()); },
+  saved() { const r = Store.get(runKey(Seas.current), null); return !!(r && r.v === RUN_VERSION && !r.over && r.mode === 'lecon' && r.lecon && r.lecon.id === 'voyage'); },
+  dest() { const c = Game.run.lecon; return c.ch === 2 ? this.V().to : c.ch === 3 ? this.V().home : null; },
+  // (au chapitre 1, comme au prologue) l'emprunt, l'équipage et les vivres que dit le mentor : les réglettes ne bougent pas
+  imposed() { return this.on && Game.run.lecon.ch === 1 && ['emprunt', 'navire', 'ameliorations', 'equipage', 'taverne', 'vivres'].includes(Game.run.lecon.s); },
+  rank() { return this.RANK[Game.run.lecon.s] || 1; },
+  objectives() {
+    const c = Game.run.lecon, k = this.rank();
+    return { title: T('voyage.carnet', { n: c.ch }), list: this.LINES[c.ch].map((key, i) => ({ t: T('voyage.e.' + key), done: i + 1 < k, cur: i + 1 === k })) };
   },
 
-  // ── L'offre de la leçon de navigation, dans une carrière en mer de Chine (variante A de la maquette du 10/10/2026) ──
-  // en tête de la fenêtre Appareiller : aux trois premiers départs, tant qu'elle n'est ni faite ni refusée (la croix) ; de
-  // nouveau au départ qui suit le premier échouage, une seule fois. Jamais pendant le prologue ni dans une autre mer
+  // ── Démarrer, préparer ──
+  start(ch, o) { this.post = null; Lessons.start('voyage', Object.assign({ ch: ch || this.nextCh() }, o)); },
+  // la proposition, au premier « Nouvelle carrière » : suivre le premier voyage, ou partir seul (go)
+  offer(go) {
+    const n = this.V().reward, next = this.meta().next;
+    const never = h('input', { type: 'checkbox', id: 'voy-never' });
+    const body = h('div', { class: 'pro-offer' },
+      h('div', { class: 'pro-head' }, h('span', { class: 'g-seal', 'aria-hidden': 'true' }, SEA.mentorSeal),
+        h('div', null, h('p', { class: 'pro-eyebrow' }, T('guide.qui', { nom: TXT.mentorName, role: TXT.mentorRole })), h('h3', null, TXT.prologue.offreTitre))),
+      h('p', null, T('voyage.offre.texte', { mentor: TXT.mentorName })),
+      h('div', { class: 'row pro-facts' }, h('span', { class: 'pill' }, T('voyage.offre.duree')), h('span', { class: 'pill jade' }, ico('jade', 'sm'), ' +' + T('commun.qteJetons', { n, mot: motJetons(n) })),
+        h('span', { class: 'pill' }, next ? T('voyage.offre.reprise', { n: next }) : T('prologue.offre.sansRisque'))),
+      h('label', { class: 'chk' }, never, T('prologue.offre.jamais')));
+    const keep = () => { if (never.checked) { Game.meta.voyageNever = true; Game.saveMeta(); } };
+    const entry = UI.open({
+      title: T('voyage.offre.titre'), icon: 'scroll', cls: 'narrow', body, help: false, closeLabel: T('commun.annuler'),
+      foot: [btn(T('prologue.offre.seul'), () => { keep(); UI.close(entry); go(); }), btn(T('voyage.offre.suivre'), () => { UI.close(entry); this.start(this.nextCh(), { discard: true }); }, 'jade big')],
+    });
+  },
+  // (Game.newRun, par Lessons.setup) l'état du départ du chapitre : ce que les chapitres d'avant auraient laissé
+  setup(run, o) {
+    const V = this.V(), ch = U.clamp(Math.round(+o.ch || 1), 1, 3), soie = this.gi(), riz = this.gi('back');
+    run.lecon = { id: 'voyage', ch, s: this.FIRST[ch], ok: {} };
+    // (ni pénurie ni surplus de soie ou de riz là où passe le voyage : les prix que dit Chen sont ceux qu'on trouve)
+    run.events = run.events.filter(e => !((e.g === soie || e.g === riz) && [V.from, V.to, V.home].includes(e.p)));
+    if (ch === 1) return;
+    Game.borrow(V.loan); Game.buyShip(V.ship); Game.hire(this.crewGoal()); Game.buyFood(40);
+    this.etalSoie();
+    Game.buy(soie, Game.maxBuy(V.from, soie));
+    if (ch === 2) return;
+    // (le chapitre 3 : la traversée faite, la coque entamée par le pirate)
+    Game.depart(V.to);
+    Game.advance(V.days);
+    run.ship.food = Math.max(0, run.ship.food - run.ship.crew * V.days);
+    run.ship.hull = Math.round(Game.stats().hullMax * 0.7);
+    Game.arrive(V.to);
+  },
+  crewGoal() { const st = Game.stats(); return st ? Math.min(st.crewMax, st.crewMin + 3) : 8; },
+  // (11/10/2026) l'emprunt de Wang n'achète qu'une dizaine de piculs de soie : pour qu'on voie la réserve, le rayon de Canton a
+  // déjà été entamé (il en reste V.rayon) ; pour qu'on voie le bradé, la commande de Manille aussi (il en reste V.commande)
+  etalSoie() { const V = this.V(), gi = this.gi(), t = Game.tiers(V.from, gi, true); if (t.q1 > V.rayon) Game.etalUse(V.from, gi, t.q1 - V.rayon, 0); },
+  etalManille() { const V = this.V(), gi = this.gi(), t = Game.tiers(V.to, gi, false); if (t.q1 > V.commande) Game.etalUse(V.to, gi, 0, t.q1 - V.commande); },
+
+  // ── Finir un chapitre, le voyage ──
+  // un chapitre fait : noté (la première fois), les aides de ses écrans marquées vues ; les trois faits, les jetons (une fois)
+  chapterDone(n) {
+    const m = this.meta(), c = Game.run.lecon, V = this.V();
+    m.done[n] = 1;
+    if (m.next && m.next <= n) delete m.next;
+    Help.markSeen({ 1: ['port', 'usurier', 'chantier', 'taverne', 'marche'], 2: ['carte', 'mer'], 3: ['journal'] }[n]);
+    if (this.done() && !m.paid) {
+      m.paid = 1; delete m.next;
+      Game.meta.jade += V.reward; Game.meta.jadeTotal += V.reward;
+      c.paid = n;
+      Sound.sfxPlay('levelup');
+    }
+    Game.saveMeta(); Game.saveRun();
+  },
+  // « Plus tard » : l'écran titre (ou la carrière), d'où l'on reprendra au chapitre suivant
+  later() { const m = this.meta(); m.next = Game.run.lecon.ch + 1; Game.saveMeta(); Lessons.leave(); },
+  // (Lessons.quit) quitter en route : on reprendra ce chapitre-là
+  interrupted() { if (!this.done()) { this.meta().next = Game.run.lecon.ch; Game.saveMeta(); } },
+  cont() {
+    const c = Game.run.lecon;
+    c.ch++; c.ok = {}; c.paid = 0;
+    this.go(this.FIRST[c.ch]);
+  },
+  // la fin du voyage : l'Héritage ouvert à l'écran titre la première fois, sinon l'écran titre
+  finish(heritage) { this.post = heritage ? 'heritage' : null; this.postOpened = false; Lessons.leave(); },
+  endPost(career) { this.post = null; Guide.hide(); UI.title(); if (career) UI.newGame('career'); },
+
+  // ── En mer ──
+  isNav() { const c = Game.run.lecon; return c.ch === 2 && !!c.course && ['pilote', 'estuaire', 'barre', 'toile', 'ferler', 'vent'].includes(c.s); },
+  // (le calendrier arrêté pendant les exercices : la barre, puis l'abordage et les épaves, où l'on prend son temps ; pendant le
+  //  combat lui-même, il passe 15 fois moins vite, comme dans le jeu et comme le dit Chen)
+  timeStill() { const c = Game.run.lecon; return c.ch === 2 && ['barre', 'toile', 'ferler', 'vent', 'rendu', 'abordage', 'epaves'].includes(c.s); },
+  // on n'accoste qu'au port du chapitre, et à Manille seulement une fois le pirate passé
+  portClosed(pid) {
+    if (Main.sceneName !== 'sea') return false;
+    const c = Game.run.lecon;
+    return pid !== this.dest() || (c.ch === 2 && c.s !== 'manille');
+  },
+  // (SeaScene.enter) au départ de Canton : le parcours de la barre posé sur la route, au large
+  seaEnter(S) {
+    const c = Game.run.lecon;
+    if (c.ch === 2 && !c.course && ['quai', 'pilote', 'estuaire'].includes(c.s)) { c.course = this.layCourse(S); c.sPrev = null; }
+  },
+  // le premier tronçon de la route assez loin de tout (côtes, récifs, ports) pour y poser le parcours, dans son sens
+  layCourse(S) {
+    const P = S.path, N = Lessons.NAV, p = S.player;
+    if (!P || P.length < 2) return { sx: p.x, sy: p.y, ux: Math.cos(p.a), uy: Math.sin(p.a), cx: p.x + Math.cos(p.a) * N.L / 2, cy: p.y + Math.sin(p.a) * N.L / 2 };
+    const pts = [];
+    let L = 0;
+    for (let i = 1; i < P.length; i++) {
+      const a = P[i - 1], b = P[i], d = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      for (let t = 0; t < d; t += 12) pts.push({ x: a[0] + (b[0] - a[0]) * t / d, y: a[1] + (b[1] - a[1]) * t / d, L: L + t });
+      L += d;
+    }
+    const at = l => pts.find(q => q.L >= l) || pts[pts.length - 1];
+    const clear = (x, y) => World.inBounds(x, y, 60) && World.sdf(x, y) > 44 && World.reefs.every(rf => Math.hypot(rf.x - x, rf.y - y) > rf.r + 70) && World.ports.every(q => Math.hypot(q.x - x, q.y - y) > 170);
+    const lay = (q, f) => {
+      const d = Math.hypot(f.x - q.x, f.y - q.y) || 1, ux = (f.x - q.x) / d, uy = (f.y - q.y) / d;
+      return { sx: q.x, sy: q.y, ux, uy, cx: q.x + ux * N.L / 2, cy: q.y + uy * N.L / 2 };
+    };
+    for (const q of pts) {
+      if (q.L < 120 || q.L > L * 0.45) continue;
+      const k = lay(q, at(q.L + 140));
+      let ok = true;
+      for (let s = -60; s <= N.L + 40 && ok; s += 30) for (let l = -120; l <= 120 && ok; l += 40) if (!clear(k.sx + k.ux * s - k.uy * l, k.sy + k.uy * s + k.ux * l)) ok = false;
+      if (ok) return k;
+    }
+    const q = at(L * 0.3);
+    return lay(q, at(L * 0.3 + 140));
+  },
+  // l'endroit où mène l'étape en cours (le fil doré) : le début du parcours, la porte à passer, le banc de sable ; le port, quand on
+  // barre soi-même sur la route ; null sinon
+  aim() {
+    const c = Game.run.lecon, s = c.s, N = Lessons.NAV, k = c.course, auto = SeaScene.auto;
+    if (k && s === 'estuaire' && !auto) return [k.sx, k.sy];
+    if (Lessons.isNav() && k) {
+      if (s === 'barre') return Lessons.navPt(N.g1.s, N.g1.l);
+      if (s === 'toile') return Lessons.navPt(N.g2.s, N.g2.l);
+      if (s === 'ferler') return Lessons.navPt(N.sand.s - N.sand.a - 20, 0);
+      return c.loin ? [k.cx, k.cy] : null;
+    }
+    if (!auto && ['route', 'croisiere', 'manille', 'retour'].includes(s)) { const q = World.ports.find(x => x.id === SeaScene.dest); return q ? [q.x, q.y] : null; }
+    return null;
+  },
+  // (Game.rumorPick) la tournée de Manille : la pénurie de riz à Hong Kong, dans 3 jours, pour deux semaines
+  rumorPick() {
+    if (!this.on || Game.run.lecon.s !== 'tournee') return null;
+    const r = Game.run, V = this.V();
+    let ev = r.events.find(e => e.id === this.EV);
+    if (!ev) { ev = { id: this.EV, p: V.home, g: this.gi('back'), mult: V.mult, start: Math.round(r.day) + 3, dur: 14, shortage: true }; r.events.push(ev); }
+    if (!r.rumors.includes(ev.id)) r.rumors.push(ev.id);
+    r.lecon.heard = 1;
+    const why = Game.rumorCause(ev);
+    return { ev, text: (why ? '« ' + why + ' » ' : '') + Game.rumorText(ev) };
+  },
+  // (à Hong Kong) arrivé avant ou après : la pénurie dure jusqu'à ce qu'on ait vendu
+  holdShortage() {
+    const r = Game.run, ev = r.events.find(e => e.id === this.EV);
+    if (!ev) return;
+    if (ev.start > r.day) ev.start = Math.floor(r.day);
+    if (ev.start + ev.dur < r.day + 5) ev.dur = Math.ceil(r.day + 5 - ev.start);
+  },
+
+  // ── L'offre dans une carrière, et les conseils ──
+  // en tête de la fenêtre Appareiller (maquette du 10/10/2026, variante A) : la traversée (chapitre 2), aux trois premiers départs
+  // d'une carrière, tant qu'elle n'est ni faite ni refusée (la croix) ; de nouveau au départ qui suit le premier échouage
   navOffer() {
     const r = Game.run, m = Game.meta;
-    if (!r || r.over || r.mode !== 'career' || Seas.current !== 'chine' || !SEA.mentorSeal || this.done('mer')) return false;
+    if (!r || r.over || r.mode !== 'career' || !this.has() || this.done(2)) return false;
     const o = (m && m.navOffer) || {};
     return !!(o.echoue || (!o.closed && (o.n || 0) < 3));
   },
@@ -126724,241 +126835,454 @@ const Lessons = {
     Game.saveMeta();
   },
   navClose() { const m = Game.meta, o = m.navOffer || (m.navOffer = {}); o.closed = true; o.echoue = false; Game.saveMeta(); },
-  // (SeaScene, au premier « Échoué ! » d'une carrière) le conseil du mentor, et la leçon reproposée au port suivant
+  // (SeaScene, au premier « Échoué ! » d'une carrière) le conseil du mentor, et la traversée reproposée au départ suivant
   grounded() {
     const r = Game.run;
-    if (!r || r.mode === 'lecon' || r.mode === 'prologue' || Seas.current !== 'chine') return;
-    const m = Game.meta, o = m.navOffer || (m.navOffer = {}), done = this.done('mer');
+    if (!r || r.mode === 'lecon' || r.mode === 'prologue' || !this.has()) return;
+    const m = Game.meta, o = m.navOffer || (m.navOffer = {}), done = this.done(2);
     if (!o.grounded) { o.grounded = 1; if (!done) o.echoue = true; Game.saveMeta(); }
-    Bus.emit('hint', { id: 'echoue', p: { lecon: done ? '' : ' ' + T('lecon.mer.promesse') } });
+    Bus.emit('hint', { id: 'echoue', p: { lecon: done ? '' : ' ' + T('voyage.promesse') } });
   },
 
-  // ── Les étapes ──
+  // ── À chaque image : l'étape en cours, et ce que le guide montre ──
+  tick() {
+    if (Lessons.asking || Main.fadeDir || Guide.menuOpen()) { if (Guide.owner === 'voyage') Guide.hide(); return; }
+    if (Help.active) return;
+    let cfg = null;
+    if (this.on) {
+      const r = Game.run;
+      // (un chapitre commencé tout seul : son étape de départ n'est pas encore « entrée » — côté du marché, étal entamé…)
+      if (!r.lecon.go) { this.go(r.lecon.s); return; }
+      this.fix(r);
+      const st = this.S[r.lecon.s];
+      if (!st) { this.go(this.FIRST[r.lecon.ch]); return; }
+      if (st.done && st.done.call(this, r)) { this.go(st.next); return; }
+      cfg = st.view.call(this, r);
+    } else if (this.post === 'heritage' && Main.sceneName === 'title') cfg = this.postView();
+    if (cfg) Guide.show(Guide.withMenu(cfg), 'voyage');
+    else if (Guide.owner === 'voyage') Guide.hide();
+  },
+  // une partie reprise au port alors que l'étape était en mer (le jeu fermé en route) : la traversée reprend au quai
+  fix(r) {
+    if (Main.sceneName !== 'port' || !r.port) return;
+    const c = r.lecon;
+    if (c.ch === 2 && this.SEA2.includes(c.s) && r.port !== this.V().to) this.go('quai');
+    else if (c.ch === 3 && c.s === 'retour' && r.port !== this.V().home) this.go('quai3');
+  },
+  go(s) {
+    const r = Game.run, c = r.lecon, V = this.V();
+    c.s = s; c.go = 1; c.t0 = SeaScene.t || 0; c.miss = 0; c.trop = 0;
+    const soie = this.gi(), riz = this.gi('back');
+    if (s === 'vivres') UI.marketMode = 'buy';
+    if (s === 'soie') {
+      this.etalSoie();
+      c.target = Math.max(1, Game.maxBuy(r.port, soie));
+      UI.marketMode = 'buy'; UI.mkOpen = { buy: soie };
+      if (UI.top() === 'marche') { UI.closeAll(); UI.market(); }   // (la rubrique de la soie ouverte)
+    }
+    if (s === 'quai') Object.assign(c, { course: null, gate1: 0, gate2: 0, ventT: 0, sPrev: null, loin: 0, ok: {} });
+    if (s === 'barre') {
+      const S = SeaScene, p = S.player;
+      S.auto = false;
+      if (p && c.course) c.sPrev = Lessons.navPos(p.x, p.y).s;
+    }
+    if (s === 'croisiere') c.x0 = c.y0 = null;
+    if (s === 'pirate') Lessons.spawnFoe();
+    if (s === 'epaves') Lessons.spawnWreck();
+    if (s === 'commande') { this.etalManille(); UI.marketMode = 'sell'; UI.mkOpen = { sell: soie }; }
+    if (s === 'digere') { UI.marketMode = 'sell'; UI.mkOpen = { sell: soie }; }
+    if (s === 'tournee') UI.nextTab = Object.assign(UI.nextTab || {}, { taverne: 'rumeurs' });
+    if (s === 'journal') UI.journalTab = 'prix';
+    if (s === 'riz') { c.target = Math.max(1, Game.maxBuy(r.port, riz)); UI.marketMode = 'buy'; UI.mkOpen = { buy: riz }; }
+    if (s === 'vente') { this.holdShortage(); UI.marketMode = 'sell'; UI.mkOpen = { sell: riz }; }
+    if (s === 'fin1' || s === 'fin2' || s === 'fin') this.chapterDone(c.ch);
+    Game.saveRun();
+    UI.refresh();
+  },
+
+  // ── Morceaux de vue ──
+  X(k, p) { return T('voyage.' + k, p || {}); },
+  P(k, p) { return Lang.fmt(TXT.prologue[k], p || {}); },
+  label(type) { return Prologue.label(type); },
+  bub(text, o) {
+    o = o || {};
+    const c = Game.run && !Game.run.over && Game.run.lecon;
+    const b = Object.assign({ mentor: { seal: SEA.mentorSeal, name: TXT.mentorName }, who: TXT.mentorName, text, step: c && c.id === 'voyage' ? { i: this.rank(), n: this.LINES[c.ch].length } : null }, o);
+    b.buttons = o.next ? [{ label: o.next, cls: 'jade', fn: o.fn }] : (o.buttons || []);
+    delete b.next; delete b.fn;
+    return b;
+  },
+  // aller à un bâtiment : la flèche sur son bouton dans la barre du port ; une fenêtre ouverte se ferme d'abord
+  goTo(type, text) {
+    if (UI.isOpen()) return this.closeV();
+    if (Main.sceneName !== 'port') return null;
+    const sel = 'bar-' + type;
+    return { key: 'vy-go:' + type + ':' + Game.run.lecon.s, spot: [sel], arrow: sel, veil: false, lock: [gSel(sel), '#screen'], bubble: this.bub([text], { anchor: sel }) };
+  },
+  // fermer la fenêtre du dessus : la croix, seul bouton actif
+  closeV(text) {
+    const top = UI.top(), sel = '[data-g="x-' + (top || 'win') + '"]', x = document.querySelector(sel);
+    if (!x) return null;
+    return { key: 'vy-close:' + top + ':' + Game.run.lecon.s, spot: [sel], lock: [sel], bubble: this.bub([text || this.P('fermer', { sortir: x.textContent })], { anchor: sel }) };
+  },
+  goJournal() {
+    if (UI.isOpen()) return this.closeV();
+    return { key: 'vy-journal:' + Game.run.lecon.s, spot: ['hud-journal'], arrow: 'hud-journal', veil: false, lock: [gSel('hud-journal')],
+      bubble: this.bub([this.P('allerJournal', { bouton: T('hud.journal') })], { anchor: 'hud-journal' }) };
+  },
+  market(text) { return this.goTo('marche', text || this.P('allerMarche', { bouton: this.label('marche') })); },
+  seaBubble(key, text, o) { return Object.assign({ key, veil: false, lock: null, bubble: this.bub(text, Object.assign({ dock: 'top', anchor: null }, o || {})) }, o && o.cfg); },
+  // une explication en mer : la première fois, le jeu s'arrête le temps de la lire (« Compris ») ; ensuite, un rappel en bas
+  // (o.after : son texte, le même par défaut ; null : rien), qui suit ce qui change (o.tag)
+  explain(key, text, o) {
+    o = o || {};
+    const c = Game.run.lecon;
+    if (!c.ok[key]) return { key: 'vy-' + key + ':0', veil: false, pause: true, lock: null, spot: o.spot,
+      bubble: this.bub(text, { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => { c.ok[key] = 1; Game.saveRun(); if (o.fn) o.fn(); } }) };
+    const after = o.after === undefined ? text : o.after;
+    if (!after) return null;
+    return Object.assign(this.seaBubble('vy-' + key + (o.tag || ''), after, { dock: 'bottom' }), o.spot ? { spot: o.spot } : null);
+  },
+  atSea() { return Main.sceneName === 'sea' && !UI.isOpen(); },
+  near(pid, d) { const p = SeaScene.player, q = World.ports.find(x => x.id === pid); return !!(p && q && Math.hypot(q.x - p.x, q.y - p.y) < d); },
+  // la fenêtre d'appareillage, en quatre zones numérotées (au chapitre 3, le bouton de départ seulement). (11/10/2026, Adrien :
+  // « Chen masque l'interface ») la bulle en haut, sa liste sur deux colonnes : la fenêtre descend, la carte rétrécit d'autant
+  chartView() {
+    if (Game.run.lecon.ch === 3) return { key: 'vy-carte3', spot: ['ch-go'], lock: [gSel('ch-go')], bubble: this.bub([this.X('carteHK')], { anchor: 'ch-go' }) };
+    const z = ['ch-map', 'ch-card', 'ch-prices', 'ch-go'];
+    return { key: 'vy-carte', spot: z, badges: z.map((sel, i) => ({ sel, n: String(i + 1) })), lock: [gSel('ch-go')],
+      bubble: this.bub([this.X('carte')], { list: [this.P('carte1'), this.X('carte2'), this.P('carte3'), this.P('carte4')], cls: 'g-cols' }) };
+  },
+  coins(n) { return h('div', { class: 'pro-coins' }, ico('jade', 'big'), ico('jade', 'big'), ico('jade', 'big'), h('b', null, '+' + n), h('span', null, motJetons(n))); },
+  // la fin d'un chapitre (1 ou 2) : « Plus tard » ou « Continuer » ; prise depuis la carrière, on y retourne
+  chapterEnd(n, text) {
+    const c = Game.run.lecon, V = this.V(), paid = c.paid === n;
+    const buttons = c.resume ? [{ label: T('voyage.carriere'), cls: 'jade', fn: () => Lessons.leave() }]
+      : [{ label: T('voyage.plusTard'), cls: 'ghost sm', fn: () => this.later() }, { label: T('voyage.suite', { n: n + 1 }), cls: 'jade', fn: () => this.cont() }];
+    const body = text.concat(paid ? [this.P('fin1', { n: V.reward, jetons: motJetons(V.reward) }), this.coins(V.reward), this.P('fin2')] : []);
+    return { key: 'vy-fin' + n, veil: true, pause: true, lock: [], bubble: Object.assign(this.bub(body, { buttons }), { title: T('voyage.finChapitre', { n }), dock: 'center', anchor: null, cls: paid ? 'wide' : '' }) };
+  },
+  // après le voyage : l'Héritage, le conseil du mentor, et les deux sorties
+  postView() {
+    const id = this.V().heritage;
+    if (!this.postOpened && !UI.isOpen()) { this.postOpened = true; UI.heritage({ sel: id }); return null; }
+    const x = HERITAGE_BY_ID[id];
+    const b = this.bub([x ? this.P('heritage', { nom: x.name }) : '', this.P('pret')].filter(Boolean), {
+      buttons: [{ label: T('prologue.ecranTitre'), cls: 'ghost sm', fn: () => this.endPost(false) }, { label: T('prologue.carriere'), cls: 'jade', fn: () => this.endPost(true) }] });
+    if (UI.top() === 'heritage' && x) return { key: 'vy-heritage', spot: ['hr-h-' + x.id, 'hr-fiche'], veil: false, bubble: Object.assign(b, { anchor: 'hr-h-' + x.id }) };
+    return { key: 'vy-heritage:seul', veil: false, bubble: Object.assign(b, { dock: 'center', anchor: null }) };
+  },
+
+  // ── Les étapes : view (ce que montre le guide), done (l'étape est faite) → next ──
   S: {
-    marche: {
-      intro: {
-        view() {
-          if (UI.isOpen()) return this.closeV();
-          return { key: 'lc-intro', spot: ['#objectives'], lock: [], bubble: this.bub([this.X('intro1'), this.X('intro2', { navire: SHIPS[this.cfg().ship].name, somme: monnaie(Game.run.cash) })], { next: T('guide.enRoute'), fn: () => this.go('barre') }) };
-        },
-      },
-      barre: {
-        done(r) { const c = this.cfg(), gi = GOOD[c.good].idx; return r.lecon.target && r.cargo[gi] >= r.lecon.target; }, next: 'rayon',
-        view(r) {
-          if (UI.top() !== 'marche') return this.goTo('marche');
-          const c = this.cfg(), gi = GOOD[c.good].idx, sel = 'mk-g-' + c.good;
-          if (!r.lecon.target) { const t = Game.tiers(r.port, gi, true); r.lecon.target = Math.max(1, Math.min(t.q1 + t.q2, Game.maxBuy(r.port, gi)) - 2); }
-          return { key: 'lc-barre', spot: [sel], lock: [gSel(sel)], bubble: this.bub([this.X('barre1', { marchandise: lower(GOODS[gi].name) }), this.X('barre2')], { anchor: sel }) };
-        },
-      },
-      rayon: {
-        view(r) {
-          if (UI.top() !== 'marche') return this.goTo('marche');
-          const c = this.cfg(), gi = GOOD[c.good].idx, sel = 'mk-g-' + c.good;
-          return { key: 'lc-rayon', spot: [sel], lock: [], bubble: this.bub([this.X('rayon', { port: PORT[r.port].name, n: Math.round(Game.etalHalf(r.port, gi)) })], { anchor: sel, next: T('guide.compris'), fn: () => { UI.closeAll(); this.go('traversee'); } }) };
-        },
-      },
-      traversee: { done() { return Main.sceneName === 'sea'; }, next: 'mer', view() { return this.sail(); } },
-      mer: {
-        done(r) { return Main.sceneName === 'port' && r.port === this.cfg().to; }, next: 'commande',
-        view(r) {
-          if (Main.sceneName === 'sea') {
-            if (r.lecon.merOk || UI.isOpen()) return null;
-            return { key: 'lc-mer', veil: false, pause: true, bubble: this.bub([this.X('mer', { port: PORT[this.cfg().to].name })], { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => { r.lecon.merOk = 1; } }) };
-          }
-          return this.sail();
-        },
-      },
-      commande: {
-        done(r) { const c = this.cfg(), gi = GOOD[c.good].idx, sl = document.getElementById('mk-' + gi); return UI.top() === 'marche' && sl && +sl.value > Game.tiers(r.port, gi, false).q1; }, next: 'brade',
-        view(r) {
-          if (UI.top() !== 'marche') return this.goTo('marche');
-          const c = this.cfg(), gi = GOOD[c.good].idx, sel = 'mk-g-' + c.good, t = Game.tiers(r.port, gi, false);
-          r.lecon.held = r.cargo[gi];
-          return { key: 'lc-commande', spot: [sel], lock: [gSel(sel) + ' input'], bubble: this.bub([this.X('commande', { port: PORT[r.port].name, n: t.q1 })], { anchor: sel }) };
-        },
-      },
-      brade: {
-        done(r) { const gi = GOOD[this.cfg().good].idx; return r.cargo[gi] < (r.lecon.held || 0); }, next: 'repartir',
-        view(r) {
-          if (UI.top() !== 'marche') return this.goTo('marche');
-          const c = this.cfg(), gi = GOOD[c.good].idx, sel = 'mk-g-' + c.good, t = Game.tiers(r.port, gi, false);
-          return { key: 'lc-brade', spot: [sel], lock: [gSel(sel)], bubble: this.bub([this.X('brade', { n: t.q1 })], { anchor: sel }) };
-        },
-      },
-      repartir: {
-        view(r) {
-          if (UI.top() !== 'journal') return this.goJournal();
-          const c = this.cfg(), gi = GOOD[c.good].idx, k = Game.knownTiers('macao', gi, false);
-          return { key: 'lc-repartir', spot: ['jr-table'], lock: [], bubble: this.bub([this.X('repartir', { reste: r.cargo[gi], q: k ? k.q1 : '?', prix: k ? fmt(k.p1) : '?' })], { next: T('guide.suivant'), fn: () => { UI.closeAll(); this.go('digerer'); } }) };
-        },
-      },
-      digerer: {
-        view(r) {
-          if (UI.top() !== 'marche') return this.goTo('marche');
-          const c = this.cfg(), gi = GOOD[c.good].idx, sel = 'mk-g-' + c.good, t = Game.tiers(r.port, gi, false);
-          if (!r.lecon.waited) return { key: 'lc-attendre', spot: [sel], lock: [], bubble: this.bub([this.X('attendre', { port: PORT[r.port].name, n: t.q1 })], { anchor: sel,
-            next: T('lecon.marche.btnAttendre', { n: 6 }), fn: () => { Game.advance(6); r.lecon.waited = 1; UI.closeAll(); UI.market(); } }) };
-          return { key: 'lc-digere', spot: [sel], lock: [], bubble: this.bub([this.X('digere', { n: t.q1 })], { anchor: sel, next: T('guide.suivant'), fn: () => { UI.closeAll(); this.go('penurie'); } }) };
-        },
-      },
-      penurie: {
-        view() {
-          if (UI.top() !== 'journal') return this.goJournal();
-          const card = document.querySelector('.jr-ev.rich');
-          return { key: 'lc-penurie', spot: card ? ['.jr-ev.rich'] : [], lock: [], bubble: this.bub([this.X('penurie')], { next: T('guide.suivant'), fn: () => { UI.closeAll(); this.go('fin'); } }) };
-        },
-      },
-      fin: {
-        view() {
-          if (UI.isOpen()) return this.closeV();
-          const n = this.cfg().reward, first = !this.done('marche');
-          const coins = first ? h('div', { class: 'pro-coins' }, ico('jade', 'big'), ico('jade', 'big'), h('b', null, '+' + n), h('span', null, motJetons(n))) : null;
-          return { key: 'lc-fin', veil: true, lock: [], bubble: Object.assign(this.bub([this.X('fin1'), coins, this.X('fin2')].filter(Boolean),
-            { buttons: [{ label: T('prologue.ecranTitre'), cls: 'ghost sm', fn: () => this.finish() }, { label: T('lecon.mer.titre'), cls: 'jade', fn: () => this.finish('mer') }] }),
-            { title: T('lecon.finTitre'), dock: 'center', anchor: null }) };
-        },
+    // ═══ Chapitre 1 : Canton, préparer le voyage ═══
+    intro: {
+      view(r) {
+        if (UI.isOpen()) return this.closeV();
+        return { key: 'vy-intro', spot: ['#objectives'], lock: [], bubble: this.bub([this.P('intro1'), this.X('intro2', { date: fmtDate(r.endDay - 0.5) })], { next: T('guide.enRoute'), fn: () => this.go('emprunt') }) };
       },
     },
-    combat: {
-      intro: {
-        view() {
-          if (UI.isOpen()) return this.closeV();
-          return { key: 'lc-intro', spot: ['#objectives'], lock: [], bubble: this.bub([this.X('intro1'), this.X('intro2', { navire: SHIPS[this.cfg().ship].name })], { next: T('guide.enRoute'), fn: () => this.go('traversee') }) };
-        },
-      },
-      traversee: { done() { return Main.sceneName === 'sea'; }, next: 'vent', view() { return this.sail(); } },
-      vent: {
-        view() {
-          if (Main.sceneName !== 'sea' || UI.isOpen()) return null;
-          return { key: 'lc-vent', spot: ['#compass'], veil: false, pause: true, lock: [], bubble: this.bub([this.X('vent')], { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => this.go('flanc') }) };
-        },
-      },
-      flanc: {
-        done() { const e = this.foe(); return !e || e.dead || e.surrendered; }, next: 'rendu',
-        view() {
-          const e = this.foe();
-          if (!e && Main.sceneName === 'sea' && !SeaScene.ships.some(s => s.lessonFoe)) this.spawnFoe();
-          // (le pirate de la leçon se rend dès qu'il est bien touché)
-          if (e && !e.dead && !e.surrendered && e.hull < e.hullMax * 0.5) SeaScene.surrender(e);
-          if (UI.isOpen()) return null;
-          return this.seaBubble('lc-flanc', [this.X('flanc', { touches: this.fireKeys() })]);
-        },
-      },
-      rendu: {
-        done() { const e = this.foe(); return !!document.querySelector('.board-cv') || !e || e.dead; }, next: 'abordage',
-        view() {
-          if (UI.isOpen()) return null;
-          return this.seaBubble('lc-rendu', [this.X('rendu', { touche: this.boardKey() })]);
-        },
-      },
-      abordage: {
-        done() { return !document.querySelector('.board-cv') && !UI.isOpen(); }, next: 'epaves',
-        view() {
-          // (coulé plutôt que pris : on passe aux épaves)
-          if (!document.querySelector('.board-cv')) return null;
-          return { key: 'lc-abordage', veil: false, lock: null, bubble: this.bub([this.X('abordage')], { dock: 'top', anchor: null }) };
-        },
-      },
-      epaves: {
-        done(r) { return Main.sceneName === 'sea' && (!SeaScene.loot.length || SeaScene.t - (r.lecon.t0 || 0) > 45); }, next: 'fuir',
-        view() {
-          if (UI.isOpen()) return null;
-          return this.seaBubble('lc-epaves', [this.X('epaves')]);
-        },
-      },
-      fuir: {
-        done(r) { return Main.sceneName === 'sea' && SeaScene.t - (r.lecon.t0 || 0) > 16; }, next: 'fin',
-        view() {
-          if (UI.isOpen()) return null;
-          return this.seaBubble('lc-fuir', [this.X('fuir')]);
-        },
-      },
-      fin: {
-        view() {
-          this.dropChasers();
-          if (UI.isOpen()) return null;
-          const n = this.cfg().reward, first = !this.done('combat');
-          const coins = first ? h('div', { class: 'pro-coins' }, ico('jade', 'big'), ico('jade', 'big'), h('b', null, '+' + n), h('span', null, motJetons(n))) : null;
-          return { key: 'lc-fin', veil: true, pause: true, lock: [], bubble: Object.assign(this.bub([this.X('fin1'), coins, this.X('fin2')].filter(Boolean),
-            { next: T('prologue.ecranTitre'), fn: () => this.finish() }), { title: T('lecon.finTitre'), dock: 'center', anchor: null }) };
-        },
+    emprunt: {
+      done(r) { return r.debt > 0 && UI.top() !== 'usurier'; }, next: 'navire',
+      view(r) {
+        if (UI.top() !== 'usurier') return this.goTo('usurier', this.P('allerWang', { bouton: this.label('usurier') }));
+        if (r.debt > 0) return this.closeV(this.P('empruntOk'));
+        return { key: 'vy-emprunt', spot: ['us-dette', 'us-credit', 'us-emprunt'], lock: [gSel('us-emprunt')],
+          bubble: this.bub([this.P('emprunt', { cash: monnaie(SEA.start.cash), taux: Math.round(Game.debtRate() * 100) }), this.P('emprunt2', { somme: monnaie(this.V().loan) })], { anchor: 'us-emprunt' }) };
       },
     },
-    mer: {
-      intro: {
-        view() {
-          if (UI.isOpen()) return this.closeV();
-          return { key: 'lc-intro', spot: ['#objectives'], lock: [], bubble: this.bub([this.X('intro1'), this.X('intro2')],
-            { next: T('lecon.mer.btnMer'), fn: () => { UI.closeAll(); this.go('barre'); Main.setSail('hongkong'); } }) };
-        },
+    navire: {
+      done(r) { return !!r.ship; }, next: 'ameliorations',
+      view() {
+        if (UI.top() !== 'chantier') return this.goTo('chantier', this.P('allerChantier', { bouton: this.label('chantier') }));
+        const t = this.V().ship, o = Game.shipOffer(t);
+        return { key: 'vy-navire', spot: ['cy-offer-' + t], lock: [gSel('cy-buy-' + t)], bubble: this.bub([this.P('navire', { navire: SHIPS[t].name, prix: monnaie(o.price) })]) };
       },
-      // (une porte franchie à côté des bouées, ou le chenal passé à toute voile : le mentor le dit, et on recommence ; trop loin
-      //  du centre de la zone, il rappelle)
-      barre: {
-        done(r) { return !!r.lecon.gate1; }, next: 'toile',
-        view(r) {
-          if (Main.sceneName !== 'sea' || UI.isOpen()) return null;
-          const K = this.navKeys(), txt = [this.X('barre', K)];
-          // (la première fois, le jeu attend « Compris » : on lit avant de partir)
-          if (!r.lecon.barreOk) return { key: 'lc-nav-barre0', veil: false, pause: true, lock: null, bubble: this.bub(txt, { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => { r.lecon.barreOk = 1; } }) };
-          if (r.lecon.miss) txt.push(this.X('rate'));
-          if (r.lecon.loin) txt.push(T('lecon.mer.loin'));
-          return this.seaBubble('lc-nav-barre' + (r.lecon.miss ? '-rate' : '') + (r.lecon.loin ? '-loin' : ''), txt, { dock: 'bottom' });   // (en bas : le parcours est devant)
-        },
+    },
+    ameliorations: {
+      done() { return UI.top() !== 'chantier'; }, next: 'equipage',
+      view() { return { key: 'vy-ameliorations', spot: ['cy-upg'], lock: [], bubble: this.bub([this.P('ameliorations')], { next: T('guide.compris'), fn: () => { UI.closeAll(); this.go('equipage'); } }) }; },
+    },
+    equipage: {
+      done(r) { return r.ship.crew >= this.crewGoal(); }, next: 'taverne',
+      view() {
+        if (UI.top() !== 'taverne') return this.goTo('taverne', this.P('allerTaverne', { bouton: this.label('taverne') }));
+        const st = Game.stats();
+        return { key: 'vy-equipage', spot: ['tv-crew', 'tv-hire'], arrow: 'tv-hire', lock: [gSel('tv-hire')],
+          bubble: this.bub([this.P('equipage', { min: st.crewMin, n: this.crewGoal(), cout: monnaie(Game.hireCost()) })], { anchor: 'tv-crew' }) };
       },
-      toile: {
-        done(r) { return !!r.lecon.gate2; }, next: 'ferler',
-        view(r) {
-          if (Main.sceneName !== 'sea' || UI.isOpen()) return null;
-          const K = this.navKeys(), txt = [this.X('toile', K)];
-          if (r.lecon.trop) txt.push(this.X('trop', K)); else if (r.lecon.miss) txt.push(this.X('rate'));
-          if (r.lecon.loin) txt.push(T('lecon.mer.loin'));
-          return Object.assign(this.seaBubble('lc-nav-toile' + (r.lecon.trop ? '-trop' : r.lecon.miss ? '-rate' : '') + (r.lecon.loin ? '-loin' : ''), txt, { dock: 'bottom' }), { spot: ['.sh-speed'] });
-        },
+    },
+    taverne: {
+      done() { return UI.top() !== 'taverne'; }, next: 'vivres',
+      view() { return { key: 'vy-taverne', dash: ['tv-tabs'], lock: [], bubble: this.bub([this.P('taverne')], { anchor: 'tv-tabs', next: T('guide.compris'), fn: () => { UI.closeAll(); this.go('vivres'); } }) }; },
+    },
+    vivres: {
+      done() { return Game.foodDays() >= 30; }, next: 'soie',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market();
+        return { key: 'vy-vivres', spot: ['mk-food'], lock: [gSel('mk-food')], bubble: this.bub([this.P('vivres', { n: r.ship.crew }), this.X('vivres2')], { anchor: 'mk-food' }) };
       },
-      ferler: {
-        done() { const p = SeaScene.player; return Main.sceneName === 'sea' && p && p.sail === 0 && p.v < 5; }, next: 'vent',
-        view(r) {
-          if (Main.sceneName !== 'sea' || UI.isOpen()) return null;
-          const txt = [this.X('ferler', this.navKeys())];
-          if (r.lecon.loin) txt.push(T('lecon.mer.loin'));
-          return Object.assign(this.seaBubble('lc-nav-ferler' + (r.lecon.loin ? '-loin' : ''), txt, { dock: 'bottom' }), { spot: ['.sh-speed'] });
-        },
+    },
+    soie: {
+      done(r) { const gi = this.gi(); return r.cargo[gi] >= (r.lecon.target || 1) || (r.cargo[gi] > 0 && Game.maxBuy(r.port, gi) === 0); }, next: 'abord',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market();
+        const V = this.V(), gi = this.gi(), sel = 'mk-g-' + V.good, t = Game.tiers(r.port, gi, true), k = r.known[V.to];
+        return { key: 'vy-soie', spot: [sel], lock: [gSel(sel)], bubble: this.bub([this.X('soie1', { rayon: t.q1 }),
+          this.X('soie2', { prix: fmt(t.p1), reserve: fmt(t.p2), revente: k ? fmt(Game.counterPrice(V.to, gi, k.p[gi], false)) : '?', n: r.lecon.target })], { anchor: sel }) };
       },
-      vent: {
-        done(r) { return (r.lecon.ventT || 0) > 1.2; }, next: 'flanc',
-        view() {
-          if (Main.sceneName !== 'sea' || UI.isOpen()) return null;
-          return Object.assign(this.seaBubble('lc-nav-vent', [this.X('vent', this.navKeys())], { dock: 'bottom' }), { spot: ['#compass'] });
-        },
+    },
+    abord: {
+      done() { return UI.top() !== 'marche'; }, next: 'fin1',
+      view(r) { return this.closeV(this.X('abord', { n: Math.round(Game.etalHalf(r.port, this.gi())) })); },
+    },
+    fin1: {
+      view() {
+        if (UI.isOpen()) return this.closeV();
+        return this.chapterEnd(1, [this.X('fin1')]);
       },
-      // (flanc, rendu, abordage, épaves, fuir : les étapes de la leçon de combat, posées plus bas)
-      accoster: {
-        done() { return false; },   // (l'invite de la jonque de Chen mène à la fin : seaPrompt)
-        view() {
-          if (Main.sceneName !== 'sea' || UI.isOpen()) return null;
-          if (!this.chen()) this.spawnChen();
-          return this.seaBubble('lc-mer-accoster', [this.X('accoster', this.navKeys())], { dock: 'bottom' });
-        },
+    },
+
+    // ═══ Chapitre 2 : la traversée Canton → Manille ═══
+    quai: {
+      done() { return Main.sceneName === 'sea'; }, next: 'pilote',
+      view() { return UI.top() === 'carte' ? this.chartView() : this.goTo('quai', this.P('allerQuai', { bouton: this.label('quai') })); },
+    },
+    pilote: {
+      view() {
+        if (!this.atSea()) return null;
+        return { key: 'vy-pilote', veil: false, pause: true, lock: null, bubble: this.bub([this.X('pilote')], { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => this.go('estuaire') }) };
       },
-      fin: {
-        view(r) {
-          if (UI.isOpen()) return null;
-          const n = this.cfg().reward, first = !this.done('mer');
-          const coins = first ? h('div', { class: 'pro-coins' }, ico('jade', 'big'), ico('jade', 'big'), h('b', null, '+' + n), h('span', null, motJetons(n))) : null;
-          // (prise depuis la carrière : on y retourne ; sinon, l'écran titre)
-          const buttons = r.lecon.resume ? [{ label: T('lecon.mer.reprendre'), cls: 'jade', fn: () => this.finish() }] : [{ label: T('prologue.ecranTitre'), cls: 'jade', fn: () => this.finish() }];
-          return { key: 'lc-fin', veil: true, pause: true, lock: [], bubble: Object.assign(this.bub([this.X('fin1'), coins, this.X('fin2')].filter(Boolean), { buttons }),
-            { title: T('lecon.finTitre'), dock: 'center', anchor: null }) };
-        },
+    },
+    // (le pilote mène au début du parcours, au large ; à la barre, le fil doré y conduit)
+    estuaire: {
+      done(r) {
+        const p = SeaScene.player, k = r.lecon.course;
+        if (Main.sceneName !== 'sea' || !p) return false;
+        if (!k) return true;
+        const q = Lessons.navPos(p.x, p.y);
+        return q.s > -14 && q.s < 70 && Math.abs(q.l) < 90;
+      }, next: 'barre',
+      view() { return this.atSea() && !SeaScene.auto ? this.seaBubble('vy-estuaire', [this.X('estuaire')], { dock: 'bottom' }) : null; },
+    },
+    // (une porte franchie à côté des bouées, ou le chenal passé à toute voile : le mentor le dit, et on recommence ; trop loin
+    //  du parcours, il rappelle)
+    barre: {
+      done(r) { return !!r.lecon.gate1; }, next: 'toile',
+      view(r) {
+        if (!this.atSea()) return null;
+        const c = r.lecon, txt = [T('lecon.navigation.barre', Lessons.navKeys())], more = txt.slice();
+        if (c.miss) more.push(T('lecon.navigation.rate'));
+        if (c.loin) more.push(this.X('loin'));
+        return this.explain('barre', txt, { after: more, tag: (c.miss ? '-rate' : '') + (c.loin ? '-loin' : '') });
+      },
+    },
+    toile: {
+      done(r) { return !!r.lecon.gate2; }, next: 'ferler',
+      view(r) {
+        if (!this.atSea()) return null;
+        const c = r.lecon, K = Lessons.navKeys(), txt = [T('lecon.navigation.toile', K)], more = txt.slice();
+        if (c.trop) more.push(T('lecon.navigation.trop', K)); else if (c.miss) more.push(T('lecon.navigation.rate'));
+        if (c.loin) more.push(this.X('loin'));
+        return this.explain('toile', txt, { after: more, spot: ['.sh-speed'], tag: (c.trop ? '-trop' : c.miss ? '-rate' : '') + (c.loin ? '-loin' : '') });
+      },
+    },
+    ferler: {
+      done() { const p = SeaScene.player; return Main.sceneName === 'sea' && p && p.sail === 0 && p.v < 5; }, next: 'vent',
+      view(r) {
+        if (!this.atSea()) return null;
+        const txt = [T('lecon.navigation.ferler', Lessons.navKeys())], more = txt.slice();
+        if (r.lecon.loin) more.push(this.X('loin'));
+        return this.explain('ferler', txt, { after: more, spot: ['.sh-speed'], tag: r.lecon.loin ? '-loin' : '' });
+      },
+    },
+    vent: {
+      done(r) { return (r.lecon.ventT || 0) > 1.2; }, next: 'route',
+      view() { return this.atSea() ? this.explain('vent', [T('lecon.navigation.vent', Lessons.navKeys())], { spot: ['#compass'] }) : null; },
+    },
+    route: {
+      view() {
+        if (!this.atSea()) return null;
+        return { key: 'vy-route', veil: false, pause: true, lock: null, bubble: this.bub([this.X('route', Lessons.navKeys())], { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => this.go('croisiere') }) };
+      },
+    },
+    // (sur la route de Manille : quelques encablures, puis le pirate. Le parcours de la barre couvre déjà les deux tiers de la route ;
+    //  plus loin commencent les îles devant Manille, où le combat finissait sur les récifs : il a lieu dans les eaux libres du parcours)
+    croisiere: {
+      done(r) {
+        const p = SeaScene.player, c = r.lecon;
+        if (Main.sceneName !== 'sea' || !p) return false;
+        if (c.x0 == null) { c.x0 = p.x; c.y0 = p.y; }
+        return Math.hypot(p.x - c.x0, p.y - c.y0) > 45 || this.near(this.V().to, 150);
+      }, next: 'pirate',
+      view() { return this.atSea() && !SeaScene.auto ? this.seaBubble('vy-croisiere', [this.X('croisiere', Lessons.navKeys())], { dock: 'bottom' }) : null; },
+    },
+    pirate: {
+      view() {
+        if (!this.atSea()) return null;
+        return { key: 'vy-pirate', veil: false, pause: true, lock: null, bubble: this.bub([this.X('pirate')], { dock: 'top', anchor: null, next: T('guide.compris'), fn: () => this.go('flanc') }) };
+      },
+    },
+    flanc: {
+      done() { const e = Lessons.foe(); return !e || e.dead || e.surrendered; }, next: 'rendu',
+      view() {
+        const e = Lessons.foe();
+        // (le pirate de la leçon se rend dès qu'il est bien touché)
+        if (e && !e.dead && !e.surrendered && e.hull < e.hullMax * 0.5) SeaScene.surrender(e);
+        if (!this.atSea()) return null;
+        const K = Lessons.navKeys(), kb = a => '<kbd>' + U.esc(Input.keyLabel(a)) + '</kbd>', mouse = !Pad.active && !Input.touch;
+        // (11/10/2026, Adrien : dire qu'on barre au clavier, et qu'un clic de souris tire du côté voulu)
+        const txt = [mouse ? this.X('flanc', { q: kb('fireL'), e: kb('fireR') }) : this.X('flancAutre', { feu: K.feu })];
+        return this.explain('flanc', txt, { after: [this.X('flancRappel', { feu: K.feu })], fn: () => { SeaScene.auto = false; } });
+      },
+    },
+    rendu: {
+      done() { const e = Lessons.foe(); return !!document.querySelector('.board-cv') || !e || e.dead; }, next: 'abordage',
+      view() { return this.atSea() ? this.explain('rendu', [T('lecon.combat.rendu', { touche: Lessons.boardKey() })]) : null; },
+    },
+    abordage: {
+      done() { return !document.querySelector('.board-cv') && !UI.isOpen(); }, next: 'epaves',
+      view() {
+        // (coulé plutôt que pris : on passe aux épaves)
+        if (!document.querySelector('.board-cv')) return null;
+        return { key: 'vy-abordage', veil: false, lock: null, bubble: this.bub([T('lecon.combat.abordage')], { dock: 'top', anchor: null }) };
+      },
+    },
+    epaves: {
+      done(r) { return Main.sceneName === 'sea' && !!r.lecon.ok.epaves && (!SeaScene.loot.length || SeaScene.t - (r.lecon.t0 || 0) > 25); }, next: 'manille',
+      view() { return this.atSea() ? this.explain('epaves', [T('lecon.combat.epaves')]) : null; },
+    },
+    // (le port choisi s'ouvre à l'approche : le pilote y accoste tout seul ; à la barre, « Accoster » s'affiche)
+    manille: {
+      done(r) { return Main.sceneName === 'port' && r.port === this.V().to; }, next: 'fin2',
+      view(r) {
+        if (!this.atSea()) return null;
+        const K = Lessons.navKeys();
+        if (!r.lecon.ok.manille) return this.explain('manille', [this.X('manille', K)], { after: null });
+        if (this.near(this.V().to, 170)) return this.seaBubble('vy-approche', [this.X('approche', K)], { dock: 'bottom' });
+        return SeaScene.auto ? null : this.seaBubble('vy-manille-barre', [this.X('croisiere', K)], { dock: 'bottom' });
+      },
+    },
+    fin2: {
+      view() {
+        if (Main.sceneName !== 'port') return null;
+        if (UI.isOpen()) return this.closeV();
+        return this.chapterEnd(2, [this.X('fin2')]);
+      },
+    },
+
+    // ═══ Chapitre 3 : Manille, puis Hong Kong ═══
+    commande: {
+      done(r) { const gi = this.gi(), sl = document.getElementById('mk-' + gi); return UI.top() === 'marche' && UI.marketMode === 'sell' && sl && +sl.value > Game.tiers(r.port, gi, false).q1; }, next: 'brade',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market(this.X('arrivee', { bouton: this.label('marche') }));
+        const gi = this.gi(), sel = 'mk-g-' + this.V().good, t = Game.tiers(r.port, gi, false);
+        r.lecon.held = r.cargo[gi];
+        return { key: 'vy-commande', spot: [sel], lock: [gSel(sel) + ' input'], bubble: this.bub([T('lecon.marche.commande', { port: PORT[r.port].name, n: t.q1 })], { anchor: sel }) };
+      },
+    },
+    brade: {
+      done(r) { return r.cargo[this.gi()] < (r.lecon.held || 0); }, next: 'attendre',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market();
+        const sel = 'mk-g-' + this.V().good, t = Game.tiers(r.port, this.gi(), false);
+        return { key: 'vy-brade', spot: [sel], lock: [gSel(sel)], bubble: this.bub([T('lecon.marche.brade', { n: t.q1 })], { anchor: sel }) };
+      },
+    },
+    attendre: {
+      view(r) {
+        if (UI.top() !== 'marche') return this.market();
+        const sel = 'mk-g-' + this.V().good, t = Game.tiers(r.port, this.gi(), false);
+        return { key: 'vy-attendre', spot: [sel], lock: [], bubble: this.bub([T('lecon.marche.attendre', { port: PORT[r.port].name, n: t.q1 })], { anchor: sel,
+          next: T('lecon.marche.btnAttendre', { n: 6 }), fn: () => { Game.advance(6); this.go('digere'); UI.closeAll(); UI.market(); } }) };
+      },
+    },
+    digere: {
+      done(r) { return r.cargo[this.gi()] === 0; }, next: 'tournee',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market();
+        const sel = 'mk-g-' + this.V().good, t = Game.tiers(r.port, this.gi(), false);
+        return { key: 'vy-digere', spot: [sel], lock: [gSel(sel)], bubble: this.bub([this.X('digere', { n: t.q1 })], { anchor: sel }) };
+      },
+    },
+    tournee: {
+      done(r) { return !!r.lecon.heard; }, next: 'rumeur',
+      view() {
+        if (UI.top() !== 'taverne') return this.goTo('taverne', this.X('tournee', { bouton: this.label('taverne') }));
+        if (!document.querySelector(gSel('tv-rumeurs'))) return null;
+        return { key: 'vy-tournee', spot: ['tv-rumeurs'], lock: [gSel('tv-rumeurs')], bubble: this.bub([this.X('tournee2', { cout: monnaie(Game.rumorCost()) })], { anchor: 'tv-rumeurs' }) };
+      },
+    },
+    rumeur: {
+      done() { return UI.top() !== 'taverne'; }, next: 'journal',
+      view() { return this.closeV(this.X('rumeur')); },
+    },
+    journal: {
+      view() {
+        if (UI.top() !== 'journal') return this.goJournal();
+        return { key: 'vy-prix', spot: ['jr-table'], lock: [], bubble: this.bub([this.X('prix')], { next: T('guide.suivant'), fn: () => { UI.closeAll(); UI.journalTab = 'rumeurs'; this.go('rumeurs'); UI.journal(); } }) };
+      },
+    },
+    rumeurs: {
+      view() {
+        if (UI.top() !== 'journal') return this.goJournal();
+        // (la fiche de la pénurie de riz seulement, pas les saisons ni les fêtes)
+        const card = [...document.querySelectorAll('.jr-ev.rich')].find(e => e.textContent.includes(GOODS[this.gi('back')].name));
+        if (card) card.dataset.g = 'vy-ev';
+        return { key: 'vy-rumeurs', spot: card ? ['vy-ev'] : [], lock: [], bubble: this.bub([this.X('rumeurs')], { next: T('guide.compris'), fn: () => { UI.closeAll(); this.go('riz'); } }) };
+      },
+    },
+    riz: {
+      done(r) { const gi = this.gi('back'); return r.cargo[gi] >= (r.lecon.target || 1) || (r.cargo[gi] > 0 && Game.maxBuy(r.port, gi) === 0); }, next: 'quai3',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market();
+        const V = this.V(), gi = this.gi('back'), sel = 'mk-g-' + V.back, t = Game.tiers(r.port, gi, true);
+        return { key: 'vy-riz', spot: [sel], lock: [gSel(sel)], bubble: this.bub([this.X('riz', { prix: fmt(t.p1), n: r.lecon.target })], { anchor: sel }) };
+      },
+    },
+    quai3: {
+      done() { return Main.sceneName === 'sea'; }, next: 'retour',
+      view() { return UI.top() === 'carte' ? this.chartView() : this.goTo('quai', this.X('quaiHK', { bouton: this.label('quai') })); },
+    },
+    retour: {
+      done(r) { return Main.sceneName === 'port' && r.port === this.V().home; }, next: 'vente',
+      view() { return this.atSea() ? this.explain('retour', [this.X('retour', Lessons.navKeys())], { after: SeaScene.auto ? null : [this.X('croisiere', Lessons.navKeys())] }) : null; },
+    },
+    vente: {
+      done(r) { return r.cargo[this.gi('back')] === 0; }, next: 'benefice',
+      view(r) {
+        if (UI.top() !== 'marche') return this.market(this.X('arriveeHK', { bouton: this.label('marche') }));
+        const gi = this.gi('back'), sel = 'mk-g-' + this.V().back, t = Game.tiers(r.port, gi, false);
+        return { key: 'vy-vente', spot: [sel], lock: [gSel(sel)], bubble: this.bub([this.X('vente', { n: t.q1, offre: fmt(t.p1), paye: fmt(r.cost[gi]) })], { anchor: sel }) };
+      },
+    },
+    benefice: {
+      done() { return UI.top() !== 'marche'; }, next: 'port',
+      view() { return this.closeV(this.X('benefice')); },
+    },
+    port: {
+      view() {
+        if (UI.isOpen()) return this.closeV();
+        const z = ['hud-debt', 'hud-hull', 'hud-food', 'bar-chantier'];
+        return { key: 'vy-port', spot: z, badges: z.map((sel, i) => ({ sel, n: String(i + 1) })), lock: [],
+          bubble: this.bub([this.P('port')], { list: [this.P('port1'), this.X('port2'), this.P('port3'), this.P('port4')], anchor: null, next: T('guide.suivant'), fn: () => this.go('fin') }) };
+      },
+    },
+    // la fin : les jetons (les trois chapitres faits, la première fois), à quoi ils servent ; puis l'Héritage à l'écran titre
+    fin: {
+      view(r) {
+        if (UI.isOpen()) return this.closeV();
+        const c = r.lecon, V = this.V(), paid = c.paid === 3;
+        const left = [1, 2].filter(n => !this.done(n));
+        const text = paid ? [this.P('fin1', { n: V.reward, jetons: motJetons(V.reward) }), this.coins(V.reward), this.P('fin2'), this.P('fin3')]
+          : [left.length ? this.X('reste', { chapitres: andList(left.map(n => T('voyage.chapitreN', { n }))), n: V.reward }) : this.X('rejoue'), this.P('fin3')];
+        const buttons = c.resume ? [{ label: T('voyage.carriere'), cls: 'jade', fn: () => this.finish(false) }]
+          : [{ label: paid ? T('prologue.voirHeritage') : T('prologue.ecranTitre'), cls: 'jade', fn: () => this.finish(paid) }];
+        return { key: 'vy-fin', veil: true, pause: true, lock: [], bubble: Object.assign(this.bub(text, { buttons }), { title: this.P('finTitre'), dock: 'center', anchor: null, cls: paid ? 'wide' : '' }) };
       },
     },
   },
 };
-// (la leçon de mer reprend telles quelles les étapes du combat de la leçon de combat ; après la fuite, on va accoster)
-Object.assign(Lessons.S.mer, { flanc: Lessons.S.combat.flanc, rendu: Lessons.S.combat.rendu, abordage: Lessons.S.combat.abordage, epaves: Lessons.S.combat.epaves,
-  fuir: Object.assign({}, Lessons.S.combat.fuir, { next: 'accoster' }) });
 
 </script>
 <script>
@@ -127350,11 +127674,14 @@ Seas.register({
     familyShips: ['jonque', 'lorcha', 'brick'], rescueShip: 'jonque',
     known: { ports: ['hongkong', 'macao', 'manille', 'singapour', 'batavia'], age: [12, 40] },
   },
-  // ── Le mentor (le vieux Chen, second du père : son sceau ; nom et répliques dans text) et le prologue, un premier
-  //    voyage guidé (js/prologue.js) : départ, arrivée, marchandise, navire, emprunt conseillé, graine (prix fixes :
-  //    porcelaine vers 68 à Canton, revendue vers 122 à Hong Kong), jetons offerts, amélioration d'héritage conseillée ──
+  // ── Le mentor (le vieux Chen, second du père : son sceau ; nom et répliques dans text) et le premier voyage (js/voyage.js,
+  //    11/10/2026 : il remplace le prologue et les leçons) : la soie (good) de Canton (from) à Manille (to), puis le riz (back) vers
+  //    Hong Kong (home) ; navire, emprunt, graine (prix fixes), jours de mer du chapitre 3, ce qui reste au rayon de soie de Canton
+  //    et à la commande de Manille (rayon, commande : pour voir la réserve et le bradé avec une dizaine de piculs), la pénurie de
+  //    riz annoncée (mult), jetons des trois chapitres, amélioration d'héritage conseillée. Les répliques de l'ancien prologue
+  //    (text.prologue) servent encore au voyage ──
   mentorSeal: '陳',
-  prologue: { from: 'canton', to: 'hongkong', good: 'porcelaine', ship: 'jonque', loan: 4000, seed: 1091990173, reward: 15, heritage: 'navire' },
+  voyage: { from: 'canton', to: 'manille', home: 'hongkong', good: 'soie', back: 'riz', ship: 'jonque', loan: 4000, seed: 1091990173, days: 10, rayon: 6, commande: 4, mult: 2.6, reward: 15, heritage: 'navire' },
   // haut fait des grands navires
   bigShipAch: { id: 'clipper', types: ['clipper', 'indiaman'] },
   // hauts faits de fortune (valeur nette)
@@ -128888,7 +129215,8 @@ Seas.register({
       vivres: '<b>Les vivres s\'épuisent !</b> Accoste au port le plus proche et achète de quoi manger, ou l\'équipage va déserter.',
       coque: 'La coque a souffert. Passe au <b>chantier naval</b> : un navire abîmé coule vite au prochain coup dur.',
       solde: 'Début du mois : <b>la solde</b> des marins. Garde toujours de quoi les payer, sinon certains déserteront.',
-      leconCombat: 'Ces pirates t\'ont donné du fil à retordre ? Je t\'apprendrai à te battre : la <b>leçon de mer</b> t\'attend dans l\'<b>Aide</b>, depuis l\'écran titre. Elle ne compte pas dans ta carrière.',
+      // (11/10/2026) la traversée du premier voyage, proposée sans obliger
+      leconCombat: 'Ces pirates t\'ont donné du fil à retordre ? Si tu veux, je t\'apprends à te battre : la <b>traversée du premier voyage</b> (chapitre 2) t\'attend dans l\'<b>Aide</b>, depuis l\'écran titre. Elle ne compte pas dans ta carrière.',
       // (10/10/2026, partie d'un débutant : ce que le prologue n'explique pas) ; taux : la dette de Wang, en % par mois
       rembourser: 'Tu as de quoi rembourser <b>Wang</b>, et sa maison est ici. Ne traîne pas : sa dette grossit de <b>{taux} % par mois</b>, et dans {jours, plural, one {# jour} other {# jours}}, ses hommes viendront se servir.',
       soldeAvance: 'Avant le large, un conseil : le 1er du mois, {marins, plural, one {ton marin attend} other {tes # marins attendent}} <b>{somme}</b> de solde. Garde toujours de quoi la payer, sinon certains déserteront.',
@@ -140382,6 +140710,7 @@ const Main = {
     this.ctx = this.cv.getContext('2d');
     Input.init(this.cv);
     Game.demoReset();   // (la démo seulement : une remise à zéro demandée par la nouvelle version, tools/demo.js)
+    Game.webReset();    // (la version test du site seulement : pareil, tools/publish-web.js)
     Game.loadGlobal();
     Input.applyKeys();   // (les touches choisies dans les Options)
     // la langue : celle choisie par le joueur, sinon celle du système (js/lang.js) ; puis les textes fixes de la page
@@ -140501,7 +140830,7 @@ const Main = {
     Game.newRun(o);
     Game.saveRun();
     this.transition(() => {
-      this.enterPort(SEA.start.port);
+      this.enterPort(Game.run.port || SEA.start.port);   // (le premier voyage peut commencer à Manille : son chapitre 3)
       if (o.mode === 'prologue' || o.mode === 'lecon') return;   // (le prologue et les leçons expliquent eux-mêmes)
       setTimeout(() => {
         if (!Game.meta.tutorialDone && Game.meta.runs === 0) UI.toast(Pad.active ? T('tuto.manette', { lb: 'LB', rb: 'RB', a: 'A' }) : Input.touch ? T('tuto.tactile') : T('tuto.clavier'), '');
@@ -140541,7 +140870,8 @@ const Main = {
       else if (r.ship && st && r.ship.hull < st.hullMax * 0.5) Bus.emit('hint', { id: 'coque' });
       // (après le premier combat, la leçon de combat, si on ne l'a pas faite : 09/10/2026, partie d'un débutant)
       // (10/10/2026, audit : « Ces pirates t'ont donné du fil à retordre ? » sans un coup de canon) après un vrai combat seulement
-      if (r.flags.fought && !Lessons.done('combat') && !Lessons.done('mer')) Bus.emit('hint', { id: 'leconCombat' });
+      // (11/10/2026) la traversée du premier voyage, son chapitre 2, proposée sans obliger
+      if (r.flags.fought && Voyage.has() && !Voyage.done(2)) Bus.emit('hint', { id: 'leconCombat' });
       // (10/10/2026, partie d'un débutant : ce que le prologue n'explique pas) rembourser Wang chez lui, la banque
       const P = PORT[pid];
       if (r.debt > 0 && r.cash >= r.debt && P.buildings.includes('usurier')) Bus.emit('hint', { id: 'rembourser', p: { taux: String(+(Game.debtRate() * 100).toFixed(1)).replace('.', LOC.decimal), jours: Math.max(0, due != null ? due : Game.debtTerm()) } });
@@ -140553,7 +140883,7 @@ const Main = {
     const rs = Game.run, crew = rs.ship ? rs.ship.crew : 0;
     if (crew > 0 && rs.cash < crew * CREW_WAGE && !(SEA.rules && SEA.rules.wages && SEA.rules.wages() === false)) Bus.emit('hint', { id: 'soldeAvance', p: { marins: crew, somme: monnaie(crew * CREW_WAGE) } });
     PortScene.talkEnd();
-    Lessons.navDeparted();   // (l'offre de la leçon de navigation : aux trois premiers départs)
+    Voyage.navDeparted();   // (l'offre de la traversée du premier voyage : aux trois premiers départs)
     Game.depart(dest);
     this.transition(() => {
       this.sceneName = 'sea'; this.scene = SeaScene;
@@ -140724,9 +141054,9 @@ body:has(.title-screen):not(:has(#loading)) #majb { display: inline-flex; }
 @media (max-width: 520px) { #majb { padding: 6px 11px; font-size: 11.5px; } #majn .majn-h { padding: 12px 14px 10px; } #majn .majn-b { padding: 4px 14px 14px; } #majn h2 { font-size: 19px; } }
 </style>
 <button type="button" id="majb"><span class="majb-p" aria-hidden="true"></span><span class="majb-t">Mises à jour</span><span class="majb-d"></span></button>
-<div id="majn" role="dialog" aria-modal="true" aria-labelledby="majn-t"><div class="majn-box"><div class="majn-h"><div><h2 id="majn-t">Dernières mises à jour</h2><p class="majn-l" hidden></p></div><button type="button" class="majn-x">×</button></div><div class="majn-b" lang="fr"><article class="majn-e"><div class="majn-d">10 octobre 2026</div><h3>Une première partie plus claire, et l’Héritage refait</h3><span class="majn-tag majn-chine">Mer de Chine</span><div class="majn-pv"><b>Pour vous</b><ul><li>Nouvelle leçon de Chen, la leçon de mer : au grand large, loin des côtes, la barre (tourner, réduire la toile, s’arrêter, prendre le vent) puis le combat, et l’on accoste à la main le long de sa jonque. Elle vous est proposée à vos premiers départs, et reste dans l’Aide à la place de la leçon de combat.</li><li>Le premier pirate se voit tout de suite et se bat mal à l’abordage ; chaque pirate ne prend plus qu’une part à sa taille. Et Chen vous prévient de la douane avant de vous envoyer vendre des armes.</li><li>Les touches du clavier se changent dans les Options, et l’Aide les présente en tableau : clavier, souris, manette.</li><li>L’Héritage de la Mer de Chine est refait pour le marché à l’étal : le Réseau de marchands (plus de marchandise en rayon et à la commande), le Marchandage, les Étals vite regarnis, la Fortune de famille, et chaque amélioration à son juste prix. Vos niveaux achetés restent.</li><li>Le but est écrit dès le départ : un million de taels de valeur nette avant le 31 décembre. Et la dette de Wang dit où la rembourser, et ce qu’elle coûte.</li><li>Chen vous prévient au bon moment : premier pirate, premier typhon, banque, solde du mois, contrebande. Il vous conseille le port qui rapporte le plus par jour de mer.</li><li>Chaque nouvelle lune, le jeu s’arrête un instant : le mois peint au pinceau, les lunes qui restent pour devenir Taï-pan, la paye de l’équipage, votre progression vers le titre, et le bilan du mois écoulé (aussi gardé dans le journal).</li><li>Les messages ne cachent plus les fenêtres, la musique change d’un passage à l’autre, et en mer le navire vit : bois qui grince, voiles, vent, cloche de quart.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>La barre et les touches</h4><ul><li>La leçon de mer, dans une zone d’entraînement au grand large : des bouées vertes à passer, un chenal entre deux récifs à franchir à mi-voile, un banc de sable devant lequel s’arrêter, le vent à prendre ; puis un pirate à affronter, son drapeau blanc, l’abordage, les épaves, la fuite ; enfin la jonque de Chen, le long de laquelle on accoste à la main. On ne peut accoster nulle part avant, et un fil doré mène à chaque étape. 10 jetons la première fois.</li><li>Elle est proposée en tête de la fenêtre Appareiller à vos trois premiers départs (la croix la range), de nouveau après votre premier échouage, et toujours dans l’Aide. Prise depuis une carrière, elle vous y ramène à la fin.</li><li>En mer, les touches de la toile s’affichent sous la vitesse ; à la barre, la ligne du bas rappelle les touches de la barre, de la toile et du pilote. Dans le prologue, Chen dit comment ralentir.</li><li>Au premier échouage, Chen explique comment ralentir avant une côte.</li><li>À la barre, le port où vous allez s’accoste d’un peu plus loin : « Accoster » s’affiche à l’entrée de la rade.</li><li>Options › Touches : une touche par action, à changer d’un clic (deux actions sur la même touche échangent leurs touches). Les flèches, Tab et Échap marchent toujours.</li><li>Aide › Les commandes : un tableau, une ligne par action, avec le clavier, la souris et la manette.</li><li>Sous Firefox et Safari, un clavier français affiche enfin ses vraies lettres (Q/D pour tourner, Z/S pour la toile), et la carte s’ouvre avec M.</li></ul><h4>Pirates et douane</h4><ul><li>Le premier pirate arrive par le côté, à l’écran, un peu plus rapide que vous mais avec cinq hommes : il ne tente pas l’abordage, et se prend facilement.</li><li>Au début d’un combat, le pilote garde le cap jusqu’à ce que vous preniez la barre (au doigt, le navire ne s’arrête plus net).</li><li>À l’abordage, chaque pirate prend une part à sa taille : un sampan 5 % de chaque marchandise et 10 % de l’argent à bord, une jonque pirate 15 % et 20 %, jusqu’à 45 % et 50 % pour une frégate.</li><li>Si vous repoussez un abordage, Chen dit qu’on peut prendre le navire qui s’est rendu.</li><li>Pour des armes, Chen nomme d’abord le meilleur port sans douane, puis « Gaffe à la douane ! » : le port à douane qui paierait mieux, la fréquence des fouilles, et le pot-de-vin à garder.</li><li>Les contrats d’armes vers un port à douane le disent : « Contrebande · douane à l’arrivée ».</li></ul><h4>L’Héritage refait</h4><ul><li>Réseau de marchands : les marchands vous gardent plus de marchandise et vous en prennent plus, +10 % au rayon, à la réserve et à la commande par niveau.</li><li>Marchandage : au-delà de la commande, le bradé commence à −15 %, puis à −10 %, au lieu de −20 %.</li><li>Étals vite regarnis : après vos achats et vos ventes, les étals se refont jusqu’à 30 % plus vite.</li><li>La Fortune de famille remplace le Bas de laine : +1 500 taels au départ par niveau.</li><li>Chaque amélioration coûte ce qu’elle rapporte : Navire de famille, Navigateur, Faveur de Mazu, Canonniers, Arrimage, Équipage et Informateurs coûtent moins cher. Le Crédit chez Wang quitte l’Héritage (Wang prête toujours, en ville).</li><li>Rien n’est perdu de ce que vous aviez acheté, sauf le Crédit chez Wang et le Bas de laine au-delà du niveau 3, qui ne comptent plus.</li><li>À la fin du prologue, Chen conseille le Navire de famille : vous partez avec votre propre jonque, sans emprunter pour l’acheter.</li></ul><h4>La nouvelle lune</h4><ul><li>Le 1er de chaque mois, un écran plein, jeu en pause jusqu’au clic : le mois en calligraphie, « Encore 11 lunes pour devenir Taï-pan », « Vous payez votre équipage » (ou les marins qui désertent si la caisse est vide).</li><li>Une jauge de votre valeur nette, jalonnée des grades jusqu’au sceau du Taï-pan.</li><li>La page du mois écoulé : bénéfice des ventes (dont grâce aux rumeurs), escales, contrats livrés, pirates coulés, navires abordés, butin, typhons, marins perdus, et la meilleure affaire. Elle est gardée dans le journal, onglet Carnet.</li><li>La nuit vire du bleu à l’ocre quand il reste 6 lunes ou moins, puis au vermillon pour les deux dernières.</li></ul><h4>Le but et la dette</h4><ul><li>Le but est écrit dès l’introduction et reste en dernière ligne des objectifs : 1 000 000 taels de valeur nette avant le 31 décembre.</li><li>Endetté, l’objectif dit « Sortir du rouge » au lieu de viser un titre.</li><li>La dette de Wang dit où la rembourser : à Canton ou à Macao.</li><li>Le titre en haut à droite s’explique au survol : votre rang, le détail de votre valeur nette et le prochain titre.</li></ul><h4>En mer</h4><ul><li>Au premier pirate et au premier typhon, Chen dit comment tourner (Q/D ou les flèches au clavier, la barre au doigt, le stick à la manette). Le message de combat le rappelle.</li><li>Abordé, un bilan reste à l’écran jusqu’à « Compris ». Le journal note l’argent, la cargaison et les marins perdus.</li><li>Après votre premier vrai combat, Chen propose la leçon de combat (dans l’Aide, depuis l’écran titre).</li><li>Le trésor d’une carte au trésor se remonte depuis le navire : on ne parle plus de le « déterrer ».</li><li>La porcelaine brisée et les hommes tombés à la mer pendant la traversée sont notés à l’arrivée. Les jours de mer suivent le calendrier.</li><li>Pas de typhon au tout premier voyage, et l’aide « Première visite » attend que Chen ait fini de parler.</li></ul><h4>Les conseils de Chen</h4><ul><li>À l’achat, Chen choisit le port qui rapporte le plus par jour de mer, un peu moins sur une route à pirates, et dit quand un voyage ne vaut pas la peine.</li><li>Il prévient quand vous avez de quoi rembourser Wang, devant votre première banque, quand vous partez sans de quoi payer la solde, et dès que vous regardez des armes au marché (la contrebande, les ports sans douane).</li><li>Au temple, chaque offrande dit ce qu’elle fait et pendant combien de jours.</li></ul><h4>Marché, carte et contrats</h4><ul><li>Les quantités se lisent mieux : « En rayon : 61 · puis 61 de réserve à 85 ».</li><li>Quand c’est l’argent, et non la cale, qui arrête la réglette, le jeu le dit.</li><li>Le marché s’ouvre toutes rubriques fermées.</li><li>Les contrats disent à combien de jours de mer est le port de livraison.</li><li>Sur la carte, on choisit un port en touchant son nom (Hong Kong et Macao se distinguent enfin) ; les zones de pirates se voient mieux.</li></ul><h4>À l’écran</h4><ul><li>Quand une fenêtre est ouverte, les messages s’affichent en bas et ne cachent plus son en-tête. À l’arrivée, le nom de la ville s’écarte des messages.</li><li>Les boutons du port portent le nom des enseignes : Maison Wang, Marché, Maison de jeu.</li><li>Journal des prix : le nom des marchandises sous leurs icônes. Héritage : « Acheter le niv. 1 ».</li><li>Écran titre : la présentation d’une mer s’ouvre au-dessus des boutons et ne cache plus « Nouvelle carrière ». L’accueil ne dit plus « Meilleur avec le son ».</li><li>Le bouton « Mises à jour », en bas à droite de l’écran titre, ouvre les dix derniers jours de mise à jour : ce qui change pour vous, puis le détail dans « En savoir plus ».</li></ul><h4>Musique et ambiance</h4><ul><li>En mer (style moderne) : le bois du navire qui grince, les poulies et les drisses, les voiles qui faseyent, le vent dans la voilure, la cloche de quart de loin en loin, et les mouettes près des côtes. La houle est un peu plus douce.</li><li>Chaque musique change d’un passage à l’autre : des instruments entrent et sortent, une autre mélodie prend le relais, les percussions changent de rythme.</li><li>Mer de Chine : au port et en mer, quatre morceaux au lieu d’un, tirés au hasard à chaque arrivée, jamais le même deux fois de suite. Les Caraïbes et la Méditerranée suivront.</li></ul></details></article><article class="majn-e"><div class="majn-d">8 octobre 2026</div><h3>Des prix qui s’expliquent</h3><div class="majn-pv"><b>Pour vous</b><ul><li>On voit d’où vient chaque prix et ce qu’il vous a rapporté.</li><li>Vendre trop d’un coup coûte moins cher qu’avant, et le jeu vous prévient.</li><li>Deux leçons de Chen, le marché et le combat, pour apprendre sans risque.</li><li>Si vous aviez des marchandises en entrepôt en Mer de Chine, vérifiez votre cale.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Lisibilité</h4><ul><li>Journal des prix en deux bandes par port : en haut, en jade, ce que le port vous vend (prix et quantité en rayon) ; en bas, en or, ce qu’il vous achète (prix et commande). Le meilleur prix est encadré.</li><li>Pénuries toujours en or, surplus toujours en bleu, partout dans le jeu.</li><li>La valeur nette se détaille dans une bulle : argent, banque, navire, cargaison, dette, prochain titre.</li><li>Le conseil de Chen à l’achat est chiffré : combien le port en prend et à quel prix, l’âge du relevé, les jours de mer, la saison ou la fête à l’arrivée.</li><li>Les fausses rumeurs et les bavardages de la rue ne sont plus notés au journal.</li><li>Les bénédictions du temple s’affichent en cercles à minuteur sous le bandeau ; la cale a une jauge, rouge quand elle est pleine.</li></ul><h4>Le rythme de l’année</h4><ul><li>Une page d’éphéméride à chaque 1er du mois (mois restants, solde de l’équipage), « J−7 » à côté de la date les sept derniers jours, et un bandeau avant le bilan de fin d’année.</li></ul><h4>La vente</h4><ul><li>Au-delà de ce que le port commande, on brade : le premier picul part 20 % sous le prix ferme, puis un peu moins à chaque unité, et le jeu vous prévient.</li><li>Mer de Chine : les entrepôts sont retirés. Ce qui y était laissé est revenu à bord, le reste a été racheté.</li></ul><h4>Le registre</h4><ul><li>Chaque achat et chaque vente laisse un billet numéroté dans l’onglet « Registre » du journal, rangé par escale : les quantités à chaque prix, ce qui a fait le prix (pénurie, saison, fête, marge du marchand, Sens des affaires, présage du temple), le bénéfice et ce que vos bonus ont rapporté.</li></ul><h4>Les rumeurs (Mer de Chine)</h4><ul><li>Chaque pénurie ou surplus a sa cause, dite à la taverne : grève des mineurs de jade, fours de Jingdezhen éteints…</li><li>Au journal, une fiche par rumeur : la cause, l’effet sur l’étal, une frise du début à la fin, la source et la durée. Nouvelle section « Saisons et fêtes ».</li></ul><h4>Les leçons de Chen</h4><ul><li>Deux leçons guidées, le marché et le combat, à part de la carrière : rien ne compte, votre partie est mise de côté puis rendue, 5 jetons de jade la première fois. Dans l’Aide de l’écran titre et à la fin du prologue.</li></ul></details></article><article class="majn-e"><div class="majn-d">7 octobre 2026</div><h3>Le marché à l’étal, et le jeu au téléphone</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><div class="majn-pv"><b>Pour vous</b><ul><li>On sait à l’avance ce qu’on paiera et ce qu’on touchera. Un rayon vidé ou une commande remplie se refait en quelques jours : en attendant, allez ailleurs.</li><li>Au téléphone, on avance en poussant le pouce et on s’arrête en le levant. Rien ne change à l’ordinateur ni à la manette.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Le marché à l’étal</h4><ul><li>Chaque marchand annonce ses prix et combien il en prend. À l’achat : son rayon au prix affiché, puis une réserve 25 % plus chère, puis plus rien. À la vente : sa commande au prix affiché ; au-delà, on brade.</li><li>Vos achats et vos ventes ne font plus bouger le prix : ce sont les quantités qui s’épuisent, puis se refont en 4 à 18 jours selon la marchandise et la taille du port.</li><li>En pénurie, le port vous achète davantage ; en surplus, il vous vend davantage, et moins cher.</li><li>Hors pénuries, surplus, saisons et fêtes, les prix ne bougent plus : un prix noté au journal reste juste.</li><li>Au marché, chaque marchandise se déroule d’un clic : la barre des paliers, le détail de ce que vous payez ou recevez, et un conseil de Chen.</li><li>Le journal donne, pour chaque port, le prix d’achat, le prix de vente et la quantité à ce prix. Le prologue l’explique.</li></ul><h4>Téléphone et tablette</h4><ul><li>En mer, une barre au pouce remplace les quatre flèches : posez le pouce sur la moitié gauche de l’écran et poussez, le navire avance dans cette direction. Pouce levé ou ramené au centre, les voiles se ferlent et le navire s’arrête en gardant son cap (sauf sous le pilote automatique).</li><li>Deux boutons au-dessus des canons choisissent la toile : toute voile en haut, mi-voile en dessous. Le choix est gardé d’un voyage à l’autre.</li><li>Le bouton d’abordage se pose sur le navire à aborder et le suit ; les boutons de feu ne bougent plus.</li><li>Les vivres s’affichent dans le bandeau ; en portrait, le bandeau prend toute la largeur. Fenêtres plus ramassées : boutons, marché, taverne.</li></ul></details></article><article class="majn-e"><div class="majn-d">6 octobre 2026</div><h3>Rumeurs, contrats et premier écran</h3><div class="majn-pv"><b>Pour vous</b><ul><li>Le prix noté au journal correspond à celui que vous trouverez en revenant, et les rumeurs disent clairement quoi, où et quand.</li><li>Plus de livraison oubliée, ni vendue par erreur avec « Tout vendre ».</li><li>On distingue un prix passager d’un prix qui dure.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Rumeurs et prix</h4><ul><li>À la taverne, les rumeurs sont datées et chiffrées : quand, pour combien de temps, de combien. Quand il n’y a rien à dire, la tournée est gratuite. Un capitaine rapporte parfois les prix d’un port lointain.</li><li>Au marché, sous chaque marchandise : ce qu’en disent les rumeurs. Sur la carte, les rumeurs ont une pastille avec l’icône de la marchandise, et la fiche d’un port liste ses rumeurs.</li><li>Le journal note aussi les prix au départ du port, après vos échanges, et un sablier marque un prix vu pendant une pénurie ou un surplus : il ne durera pas.</li><li>Au journal, « Pour votre cargaison » : les trois meilleurs ports où vendre toute votre cargaison. Le journal des rumeurs est rangé : en ce moment, à venir, prix rapportés, autres nouvelles, passées.</li></ul><h4>Contrats et fenêtres</h4><ul><li>Contrats : la prime est affichée, avec « à bord : 3 / 10 ». En arrivant avec la marchandise, « Livrer » ou « Plus tard », puis des rappels au marché, à la taverne et à l’appareillage. « Tout vendre » garde la marchandise promise.</li><li>Taverne, journal et marché ont des onglets en classeur doré. Les fenêtres s’ouvrent en haut de l’écran et ne grandissent que vers le bas : les onglets ne sautent plus sous la souris.</li><li>Au port, le nom et la description de la ville s’affichent sous le bandeau. Les messages restent deux secondes de plus à l’écran.</li></ul><h4>Démarrage</h4><ul><li>Au lancement, le logo de Besenet Studio (un clic l’écourte), puis un accueil : sauvegarde automatique, « Meilleur avec le son », « Cliquez pour commencer ». Le son se débloque à ce premier clic.</li><li>Le logo de l’écran titre est désormais dessiné à la main.</li></ul></details></article></div></div></div>
+<div id="majn" role="dialog" aria-modal="true" aria-labelledby="majn-t"><div class="majn-box"><div class="majn-h"><div><h2 id="majn-t">Dernières mises à jour</h2><p class="majn-l" hidden></p></div><button type="button" class="majn-x">×</button></div><div class="majn-b" lang="fr"><article class="majn-e"><div class="majn-d">11 octobre 2026</div><h3>Le premier voyage</h3><span class="majn-tag majn-chine">Mer de Chine</span><div class="majn-pv"><b>Pour vous</b><ul><li>Le prologue et les leçons de Chen ne font plus qu’un : le premier voyage, sur une vraie route. La soie de Canton à Manille, puis le riz vers Hong Kong, en trois chapitres (une vingtaine de minutes en tout), et 15 jetons de jade quand les trois sont faits.</li><li>En mer, chaque explication de Chen arrête le jeu le temps de la lire, puis un rappel reste en bas de l’écran.</li><li>Le journal des prix se lit d’un coup d’œil : le prix et le tael à gauche, la quantité en piculs à droite, un « × » entre les deux. La fenêtre Appareiller les donne sur deux lignes, achat puis vente.</li><li>Les commandes et raccourcis sont dans les Options.</li><li>Cette version de test repart de zéro pour tout le monde : jetons, Héritage, hauts faits, records et parties en cours sont effacés, pour découvrir le premier voyage comme à la première ouverture. Vos réglages et votre langue restent.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Le premier voyage</h4><ul><li>Chapitre 1, Canton : emprunter à Wang, acheter la jonque, engager l’équipage, les vivres, puis la soie, avec le rayon et la réserve du marchand.</li><li>Chapitre 2, la traversée : le pilote sort de l’estuaire, puis la barre au large (bouées vertes, chenal à mi-voile entre deux récifs, banc de sable, vent) ; un pirate qu’on combat jusqu’au bout (il ne fuit pas, vous non plus), son drapeau blanc, l’abordage et les épaves. On n’accoste nulle part avant Manille, et le calendrier s’arrête pendant les exercices.</li><li>Chapitre 3, Manille puis Hong Kong : vendre la commande au prix ferme, voir le bradé, attendre que la commande revienne ; une rumeur à la taverne, lue au journal ; le riz acheté pour presque rien, revendu à Hong Kong en pleine pénurie. Puis la dette, la coque et le chantier, les jetons et l’Héritage.</li><li>Après chaque chapitre : « Continuer » ou « Plus tard ». L’écran titre propose de reprendre au chapitre suivant, et l’Aide de l’écran titre rejoue chaque chapitre.</li><li>Aux trois premiers départs d’une carrière, et après un premier échouage, la fenêtre Appareiller propose la traversée (le chapitre 2), puis vous rend votre carrière. Après un vrai combat difficile, Chen la propose aussi, sans obliger.</li><li>Au combat, Chen rappelle qu’un clic de souris tire du côté où l’on clique.</li></ul><h4>Prix et commandes</h4><ul><li>Journal des prix : dans chaque case, le prix et le tael à gauche, « × », la quantité et ses piculs à droite ; la fenêtre du journal s’élargit sur ordinateur (au téléphone, la quantité reste sans unité, faute de place).</li><li>Fenêtre Appareiller : les prix d’un port sur deux lignes, achat puis vente ; et la bulle de Chen ne cache plus la carte.</li><li>Options › Commandes et raccourcis : le tableau des commandes (clavier, souris, manette) et le réglage des touches. L’Aide ne les présente plus.</li></ul></details></article><article class="majn-e"><div class="majn-d">10 octobre 2026</div><h3>Une première partie plus claire, et l’Héritage refait</h3><span class="majn-tag majn-chine">Mer de Chine</span><div class="majn-pv"><b>Pour vous</b><ul><li>Le premier pirate se voit tout de suite et se bat mal à l’abordage ; chaque pirate ne prend plus qu’une part à sa taille. Et Chen vous prévient de la douane avant de vous envoyer vendre des armes.</li><li>Les touches du clavier se changent dans les Options, avec un tableau des commandes : clavier, souris, manette.</li><li>L’Héritage de la Mer de Chine est refait pour le marché à l’étal : le Réseau de marchands (plus de marchandise en rayon et à la commande), le Marchandage, les Étals vite regarnis, la Fortune de famille, et chaque amélioration à son juste prix. Vos niveaux achetés restent.</li><li>Le but est écrit dès le départ : un million de taels de valeur nette avant le 31 décembre. Et la dette de Wang dit où la rembourser, et ce qu’elle coûte.</li><li>Chen vous prévient au bon moment : premier pirate, premier typhon, banque, solde du mois, contrebande. Il vous conseille le port qui rapporte le plus par jour de mer.</li><li>Chaque nouvelle lune, le jeu s’arrête un instant : le mois peint au pinceau, les lunes qui restent pour devenir Taï-pan, la paye de l’équipage, votre progression vers le titre, et le bilan du mois écoulé (aussi gardé dans le journal).</li><li>Les messages ne cachent plus les fenêtres, la musique change d’un passage à l’autre, et en mer le navire vit : bois qui grince, voiles, vent, cloche de quart.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>La barre et les touches</h4><ul><li>En mer, les touches de la toile s’affichent sous la vitesse ; à la barre, la ligne du bas rappelle les touches de la barre, de la toile et du pilote.</li><li>Au premier échouage, Chen explique comment ralentir avant une côte.</li><li>À la barre, le port où vous allez s’accoste d’un peu plus loin : « Accoster » s’affiche à l’entrée de la rade.</li><li>Options › Touches : une touche par action, à changer d’un clic (deux actions sur la même touche échangent leurs touches). Les flèches, Tab et Échap marchent toujours.</li><li>Un tableau des commandes, une ligne par action, avec le clavier, la souris et la manette.</li><li>Sous Firefox et Safari, un clavier français affiche enfin ses vraies lettres (Q/D pour tourner, Z/S pour la toile), et la carte s’ouvre avec M.</li></ul><h4>Pirates et douane</h4><ul><li>Le premier pirate arrive par le côté, à l’écran, un peu plus rapide que vous mais avec cinq hommes : il ne tente pas l’abordage, et se prend facilement.</li><li>Au début d’un combat, le pilote garde le cap jusqu’à ce que vous preniez la barre (au doigt, le navire ne s’arrête plus net).</li><li>À l’abordage, chaque pirate prend une part à sa taille : un sampan 5 % de chaque marchandise et 10 % de l’argent à bord, une jonque pirate 15 % et 20 %, jusqu’à 45 % et 50 % pour une frégate.</li><li>Si vous repoussez un abordage, Chen dit qu’on peut prendre le navire qui s’est rendu.</li><li>Pour des armes, Chen nomme d’abord le meilleur port sans douane, puis « Gaffe à la douane ! » : le port à douane qui paierait mieux, la fréquence des fouilles, et le pot-de-vin à garder.</li><li>Les contrats d’armes vers un port à douane le disent : « Contrebande · douane à l’arrivée ».</li></ul><h4>L’Héritage refait</h4><ul><li>Réseau de marchands : les marchands vous gardent plus de marchandise et vous en prennent plus, +10 % au rayon, à la réserve et à la commande par niveau.</li><li>Marchandage : au-delà de la commande, le bradé commence à −15 %, puis à −10 %, au lieu de −20 %.</li><li>Étals vite regarnis : après vos achats et vos ventes, les étals se refont jusqu’à 30 % plus vite.</li><li>La Fortune de famille remplace le Bas de laine : +1 500 taels au départ par niveau.</li><li>Chaque amélioration coûte ce qu’elle rapporte : Navire de famille, Navigateur, Faveur de Mazu, Canonniers, Arrimage, Équipage et Informateurs coûtent moins cher. Le Crédit chez Wang quitte l’Héritage (Wang prête toujours, en ville).</li><li>Rien n’est perdu de ce que vous aviez acheté, sauf le Crédit chez Wang et le Bas de laine au-delà du niveau 3, qui ne comptent plus.</li><li>À la fin du premier voyage, Chen conseille le Navire de famille : vous partez avec votre propre jonque, sans emprunter pour l’acheter.</li></ul><h4>La nouvelle lune</h4><ul><li>Le 1er de chaque mois, un écran plein, jeu en pause jusqu’au clic : le mois en calligraphie, « Encore 11 lunes pour devenir Taï-pan », « Vous payez votre équipage » (ou les marins qui désertent si la caisse est vide).</li><li>Une jauge de votre valeur nette, jalonnée des grades jusqu’au sceau du Taï-pan.</li><li>La page du mois écoulé : bénéfice des ventes (dont grâce aux rumeurs), escales, contrats livrés, pirates coulés, navires abordés, butin, typhons, marins perdus, et la meilleure affaire. Elle est gardée dans le journal, onglet Carnet.</li><li>La nuit vire du bleu à l’ocre quand il reste 6 lunes ou moins, puis au vermillon pour les deux dernières.</li></ul><h4>Le but et la dette</h4><ul><li>Le but est écrit dès l’introduction et reste en dernière ligne des objectifs : 1 000 000 taels de valeur nette avant le 31 décembre.</li><li>Endetté, l’objectif dit « Sortir du rouge » au lieu de viser un titre.</li><li>La dette de Wang dit où la rembourser : à Canton ou à Macao.</li><li>Le titre en haut à droite s’explique au survol : votre rang, le détail de votre valeur nette et le prochain titre.</li></ul><h4>En mer</h4><ul><li>Au premier pirate et au premier typhon, Chen dit comment tourner (Q/D ou les flèches au clavier, la barre au doigt, le stick à la manette). Le message de combat le rappelle.</li><li>Abordé, un bilan reste à l’écran jusqu’à « Compris ». Le journal note l’argent, la cargaison et les marins perdus.</li><li>Après votre premier vrai combat, Chen propose la traversée du premier voyage (dans l’Aide, depuis l’écran titre).</li><li>Le trésor d’une carte au trésor se remonte depuis le navire : on ne parle plus de le « déterrer ».</li><li>La porcelaine brisée et les hommes tombés à la mer pendant la traversée sont notés à l’arrivée. Les jours de mer suivent le calendrier.</li><li>Pas de typhon au tout premier voyage, et l’aide « Première visite » attend que Chen ait fini de parler.</li></ul><h4>Les conseils de Chen</h4><ul><li>À l’achat, Chen choisit le port qui rapporte le plus par jour de mer, un peu moins sur une route à pirates, et dit quand un voyage ne vaut pas la peine.</li><li>Il prévient quand vous avez de quoi rembourser Wang, devant votre première banque, quand vous partez sans de quoi payer la solde, et dès que vous regardez des armes au marché (la contrebande, les ports sans douane).</li><li>Au temple, chaque offrande dit ce qu’elle fait et pendant combien de jours.</li></ul><h4>Marché, carte et contrats</h4><ul><li>Les quantités se lisent mieux : « En rayon : 61 · puis 61 de réserve à 85 ».</li><li>Quand c’est l’argent, et non la cale, qui arrête la réglette, le jeu le dit.</li><li>Le marché s’ouvre toutes rubriques fermées.</li><li>Les contrats disent à combien de jours de mer est le port de livraison.</li><li>Sur la carte, on choisit un port en touchant son nom (Hong Kong et Macao se distinguent enfin) ; les zones de pirates se voient mieux.</li></ul><h4>À l’écran</h4><ul><li>Quand une fenêtre est ouverte, les messages s’affichent en bas et ne cachent plus son en-tête. À l’arrivée, le nom de la ville s’écarte des messages.</li><li>Les boutons du port portent le nom des enseignes : Maison Wang, Marché, Maison de jeu.</li><li>Journal des prix : le nom des marchandises sous leurs icônes. Héritage : « Acheter le niv. 1 ».</li><li>Écran titre : la présentation d’une mer s’ouvre au-dessus des boutons et ne cache plus « Nouvelle carrière ». L’accueil ne dit plus « Meilleur avec le son ».</li><li>Le bouton « Mises à jour », en bas à droite de l’écran titre, ouvre les dix derniers jours de mise à jour : ce qui change pour vous, puis le détail dans « En savoir plus ».</li></ul><h4>Musique et ambiance</h4><ul><li>En mer (style moderne) : le bois du navire qui grince, les poulies et les drisses, les voiles qui faseyent, le vent dans la voilure, la cloche de quart de loin en loin, et les mouettes près des côtes. La houle est un peu plus douce.</li><li>Chaque musique change d’un passage à l’autre : des instruments entrent et sortent, une autre mélodie prend le relais, les percussions changent de rythme.</li><li>Mer de Chine : au port et en mer, quatre morceaux au lieu d’un, tirés au hasard à chaque arrivée, jamais le même deux fois de suite. Les Caraïbes et la Méditerranée suivront.</li></ul></details></article><article class="majn-e"><div class="majn-d">8 octobre 2026</div><h3>Des prix qui s’expliquent</h3><div class="majn-pv"><b>Pour vous</b><ul><li>On voit d’où vient chaque prix et ce qu’il vous a rapporté.</li><li>Vendre trop d’un coup coûte moins cher qu’avant, et le jeu vous prévient.</li><li>Si vous aviez des marchandises en entrepôt en Mer de Chine, vérifiez votre cale.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Lisibilité</h4><ul><li>Journal des prix en deux bandes par port : en haut, en jade, ce que le port vous vend (prix et quantité en rayon) ; en bas, en or, ce qu’il vous achète (prix et commande). Le meilleur prix est encadré.</li><li>Pénuries toujours en or, surplus toujours en bleu, partout dans le jeu.</li><li>La valeur nette se détaille dans une bulle : argent, banque, navire, cargaison, dette, prochain titre.</li><li>Le conseil de Chen à l’achat est chiffré : combien le port en prend et à quel prix, l’âge du relevé, les jours de mer, la saison ou la fête à l’arrivée.</li><li>Les fausses rumeurs et les bavardages de la rue ne sont plus notés au journal.</li><li>Les bénédictions du temple s’affichent en cercles à minuteur sous le bandeau ; la cale a une jauge, rouge quand elle est pleine.</li></ul><h4>Le rythme de l’année</h4><ul><li>Une page d’éphéméride à chaque 1er du mois (mois restants, solde de l’équipage), « J−7 » à côté de la date les sept derniers jours, et un bandeau avant le bilan de fin d’année.</li></ul><h4>La vente</h4><ul><li>Au-delà de ce que le port commande, on brade : le premier picul part 20 % sous le prix ferme, puis un peu moins à chaque unité, et le jeu vous prévient.</li><li>Mer de Chine : les entrepôts sont retirés. Ce qui y était laissé est revenu à bord, le reste a été racheté.</li></ul><h4>Le registre</h4><ul><li>Chaque achat et chaque vente laisse un billet numéroté dans l’onglet « Registre » du journal, rangé par escale : les quantités à chaque prix, ce qui a fait le prix (pénurie, saison, fête, marge du marchand, Sens des affaires, présage du temple), le bénéfice et ce que vos bonus ont rapporté.</li></ul><h4>Les rumeurs (Mer de Chine)</h4><ul><li>Chaque pénurie ou surplus a sa cause, dite à la taverne : grève des mineurs de jade, fours de Jingdezhen éteints…</li><li>Au journal, une fiche par rumeur : la cause, l’effet sur l’étal, une frise du début à la fin, la source et la durée. Nouvelle section « Saisons et fêtes ».</li></ul></details></article><article class="majn-e"><div class="majn-d">7 octobre 2026</div><h3>Le marché à l’étal, et le jeu au téléphone</h3><span class="majn-tag majn-tel">Téléphone et tablette</span><div class="majn-pv"><b>Pour vous</b><ul><li>On sait à l’avance ce qu’on paiera et ce qu’on touchera. Un rayon vidé ou une commande remplie se refait en quelques jours : en attendant, allez ailleurs.</li><li>Au téléphone, on avance en poussant le pouce et on s’arrête en le levant. Rien ne change à l’ordinateur ni à la manette.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Le marché à l’étal</h4><ul><li>Chaque marchand annonce ses prix et combien il en prend. À l’achat : son rayon au prix affiché, puis une réserve 25 % plus chère, puis plus rien. À la vente : sa commande au prix affiché ; au-delà, on brade.</li><li>Vos achats et vos ventes ne font plus bouger le prix : ce sont les quantités qui s’épuisent, puis se refont en 4 à 18 jours selon la marchandise et la taille du port.</li><li>En pénurie, le port vous achète davantage ; en surplus, il vous vend davantage, et moins cher.</li><li>Hors pénuries, surplus, saisons et fêtes, les prix ne bougent plus : un prix noté au journal reste juste.</li><li>Au marché, chaque marchandise se déroule d’un clic : la barre des paliers, le détail de ce que vous payez ou recevez, et un conseil de Chen.</li><li>Le journal donne, pour chaque port, le prix d’achat, le prix de vente et la quantité à ce prix. Le premier voyage l’explique.</li></ul><h4>Téléphone et tablette</h4><ul><li>En mer, une barre au pouce remplace les quatre flèches : posez le pouce sur la moitié gauche de l’écran et poussez, le navire avance dans cette direction. Pouce levé ou ramené au centre, les voiles se ferlent et le navire s’arrête en gardant son cap (sauf sous le pilote automatique).</li><li>Deux boutons au-dessus des canons choisissent la toile : toute voile en haut, mi-voile en dessous. Le choix est gardé d’un voyage à l’autre.</li><li>Le bouton d’abordage se pose sur le navire à aborder et le suit ; les boutons de feu ne bougent plus.</li><li>Les vivres s’affichent dans le bandeau ; en portrait, le bandeau prend toute la largeur. Fenêtres plus ramassées : boutons, marché, taverne.</li></ul></details></article><article class="majn-e"><div class="majn-d">6 octobre 2026</div><h3>Rumeurs, contrats et premier écran</h3><div class="majn-pv"><b>Pour vous</b><ul><li>Le prix noté au journal correspond à celui que vous trouverez en revenant, et les rumeurs disent clairement quoi, où et quand.</li><li>Plus de livraison oubliée, ni vendue par erreur avec « Tout vendre ».</li><li>On distingue un prix passager d’un prix qui dure.</li></ul></div><details class="majn-more"><summary>En savoir plus</summary><h4>Rumeurs et prix</h4><ul><li>À la taverne, les rumeurs sont datées et chiffrées : quand, pour combien de temps, de combien. Quand il n’y a rien à dire, la tournée est gratuite. Un capitaine rapporte parfois les prix d’un port lointain.</li><li>Au marché, sous chaque marchandise : ce qu’en disent les rumeurs. Sur la carte, les rumeurs ont une pastille avec l’icône de la marchandise, et la fiche d’un port liste ses rumeurs.</li><li>Le journal note aussi les prix au départ du port, après vos échanges, et un sablier marque un prix vu pendant une pénurie ou un surplus : il ne durera pas.</li><li>Au journal, « Pour votre cargaison » : les trois meilleurs ports où vendre toute votre cargaison. Le journal des rumeurs est rangé : en ce moment, à venir, prix rapportés, autres nouvelles, passées.</li></ul><h4>Contrats et fenêtres</h4><ul><li>Contrats : la prime est affichée, avec « à bord : 3 / 10 ». En arrivant avec la marchandise, « Livrer » ou « Plus tard », puis des rappels au marché, à la taverne et à l’appareillage. « Tout vendre » garde la marchandise promise.</li><li>Taverne, journal et marché ont des onglets en classeur doré. Les fenêtres s’ouvrent en haut de l’écran et ne grandissent que vers le bas : les onglets ne sautent plus sous la souris.</li><li>Au port, le nom et la description de la ville s’affichent sous le bandeau. Les messages restent deux secondes de plus à l’écran.</li></ul><h4>Démarrage</h4><ul><li>Au lancement, le logo de Besenet Studio (un clic l’écourte), puis un accueil : sauvegarde automatique, « Meilleur avec le son », « Cliquez pour commencer ». Le son se débloque à ce premier clic.</li><li>Le logo de l’écran titre est désormais dessiné à la main.</li></ul></details></article></div></div></div>
 <script>(() => {
-  const last = "2026-10-10 23:13";
+  const last = "2026-10-11 00:34";
   const btn = document.getElementById('majb'), pan = document.getElementById('majn');
   const code = () => (typeof Lang !== 'undefined' && Lang.code) || 'fr';
   const tr = (k, fb) => { try { const s = T(k); return s && s !== k && s.indexOf(k) < 0 ? s : fb; } catch (e) { return fb; } };
