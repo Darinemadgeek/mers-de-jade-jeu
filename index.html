@@ -118366,6 +118366,22 @@ const Game = {
     this.saveGlobal();
   },
   saveGlobal() { Store.set(GLOBAL_KEY, this.global); },
+  // (10/10/2026, choix d'Adrien) la démo remise à zéro pour tous les joueurs, une fois par clé DEMO.reset (tools/demo.js) :
+  // jetons, Héritage, hauts faits, records, leçons, partie en cours, prologue, aides et voiles repartent de zéro ; les réglages
+  // (son, commandes, aides oui ou non) et la langue restent. Avant loadGlobal (Main.boot) ; le jeu complet n'y passe jamais
+  demoReset() {
+    if (typeof DEMO === 'undefined' || !DEMO || !DEMO.reset) return false;
+    const g = Store.get(GLOBAL_KEY, null);
+    if (g && g.demoReset === DEMO.reset) return false;
+    const id = DEMO.sea || 'chine';
+    Store.del(metaKey(id)); Store.del(runKey(id)); Store.del(runKey(id) + '.avantLecon');
+    const d = this.defaultGlobal();
+    if (g && g.settings) Object.assign(d.settings, g.settings);
+    if (g && g.lang) d.lang = g.lang;
+    d.demoReset = DEMO.reset;
+    Store.set(GLOBAL_KEY, d);
+    return !!g;
+  },
   // tout effacer : toutes les mers et les réglages
   // efface la progression d'une mer (la mer en cours par défaut) ; les autres mers, les voiles et les réglages restent
   eraseSea(id) {
@@ -139687,6 +139703,7 @@ const Main = {
     this.cv = document.getElementById('screen');
     this.ctx = this.cv.getContext('2d');
     Input.init(this.cv);
+    Game.demoReset();   // (la démo seulement : une remise à zéro demandée par la nouvelle version, tools/demo.js)
     Game.loadGlobal();
     // la langue : celle choisie par le joueur, sinon celle du système (js/lang.js) ; puis les textes fixes de la page
     Lang.set(Lang.pick(Game.global.lang));
