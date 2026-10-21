@@ -20,6 +20,9 @@ Noto Serif · Noto Sans Symbols 2 · Noto Sans Math · The Noto Project Authors
 Noto Sans SC, TC, JP, KR · Noto Serif SC, TC, KR · Adobe · The Noto Project Authors
 Sous licence SIL Open Font License 1.1 ; le texte de la licence accompagne le jeu (LICENSES-fonts.txt).
 
+BIBLIOTHÈQUES
+three.js · licence MIT, © les auteurs de three.js
+
 REMERCIEMENTS
 Merci à nos testeurs : Mazazou, Yersinia et Mystyx.
 Mention honorable à Aelynn, qui a coulé.
@@ -47,6 +50,9 @@ Ma Shan Zheng · The MaShanZheng Project Authors
 Noto Serif · Noto Sans Symbols 2 · Noto Sans Math · The Noto Project Authors
 Noto Sans SC, TC, JP, KR · Noto Serif SC, TC, KR · Adobe · The Noto Project Authors
 Licensed under the SIL Open Font License 1.1; the license text comes with the game (LICENSES-fonts.txt).
+
+LIBRARIES
+three.js · MIT license, © the three.js authors
 
 THANKS
 Thanks to our testers: Mazazou, Yersinia and Mystyx.
