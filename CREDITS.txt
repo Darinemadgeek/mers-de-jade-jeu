@@ -4,7 +4,7 @@ LE JEU
 Silk & Cannons, un jeu de Besenet Studio (https://besenetstudio.com).
 
 GRAPHISMES
-Mers, côtes, ports, navires et estampes : tout est dessiné par le code du jeu.
+Tout le jeu est dessiné par son propre code, à part quelques éléments faits à la main.
 
 MUSIQUE ET BRUITAGES
 Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
@@ -35,7 +35,7 @@ THE GAME
 Silk & Cannons, a game by Besenet Studio (https://besenetstudio.com).
 
 GRAPHICS
-Seas, coasts, ports, ships and prints: everything is drawn by the game's code.
+The whole game is drawn by its own code, apart from a few hand-drawn elements.
 
 MUSIC AND SOUND EFFECTS
 Composed for the game and played live by its code, with no recordings at all.
