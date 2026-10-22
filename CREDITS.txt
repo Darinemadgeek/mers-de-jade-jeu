@@ -7,7 +7,7 @@ GRAPHISMES
 Tout le jeu est dessiné par son propre code, à part quelques éléments faits à la main.
 
 MUSIQUE ET BRUITAGES
-Composés pour le jeu et joués en direct par son code, sans aucun enregistrement.
+Composés pour le jeu et joués en direct par son code ; seuls les coups de canon sont des enregistrements libres de droits.
 
 CARTES
 Côtes et îles d'après Natural Earth (https://www.naturalearthdata.com), données du domaine public.
@@ -38,7 +38,7 @@ GRAPHICS
 The whole game is drawn by its own code, apart from a few hand-drawn elements.
 
 MUSIC AND SOUND EFFECTS
-Composed for the game and played live by its code, with no recordings at all.
+Composed for the game and played live by its code; only the cannon shots are royalty-free recordings.
 
 MAPS
 Coasts and islands based on Natural Earth (https://www.naturalearthdata.com), public domain data.
