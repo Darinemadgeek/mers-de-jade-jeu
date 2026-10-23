@@ -38,7 +38,7 @@ GRAPHICS
 The whole game is drawn by its own code, apart from a few hand-drawn elements.
 
 MUSIC AND SOUND EFFECTS
-Composed for the game and played live by its code; only the cannon shots are royalty-free recordings.
+The music is composed and played by the game’s code; the sound effects are recordings from Sound-Fishing (sound-fishing.net), used under licence, or created by the code.
 
 MAPS
 Coasts and islands based on Natural Earth (https://www.naturalearthdata.com), public domain data.
