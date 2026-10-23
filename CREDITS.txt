@@ -7,7 +7,7 @@ GRAPHISMES
 Tout le jeu est dessiné par son propre code, à part quelques éléments faits à la main.
 
 MUSIQUE ET BRUITAGES
-Composés pour le jeu et joués en direct par son code ; seuls les coups de canon sont des enregistrements libres de droits.
+La musique est composée et jouée par le code du jeu ; les bruitages sont des enregistrements de Sound-Fishing (sound-fishing.net), utilisés sous licence, ou créés par le code.
 
 CARTES
 Côtes et îles d'après Natural Earth (https://www.naturalearthdata.com), données du domaine public.
